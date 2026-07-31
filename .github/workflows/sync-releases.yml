@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '*/30 * * * *'  # alle 30 Min
   workflow_dispatch:
+    inputs:
+      initial_sync:
+        description: 'Sync ALL releases if true'
+        required: false
+        default: 'false'  
 
 permissions:
   contents: write
