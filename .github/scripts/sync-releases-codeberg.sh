@@ -8,7 +8,7 @@ SOURCE_REPO="KashCal/KashCal"
 TARGET_REPO_CODEBERG="alexb936/KashCal"
 CODEBERG_API="https://codeberg.org/api/v1"
 
-if [ -z "$CODEBERG_API_TOKEN" ]; then
+if [ -z "$CODEBERG_TOKEN" ]; then
   echo "❌ CODEBERG_API_TOKEN ist nicht gesetzt!"
   exit 1
 fi
@@ -29,7 +29,7 @@ fi
 
 # Existierende Codeberg Releases holen
 existing_tags=$(curl -s "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases" \
-  -H "Authorization: token $CODEBERG_API_TOKEN" \
+  -H "Authorization: token $CODEBERG_TOKEN" \
   | jq -r '.[].tag_name' 2>/dev/null || echo "")
 
 synced_count=0
@@ -64,7 +64,7 @@ while IFS= read -r tag; do
 
   # Release zu Codeberg erstellen
   if curl -s -X POST "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases" \
-    -H "Authorization: token $CODEBERG_API_TOKEN" \
+    -H "Authorization: token $CODEBERG_TOKEN" \
     -H "Content-Type: application/json" \
     -d '{
       "tag_name": "'"$tag"'",
@@ -83,7 +83,7 @@ while IFS= read -r tag; do
         echo "📎 Lade Assets hoch..."
         for asset in "$asset_dir"/*; do
           curl -s -X POST "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases/tags/$tag/assets" \
-            -H "Authorization: token $CODEBERG_API_TOKEN" \
+            -H "Authorization: token $CODEBERG_TOKEN" \
             -F "attachment=@$asset" > /dev/null && echo "  ✓ $(basename "$asset")"
         done
       fi
