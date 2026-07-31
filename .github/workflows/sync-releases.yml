@@ -37,4 +37,4 @@ jobs:
       - uses: actions/checkout@v5
       - run: |
           chmod +x ./.github/scripts/sync-releases-codeberg.sh
-          ./.github/scripts/sync-releases-codeberg.sh 5 ${{ github.event.inputs.initial_sync || 'false' }} ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.sync_assets || 'false') || 'false' }}
+          ./.github/scripts/sync-releases-codeberg.sh 15 ${{ github.event.inputs.initial_sync || 'false' }} ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.sync_assets || 'false') || 'false' }}
