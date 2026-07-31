@@ -22,4 +22,4 @@ jobs:
       - name: Check for new release and sync if needed
         run: |
           chmod +x ./.github/scripts/sync-releases.sh
-          ./.github/scripts/sync-releases.sh
+          ./.github/scripts/sync-releases.sh 5 ${{ github.event.inputs.initial_sync || 'false' }}
