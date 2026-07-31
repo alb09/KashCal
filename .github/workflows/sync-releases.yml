@@ -1,5 +1,4 @@
 name: Sync Releases
-
 on:
   schedule:
     - cron: '*/30 * * * *'
@@ -13,11 +12,8 @@ on:
         description: 'APKs hochladen (false = nur Release-Metadaten)'
         required: false
         default: 'false'
-
-
 permissions:
   contents: write
-
 jobs:
   sync-github:
     runs-on: ubuntu-latest
@@ -30,7 +26,6 @@ jobs:
       - run: |
           chmod +x ./.github/scripts/sync-releases.sh
           ./.github/scripts/sync-releases.sh 5 ${{ github.event.inputs.initial_sync || 'false' }}
-
   sync-codeberg:
     runs-on: ubuntu-latest
     env:
@@ -42,4 +37,4 @@ jobs:
       - uses: actions/checkout@v5
       - run: |
           chmod +x ./.github/scripts/sync-releases-codeberg.sh
-          ./.github/scripts/sync-releases-codeberg.sh 5 ${{ github.event.inputs.initial_sync || 'false' }}
+          ./.github/scripts/sync-releases-codeberg.sh 5 ${{ github.event.inputs.initial_sync || 'false' }} ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.sync_assets || 'false') || 'false' }}
