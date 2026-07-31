@@ -102,5 +102,3 @@ echo ""
 echo "=========================================="
 echo "Neu synchronisiert: $synced_count | Übersprungen: $skipped_count | Fehlgeschlagen: $failed_count"
 echo "==========================================";
-
-das war das richtige
