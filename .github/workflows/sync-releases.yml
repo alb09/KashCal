@@ -9,6 +9,11 @@ on:
         description: 'Sync all releases'
         required: false
         default: 'false'
+      sync_assets:
+        description: 'APKs hochladen (false = nur Release-Metadaten)'
+        required: false
+        default: 'true'
+
 
 permissions:
   contents: write
