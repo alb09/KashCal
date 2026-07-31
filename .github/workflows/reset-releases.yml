@@ -1,0 +1,32 @@
+name: Cleanup Codeberg Releases
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete all Codeberg releases
+        env:
+          CODEBERG_API: https://codeberg.org/api/v1
+          TARGET_REPO_CODEBERG: KashCal/KashCal
+          CODEBERG_TOKEN: ${{ secrets.CODEBERG_API_TOKEN }}
+        run: |
+          # Alle Releases holen
+          releases=$(curl -s "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases" \
+            -H "Authorization: token $CODEBERG_TOKEN" \
+            | jq -r '.[].id')
+
+          if [ -z "$releases" ]; then
+            echo "ℹ️  Keine Releases gefunden"
+            exit 0
+          fi
+
+          for release_id in $releases; do
+            echo "🗑️  Lösche Release ID: $release_id..."
+            curl -s -X DELETE "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases/$release_id" \
+              -H "Authorization: token $CODEBERG_TOKEN" && echo "✅ Gelöscht" || echo "❌ Fehler"
+          done
+
+          echo "✅ Cleanup abgeschlossen"
