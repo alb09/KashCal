@@ -1,0 +1,19 @@
+name: Scheduled Upstream Sync
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Fork
+        uses: actions/checkout@v5
+      - name: Sync with Upstream
+        uses: wei/pull@v3
+        with:
+          upstream_repository: KashCal/KashCal
+          upstream_branch: main
+          target_branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
