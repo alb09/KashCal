@@ -1,47 +1,76 @@
 name: Cleanup Codeberg Releases
-
 on:
   workflow_dispatch:
-
 jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: Delete all Codeberg releases and tags
         env:
           CODEBERG_API: https://codeberg.org/api/v1
           TARGET_REPO_CODEBERG: alexb936/KashCal
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_API_TOKEN }}
         run: |
-          echo "🔍 Hole Releases..."
-          
-          releases=$(curl -s "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases" \
-            -H "Authorization: token $CODEBERG_TOKEN" | jq -r '.[] | "\(.id):\(.tag_name)"')
+          set -uo pipefail
+          echo "🔍 Hole alle Releases (mit Pagination)..."
 
-          if [ -z "$releases" ]; then
+          page=1
+          all_releases=""
+          while true; do
+            batch=$(curl -s "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases?page=$page&limit=50" \
+              -H "Authorization: token $CODEBERG_TOKEN" | jq -r '.[] | "\(.id):\(.tag_name)"')
+            if [ -z "$batch" ]; then
+              break
+            fi
+            all_releases="$all_releases
+          $batch"
+            page=$((page+1))
+          done
+
+          all_releases=$(echo "$all_releases" | sed '/^$/d')
+
+          if [ -z "$all_releases" ]; then
             echo "ℹ️  Keine Releases gefunden"
             exit 0
           fi
 
-          while IFS=: read -r release_id tag_name; do
-            echo "🗑️  Lösche Release ID: $release_id (Tag: $tag_name)..."
-            
-            # Release löschen
-            curl -s -X DELETE "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases/$release_id" \
-              -H "Authorization: token $CODEBERG_TOKEN" \
-              -H "Content-Type: application/json"
-            
-            echo "✅ Release gelöscht, lösche nun Tag '$tag_name'..."
-            
-            # Tag löschen (optional, aber sauberer)
-            curl -s -X DELETE "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/tags/$tag_name" \
-              -H "Authorization: token $CODEBERG_TOKEN" 2>/dev/null || true
-              
-          done <<< "$releases"
+          total=$(echo "$all_releases" | wc -l)
+          echo "📦 $total Release(s) gefunden — starte Löschung..."
 
-          echo "✅ Cleanup abgeschlossen"
+          deleted=0
+          failed=0
+
+          while IFS=: read -r release_id tag_name; do
+            [ -z "$release_id" ] && continue
+            echo ""
+            echo "🗑️  Lösche Release ID: $release_id (Tag: $tag_name)..."
+
+            release_http_code=$(curl -s -o /tmp/del_resp.json -w "%{http_code}" -X DELETE \
+              "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases/$release_id" \
+              -H "Authorization: token $CODEBERG_TOKEN")
+
+            if [ "$release_http_code" = "204" ]; then
+              echo "✅ Release gelöscht"
+            else
+              echo "❌ Release-Löschung fehlgeschlagen (HTTP $release_http_code): $(cat /tmp/del_resp.json)"
+              failed=$((failed+1))
+              continue
+            fi
+
+            tag_http_code=$(curl -s -o /tmp/del_tag_resp.json -w "%{http_code}" -X DELETE \
+              "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/tags/$tag_name" \
+              -H "Authorization: token $CODEBERG_TOKEN")
+
+            if [ "$tag_http_code" = "204" ]; then
+              echo "✅ Tag '$tag_name' gelöscht"
+            else
+              echo "⚠️  Tag-Löschung fehlgeschlagen (HTTP $tag_http_code): $(cat /tmp/del_tag_resp.json)"
+            fi
+
+            deleted=$((deleted+1))
+          done <<< "$all_releases"
+
+          echo ""
+          echo "=========================================="
+          echo "Gelöscht: $deleted | Fehlgeschlagen: $failed"
+          echo "=========================================="
