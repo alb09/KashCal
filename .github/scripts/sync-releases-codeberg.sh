@@ -8,6 +8,11 @@ SOURCE_REPO="KashCal/KashCal"
 TARGET_REPO_CODEBERG="alexb936/KashCal"
 CODEBERG_API="https://codeberg.org/api/v1"
 
+if [ -z "$CODEBERG_API_TOKEN" ]; then
+  echo "❌ CODEBERG_TOKEN ist nicht gesetzt!"
+  exit 1
+fi
+
 if [ "$INITIAL_SYNC" = "true" ]; then
   CHECK_LAST_N=1000
 fi
@@ -24,8 +29,8 @@ fi
 
 # Existierende Codeberg Releases holen
 existing_tags=$(curl -s "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases" \
-  -H "Authorization: token $CODEBERG_TOKEN" \
-  | jq -r '.[].tag_name' || echo "")
+  -H "Authorization: token $CODEBERG_API_TOKEN" \
+  | jq -r '.[].tag_name' 2>/dev/null || echo "")
 
 synced_count=0
 skipped_count=0
@@ -53,17 +58,38 @@ while IFS= read -r tag; do
   body=$(jq -r '.body // ""' /tmp/release_data.json)
   is_prerelease=$(jq -r '.isPrerelease' /tmp/release_data.json)
 
+  # JSON-Escape für Body und Name
+  name_escaped=$(echo "$name" | jq -Rs .)
+  body_escaped=$(echo "$body" | jq -Rs .)
+
   # Release zu Codeberg erstellen
   if curl -s -X POST "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases" \
-    -H "Authorization: token $CODEBERG_TOKEN" \
+    -H "Authorization: token $CODEBERG_API_TOKEN" \
     -H "Content-Type: application/json" \
     -d '{
       "tag_name": "'"$tag"'",
-      "name": "'"$(echo "$name" | sed 's/"/\\"/g')"'",
-      "body": "'"$(echo "$body" | sed 's/"/\\"/g')"'",
+      "name": '"$name_escaped"',
+      "body": '"$body_escaped"',
       "prerelease": '"$is_prerelease"'
     }' > /dev/null; then
     echo "✅ Release '$tag' zu Codeberg erstellt"
+    
+    # Assets syncen
+    asset_dir="/tmp/assets_${tag//\//_}"
+    mkdir -p "$asset_dir"
+    
+    if gh release download "$tag" --repo "$SOURCE_REPO" -D "$asset_dir" 2>/dev/null; then
+      if [ -n "$(ls -A "$asset_dir" 2>/dev/null)" ]; then
+        echo "📎 Lade Assets hoch..."
+        for asset in "$asset_dir"/*; do
+          curl -s -X POST "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases/tags/$tag/assets" \
+            -H "Authorization: token $CODEBERG_API_TOKEN" \
+            -F "attachment=@$asset" > /dev/null && echo "  ✓ $(basename "$asset")"
+        done
+      fi
+    fi
+    rm -rf "$asset_dir"
+    
     synced_count=$((synced_count+1))
   else
     echo "❌ Fehler bei '$tag'"
