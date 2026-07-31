@@ -10,7 +10,7 @@ jobs:
       - name: Delete all Codeberg releases
         env:
           CODEBERG_API: https://codeberg.org/api/v1
-          TARGET_REPO_CODEBERG: KashCal/KashCal
+          TARGET_REPO_CODEBERG: alexb936/KashCal
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_API_TOKEN }}
         run: |
           echo "🔍 Hole Releases von $TARGET_REPO_CODEBERG..."
