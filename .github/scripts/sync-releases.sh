@@ -75,7 +75,7 @@ done <<< "$ordered_tags"
 
 echo ""
 echo "=========================================="
-echo "Neu synct: $synced_count | Übersprungen: $skipped_count | Fehlgeschlagen: $failed_count"
+echo "Neu synchronisiert: $synced_count | Übersprungen: $skipped_count | Fehlgeschlagen: $failed_count"
 echo "=========================================="
 
 if [ "$synced_count" -eq 0 ] && [ "$failed_count" -eq 0 ]; then
