@@ -13,10 +13,23 @@ jobs:
           TARGET_REPO_CODEBERG: KashCal/KashCal
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_API_TOKEN }}
         run: |
-          # Alle Releases holen
-          releases=$(curl -s "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases" \
-            -H "Authorization: token $CODEBERG_TOKEN" \
-            | jq -r '.[].id')
+          echo "🔍 Hole Releases von $TARGET_REPO_CODEBERG..."
+          
+          response=$(curl -s -w "\n%{http_code}" "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases" \
+            -H "Authorization: token $CODEBERG_TOKEN")
+          
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n-1)
+          
+          echo "HTTP Code: $http_code"
+          echo "Response: $body"
+          
+          if [ "$http_code" != "200" ]; then
+            echo "❌ API Error: $http_code"
+            exit 1
+          fi
+
+          releases=$(echo "$body" | jq -r '.[].id')
 
           if [ -z "$releases" ]; then
             echo "ℹ️  Keine Releases gefunden"
