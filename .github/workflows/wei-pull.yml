@@ -11,7 +11,7 @@ jobs:
       - name: Checkout Fork
         uses: actions/checkout@v5
       - name: Sync with Upstream
-        uses: wei/pull@v3
+        uses: wei/pull@master
         with:
           upstream_repository: KashCal/KashCal
           upstream_branch: main
