@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-CHECK_LAST_N="${1:-20}"
+CHECK_LAST_N="${1:-5}"
 INITIAL_SYNC="${2:-false}"
 SYNC_ASSETS="${3:-true}"
 SOURCE_REPO="KashCal/KashCal"
