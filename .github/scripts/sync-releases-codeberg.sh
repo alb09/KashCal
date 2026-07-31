@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
-
 CHECK_LAST_N="${1:-5}"
 INITIAL_SYNC="${2:-false}"
+SYNC_ASSETS="${3:-true}"
 SOURCE_REPO="KashCal/KashCal"
 TARGET_REPO_CODEBERG="alexb936/KashCal"
 CODEBERG_API="https://codeberg.org/api/v1"
@@ -17,9 +17,10 @@ if [ "$INITIAL_SYNC" = "true" ]; then
 fi
 
 echo "🔍 Prüfe die letzten $CHECK_LAST_N Releases in $SOURCE_REPO (GitHub)..."
-# GitHub Releases holen
-source_releases=$(gh release list --repo "$SOURCE_REPO" --limit "$CHECK_LAST_N" --json tagName,isDraft -q '.[] | select(.isDraft==false) | .tagName')
-
+# GitHub Releases holen (explizit nach Veröffentlichungsdatum sortiert, neueste zuerst)
+source_releases=$(gh release list --repo "$SOURCE_REPO" --limit "$CHECK_LAST_N" --json tagName,isDraft,publishedAt \
+  -q 'sort_by(.publishedAt) | reverse | .[] | select(.isDraft==false) | .tagName')
+  
 if [ -z "$source_releases" ]; then
   echo "ℹ️  Keine Releases gefunden."
   exit 0
@@ -39,7 +40,6 @@ while IFS= read -r tag; do
     -H "Authorization: token $CODEBERG_TOKEN")
   existing_id=$(echo "$existing_release" | jq -r '.id // empty' 2>/dev/null || echo "")
   existing_asset_count=0
-  
   if [ -n "$existing_id" ]; then
     existing_asset_count=$(echo "$existing_release" | jq '.assets | length' 2>/dev/null || echo 0)
   fi
@@ -48,6 +48,10 @@ while IFS= read -r tag; do
 
   if [ -n "$existing_id" ] && [ "$existing_asset_count" -gt 0 ]; then
     echo "⏭️  '$tag' bereits vorhanden mit $existing_asset_count Asset(s) — skip"
+    skipped_count=$((skipped_count+1))
+    continue
+  elif [ -n "$existing_id" ] && [ "$SYNC_ASSETS" != "true" ]; then
+    echo "⏭️  '$tag' bereits vorhanden (ohne Assets, APK-Sync deaktiviert) — skip"
     skipped_count=$((skipped_count+1))
     continue
   elif [ -n "$existing_id" ]; then
@@ -88,27 +92,31 @@ while IFS= read -r tag; do
     fi
   fi
 
-  # Assets syncen
-  asset_dir="/tmp/assets_${tag//\//_}"
-  mkdir -p "$asset_dir"
-  if gh release download "$tag" --repo "$SOURCE_REPO" -D "$asset_dir" 2>/dev/null; then
-    if [ -n "$(ls -A "$asset_dir" 2>/dev/null)" ]; then
-      echo "📎 Lade Assets hoch..."
-      for asset in "$asset_dir"/*; do
-        fname=$(basename "$asset")
-        upload_http_code=$(curl -s -o /tmp/upload_resp.json -w "%{http_code}" -X POST \
-          "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases/$release_id/assets?name=$fname" \
-          -H "Authorization: token $CODEBERG_TOKEN" \
-          -F "attachment=@$asset")
-        if [ "$upload_http_code" = "201" ]; then
-          echo "  ✓ $fname"
-        else
-          echo "  ❌ $fname (HTTP $upload_http_code): $(cat /tmp/upload_resp.json)"
-        fi
-      done
+  # Assets syncen (nur wenn SYNC_ASSETS aktiviert ist)
+  if [ "$SYNC_ASSETS" = "true" ]; then
+    asset_dir="/tmp/assets_${tag//\//_}"
+    mkdir -p "$asset_dir"
+    if gh release download "$tag" --repo "$SOURCE_REPO" -D "$asset_dir" 2>/dev/null; then
+      if [ -n "$(ls -A "$asset_dir" 2>/dev/null)" ]; then
+        echo "📎 Lade Assets hoch..."
+        for asset in "$asset_dir"/*; do
+          fname=$(basename "$asset")
+          upload_http_code=$(curl -s -o /tmp/upload_resp.json -w "%{http_code}" -X POST \
+            "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases/$release_id/assets?name=$fname" \
+            -H "Authorization: token $CODEBERG_TOKEN" \
+            -F "attachment=@$asset")
+          if [ "$upload_http_code" = "201" ]; then
+            echo "  ✓ $fname"
+          else
+            echo "  ❌ $fname (HTTP $upload_http_code): $(cat /tmp/upload_resp.json)"
+          fi
+        done
+      fi
     fi
+    rm -rf "$asset_dir"
+  else
+    echo "⏭️  APK-Sync deaktiviert (SYNC_ASSETS=false) — überspringe Asset-Upload"
   fi
-  rm -rf "$asset_dir"
   synced_count=$((synced_count+1))
 done <<< "$ordered_tags"
 echo ""
