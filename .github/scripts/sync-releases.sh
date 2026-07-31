@@ -1,11 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
-CHECK_LAST_N=5  # wie viele der neuesten Releases geprüft werden sollen
+CHECK_LAST_N="${1:-5}"      # 1. Argument, default 5
+INITIAL_SYNC="${2:-false}"  # 2. Argument, default false
 
 echo "🔍 Prüfe die letzten $CHECK_LAST_N Releases in $SOURCE_REPO..."
 
+if [ "$INITIAL_SYNC" = "true" ]; then
+  CHECK_LAST_N=1000
+fi
+
 source_releases=$(gh release list --repo "$SOURCE_REPO" --limit "$CHECK_LAST_N" --json tagName,isDraft -q '.[] | select(.isDraft==false) | .tagName')
+
 
 if [ -z "$source_releases" ]; then
   echo "ℹ️  Keine (nicht-Draft) Releases gefunden. Beende."
