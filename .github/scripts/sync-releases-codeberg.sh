@@ -9,7 +9,7 @@ TARGET_REPO_CODEBERG="alexb936/KashCal"
 CODEBERG_API="https://codeberg.org/api/v1"
 
 if [ -z "$CODEBERG_API_TOKEN" ]; then
-  echo "❌ CODEBERG_TOKEN ist nicht gesetzt!"
+  echo "❌ CODEBERG_API_TOKEN ist nicht gesetzt!"
   exit 1
 fi
 
