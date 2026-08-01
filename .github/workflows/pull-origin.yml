@@ -10,10 +10,22 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Sync Fork Natively
+
+      - id: before
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  
+      - name: Sync main from upstream
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh repo sync ${{ github.repository }} --branch main
-          gh repo sync ${{ github.repository }} --branch sync
 
+      - id: after
+        run: |
+          git fetch origin main
+          echo "sha=$(git rev-parse origin/main)" >> "$GITHUB_OUTPUT"
+
+      - if: steps.before.outputs.sha != steps.after.outputs.sha
+        run: gh workflow run codeberg-mirror.yml --repo ${{ github.repository }} --ref sync
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
