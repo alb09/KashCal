@@ -21,4 +21,4 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan codeberg.org >> ~/.ssh/known_hosts
           git remote add codeberg git@codeberg.org:alexb936/KashCal.git
-          git push --mirror codeberg
+          git push codeberg main --tags --force --prune --prune-tags
