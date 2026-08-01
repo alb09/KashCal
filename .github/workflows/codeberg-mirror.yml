@@ -9,7 +9,7 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -22,4 +22,4 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan codeberg.org >> ~/.ssh/known_hosts
           git remote add codeberg git@codeberg.org:alexb936/KashCal.git
-          git push codeberg main --tags --force
+          git push codeberg --force --prune HEAD:main refs/tags/*:refs/tags/*
