@@ -9,7 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write
     steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - id: before
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
