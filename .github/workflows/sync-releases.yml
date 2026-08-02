@@ -5,13 +5,33 @@ on:
   workflow_dispatch:
     inputs:
       initial_sync:
-        description: 'Sync all releases'
+        description: 'Alle Releases syncen (Metadaten, immer alt -> neu)'
         required: false
         default: 'false'
-      sync_assets:
-        description: 'APKs hochladen (false = nur Release-Metadaten)'
+      apk_count:
+        description: 'Anzahl Releases, für die APKs hochgeladen werden (0 = keine)'
         required: false
-        default: 'true'
+        default: '5'
+      apk_direction:
+        description: 'Welche Releases (bei apk_count) — älteste oder neueste zuerst'
+        required: false
+        type: choice
+        default: 'newest'
+        options:
+          - newest
+          - oldest
+      max_apk_retain:
+        description: 'Max. Anzahl Releases mit APK auf Codeberg'
+        required: false
+        default: '27'
+
+# Nur als Fallback für den Cron-Trigger (schedule hat keine Inputs).
+# Bei Änderung: unbedingt mit den Input-Defaults oben synchron halten.
+env:
+  DEFAULT_APK_COUNT: '5'
+  DEFAULT_APK_DIRECTION: 'newest'
+  DEFAULT_MAX_APK_RETAIN: '27'
+
 permissions:
   contents: write
 jobs:
@@ -37,4 +57,8 @@ jobs:
       - uses: actions/checkout@v5
       - run: |
           chmod +x ./.github/scripts/sync-releases-codeberg.sh
-          ./.github/scripts/sync-releases-codeberg.sh 15 ${{ github.event.inputs.initial_sync || 'false' }} ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.sync_assets || 'false') || 'false' }}
+          ./.github/scripts/sync-releases-codeberg.sh 5 \
+            ${{ github.event.inputs.initial_sync || 'false' }} \
+            ${{ github.event.inputs.apk_count || env.DEFAULT_APK_COUNT }} \
+            ${{ github.event.inputs.apk_direction || env.DEFAULT_APK_DIRECTION }} \
+              ${{ github.event.inputs.max_apk_retain || env.DEFAULT_MAX_APK_RETAIN }}
