@@ -11,7 +11,7 @@ on:
       sync_assets:
         description: 'APKs hochladen (false = nur Release-Metadaten)'
         required: false
-        default: 'false'
+        default: 'true'
 permissions:
   contents: write
 jobs:
