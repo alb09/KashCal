@@ -20,7 +20,7 @@ jobs:
   
       - name: Sync main from upstream
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.KASHCAL_SYNC }}
         run: |
           gh repo sync ${{ github.repository }} --branch main
 
