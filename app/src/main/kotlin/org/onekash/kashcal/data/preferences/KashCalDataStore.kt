@@ -328,6 +328,39 @@ class KashCalDataStore(
         setPreference(PreferencesKeys.ACCENT_SEED, seed)
     }
 
+    /**
+     * Stored widget color-source value ("follow_app"/"dynamic"/"seed"), or null if the user
+     * never chose one — the widgets then mirror the app's colors (see
+     * [org.onekash.kashcal.widget.WidgetColorSource]).
+     */
+    val widgetColorSource: Flow<String?>
+        get() = getOptionalPreference(PreferencesKeys.WIDGET_COLOR_SOURCE)
+
+    suspend fun setWidgetColorSource(value: String) {
+        setPreference(PreferencesKeys.WIDGET_COLOR_SOURCE, value)
+    }
+
+    /** Widget-only accent seed, independent of [accentSeed]; used when the widget source is "seed". */
+    val widgetAccentSeed: Flow<Int>
+        get() = getPreference(PreferencesKeys.WIDGET_ACCENT_SEED, ACCENT_SEED_DEFAULT)
+
+    suspend fun setWidgetAccentSeed(seed: Int) {
+        setPreference(PreferencesKeys.WIDGET_ACCENT_SEED, seed)
+    }
+
+    /**
+     * Stored widget theme-source value ("follow_app"/"light"/"dark"), or null if the user never
+     * chose one — the widget then follows the app's face (see
+     * [org.onekash.kashcal.widget.WidgetThemeSource]). A legacy "system" value from the earlier
+     * widget-theme setting also falls back to follow-app, which is the intended target.
+     */
+    val widgetThemeSource: Flow<String?>
+        get() = getOptionalPreference(PreferencesKeys.WIDGET_THEME_SOURCE)
+
+    suspend fun setWidgetThemeSource(value: String) {
+        setPreference(PreferencesKeys.WIDGET_THEME_SOURCE, value)
+    }
+
     val notificationSound: Flow<Boolean>
         get() = getPreference(PreferencesKeys.NOTIFICATION_SOUND, true)
 

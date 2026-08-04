@@ -85,6 +85,15 @@ object PreferencesKeys {
     /** Accent seed color as packed ARGB int; drives the generated scheme when source is "seed" */
     val ACCENT_SEED = intPreferencesKey("accent_seed")
 
+    /** Widget color source: "follow_app" (default), "dynamic", or "seed" — independent of the app */
+    val WIDGET_COLOR_SOURCE = stringPreferencesKey("widget_color_source")
+
+    /** Widget-only accent seed as packed ARGB int, used when the widget color source is "seed" */
+    val WIDGET_ACCENT_SEED = intPreferencesKey("widget_accent_seed")
+
+    /** Widget theme source: "follow_app" (default), "light", or "dark" — tracks or pins the widget face */
+    val WIDGET_THEME_SOURCE = stringPreferencesKey("widget_theme_mode")
+
     /** Enable notification sounds */
     val NOTIFICATION_SOUND = booleanPreferencesKey("notification_sound")
 
