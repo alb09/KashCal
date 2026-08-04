@@ -32,4 +32,4 @@ jobs:
       - if: steps.before.outputs.sha != steps.after.outputs.sha
         run: gh workflow run codeberg-mirror.yml --repo ${{ github.repository }} --ref sync
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.KASHCAL_SYNC }}
