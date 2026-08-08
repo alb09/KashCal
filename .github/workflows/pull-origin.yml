@@ -16,7 +16,9 @@ jobs:
           fetch-depth: 0
 
       - id: before
-        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+        run: |
+          git fetch origin main
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   
       - name: Sync main from upstream
         env:
