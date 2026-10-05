@@ -6,19 +6,21 @@
 
 **All your calendars in one private app on Android.**
 
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="80">](https://play.google.com/store/apps/details?id=org.onekash.kashcal)
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="80">](https://f-droid.org/packages/org.onekash.kashcal)
-[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="80">](https://apt.izzysoft.de/fdroid/index/apk/org.onekash.kashcal)
-[<img src="https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png" height="70">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22:%22org.onekash.kashcal%22,%22url%22:%22https://github.com/KashCal/KashCal%22,%22author%22:%22KashCal%22,%22name%22:%22KashCal%22,%22additionalSettings%22:%22%7B%5C%22about%5C%22:%5C%22All%20your%20calendars%20in%20one%20private%20app%5C%22,%5C%22appAuthor%5C%22:%5C%22KashCal%5C%22%7D%22%7D)
+
+<sub>Also on [IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/org.onekash.kashcal), [Obtainium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22:%22org.onekash.kashcal%22,%22url%22:%22https://github.com/KashCal/KashCal%22,%22author%22:%22KashCal%22,%22name%22:%22KashCal%22,%22additionalSettings%22:%22%7B%5C%22about%5C%22:%5C%22All%20your%20calendars%20in%20one%20private%20app%5C%22,%5C%22appAuthor%5C%22:%5C%22KashCal%5C%22%7D%22%7D), or [GitHub Releases](https://github.com/KashCal/KashCal/releases).</sub>
 
 [<img src="https://img.shields.io/github/v/release/KashCal/KashCal?logo=github&label=GitHub&style=for-the-badge" height="36">](https://github.com/KashCal/KashCal/releases)
 [<img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge" height="36">](LICENSE)
 [<img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?style=for-the-badge&logo=github" height="36">](https://github.com/sponsors/one-kash)
+[<img src="https://img.shields.io/badge/Ask-DeepWiki-007ec6?style=for-the-badge" alt="Ask DeepWiki" height="36">](https://deepwiki.com/KashCal/KashCal)
 
-> **Official Repository:** This is the only official KashCal™ source. Only download from [F-Droid](https://f-droid.org/packages/org.onekash.kashcal), [IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/org.onekash.kashcal), [GitHub Releases](https://github.com/KashCal/KashCal/releases), or via [Obtainium](https://obtainium.imranr.dev/). Beware of copies distributing APKs from other sources.
+> **Official Repository:** This is the only official KashCal™ source. Only download from [Google Play](https://play.google.com/store/apps/details?id=org.onekash.kashcal), [F-Droid](https://f-droid.org/packages/org.onekash.kashcal), [IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/org.onekash.kashcal), [GitHub Releases](https://github.com/KashCal/KashCal/releases), or via [Obtainium](https://obtainium.imranr.dev/). Beware of copies distributing APKs from other sources.
 
 **APK Signing Certificate (SHA-256):**
 `B0:47:6C:12:88:28:BE:04:7B:64:FE:43:F7:9B:1D:5F:2C:34:60:B0:72:6F:B3:99:33:B1:16:20:D8:95:46:22`
-<br>Verify GitHub Release APKs with [AppVerifier](https://github.com/soupslurpr/AppVerifier) or Obtainium. F-Droid builds use F-Droid's own signing key.
+<br>This certificate signs the GitHub Release, IzzyOnDroid, and Obtainium APKs. Verify them with [AppVerifier](https://github.com/soupslurpr/AppVerifier) or Obtainium. F-Droid builds carry F-Droid's own signing key and Google Play builds carry Google Play's app signing key, so their certificates differ.
 
 ---
 
@@ -53,22 +55,23 @@ Family stuff on iCloud. Holidays from some website. Birthdays buried in your con
 
 ## Your schedule, together
 
-- **iCloud**: Switched to Android but your family is still on Apple? Sync with iCloud calendars directly. No workaround needed.
-- **CalDAV**: Nextcloud, Radicale, Baïkal, Stalwart, Purelymail, FastMail, Zoho, SOGo, and more. Native sync, no middleware.
-- **Device calendar**: See events from your phone's built-in calendar alongside everything else.
+- **iCloud**: Switched to Android but your family is still on Apple? Sync with iCloud calendars directly.
+- **CalDAV**: Nextcloud, Radicale, Baïkal, Stalwart, Purelymail, Fastmail, Zoho, SOGo, and more. Native sync, no middleware.
+- **Device calendar**: See and edit events from your phone's built-in calendar alongside everything else.
 - **Holidays & schedules**: Subscribe to any ICS calendar. Holidays, school schedules, sports seasons.
-- **Birthdays**: Pulls from your contacts automatically.
+- **Contacts**: Two-way CardDAV contact sync, including photos.
+- **Birthdays and anniversaries**: Turn them on and KashCal builds calendars from your contacts.
 - **Local**: Don't need sync? Works fully offline out of the box.
 
 Material You with dynamic theming. Home screen widgets. Full-text search across all events. Per-event timezone for travel.
 
 ## Private by default
 
-No analytics, no tracking, no KashCal account required. Data is stored locally unless you explicitly set up sync.
+No analytics, no tracking, no KashCal account required. Your data stays on the phone unless you set up sync.
 
 - **Fort Knox Mode**: other apps have no access to your events
 - **Encrypted credentials** via Android Keystore (AES-256-GCM)
-- **HTTPS only**: cleartext traffic blocked
+- **HTTPS by default**: an account uses plain http only if you enter an http:// address, and an https account never falls back to http
 - **No WebViews**: native UI only
 - **Minimal permissions**: only what's necessary
 - **Fully auditable**: open source codebase
@@ -85,9 +88,9 @@ Community-made add-ons that enhance KashCal features.
 
 | Add-on | Description | Author |
 |--------|-------------|--------|
-| [long-reminder-sounds](https://github.com/SchrodingersCpp/long-reminder-sounds) | Notification sound files that keep alerting at intervals until you dismiss. Effectively enables repeat-until-dismissed reminders ([#178](https://github.com/KashCal/KashCal/issues/178)) | [@SchrodingersCpp](https://github.com/SchrodingersCpp) |
+| [long-reminder-sounds](https://github.com/SchrodingersCpp/long-reminder-sounds) | Notification sound files that keep alerting at intervals until you dismiss them, which gives repeat-until-dismissed reminders ([#178](https://github.com/KashCal/KashCal/issues/178)) | [@SchrodingersCpp](https://github.com/SchrodingersCpp) |
 
-Built something that pairs with KashCal? [Open an issue](https://github.com/KashCal/KashCal/issues) and we'll add it here.
+Built something that pairs with KashCal? [Open an issue](https://github.com/KashCal/KashCal/issues) to have it listed here.
 
 ## Tested CalDAV Providers
 
@@ -101,7 +104,7 @@ Built something that pairs with KashCal? [Open an issue](https://github.com/Kash
 | mailbox.org | ✓ | [@h1nnak](https://github.com/h1nnak) |
 | Infomaniak | ✓ | [@dirko-madrileno](https://github.com/dirko-madrileno) |
 | Stalwart | ✓ | [@OneCreek](https://github.com/OneCreek) |
-| FastMail | ✓ | [@mittensicle](https://github.com/mittensicle) |
+| Fastmail | ✓ | [@mittensicle](https://github.com/mittensicle) |
 | [Davis](https://github.com/tchapi/davis) | ✓ | [@Ivan-Roger](https://github.com/Ivan-Roger) |
 | [Purelymail](https://purelymail.com/) | ✓ | [@babyhuehnchen](https://github.com/babyhuehnchen) |
 | [Posteo](https://posteo.de/) | ✓ | [@4nndee](https://github.com/4nndee) |
@@ -109,6 +112,12 @@ Built something that pairs with KashCal? [Open an issue](https://github.com/Kash
 | [SOGo](https://github.com/Alinto/sogo) | ✓ | [@mdonz](https://github.com/mdonz) |
 
 Found a CalDAV server that doesn't work? [Let us know](https://github.com/KashCal/KashCal/issues)!
+
+## Device Calendar
+
+KashCal reads and edits your phone's built-in system calendar, so any app that syncs there works too: Google Calendar, Outlook (with Android calendar sync on), or an end-to-end-encrypted service like [SilentSuite](https://github.com/silent-suite/silentsuite). Their events show up in KashCal, and you can create, edit, and delete them. KashCal writes to the device calendar, and each app syncs the changes back to its own server.
+
+SilentSuite two-way sync was tested by [@silent-suite](https://github.com/silent-suite). Using another app that syncs to your device calendar? [Let us know](https://github.com/KashCal/KashCal/issues)!
 
 ---
 
@@ -119,7 +128,8 @@ Found a CalDAV server that doesn't work? [Let us know](https://github.com/KashCa
 
 | Category | Technology |
 |----------|------------|
-| CalDAV/ICS | [iCalDAV](https://github.com/icaldav/icaldav) |
+| CalDAV/ICS | `icaldav-core` (in-tree, wraps ical4j 4.3.0) |
+| CardDAV/contacts | `vcard-core` (in-tree, wraps ez-vcard 0.12.2) |
 | UI | Jetpack Compose, Material 3 |
 | Widgets | Jetpack Glance |
 | Database | Room + FTS4 full-text search |
@@ -139,8 +149,9 @@ cd KashCal
 
 ### Requirements
 - Android Studio (latest stable)
-- JDK 17
-- Android SDK 35
+- JDK 21
+- Android SDK 37 (compile and target)
+- Runs on Android 12 (API 31) and up
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 

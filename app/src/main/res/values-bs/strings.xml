@@ -85,6 +85,7 @@
     <string name="action_delete">Obriši</string>
     <string name="action_confirm">Potvrdi</string>
     <string name="action_discard">Odbaci</string>
+    <string name="action_discard_confirm">Odbaciti?</string>
     <string name="action_dismiss">Odbaci</string>
     <string name="action_show_all">Prikaži sve</string>
     <string name="action_connect">Poveži</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Idi na datum</string>
     <string name="label_week">S</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Postavke</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Poveži iCloud da vidiš svoje događaje</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Novosti</string>
-    <string name="whats_new_dismiss">Razumijem</string>
+    <string name="whats_new_later">Kasnije</string>
     <string name="whats_new_v598_title">Pomozi da Android ostane otvoren</string>
     <string name="whats_new_v598_body">Google mijenja način na koji instalirate aplikacije na uređaj. Potrebna nam je tvoja pomoć.</string>
     <string name="whats_new_v598_action_label">Posjeti keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Trajna zahvalnost</string>
+    <string name="whats_new_v732_body">Ovo izdanje posvećeno je onima koji podržavaju KashCal. Mali doprinos koji se stalno isplaćuje.</string>
+    <string name="whats_new_v732_caption">Još nisi podržavalac?</string>
+    <string name="whats_new_v732_action_label">Dodaj nas u svoje planove</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Poveži iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Nijedan kalendar nije pronađen na ovom serveru.</string>
     <string name="caldav_error_unexpected">Neočekivana greška. Pokušajte ponovo.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nAko je ovo server na tvojoj lokalnoj mreži, dozvoli pristup lokalnoj mreži za povezivanje.</string>
+    <string name="caldav_error_connection_refused_insecure">Server je preusmjerio vezu na mjesto na koje KashCal ne ide (nešifrovanu adresu ili petlju preusmjeravanja), pa je KashCal stao prije slanja tvoje lozinke. Provjeri adresu servera.</string>
     <string name="local_network_banner_title">Potreban pristup lokalnoj mreži</string>
     <string name="local_network_banner_body">Ovaj server izgleda kao da je na tvojoj lokalnoj mreži. Dozvoli pristup lokalnoj mreži kako bi se KashCal mogao povezati s njim.</string>
     <string name="local_network_banner_allow">Dozvoli pristup</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Kalendar</string>
     <string name="account_detail_sync_calendar_subtitle">Sinhronizuj kalendare ovog računa</string>
     <string name="account_detail_sync_contacts">Kontakti</string>
-    <string name="account_detail_sync_contacts_subtitle">Sinhronizuj kontakte ovog računa na telefon</string>
+    <string name="account_detail_sync_contacts_subtitle">Sinhronizuj kontakte ovog računa</string>
     <string name="account_detail_contacts_permission_needed">Dozvola za kontakte je isključena. Dozvoli pristup da bi se kontakti nastavili sinhronizirati.</string>
     <string name="account_detail_contacts_grant">Dozvoli pristup</string>
     <string name="contact_sync_enabled_for">Sinhronizacija kontakata za %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Predloži nazive događaja</string>
     <string name="settings_suggest_titles_info">Dok imenujete novi događaj, predlaže naslove koje ste već koristili, pa su ponovljeni događaji jedan dodir. Rangirano prema tome koliko često i koliko nedavno ste ih koristili.</string>
     <string name="settings_week_numbers">Brojevi sedmica</string>
+    <string name="settings_multiday_in_allday_strip">Višednevni događaji u traci za cijeli dan</string>
+    <string name="settings_multiday_in_allday_strip_info">Prikaži događaje s vremenom koji traju duže od jednog dana u traci za cijeli dan na vrhu sedmičnog prikaza, umjesto u mreži s vremenom. Isključite da biste ih zadržali u mreži s vremenom svaki dan.</string>
     <string name="settings_show_declined">Prikaži odbijene događaje</string>
     <string name="settings_widget_event_limit">Ograničenje događaja widgeta</string>
     <string name="settings_widget_event_limit_hint">Najviše događaja prikazanih po danu u widgetima</string>
@@ -851,6 +857,8 @@
     <string name="dialog_edit_recurring_title">Sačuvaj promjene u</string>
     <string name="dialog_delete_recurring_title">Obriši</string>
     <string name="dialog_move_recurring_title">Premjesti</string>
+    <string name="snackbar_event_rescheduled">Događaj premješten</string>
+    <string name="snackbar_reschedule_failed">Premještanje događaja nije uspjelo</string>
     <string name="recurring_this_event">Ovaj događaj</string>
     <string name="recurring_all_events">Sve događaje</string>
 
@@ -1155,6 +1163,7 @@
     <string name="ics_sync_every_n_hours">Svakih %1$d sati</string>
     <string name="ics_sync_daily">Dnevno</string>
     <string name="ics_sync_weekly">Sedmično</string>
+    <string name="default_calendar_name">Kalendar</string>
     <string name="ics_url_required">URL je obavezan</string>
     <string name="ics_url_invalid_scheme">URL mora počinjati sa http://, https:// ili webcal://</string>
     <string name="ics_fetch_error_http">Server je vratio grešku (%1$d). Provjerite URL.</string>

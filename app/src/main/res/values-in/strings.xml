@@ -85,6 +85,7 @@
     <string name="action_delete">Hapus</string>
     <string name="action_confirm">Konfirmasi</string>
     <string name="action_discard">Buang</string>
+    <string name="action_discard_confirm">Buang?</string>
     <string name="action_dismiss">Abaikan</string>
     <string name="action_show_all">Tampilkan Semua</string>
     <string name="action_connect">Hubungkan</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Ke tanggal</string>
     <string name="label_week">M</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Pengaturan</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Hubungkan iCloud untuk melihat acara Anda di sini</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Apa yang baru</string>
-    <string name="whats_new_dismiss">Mengerti</string>
+    <string name="whats_new_later">Nanti saja</string>
     <string name="whats_new_v598_title">Bantu Android tetap terbuka</string>
     <string name="whats_new_v598_body">Google sedang mengubah cara Anda memasang aplikasi di perangkat. Kami butuh bantuan Anda.</string>
     <string name="whats_new_v598_action_label">Kunjungi keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Terima kasih yang abadi</string>
+    <string name="whats_new_v732_body">Rilis ini kami persembahkan untuk para pendukung KashCal. Kontribusi kecil dengan manfaat besar yang terus berlanjut.</string>
+    <string name="whats_new_v732_caption">Belum jadi pendukung?</string>
+    <string name="whats_new_v732_action_label">Tambahkan kami ke rencana Anda</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Hubungkan iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Tidak ada kalender ditemukan di server ini.</string>
     <string name="caldav_error_unexpected">Kesalahan tak terduga. Silakan coba lagi.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nKalau ini server di jaringan lokalmu, izinkan akses jaringan lokal untuk terhubung.</string>
+    <string name="caldav_error_connection_refused_insecure">Server mengalihkan koneksi ke tempat yang tidak diikuti KashCal (alamat tanpa enkripsi, atau pengalihan berulang), jadi KashCal berhenti sebelum mengirim kata sandi Anda. Periksa alamat server.</string>
     <string name="local_network_banner_title">Perlu akses jaringan lokal</string>
     <string name="local_network_banner_body">Server ini sepertinya ada di jaringan lokalmu. Izinkan akses jaringan lokal agar KashCal bisa terhubung ke server ini.</string>
     <string name="local_network_banner_allow">Izinkan akses</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Kalender</string>
     <string name="account_detail_sync_calendar_subtitle">Sinkronkan kalender akun ini</string>
     <string name="account_detail_sync_contacts">Kontak</string>
-    <string name="account_detail_sync_contacts_subtitle">Sinkronkan kontak akun ini ke ponsel Anda</string>
+    <string name="account_detail_sync_contacts_subtitle">Sinkronkan kontak akun ini</string>
     <string name="account_detail_contacts_permission_needed">Izin Kontak nonaktif. Berikan akses agar kontak tetap tersinkronisasi.</string>
     <string name="account_detail_contacts_grant">Berikan akses</string>
     <string name="contact_sync_enabled_for">Menyinkronkan kontak untuk %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Sarankan judul acara</string>
     <string name="settings_suggest_titles_info">Saat Anda memberi nama acara baru, sarankan judul yang pernah Anda gunakan sebelumnya, sehingga acara berulang cukup satu ketukan. Diurutkan berdasarkan seberapa sering dan seberapa baru Anda menggunakannya.</string>
     <string name="settings_week_numbers">Nomor Minggu</string>
+    <string name="settings_multiday_in_allday_strip">Acara multi-hari di strip sepanjang hari</string>
+    <string name="settings_multiday_in_allday_strip_info">Tampilkan acara berwaktu yang berlangsung lebih dari satu hari di strip sepanjang hari di bagian atas tampilan minggu, bukan di kisi waktu. Matikan untuk tetap menampilkannya di kisi waktu setiap hari.</string>
     <string name="settings_show_declined">Tampilkan acara yang ditolak</string>
     <string name="settings_widget_event_limit">Batas Acara Widget</string>
     <string name="settings_widget_event_limit_hint">Jumlah acara terbanyak per hari di widget</string>
@@ -787,6 +793,8 @@
     <string name="dialog_edit_recurring_title">Simpan perubahan ke</string>
     <string name="dialog_delete_recurring_title">Hapus</string>
     <string name="dialog_move_recurring_title">Pindahkan</string>
+    <string name="snackbar_event_rescheduled">Acara dijadwalkan ulang</string>
+    <string name="snackbar_reschedule_failed">Tidak dapat menjadwalkan ulang acara</string>
     <string name="recurring_this_event">Acara ini</string>
     <string name="recurring_all_events">Semua acara</string>
 
@@ -1059,6 +1067,7 @@
     <string name="ics_sync_every_n_hours">Setiap %1$d jam</string>
     <string name="ics_sync_daily">Harian</string>
     <string name="ics_sync_weekly">Mingguan</string>
+    <string name="default_calendar_name">Kalender</string>
     <string name="ics_url_required">URL diperlukan</string>
     <string name="ics_url_invalid_scheme">URL harus diawali dengan http://, https://, atau webcal://</string>
     <string name="ics_fetch_error_http">Server mengembalikan galat (%1$d). Silakan periksa URL.</string>

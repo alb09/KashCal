@@ -85,6 +85,7 @@
     <string name="action_delete">Eyða</string>
     <string name="action_confirm">Staðfesta</string>
     <string name="action_discard">Henda</string>
+    <string name="action_discard_confirm">Henda?</string>
     <string name="action_dismiss">Hunsa</string>
     <string name="action_show_all">Sýna allt</string>
     <string name="action_connect">Tengja</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Fara á dagsetningu</string>
     <string name="label_week">V</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Stillingar</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Tengdu iCloud til að sjá viðburðina þína hér</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Nýjungar</string>
-    <string name="whats_new_dismiss">Í lagi</string>
+    <string name="whats_new_later">Seinna</string>
     <string name="whats_new_v598_title">Hjálpaðu til við að halda Android opnu</string>
     <string name="whats_new_v598_body">Google er að breyta því hvernig þú setur upp forrit í tækinu þínu. Við þurfum hjálp þína.</string>
     <string name="whats_new_v598_action_label">Heimsækja keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Varanlegt þakklæti</string>
+    <string name="whats_new_v732_body">Þessi útgáfa er tileinkuð þeim sem styðja KashCal. Lítið framlag með stórum, endurteknum ávinningi.</string>
+    <string name="whats_new_v732_caption">Ekki enn stuðningsmaður?</string>
+    <string name="whats_new_v732_action_label">Bættu okkur við áætlanir þínar</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Tengja iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Engin dagatöl fundust á þessum þjóni.</string>
     <string name="caldav_error_unexpected">Óvænt villa. Reyndu aftur.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nEf þetta er þjónn á staðarnetinu þínu skaltu leyfa aðgang að staðarneti til að tengjast.</string>
+    <string name="caldav_error_connection_refused_insecure">Þjónninn vísaði tengingunni eitthvert sem KashCal fylgir ekki (á ódulkóðað vistfang eða í endurvísunarlykkju), svo KashCal hætti áður en lykilorðið þitt var sent. Athugaðu vistfang þjónsins.</string>
     <string name="local_network_banner_title">Aðgangur að staðarneti nauðsynlegur</string>
     <string name="local_network_banner_body">Þessi þjónn virðist vera á staðarnetinu þínu. Leyfðu aðgang að staðarneti svo KashCal geti tengst honum.</string>
     <string name="local_network_banner_allow">Leyfa aðgang</string>
@@ -530,7 +534,7 @@
     <string name="account_detail_sync_calendar">Dagatal</string>
     <string name="account_detail_sync_calendar_subtitle">Samstilla dagatöl þessa reiknings</string>
     <string name="account_detail_sync_contacts">Tengiliðir</string>
-    <string name="account_detail_sync_contacts_subtitle">Samstilla tengiliði þessa reiknings við símann þinn</string>
+    <string name="account_detail_sync_contacts_subtitle">Samstilla tengiliði þessa reiknings</string>
     <string name="account_detail_contacts_permission_needed">Heimild fyrir tengiliði er slökkt. Veittu aðgang til að halda áfram að samstilla tengiliði.</string>
     <string name="account_detail_contacts_grant">Veita aðgang</string>
     <string name="contact_sync_enabled_for">Samstilli tengiliði fyrir %1$s</string>
@@ -570,6 +574,8 @@
     <string name="settings_suggest_titles">Stinga upp á heiti viðburða</string>
     <string name="settings_suggest_titles_info">Þegar þú nefnir nýjan viðburð eru lögð til heiti sem þú hefur notað áður, svo endurteknir viðburðir eru aðeins eitt bank í burtu. Raðað eftir því hversu oft og hversu nýlega þú hefur notað þau.</string>
     <string name="settings_week_numbers">Vikunúmer</string>
+    <string name="settings_multiday_in_allday_strip">Fjölda daga viðburðir í heilsdagsrönd</string>
+    <string name="settings_multiday_in_allday_strip_info">Sýna tímasetta viðburði sem ná yfir meira en einn dag í heilsdagsrönd efst í vikuyfirliti, í stað tímatöflu. Slökktu til að halda þeim í tímatöflu hvern dag.</string>
     <string name="settings_show_declined">Sýna höfnuð atvik</string>
     <string name="settings_widget_event_limit">Viðburðahámark græju</string>
     <string name="settings_widget_event_limit_hint">Flestir viðburðir sýndir á dag í græjum</string>
@@ -818,6 +824,8 @@
     <string name="dialog_edit_recurring_title">Vista breytingar á</string>
     <string name="dialog_delete_recurring_title">Eyða</string>
     <string name="dialog_move_recurring_title">Flytja</string>
+    <string name="snackbar_event_rescheduled">Viðburður færður</string>
+    <string name="snackbar_reschedule_failed">Ekki tókst að færa viðburð</string>
     <string name="recurring_this_event">Þennan viðburð</string>
     <string name="recurring_all_events">Alla viðburði</string>
 
@@ -1106,6 +1114,7 @@
     <string name="ics_sync_every_n_hours">Á %1$d klukkustunda fresti</string>
     <string name="ics_sync_daily">Daglega</string>
     <string name="ics_sync_weekly">Vikulega</string>
+    <string name="default_calendar_name">Dagatal</string>
     <string name="ics_url_required">URL er nauðsynlegt</string>
     <string name="ics_url_invalid_scheme">URL verður að byrja á http://, https:// eða webcal://</string>
     <string name="ics_fetch_error_http">Netþjónninn skilaði villu (%1$d). Athugaðu URL-slóðina.</string>

@@ -85,6 +85,7 @@
     <string name="action_delete">Ezabatu</string>
     <string name="action_confirm">Berretsi</string>
     <string name="action_discard">Baztertu</string>
+    <string name="action_discard_confirm">Aldaketak baztertu?</string>
     <string name="action_dismiss">Baztertu</string>
     <string name="action_show_all">Dena erakutsi</string>
     <string name="action_connect">Konektatu</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Datara joan</string>
     <string name="label_week">A</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Ezarpenak</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Konektatu iCloud zure gertaerak hemen ikusteko</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Berriak</string>
-    <string name="whats_new_dismiss">Ulertuta</string>
+    <string name="whats_new_later">Geroago</string>
     <string name="whats_new_v598_title">Lagundu Android irekirik mantentzen</string>
     <string name="whats_new_v598_body">Google zure gailuan aplikazioak instalatzeko modua aldatzen ari da. Zure laguntza behar dugu.</string>
     <string name="whats_new_v598_action_label">Bisitatu keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Esker on iraunkor bat</string>
+    <string name="whats_new_v732_body">Bertsio hau KashCal-en babesleei eskaintzen zaie. Ekarpen txiki bat, etekin handi eta errepikakorrarekin.</string>
+    <string name="whats_new_v732_caption">Oraindik ez gaituzu babesten?</string>
+    <string name="whats_new_v732_action_label">Gehitu gaitzazu zure planetara</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud konektatu</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Ez da egutegirik aurkitu zerbitzari honetan.</string>
     <string name="caldav_error_unexpected">Ustekabeko errorea. Saiatu berriro.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nHau zure sare lokaleko zerbitzari bat bada, baimendu sare lokalerako sarbidea konektatzeko.</string>
+    <string name="caldav_error_connection_refused_insecure">Zerbitzariak konexioa KashCal-ek jarraitzen ez duen leku batera birbideratu du (zifratu gabeko helbide batera edo birbideratze-begizta batera); beraz, KashCal gelditu egin da zure pasahitza bidali aurretik. Egiaztatu zerbitzariaren helbidea.</string>
     <string name="local_network_banner_title">Sare lokalerako sarbidea behar da</string>
     <string name="local_network_banner_body">Badirudi zerbitzari hau zure sare lokalean dagoela. Baimendu sare lokalerako sarbidea KashCal bertara konektatu ahal izan dadin.</string>
     <string name="local_network_banner_allow">Baimendu sarbidea</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Egutegia</string>
     <string name="account_detail_sync_calendar_subtitle">Sinkronizatu kontu honen egutegiak</string>
     <string name="account_detail_sync_contacts">Kontaktuak</string>
-    <string name="account_detail_sync_contacts_subtitle">Sinkronizatu kontu honen kontaktuak zure telefonoan</string>
+    <string name="account_detail_sync_contacts_subtitle">Sinkronizatu kontu honen kontaktuak</string>
     <string name="account_detail_contacts_permission_needed">Kontaktuen baimena desaktibatuta dago. Eman sarbidea kontaktuak sinkronizatzen jarraitzeko.</string>
     <string name="account_detail_contacts_grant">Eman sarbidea</string>
     <string name="contact_sync_enabled_for">%1$s kontuaren kontaktuak sinkronizatzen</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Iradoki gertaeren izenburuak</string>
     <string name="settings_suggest_titles_info">Gertaera berri bati izena jartzean, lehen erabili dituzun izenburuak iradokitzen ditu, errepikatzen diren gertaerak ukitu bakarrean egon daitezen. Zenbat aldiz eta noiz arte erabili dituzun arabera sailkatuta.</string>
     <string name="settings_week_numbers">Aste-zenbakiak</string>
+    <string name="settings_multiday_in_allday_strip">Egun anitzeko ekitaldiak egun osoko zerrendan</string>
+    <string name="settings_multiday_in_allday_strip_info">Erakutsi egun bat baino gehiago irauten duten ordu-ekitaldiak asteko ikuspegiaren goiko aldeko egun osoko zerrendan, ordu-saretan erakutsi beharrean. Desaktibatu egunero ordu-saretan mantentzeko.</string>
     <string name="settings_show_declined">Erakutsi ezetsitako gertaerak</string>
     <string name="settings_widget_event_limit">Widget-eko gertaera-muga</string>
     <string name="settings_widget_event_limit_hint">Widgetetan eguneko gehienez erakusten diren gertaerak</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">Gorde aldaketak</string>
     <string name="dialog_delete_recurring_title">Ezabatu</string>
     <string name="dialog_move_recurring_title">Eraman</string>
+    <string name="snackbar_event_rescheduled">Gertaera birprogramatu da</string>
+    <string name="snackbar_reschedule_failed">Ezin izan da gertaera birprogramatu</string>
     <string name="recurring_this_event">Gertaera hau</string>
     <string name="recurring_all_events">Gertaera guztiak</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">%1$d orduro</string>
     <string name="ics_sync_daily">Egunero</string>
     <string name="ics_sync_weekly">Astero</string>
+    <string name="default_calendar_name">Egutegia</string>
     <string name="ics_url_required">URL behar da</string>
     <string name="ics_url_invalid_scheme">URLa http://, https://, edo webcal:// bidez hasi behar da</string>
     <string name="ics_fetch_error_http">Zerbitzariak errore bat itzuli du (%1$d). Egiaztatu URLa.</string>

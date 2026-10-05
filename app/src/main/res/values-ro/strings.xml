@@ -85,6 +85,7 @@
     <string name="action_delete">Șterge</string>
     <string name="action_confirm">Confirmă</string>
     <string name="action_discard">Renunță</string>
+    <string name="action_discard_confirm">Renunți?</string>
     <string name="action_dismiss">Respinge</string>
     <string name="action_show_all">Arată tot</string>
     <string name="action_connect">Conectează</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Mergi la data</string>
     <string name="label_week">S</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Setări</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Conectează iCloud pentru a vedea evenimentele tale aici</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Noutăți</string>
-    <string name="whats_new_dismiss">Am înțeles</string>
+    <string name="whats_new_later">Poate mai târziu</string>
     <string name="whats_new_v598_title">Ajută să păstrăm Android deschis</string>
     <string name="whats_new_v598_body">Google schimbă modul în care instalezi aplicații pe dispozitivul tău. Avem nevoie de ajutorul tău.</string>
     <string name="whats_new_v598_action_label">Vizitează keepandroidopen.org</string>
+    <string name="whats_new_v732_title">O mulțumire de durată</string>
+    <string name="whats_new_v732_body">Această versiune este dedicată susținătorilor KashCal. O contribuție mică, cu un beneficiu mare care revine mereu.</string>
+    <string name="whats_new_v732_caption">Încă nu ești susținător?</string>
+    <string name="whats_new_v732_action_label">Adaugă-ne în planurile tale</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Conectare iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Nu s-au găsit calendare pe acest server.</string>
     <string name="caldav_error_unexpected">Eroare neașteptată. Încercați din nou.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nDacă acesta este un server din rețeaua ta locală, permite accesul la rețeaua locală pentru a te conecta.</string>
+    <string name="caldav_error_connection_refused_insecure">Serverul a redirecționat conexiunea către un loc unde KashCal nu merge (o adresă necriptată sau o buclă de redirecționări), așa că KashCal s-a oprit înainte să îți trimită parola. Verifică adresa serverului.</string>
     <string name="local_network_banner_title">Este necesar accesul la rețeaua locală</string>
     <string name="local_network_banner_body">Se pare că acest server este în rețeaua ta locală. Permite accesul la rețeaua locală pentru ca KashCal să se poată conecta la el.</string>
     <string name="local_network_banner_allow">Permite accesul</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Calendar</string>
     <string name="account_detail_sync_calendar_subtitle">Sincronizează calendarele acestui cont</string>
     <string name="account_detail_sync_contacts">Contacte</string>
-    <string name="account_detail_sync_contacts_subtitle">Sincronizează contactele acestui cont pe telefonul tău</string>
+    <string name="account_detail_sync_contacts_subtitle">Sincronizează contactele acestui cont</string>
     <string name="account_detail_contacts_permission_needed">Permisiunea pentru Contacte este dezactivată. Acordă accesul pentru a menține sincronizarea contactelor.</string>
     <string name="account_detail_contacts_grant">Acordă acces</string>
     <string name="contact_sync_enabled_for">Se sincronizează contactele pentru %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Sugerează titluri de evenimente</string>
     <string name="settings_suggest_titles_info">Pe măsură ce denumești un eveniment nou, sugerează titluri folosite anterior, astfel încât evenimentele repetate să fie la o singură atingere. Clasificate după cât de des și cât de recent le-ai folosit.</string>
     <string name="settings_week_numbers">Numere săptămâni</string>
+    <string name="settings_multiday_in_allday_strip">Evenimente pe mai multe zile în banda de toată ziua</string>
+    <string name="settings_multiday_in_allday_strip_info">Afișează evenimentele cu oră care se întind pe mai mult de o zi în banda de toată ziua din partea de sus a vizualizării săptămânale, în loc de grila orară. Dezactivează pentru a le păstra în grila orară în fiecare zi.</string>
     <string name="settings_show_declined">Afișează evenimentele refuzate</string>
     <string name="settings_widget_event_limit">Limită evenimente widget</string>
     <string name="settings_widget_event_limit_hint">Numărul maxim de evenimente afișate pe zi în widgeturi</string>
@@ -851,6 +857,8 @@
     <string name="dialog_edit_recurring_title">Salvează modificările în</string>
     <string name="dialog_delete_recurring_title">Șterge</string>
     <string name="dialog_move_recurring_title">Mută</string>
+    <string name="snackbar_event_rescheduled">Eveniment reprogramat</string>
+    <string name="snackbar_reschedule_failed">Nu s-a putut reprograma evenimentul</string>
     <string name="recurring_this_event">Acest eveniment</string>
     <string name="recurring_all_events">Toate evenimentele</string>
 
@@ -1155,6 +1163,7 @@
     <string name="ics_sync_every_n_hours">La fiecare %1$d ore</string>
     <string name="ics_sync_daily">Zilnic</string>
     <string name="ics_sync_weekly">Săptămânal</string>
+    <string name="default_calendar_name">Calendar</string>
     <string name="ics_url_required">URL-ul este obligatoriu</string>
     <string name="ics_url_invalid_scheme">URL-ul trebuie să înceapă cu http://, https:// sau webcal://</string>
     <string name="ics_fetch_error_http">Serverul a returnat o eroare (%1$d). Verifică URL-ul.</string>

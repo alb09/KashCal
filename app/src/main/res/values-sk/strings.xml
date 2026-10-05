@@ -85,6 +85,7 @@
     <string name="action_delete">Zmazať</string>
     <string name="action_confirm">Potvrdiť</string>
     <string name="action_discard">Zahodiť</string>
+    <string name="action_discard_confirm">Zahodiť?</string>
     <string name="action_dismiss">Zavrieť</string>
     <string name="action_show_all">Zobraziť všetko</string>
     <string name="action_connect">Pripojiť</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Prejsť na dátum</string>
     <string name="label_week">T</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Nastavenia</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Pripojte iCloud a uvidíte svoje udalosti</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Novinky</string>
-    <string name="whats_new_dismiss">Rozumiem</string>
+    <string name="whats_new_later">Neskôr</string>
     <string name="whats_new_v598_title">Pomôžte zachovať otvorenosť Androidu</string>
     <string name="whats_new_v598_body">Google mení spôsob, akým inštalujete aplikácie na svoje zariadenie. Potrebujeme vašu pomoc.</string>
     <string name="whats_new_v598_action_label">Navštíviť keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Trvalé poďakovanie</string>
+    <string name="whats_new_v732_body">Túto verziu venujeme tým, ktorí podporujú KashCal. Malý príspevok, ktorý sa stále vypláca.</string>
+    <string name="whats_new_v732_caption">Ešte nepodporujete?</string>
+    <string name="whats_new_v732_action_label">Pridajte nás do svojich plánov</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Pripojiť iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Na tomto serveri neboli nájdené žiadne kalendáre.</string>
     <string name="caldav_error_unexpected">Neočakávaná chyba. Skúste to znova.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nAk je to server vo vašej miestnej sieti, povoľte prístup k miestnej sieti, aby ste sa mohli pripojiť.</string>
+    <string name="caldav_error_connection_refused_insecure">Server presmeroval pripojenie tam, kam KashCal nepokračuje (na nešifrovanú adresu alebo do slučky presmerovaní), takže KashCal skončil skôr, než odoslal tvoje heslo. Skontroluj adresu servera.</string>
     <string name="local_network_banner_title">Potrebný prístup k miestnej sieti</string>
     <string name="local_network_banner_body">Tento server vyzerá, že je vo vašej miestnej sieti. Povoľte prístup k miestnej sieti, aby sa k nemu KashCal mohol pripojiť.</string>
     <string name="local_network_banner_allow">Povoliť prístup</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Kalendár</string>
     <string name="account_detail_sync_calendar_subtitle">Synchronizovať kalendáre tohto účtu</string>
     <string name="account_detail_sync_contacts">Kontakty</string>
-    <string name="account_detail_sync_contacts_subtitle">Synchronizovať kontakty tohto účtu do telefónu</string>
+    <string name="account_detail_sync_contacts_subtitle">Synchronizovať kontakty tohto účtu</string>
     <string name="account_detail_contacts_permission_needed">Povolenie na kontakty je vypnuté. Povoľ prístup, aby sa kontakty ďalej synchronizovali.</string>
     <string name="account_detail_contacts_grant">Povoliť prístup</string>
     <string name="contact_sync_enabled_for">Synchronizácia kontaktov pre %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Navrhovať názvy udalostí</string>
     <string name="settings_suggest_titles_info">Keď pomenúvate novú udalosť, navrhne skôr použité názvy, takže opakujúce sa udalosti sú na jedno ťuknutie. Zoradené podľa toho, ako často a ako nedávno ste ich použili.</string>
     <string name="settings_week_numbers">Čísla týždňov</string>
+    <string name="settings_multiday_in_allday_strip">Viacdňové udalosti v celodennom pruhu</string>
+    <string name="settings_multiday_in_allday_strip_info">Zobraziť časované udalosti trvajúce viac ako jeden deň v celodennom pruhu v hornej časti týždenného zobrazenia namiesto časovej mriežky. Vypnutím ich necháte v časovej mriežke každý deň.</string>
     <string name="settings_show_declined">Zobraziť odmietnuté udalosti</string>
     <string name="settings_widget_event_limit">Limit udalostí widgetu</string>
     <string name="settings_widget_event_limit_hint">Najviac udalostí zobrazených za deň vo widgetoch</string>
@@ -883,6 +889,8 @@
     <string name="dialog_edit_recurring_title">Uložiť zmeny</string>
     <string name="dialog_delete_recurring_title">Odstrániť</string>
     <string name="dialog_move_recurring_title">Presunúť</string>
+    <string name="snackbar_event_rescheduled">Udalosť presunutá</string>
+    <string name="snackbar_reschedule_failed">Udalosť sa nepodarilo presunúť</string>
     <string name="recurring_this_event">Túto udalosť</string>
     <string name="recurring_all_events">Všetky udalosti</string>
 
@@ -1203,6 +1211,7 @@
     <string name="ics_sync_every_n_hours">Každých %1$d hodín</string>
     <string name="ics_sync_daily">Denne</string>
     <string name="ics_sync_weekly">Týždenne</string>
+    <string name="default_calendar_name">Kalendár</string>
     <string name="ics_url_required">URL je povinné</string>
     <string name="ics_url_invalid_scheme">URL musí začínať http://, https:// alebo webcal://</string>
     <string name="ics_fetch_error_http">Server vrátil chybu (%1$d). Skontrolujte URL.</string>

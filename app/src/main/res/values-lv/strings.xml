@@ -85,6 +85,7 @@
     <string name="action_delete">Dzēst</string>
     <string name="action_confirm">Apstiprināt</string>
     <string name="action_discard">Atmest</string>
+    <string name="action_discard_confirm">Atmest?</string>
     <string name="action_dismiss">Noraidīt</string>
     <string name="action_show_all">Rādīt visus</string>
     <string name="action_connect">Savienot</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Pāriet uz datumu</string>
     <string name="label_week">N</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Iestatījumi</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Savienojiet iCloud, lai šeit redzētu savus notikumus</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Kas jauns</string>
-    <string name="whats_new_dismiss">Sapratu</string>
+    <string name="whats_new_later">Vēlāk</string>
     <string name="whats_new_v598_title">Palīdzi saglabāt Android atvērtu</string>
     <string name="whats_new_v598_body">Google maina veidu, kā tu instalē lietotnes savā ierīcē. Mums vajadzīga tava palīdzība.</string>
     <string name="whats_new_v598_action_label">Apmeklēt keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Pastāvīga pateicība</string>
+    <string name="whats_new_v732_body">Šis laidiens ir veltīts KashCal atbalstītājiem. Mazs ieguldījums ar lielu regulāru atdevi.</string>
+    <string name="whats_new_v732_caption">Vēl neesi atbalstītājs?</string>
+    <string name="whats_new_v732_action_label">Pievieno mūs saviem plāniem</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Savienot iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Šajā serverī kalendāri nav atrasti.</string>
     <string name="caldav_error_unexpected">Negaidīta kļūda. Mēģiniet vēlreiz.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nJa šis ir serveris tavā lokālajā tīklā, atļauj piekļuvi lokālajam tīklam, lai izveidotu savienojumu.</string>
+    <string name="caldav_error_connection_refused_insecure">Serveris pāradresēja savienojumu uz vietu, kur KashCal neseko (uz nešifrētu adresi vai pāradresāciju cilpu), tāpēc KashCal apstājās, pirms nosūtīja tavu paroli. Pārbaudi servera adresi.</string>
     <string name="local_network_banner_title">Nepieciešama piekļuve lokālajam tīklam</string>
     <string name="local_network_banner_body">Šķiet, ka šis serveris ir tavā lokālajā tīklā. Atļauj piekļuvi lokālajam tīklam, lai KashCal varētu ar to izveidot savienojumu.</string>
     <string name="local_network_banner_allow">Atļaut piekļuvi</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Kalendārs</string>
     <string name="account_detail_sync_calendar_subtitle">Sinhronizēt šī konta kalendārus</string>
     <string name="account_detail_sync_contacts">Kontakti</string>
-    <string name="account_detail_sync_contacts_subtitle">Sinhronizēt šī konta kontaktus ar tālruni</string>
+    <string name="account_detail_sync_contacts_subtitle">Sinhronizēt šī konta kontaktus</string>
     <string name="account_detail_contacts_permission_needed">Piekļuve kontaktiem ir izslēgta. Piešķir piekļuvi, lai kontakti turpinātu sinhronizēties.</string>
     <string name="account_detail_contacts_grant">Piešķirt piekļuvi</string>
     <string name="contact_sync_enabled_for">Tiek sinhronizēti %1$s kontakti</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Ieteikt notikumu nosaukumus</string>
     <string name="settings_suggest_titles_info">Kad nosaucat jaunu notikumu, piedāvāt jau iepriekš izmantotus nosaukumus, lai atkārtotus notikumus izveidotu ar vienu pieskārienu. Sakārtoti pēc tā, cik bieži un cik nesen tos esat izmantojis.</string>
     <string name="settings_week_numbers">Nedēļu numuri</string>
+    <string name="settings_multiday_in_allday_strip">Vairāku dienu notikumi visas dienas joslā</string>
+    <string name="settings_multiday_in_allday_strip_info">Rādīt notikumus ar laiku, kas ilgst vairāk par vienu dienu, visas dienas joslā nedēļas skata augšdaļā, nevis laika režģī. Izslēdziet, lai tie paliktu laika režģī katru dienu.</string>
     <string name="settings_show_declined">Rādīt noraidītos notikumus</string>
     <string name="settings_widget_event_limit">Logrīka notikumu limits</string>
     <string name="settings_widget_event_limit_hint">Maksimālais notikumu skaits dienā logrīkos</string>
@@ -851,6 +857,8 @@
     <string name="dialog_edit_recurring_title">Saglabāt izmaiņas</string>
     <string name="dialog_delete_recurring_title">Dzēst</string>
     <string name="dialog_move_recurring_title">Pārvietot</string>
+    <string name="snackbar_event_rescheduled">Notikums pārcelts</string>
+    <string name="snackbar_reschedule_failed">Neizdevās pārcelt notikumu</string>
     <string name="recurring_this_event">Šo notikumu</string>
     <string name="recurring_all_events">Visus notikumus</string>
 
@@ -1155,6 +1163,7 @@
     <string name="ics_sync_every_n_hours">Ik pēc %1$d stundām</string>
     <string name="ics_sync_daily">Katru dienu</string>
     <string name="ics_sync_weekly">Katru nedēļu</string>
+    <string name="default_calendar_name">Kalendārs</string>
     <string name="ics_url_required">Nepieciešams URL</string>
     <string name="ics_url_invalid_scheme">URL jāsākas ar http://, https:// vai webcal://</string>
     <string name="ics_fetch_error_http">Serveris atgrieza kļūdu (%1$d). Pārbaudi URL.</string>

@@ -6,15 +6,11 @@ import org.onekash.kashcal.testutil.resolveProjectRoot
 import java.io.File
 
 /**
- * Locks the declared dimensions in `month_widget_info.xml`.
+ * Locks the sizing, resize, category and update attributes in `month_widget_info.xml`.
  *
- * Reads the source XML directly (not via Android resources) so the assertions
- * match the literal text developers see in the file — Robolectric returns
- * formatted dimension strings ("250.0dip") which would make these tests
- * brittle. Plain JUnit, no Android runtime needed.
- *
- * Mirrors the structure of `UpcomingWidgetMetadataTest` so that any future
- * change to either descriptor is caught alongside the others.
+ * Reads the source XML as text, not through Android resources, so the assertions match the
+ * file's literal values; Robolectric returns formatted dimension strings ("250.0dip"). Plain JUnit,
+ * no Android runtime needed.
  */
 class MonthWidgetMetadataTest {
 
@@ -32,33 +28,34 @@ class MonthWidgetMetadataTest {
     }
 
     @Test
-    fun `minResizeWidth is 200dp`() {
-        assertContainsAttr("minResizeWidth", "200dp")
+    fun `minResizeWidth is 170dp`() {
+        assertContainsAttr("minResizeWidth", "170dp")
     }
 
     @Test
-    fun `minResizeHeight is 264dp`() {
-        assertContainsAttr("minResizeHeight", "264dp")
+    fun `minResizeHeight is 200dp`() {
+        assertContainsAttr("minResizeHeight", "200dp")
     }
 
     /**
-     * The month grid is a non-scrolling Column of fixed-height cells, so it
-     * crops if the declared resize floor can't even hold all six week-rows.
-     * Assert the grid alone fits within minResizeHeight. This is a necessary
-     * condition (the header and day-of-week row consume further space on top),
-     * and it ties the cell-height constant to the descriptor so a future
-     * cell-height increase that outgrows the floor fails here instead of
-     * silently cropping on-device.
+     * The month grid splits its height, less the header and day-of-week row, evenly among the
+     * week rows, and each cell needs room for its day number or the number clips on the device.
+     * At the declared minResizeHeight, a six-week month must still give each cell at least
+     * [DAY_NUMBER_BLOCK_HEIGHT_DP]. The test copies the cell-height formula from
+     * `MonthWidgetContent.kt` and compares at font scale 1.0, so a taller header, day-of-week row
+     * or number block fails here.
      */
     @Test
-    fun `six week-rows fit within minResizeHeight`() {
-        val gridHeight = MONTH_GRID_WEEK_ROWS * MONTH_DAY_CELL_HEIGHT_DP
+    fun `day numbers fit at minResizeHeight in a six-week month`() {
         val minResize = readDpAttr("minResizeHeight")
+        val cellHeight =
+            (minResize - MONTH_HEADER_HEIGHT_DP - MONTH_DOW_ROW_HEIGHT_DP).toFloat() /
+                MONTH_GRID_WEEK_ROWS
         assertTrue(
-            "Month grid needs ${gridHeight}dp for $MONTH_GRID_WEEK_ROWS rows of " +
-                "${MONTH_DAY_CELL_HEIGHT_DP}dp but minResizeHeight is only ${minResize}dp; " +
-                "the bottom week-row will crop. Raise minResizeHeight or shrink the cell.",
-            gridHeight <= minResize
+            "At minResizeHeight ${minResize}dp a $MONTH_GRID_WEEK_ROWS-week month gives each " +
+                "cell only ${cellHeight}dp after chrome, below the ${DAY_NUMBER_BLOCK_HEIGHT_DP}dp " +
+                "day-number block; the numbers will clip. Raise minResizeHeight or shrink the chrome.",
+            cellHeight >= DAY_NUMBER_BLOCK_HEIGHT_DP
         )
     }
 
@@ -74,12 +71,10 @@ class MonthWidgetMetadataTest {
 
     @Test
     fun `maxResizeWidth is 1100dp`() {
-        // Lawnchair (and other launchers with wide cell grids on tablet
-        // landscape) refused to resize the widget past the previous 500dp
-        // cap. The Glance layout uses fillMaxWidth() and defaultWeight()
-        // throughout, so it renders correctly at much wider sizes; the
-        // limit was purely metadata. 1100dp ≈ tablet-landscape 8-cell
-        // grid using the documented (142n - 15) formula. (issue #225)
+        // Launchers with wide cell grids in tablet landscape, Lawnchair among them, won't
+        // resize a widget past maxResizeWidth (#225). The Glance layout uses fillMaxWidth() and
+        // defaultWeight() throughout, so it renders at wider sizes and the cap is metadata
+        // only. 1100dp ≈ an 8-cell tablet-landscape grid by the documented (142n - 15) formula.
         assertContainsAttr("maxResizeWidth", "1100dp")
     }
 
@@ -111,7 +106,7 @@ class MonthWidgetMetadataTest {
         )
     }
 
-    /** Parse the integer dp value of an `android:<name>="Ndp"` attribute. */
+    /** Returns the integer dp value of an `android:<name>="Ndp"` attribute. */
     private fun readDpAttr(name: String): Int {
         val match = Regex("android:$name=\"(\\d+)dp\"").find(xmlText)
             ?: error("No android:$name dp attribute in month_widget_info.xml")

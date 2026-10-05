@@ -16,10 +16,10 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 /**
- * Tests for [CardDavXmlParser]: the CardDAV-specific extractors (addressbook
- * home-set, address book listing, supported-address-data version negotiation,
- * addressbook-multiget address-data) plus a check that the generic multistatus
- * bits are delegated to the shared CalDAV parser skeleton.
+ * Tests [CardDavXmlParser]: the CardDAV extractors (addressbook-home-set, address book listing
+ * with privileges, supported-address-data version negotiation, addressbook-multiget
+ * address-data), and that principal, sync-collection and ctag parsing delegate to the shared
+ * CalDAV parser.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [34])
@@ -244,11 +244,85 @@ class CardDavXmlParserTest {
     }
 
     @Test
+    fun `an aggregated all privilege marks the address book writable`() {
+        // Some servers advertise the RFC 3744 aggregate DAV:all instead of the leaf DAV:write
+        // or DAV:write-content. DAV:all includes write, so the book is writable and must not
+        // be read-only; misreading it silently blocks every contact push to that server
+        // (issue #281).
+        val xml = """
+            <?xml version="1.0" encoding="utf-8"?>
+            <d:multistatus xmlns:d="DAV:" xmlns:card="urn:ietf:params:xml:ns:carddav">
+                <d:response>
+                    <d:href>/addressbooks/users/alice/default/</d:href>
+                    <d:propstat>
+                        <d:prop>
+                            <d:displayname>Personal</d:displayname>
+                            <d:resourcetype><d:collection/><card:addressbook/></d:resourcetype>
+                            <d:current-user-privilege-set>
+                                <d:privilege><d:all/></d:privilege>
+                            </d:current-user-privilege-set>
+                        </d:prop>
+                    </d:propstat>
+                </d:response>
+            </d:multistatus>
+        """.trimIndent()
+
+        assertFalse(parser.extractAddressBooks(xml).single().isReadOnly)
+    }
+
+    @Test
+    fun `a write-content privilege marks the address book writable`() {
+        // DAV:write-content is the leaf content-write privilege (RFC 3744 §3.12); a server may
+        // advertise it without the DAV:write aggregate, and the book must be writable.
+        val xml = """
+            <?xml version="1.0" encoding="utf-8"?>
+            <d:multistatus xmlns:d="DAV:" xmlns:card="urn:ietf:params:xml:ns:carddav">
+                <d:response>
+                    <d:href>/addressbooks/users/alice/default/</d:href>
+                    <d:propstat>
+                        <d:prop>
+                            <d:displayname>Personal</d:displayname>
+                            <d:resourcetype><d:collection/><card:addressbook/></d:resourcetype>
+                            <d:current-user-privilege-set>
+                                <d:privilege><d:read/></d:privilege>
+                                <d:privilege><d:write-content/></d:privilege>
+                            </d:current-user-privilege-set>
+                        </d:prop>
+                    </d:propstat>
+                </d:response>
+            </d:multistatus>
+        """.trimIndent()
+
+        assertFalse(parser.extractAddressBooks(xml).single().isReadOnly)
+    }
+
+    @Test
+    fun `an address book advertising no privilege set at all is treated as read-only`() {
+        // With no current-user-privilege-set, write capability is unknown, so the book fails
+        // closed to read-only instead of attempting a push that would 403.
+        val xml = """
+            <?xml version="1.0" encoding="utf-8"?>
+            <d:multistatus xmlns:d="DAV:" xmlns:card="urn:ietf:params:xml:ns:carddav">
+                <d:response>
+                    <d:href>/addressbooks/users/alice/default/</d:href>
+                    <d:propstat>
+                        <d:prop>
+                            <d:displayname>Personal</d:displayname>
+                            <d:resourcetype><d:collection/><card:addressbook/></d:resourcetype>
+                        </d:prop>
+                    </d:propstat>
+                </d:response>
+            </d:multistatus>
+        """.trimIndent()
+
+        assertTrue(parser.extractAddressBooks(xml).single().isReadOnly)
+    }
+
+    @Test
     fun `skips addressbook whose resourcetype propstat returned non-200 (RFC 4918 multi-propstat)`() {
-        // A multi-propstat server (Radicale/Stalwart) can echo the addressbook
-        // resourcetype inside a 404/403 propstat for a collection the user cannot
-        // read. The successful propstat carries the readable props; the failed one
-        // carries resourcetype. The book must NOT be surfaced as readable.
+        // A multi-propstat server (Radicale, Stalwart) can echo the addressbook resourcetype
+        // inside a 404 or 403 propstat for a collection the user can't read, while the 200
+        // propstat carries the readable props. The book must not be listed.
         val xml = """
             <?xml version="1.0" encoding="utf-8"?>
             <d:multistatus xmlns:d="DAV:" xmlns:card="urn:ietf:params:xml:ns:carddav">
@@ -275,8 +349,8 @@ class CardDavXmlParserTest {
 
     @Test
     fun `includes addressbook whose resourcetype propstat is 200 in a multi-propstat response`() {
-        // Same multi-propstat shape but the resourcetype propstat is 200: the book
-        // is real and must be surfaced (guards against the fix over-filtering).
+        // Same multi-propstat shape, but the resourcetype propstat is 200: the book is real and
+        // must be listed, so the non-200 filter doesn't over-filter.
         val xml = """
             <?xml version="1.0" encoding="utf-8"?>
             <d:multistatus xmlns:d="DAV:" xmlns:card="urn:ietf:params:xml:ns:carddav">
@@ -303,10 +377,9 @@ class CardDavXmlParserTest {
 
     @Test
     fun `extracts address data bodies with normalized etags`() {
-        // Flush-left (no trimIndent): the vCard body carries real newlines with
-        // no structural indentation, exactly as a server emits it. Indenting the
-        // wrapper would leave the body's flush-left lines un-dedented and corrupt
-        // the payload, so the whole document sits at the margin.
+        // Flush-left (no trimIndent): the vCard body's lines have no indentation, as a server
+        // emits them. An indented wrapper would leave those lines un-dedented and corrupt the
+        // payload, so the whole document sits at the margin.
         val xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
             "<d:multistatus xmlns:d=\"DAV:\" xmlns:card=\"urn:ietf:params:xml:ns:carddav\">\n" +
             "<d:response>\n" +
@@ -333,6 +406,41 @@ class CardDavXmlParserTest {
         assertTrue(entry.vcardBody.contains("BEGIN:VCARD"))
         assertTrue(entry.vcardBody.contains("FN:Alice Example"))
         assertTrue(entry.vcardBody.contains("VERSION:3.0"))
+    }
+
+    @Test
+    fun `keeps the whole vcard body when it contains an escaped ampersand`() {
+        // Guards the address-data reader's single-token text read. A contact whose ORG, NOTE
+        // or FN contains '&' arrives escaped as "&amp;" (likewise '<' as "&lt;"). If an entity
+        // reference split the element's text into segments, a one-token read would lose
+        // everything after the '&' (here END:VCARD), failing the BEGIN:VCARD check and
+        // silently dropping the contact. The pull parser resolves the five predefined XML
+        // entities inline and reports the whole run as one text token; this test fails if a
+        // parser swap changes that.
+        val xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+            "<d:multistatus xmlns:d=\"DAV:\" xmlns:card=\"urn:ietf:params:xml:ns:carddav\">\n" +
+            "<d:response>\n" +
+            "<d:href>/ab/acme.vcf</d:href>\n" +
+            "<d:propstat>\n" +
+            "<d:prop>\n" +
+            "<d:getetag>\"etag-acme\"</d:getetag>\n" +
+            "<card:address-data>BEGIN:VCARD\n" +
+            "VERSION:3.0\n" +
+            "UID:acme-1\n" +
+            "FN:Acme Contact\n" +
+            "ORG:Johnson &amp; Johnson\n" +
+            "END:VCARD</card:address-data>\n" +
+            "</d:prop>\n" +
+            "<d:status>HTTP/1.1 200 OK</d:status>\n" +
+            "</d:propstat>\n" +
+            "</d:response>\n" +
+            "</d:multistatus>\n"
+
+        val data = parser.extractAddressData(xml)
+        assertEquals("contact with '&' in body must not be dropped", 1, data.size)
+        val body = data.single().vcardBody
+        assertTrue("literal '&' must be unescaped in the body", body.contains("Johnson & Johnson"))
+        assertTrue("body must survive past the '&' to END:VCARD", body.contains("END:VCARD"))
     }
 
     @Test

@@ -18,14 +18,13 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 /**
- * Tests for [CardDavContactReader]: end-to-end composition of the client's raw
- * vCard bodies through the real [VCardParser] into the neutral contact model,
- * plus the robustness contract (empty short-circuit, per-body parse isolation,
- * body-driven version, transport-error passthrough).
+ * Tests [CardDavContactReader]: the client's raw vCard bodies through the real [VCardParser]
+ * into the contact model, plus its contract (empty short-circuit, per-body parse isolation,
+ * unreadable-href reporting, group drop, bounded batches, body-driven version, transport-error
+ * passthrough).
  *
- * The client is a hand-written [FakeCardDavClient] rather than a relaxed mock:
- * the data-bearing method returns real bodies whose parse we assert on, so a
- * silent wrong-stub can't hide behind a green suite.
+ * The client is a hand-written [FakeCardDavClient], not a relaxed mock: the fetch returns real
+ * bodies whose parse is asserted, so a wrong stub can't hide behind a green suite.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [34])
@@ -59,22 +58,21 @@ class CardDavContactReaderTest {
 
         val result = reader.readContacts("https://dav.example.test/ab/alice/", listOf("/ab/alice/v3.vcf"), "3.0")
 
-        val read = (result as CalDavResult.Success).data
+        val read = (result as CalDavResult.Success).data.contacts
         assertEquals(1, read.size)
         assertEquals("/ab/alice/v3.vcf", read.single().href)
         assertEquals("e3", read.single().etag)
         assertEquals("3.0", read.single().contact.version)
         assertEquals("Alice Example", read.single().contact.displayName)
         assertEquals("alice@example.test", read.single().contact.emails.single().address)
-        // Seam guard: the reader is a pure multiget composer — it must reach ONLY
-        // fetchContactsByHref, never the discovery/change-detection surface.
+        // The reader must reach only the fetch methods, never discovery or change detection.
         assertEquals("reader must touch only the fetch surface", 0, client.nonFetchCalls)
     }
 
     @Test
     fun `parses a 4_0 body end-to-end with the version from the body`() = runTest {
-        // Request 3.0 over the wire but the body is 4.0 — the parsed version must
-        // follow the body's VERSION line, never the requested version.
+        // 3.0 is requested but the body is 4.0: the parsed version must follow the body's
+        // VERSION line, never the requested version.
         val client = FakeCardDavClient(
             listOf(
                 CardDavContactData(
@@ -89,7 +87,7 @@ class CardDavContactReaderTest {
 
         val result = reader.readContacts("https://dav.example.test/ab/alice/", listOf("/ab/alice/v4.vcf"), "3.0")
 
-        val read = (result as CalDavResult.Success).data
+        val read = (result as CalDavResult.Success).data.contacts
         assertEquals("4.0", read.single().contact.version)
         assertEquals("Bob Example", read.single().contact.displayName)
     }
@@ -111,7 +109,7 @@ class CardDavContactReaderTest {
             "4.0",
         )
 
-        val read = (result as CalDavResult.Success).data
+        val read = (result as CalDavResult.Success).data.contacts
         // The two valid contacts survive; the malformed body is dropped.
         val hrefs = read.map { it.href }
         assertTrue(hrefs.contains("/ab/a/good.vcf"))
@@ -119,10 +117,104 @@ class CardDavContactReaderTest {
     }
 
     @Test
+    fun `a body that yields no contact is reported unreadable, not silently dropped`() = runTest {
+        // An href the read couldn't turn into a contact must be reported so the caller holds
+        // its sync-token instead of advancing past it. ez-vcard 0.12.2 doesn't throw on junk (a
+        // non-vCard string parses to an empty card list), so the zero-card body stands in for
+        // the R8-stripped constructor failure, which threw only under minification. Its href
+        // lands in unreadableHrefs; the valid sibling parses and isn't reported.
+        val client = FakeCardDavClient(
+            listOf(
+                CardDavContactData("/ab/a/good.vcf", "https://dav.example.test/ab/a/good.vcf", "eg", VCARD_3_0),
+                CardDavContactData("/ab/a/bad.vcf", "https://dav.example.test/ab/a/bad.vcf", "eb", "this is not a vcard at all"),
+            )
+        )
+        val reader = CardDavContactReader(client)
+
+        val result = reader.readContacts(
+            "https://dav.example.test/ab/a/",
+            listOf("/ab/a/good.vcf", "/ab/a/bad.vcf"),
+            "3.0",
+        )
+
+        val data = (result as CalDavResult.Success).data
+        assertEquals("only the valid contact parses", listOf("/ab/a/good.vcf"), data.contacts.map { it.href })
+        assertEquals("the zero-card href is reported unreadable", setOf("/ab/a/bad.vcf"), data.unreadableHrefs)
+    }
+
+    @Test
+    fun `an href the server omits from the multiget is reported unreadable`() = runTest {
+        // The server can leave a requested href out of the multiget response. It was requested
+        // and nothing came back, so it's unreadable: the caller must not advance its sync-token
+        // as if that href were reconciled.
+        val client = FakeCardDavClient(
+            listOf(
+                CardDavContactData("/ab/a/present.vcf", "https://dav.example.test/ab/a/present.vcf", "ep", VCARD_3_0),
+            )
+        )
+        val reader = CardDavContactReader(client)
+
+        val result = reader.readContacts(
+            "https://dav.example.test/ab/a/",
+            listOf("/ab/a/present.vcf", "/ab/a/missing.vcf"),
+            "3.0",
+        )
+
+        val data = (result as CalDavResult.Success).data
+        assertEquals("the returned href parses", listOf("/ab/a/present.vcf"), data.contacts.map { it.href })
+        assertEquals("the omitted href is reported unreadable", setOf("/ab/a/missing.vcf"), data.unreadableHrefs)
+    }
+
+    @Test
+    fun `the collection self-href is not counted unreadable`() = runTest {
+        // iCloud's sync-collection REPORT lists the collection itself (no trailing slash, no
+        // resourcetype), so the collection URL can reach the requested href set. The client's
+        // multiget drops it (it would 400 the whole batch), so it never comes back; the fake
+        // likewise returns no body for it. It must not be reported unreadable, or the caller
+        // would hold its sync-token forever and never run the orphan sweep. The slashless
+        // self-href must match the collection URL.
+        val client = FakeCardDavClient(
+            listOf(
+                CardDavContactData("/ab/a/alice.vcf", "https://dav.example.test/ab/a/alice.vcf", "ea", VCARD_3_0),
+            )
+        )
+        val reader = CardDavContactReader(client)
+
+        val result = reader.readContacts(
+            "https://dav.example.test/ab/a/",
+            listOf("https://dav.example.test/ab/a", "/ab/a/alice.vcf"),
+            "3.0",
+        )
+
+        val data = (result as CalDavResult.Success).data
+        assertEquals("the real contact parses", listOf("/ab/a/alice.vcf"), data.contacts.map { it.href })
+        assertTrue("the collection self-href must never be unreadable", data.unreadableHrefs.isEmpty())
+    }
+
+    @Test
+    fun `a valid batch reports no unreadable hrefs`() = runTest {
+        val client = FakeCardDavClient(
+            listOf(
+                CardDavContactData("/ab/a/a.vcf", "https://dav.example.test/ab/a/a.vcf", "ea", VCARD_3_0),
+                CardDavContactData("/ab/a/b.vcf", "https://dav.example.test/ab/a/b.vcf", "eb", VCARD_4_0),
+            )
+        )
+        val reader = CardDavContactReader(client)
+
+        val result = reader.readContacts(
+            "https://dav.example.test/ab/a/",
+            listOf("/ab/a/a.vcf", "/ab/a/b.vcf"),
+            "4.0",
+        )
+
+        assertTrue("nothing unreadable in a clean batch", (result as CalDavResult.Success).data.unreadableHrefs.isEmpty())
+    }
+
+    @Test
     fun `a KIND group vCard is dropped so it never mirrors as a phantom contact`() = runTest {
-        // A KIND:group vCard (RFC 6350 §6.1.4) is a distribution list, not a person.
-        // Mirrored to the device it becomes an empty phantom contact, so the reader
-        // drops it while keeping every real person in the same batch.
+        // A KIND:group vCard (RFC 6350 §6.1.4) is a distribution list, not a person. On the
+        // device it would become an empty phantom contact, so the reader drops it and keeps
+        // every real person in the same batch.
         val client = FakeCardDavClient(
             listOf(
                 CardDavContactData("/ab/a/alice.vcf", "https://dav.example.test/ab/a/alice.vcf", "ea", VCARD_3_0),
@@ -138,7 +230,7 @@ class CardDavContactReaderTest {
             "4.0",
         )
 
-        val read = (result as CalDavResult.Success).data
+        val read = (result as CalDavResult.Success).data.contacts
         val hrefs = read.map { it.href }
         assertEquals("the group vCard must be dropped, both people kept", 2, read.size)
         assertTrue(hrefs.contains("/ab/a/alice.vcf"))
@@ -164,16 +256,16 @@ class CardDavContactReaderTest {
             "3.0",
         )
 
-        val read = (result as CalDavResult.Success).data
+        val read = (result as CalDavResult.Success).data.contacts
         assertEquals("only the real person survives", 1, read.size)
         assertEquals("/ab/a/alice.vcf", read.single().href)
     }
 
     @Test
     fun `a body with a malformed tel is kept, not dropped as unparseable`() = runTest {
-        // Regression: a contact whose TEL is a spec-violating tel URI (global number
-        // without a leading "+") must still be read. The phone degrades to its raw
-        // text; the contact itself is never discarded.
+        // A contact whose TEL is a spec-violating tel URI (global number without a leading "+")
+        // must still be read. The phone degrades to its raw text; the contact is never
+        // discarded.
         val client = FakeCardDavClient(
             listOf(
                 CardDavContactData(
@@ -194,7 +286,7 @@ class CardDavContactReaderTest {
 
         val result = reader.readContacts("https://dav.example.test/ab/a/", listOf("/ab/a/badtel.vcf"), "4.0")
 
-        val read = (result as CalDavResult.Success).data
+        val read = (result as CalDavResult.Success).data.contacts
         assertEquals("the contact must not be dropped over a bad phone", 1, read.size)
         assertEquals("Carol Example", read.single().contact.displayName)
         assertEquals("carol@example.test", read.single().contact.emails.single().address)
@@ -203,10 +295,9 @@ class CardDavContactReaderTest {
 
     @Test
     fun `large href lists are fetched in bounded batches`() = runTest {
-        // iCloud rejects/empties a single oversized addressbook-multiget, so the
-        // reader must split hrefs into bounded batches. Give it more hrefs than one
-        // batch holds and assert every batch stays within the cap and all bodies
-        // still come back parsed.
+        // iCloud rejects or empties an oversized addressbook-multiget, so the reader must split
+        // hrefs into bounded batches. More hrefs than one batch holds: every batch stays within
+        // the cap and every body still comes back parsed.
         val count = 45
         val bodies = (0 until count).map { i ->
             CardDavContactData(
@@ -225,7 +316,7 @@ class CardDavContactReaderTest {
             "3.0",
         )
 
-        val read = (result as CalDavResult.Success).data
+        val read = (result as CalDavResult.Success).data.contacts
         assertEquals("all bodies should come back across batches", count, read.size)
         assertTrue(
             "no batch may exceed the multiget cap; saw ${client.batchSizes}",
@@ -246,7 +337,7 @@ class CardDavContactReaderTest {
 
         val result = reader.readContacts("https://dav.example.test/ab/a/", emptyList(), "3.0")
 
-        assertEquals(0, (result as CalDavResult.Success).data.size)
+        assertEquals(0, (result as CalDavResult.Success).data.contacts.size)
         assertEquals("client must not be called for empty hrefs", 0, client.fetchCalls)
     }
 

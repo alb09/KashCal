@@ -7,13 +7,18 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.onekash.kashcal.data.calendar_provider.DeviceCalendar
 import org.onekash.kashcal.data.db.entity.Calendar
+import org.onekash.kashcal.data.db.entity.Event
 import org.onekash.kashcal.data.preferences.DefaultCalendar
 import org.onekash.kashcal.ui.model.CalendarGroup
 import org.onekash.kashcal.ui.model.PickerCalendar
 
 /**
- * Unit tests for resolveDefaultCalendar() — pure function extracted from
- * EventFormSheet's LaunchedEffect for default calendar resolution.
+ * Tests [resolveDefaultCalendar] and [resolveDuplicateSourceCalendar], which pick the calendar
+ * the event form opens on.
+ *
+ * Covers: a Room or device default that exists, a missing one falling back to the first
+ * writable Room calendar (or no calendar when there is none), a null default, the isDevice
+ * flag for every resolvable selection, and a duplicate's source calendar.
  */
 class EventFormSheetCalendarResolutionTest {
 
@@ -36,7 +41,8 @@ class EventFormSheetCalendarResolutionTest {
     private fun makeDeviceCalendar(
         id: Long,
         name: String = "Device Calendar $id",
-        color: Int = 0x00FF00
+        color: Int = 0x00FF00,
+        accessLevel: Int = 700
     ) = DeviceCalendar(
         id = id,
         displayName = name,
@@ -44,7 +50,17 @@ class EventFormSheetCalendarResolutionTest {
         accountName = "test@example.com",
         accountType = "com.google",
         visible = true,
-        accessLevel = 700
+        accessLevel = accessLevel
+    )
+
+    private fun makeSourceEvent(calendarId: Long) = Event(
+        id = 1L,
+        uid = "dup-source@test",
+        calendarId = calendarId,
+        title = "Team Lunch",
+        startTs = 0L,
+        endTs = 0L,
+        dtstamp = 0L,
     )
 
     private fun makeDeviceCalendarGroup(vararg calendars: DeviceCalendar) = CalendarGroup(
@@ -189,12 +205,11 @@ class EventFormSheetCalendarResolutionTest {
 
     // ========== isDevice flag invariant ==========
     //
-    // The isDevice flag is the single switch that routes a save to the Room
-    // (scheduling/iTIP) path vs. the device (CalendarProvider) path. A flag
-    // inversion would send device attendees into the CalDAV scheduling stack
-    // (or vice versa), so pin the invariant: resolving a Room selection is
-    // never isDevice=true, and resolving a Device selection is never
-    // isDevice=false (when the calendar exists).
+    // isDevice becomes the form's isDeviceCalendar, which picks the save path:
+    // the device (CalendarProvider) save or the Room save with its CalDAV
+    // scheduling. An inverted flag would send device attendees into CalDAV
+    // scheduling or the reverse, so: a Room selection never resolves
+    // isDevice=true, and an existing Device selection never isDevice=false.
 
     @Test
     fun `every resolvable Room selection is not flagged as device`() {
@@ -219,5 +234,107 @@ class EventFormSheetCalendarResolutionTest {
             assertEquals(cal.id, result.id)
             assertTrue("Device calendar ${cal.id} must resolve isDevice=true", result.isDevice)
         }
+    }
+
+    // ========== resolveDuplicateSourceCalendar ==========
+    //
+    // A duplicate keeps its source calendar; the resolution order is on
+    // [resolveDuplicateSourceCalendar]. Its isDevice picks the save path too,
+    // so the same flag invariant applies as for resolveDefaultCalendar.
+
+    private val fallbackDefault = ResolvedCalendar(
+        id = 7L,
+        name = "Default Cal",
+        color = 0x123456,
+        isDevice = false
+    )
+
+    @Test
+    fun `duplicate of a Room event keeps the Room source calendar`() {
+        val cal1 = makeCalendar(1L, "Work", 0xFF0000)
+
+        val result = resolveDuplicateSourceCalendar(
+            duplicateFrom = makeSourceEvent(calendarId = 1L),
+            duplicateFromDeviceCalendarId = null,
+            writableCalendars = listOf(cal1),
+            deviceCalendarGroups = emptyList(),
+            resolvedDefault = fallbackDefault
+        )
+
+        assertEquals(1L, result.id)
+        assertEquals("Work", result.name)
+        assertEquals(0xFF0000, result.color)
+        assertFalse(result.isDevice)
+    }
+
+    @Test
+    fun `duplicate of a device event resolves the source device calendar`() {
+        val deviceCal = makeDeviceCalendar(10L, "Google Cal", 0x0000FF)
+        val deviceGroup = makeDeviceCalendarGroup(deviceCal)
+
+        val result = resolveDuplicateSourceCalendar(
+            duplicateFrom = makeSourceEvent(calendarId = 0L),
+            duplicateFromDeviceCalendarId = 10L,
+            writableCalendars = listOf(makeCalendar(1L)),
+            deviceCalendarGroups = listOf(deviceGroup),
+            resolvedDefault = fallbackDefault
+        )
+
+        assertEquals(10L, result.id)
+        assertEquals("Google Cal", result.name)
+        assertEquals(0x0000FF, result.color)
+        assertTrue(result.isDevice)
+    }
+
+    @Test
+    fun `duplicate falls back to default when the source device calendar is gone`() {
+        val deviceGroup = makeDeviceCalendarGroup(makeDeviceCalendar(10L))
+
+        val result = resolveDuplicateSourceCalendar(
+            duplicateFrom = makeSourceEvent(calendarId = 0L),
+            duplicateFromDeviceCalendarId = 99L,
+            writableCalendars = listOf(makeCalendar(1L)),
+            deviceCalendarGroups = listOf(deviceGroup),
+            resolvedDefault = fallbackDefault
+        )
+
+        assertEquals(fallbackDefault.id, result.id)
+        assertEquals(fallbackDefault.name, result.name)
+        assertEquals(fallbackDefault.color, result.color)
+        assertEquals(fallbackDefault.isDevice, result.isDevice)
+    }
+
+    @Test
+    fun `duplicate falls back to default when the source device calendar is not writable`() {
+        val readOnlyDevice = makeDeviceCalendar(10L, accessLevel = 200) // < CONTRIBUTOR (500)
+        val deviceGroup = makeDeviceCalendarGroup(readOnlyDevice)
+
+        val result = resolveDuplicateSourceCalendar(
+            duplicateFrom = makeSourceEvent(calendarId = 0L),
+            duplicateFromDeviceCalendarId = 10L,
+            writableCalendars = listOf(makeCalendar(1L)),
+            deviceCalendarGroups = listOf(deviceGroup),
+            resolvedDefault = fallbackDefault
+        )
+
+        assertEquals(fallbackDefault.id, result.id)
+        assertFalse(result.isDevice)
+    }
+
+    @Test
+    fun `duplicate Room source takes precedence over a device calendar id`() {
+        val cal1 = makeCalendar(1L, "Work", 0xFF0000)
+        val deviceGroup = makeDeviceCalendarGroup(makeDeviceCalendar(10L))
+
+        val result = resolveDuplicateSourceCalendar(
+            duplicateFrom = makeSourceEvent(calendarId = 1L),
+            duplicateFromDeviceCalendarId = 10L,
+            writableCalendars = listOf(cal1),
+            deviceCalendarGroups = listOf(deviceGroup),
+            resolvedDefault = fallbackDefault
+        )
+
+        assertEquals(1L, result.id)
+        assertFalse(result.isDevice)
     }
 }

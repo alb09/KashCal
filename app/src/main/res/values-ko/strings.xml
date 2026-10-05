@@ -85,6 +85,7 @@
     <string name="action_delete">삭제</string>
     <string name="action_confirm">확인</string>
     <string name="action_discard">버리기</string>
+    <string name="action_discard_confirm">변경사항을 버릴까요?</string>
     <string name="action_dismiss">닫기</string>
     <string name="action_show_all">모두 보기</string>
     <string name="action_connect">연결</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">날짜로 이동</string>
     <string name="label_week">주</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">설정</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">iCloud를 연결하여 일정을 확인하세요</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">새로운 기능</string>
-    <string name="whats_new_dismiss">확인</string>
+    <string name="whats_new_later">나중에</string>
     <string name="whats_new_v598_title">Android를 열린 상태로 유지하도록 도와주세요</string>
     <string name="whats_new_v598_body">Google이 사용자가 기기에 앱을 설치하는 방식을 변경하고 있어요. 여러분의 도움이 필요해요.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org 방문하기</string>
+    <string name="whats_new_v732_title">변함없는 감사의 마음</string>
+    <string name="whats_new_v732_body">이번 업데이트는 KashCal을 후원해 주시는 분들께 바칩니다. 작은 후원이 두고두고 큰 힘이 돼요.</string>
+    <string name="whats_new_v732_caption">아직 후원하지 않으셨나요?</string>
+    <string name="whats_new_v732_action_label">일정에 추가하기</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud 연결</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">이 서버에서 캘린더를 찾을 수 없습니다.</string>
     <string name="caldav_error_unexpected">예기치 않은 오류가 발생했습니다. 다시 시도해 주세요.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\n이 서버가 로컬 네트워크에 있는 경우 연결하려면 로컬 네트워크 액세스를 허용하세요.</string>
+    <string name="caldav_error_connection_refused_insecure">서버가 KashCal이 따라가지 않는 곳(암호화되지 않은 주소 또는 리디렉션 반복)으로 연결을 넘겨서, 비밀번호를 보내기 전에 KashCal이 중단했어요. 서버 주소를 확인하세요.</string>
     <string name="local_network_banner_title">로컬 네트워크 액세스 필요</string>
     <string name="local_network_banner_body">이 서버는 로컬 네트워크에 있는 것 같아요. KashCal이 연결할 수 있도록 로컬 네트워크 액세스를 허용해 주세요.</string>
     <string name="local_network_banner_allow">액세스 허용</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">캘린더</string>
     <string name="account_detail_sync_calendar_subtitle">이 계정의 캘린더를 동기화해요</string>
     <string name="account_detail_sync_contacts">연락처</string>
-    <string name="account_detail_sync_contacts_subtitle">이 계정의 연락처를 휴대폰에 동기화해요</string>
+    <string name="account_detail_sync_contacts_subtitle">이 계정의 연락처를 동기화해요</string>
     <string name="account_detail_contacts_permission_needed">연락처 권한이 꺼져 있어요. 연락처 동기화를 계속하려면 접근을 허용해 주세요.</string>
     <string name="account_detail_contacts_grant">접근 허용</string>
     <string name="contact_sync_enabled_for">%1$s의 연락처를 동기화하는 중</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">일정 제목 제안</string>
     <string name="settings_suggest_titles_info">새 일정의 이름을 입력하는 동안 이전에 사용한 제목을 제안해, 반복되는 일정은 한 번의 탭으로 만들 수 있어요. 얼마나 자주, 얼마나 최근에 사용했는지에 따라 순위가 정해져요.</string>
     <string name="settings_week_numbers">주 번호</string>
+    <string name="settings_multiday_in_allday_strip">종일 스트립의 여러 날 일정</string>
+    <string name="settings_multiday_in_allday_strip_info">하루를 초과하는 시간 지정 일정을 시간 그리드 대신 주간 보기 상단의 종일 스트립에 표시합니다. 매일 시간 그리드에 유지하려면 끄세요.</string>
     <string name="settings_show_declined">거절한 이벤트 표시</string>
     <string name="settings_widget_event_limit">위젯 일정 제한</string>
     <string name="settings_widget_event_limit_hint">위젯에서 하루에 표시할 최대 일정 수</string>
@@ -787,6 +793,8 @@
     <string name="dialog_edit_recurring_title">변경 사항 적용</string>
     <string name="dialog_delete_recurring_title">삭제</string>
     <string name="dialog_move_recurring_title">이동</string>
+    <string name="snackbar_event_rescheduled">일정을 이동했어요</string>
+    <string name="snackbar_reschedule_failed">일정을 이동하지 못했어요</string>
     <string name="recurring_this_event">이 일정만</string>
     <string name="recurring_all_events">모든 일정</string>
 
@@ -1059,6 +1067,7 @@
     <string name="ics_sync_every_n_hours">%1$d시간마다</string>
     <string name="ics_sync_daily">매일</string>
     <string name="ics_sync_weekly">매주</string>
+    <string name="default_calendar_name">캘린더</string>
     <string name="ics_url_required">URL이 필요해요</string>
     <string name="ics_url_invalid_scheme">URL은 http://, https://, 또는 webcal://로 시작해야 해요</string>
     <string name="ics_fetch_error_http">서버에서 오류(%1$d)를 반환했어요. URL을 확인해 주세요.</string>

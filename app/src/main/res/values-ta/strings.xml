@@ -85,6 +85,7 @@
     <string name="action_delete">நீக்கு</string>
     <string name="action_confirm">உறுதிசெய்</string>
     <string name="action_discard">நிராகரி</string>
+    <string name="action_discard_confirm">மாற்றங்களை நிராகரிக்கவா?</string>
     <string name="action_dismiss">நிராகரி</string>
     <string name="action_show_all">அனைத்தையும் காட்டு</string>
     <string name="action_connect">இணை</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">தேதிக்குச் செல்</string>
     <string name="label_week">வா</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">அமைப்புகள்</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">உங்கள் நிகழ்வுகளை இங்கே காண iCloud இணைக்கவும்</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">புதிதாக என்ன</string>
-    <string name="whats_new_dismiss">புரிந்தது</string>
+    <string name="whats_new_later">பிறகு</string>
     <string name="whats_new_v598_title">Android-ஐ திறந்திருக்க உதவுங்கள்</string>
     <string name="whats_new_v598_body">Google உங்கள் சாதனத்தில் பயன்பாடுகளை நிறுவும் முறையை மாற்றுகிறது. எங்களுக்கு உங்கள் உதவி தேவை.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org-க்குச் செல்லுங்கள்</string>
+    <string name="whats_new_v732_title">ஒரு நிலையான நன்றி</string>
+    <string name="whats_new_v732_body">இந்த வெளியீடு KashCal-இன் ஆதரவாளர்களுக்கு அர்ப்பணிக்கப்படுகிறது. ஒரு சிறிய பங்களிப்பு, மீண்டும் மீண்டும் கிடைக்கும் பெரிய பலன்.</string>
+    <string name="whats_new_v732_caption">இன்னும் ஆதரவாளராகவில்லையா?</string>
+    <string name="whats_new_v732_action_label">உங்கள் திட்டங்களில் எங்களைச் சேருங்கள்</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud இணை</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">இந்த சேவையகத்தில் நாட்காட்டிகள் எதுவும் இல்லை.</string>
     <string name="caldav_error_unexpected">எதிர்பாராத பிழை. மீண்டும் முயற்சிக்கவும்.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nஇது உங்கள் லோக்கல் நெட்வொர்க்கில் உள்ள சர்வராக இருந்தால், இணைக்க லோக்கல் நெட்வொர்க் அணுகலை அனுமதிக்கவும்.</string>
+    <string name="caldav_error_connection_refused_insecure">KashCal பின்தொடராத இடத்திற்கு (மறையாக்கம் இல்லாத முகவரி அல்லது திசைதிருப்பல் சுழற்சி) சேவையகம் இணைப்பைத் திருப்பியது, எனவே உங்கள் கடவுச்சொல்லை அனுப்பும் முன்பே KashCal நின்றது. சேவையக முகவரியைச் சரிபார்க்கவும்.</string>
     <string name="local_network_banner_title">லோக்கல் நெட்வொர்க் அணுகல் தேவை</string>
     <string name="local_network_banner_body">இந்த சர்வர் உங்கள் லோக்கல் நெட்வொர்க்கில் இருப்பது போல் தெரிகிறது. KashCal இதனுடன் இணைய லோக்கல் நெட்வொர்க் அணுகலை அனுமதிக்கவும்.</string>
     <string name="local_network_banner_allow">அணுகலை அனுமதி</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">நாட்காட்டி</string>
     <string name="account_detail_sync_calendar_subtitle">இந்தக் கணக்கின் நாட்காட்டிகளை ஒத்திசை</string>
     <string name="account_detail_sync_contacts">தொடர்புகள்</string>
-    <string name="account_detail_sync_contacts_subtitle">இந்தக் கணக்கின் தொடர்புகளை உங்கள் ஃபோனுடன் ஒத்திசை</string>
+    <string name="account_detail_sync_contacts_subtitle">இந்தக் கணக்கின் தொடர்புகளை ஒத்திசை</string>
     <string name="account_detail_contacts_permission_needed">தொடர்புகள் அனுமதி முடக்கப்பட்டுள்ளது. தொடர்புகள் ஒத்திசைவைத் தொடர அணுகலை வழங்கவும்.</string>
     <string name="account_detail_contacts_grant">அணுகலை வழங்கு</string>
     <string name="contact_sync_enabled_for">%1$s-இன் தொடர்புகள் ஒத்திசைக்கப்படுகின்றன</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">நிகழ்வு தலைப்புகளை பரிந்துரை</string>
     <string name="settings_suggest_titles_info">நீங்கள் புதிய நிகழ்வுக்குப் பெயரிடும்போது, முன்பு பயன்படுத்திய தலைப்புகளைப் பரிந்துரைக்கிறது, இதனால் மீண்டும் வரும் நிகழ்வுகள் ஒரே தட்டில் உருவாகும். நீங்கள் அவற்றை எவ்வளவு அடிக்கடி, எவ்வளவு சமீபத்தில் பயன்படுத்தினீர்கள் என்பதன் அடிப்படையில் தரவரிசைப்படுத்தப்படும்.</string>
     <string name="settings_week_numbers">வார எண்கள்</string>
+    <string name="settings_multiday_in_allday_strip">முழு நாள் பட்டையில் பல-நாள் நிகழ்வுகள்</string>
+    <string name="settings_multiday_in_allday_strip_info">ஒரு நாளுக்கு மேல் நீடிக்கும் நேரம் குறிக்கப்பட்ட நிகழ்வுகளை நேர கட்டத்திற்குப் பதிலாக வார காட்சியின் மேலே உள்ள முழு நாள் பட்டையில் காட்டு. ஒவ்வொரு நாளும் அவற்றை நேர கட்டத்தில் வைத்திருக்க அணைக்கவும்.</string>
     <string name="settings_show_declined">மறுக்கப்பட்ட நிகழ்வுகளைக் காட்டு</string>
     <string name="settings_widget_event_limit">விட்ஜெட் நிகழ்வு வரம்பு</string>
     <string name="settings_widget_event_limit_hint">விட்ஜெட்டில் ஒரு நாளைக்கு காட்டப்படும் அதிகபட்ச நிகழ்வுகள்</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">மாற்றங்களைச் சேமி</string>
     <string name="dialog_delete_recurring_title">அழி</string>
     <string name="dialog_move_recurring_title">நகர்த்து</string>
+    <string name="snackbar_event_rescheduled">நிகழ்வு நேரம் மாற்றப்பட்டது</string>
+    <string name="snackbar_reschedule_failed">நிகழ்வு நேரத்தை மாற்ற முடியவில்லை</string>
     <string name="recurring_this_event">இந்த நிகழ்வு</string>
     <string name="recurring_all_events">அனைத்து நிகழ்வுகளும்</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">ஒவ்வொரு %1$d மணிநேரமும்</string>
     <string name="ics_sync_daily">தினசரி</string>
     <string name="ics_sync_weekly">வாராந்திர</string>
+    <string name="default_calendar_name">நாட்காட்டி</string>
     <string name="ics_url_required">URL தேவை</string>
     <string name="ics_url_invalid_scheme">URL http://, https://, அல்லது webcal:// உடன் தொடங்க வேண்டும்</string>
     <string name="ics_fetch_error_http">சர்வர் ஒரு பிழையை வழங்கியது (%1$d). URL ஐ சரிபார்க்கவும்.</string>

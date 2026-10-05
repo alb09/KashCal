@@ -85,6 +85,7 @@
     <string name="action_delete">ഇല്ലാതാക്കുക</string>
     <string name="action_confirm">സ്ഥിരീകരിക്കുക</string>
     <string name="action_discard">നിരസിക്കുക</string>
+    <string name="action_discard_confirm">മാറ്റങ്ങൾ ഉപേക്ഷിക്കണോ?</string>
     <string name="action_dismiss">ഡിസ്മിസ്</string>
     <string name="action_show_all">എല്ലാം കാണിക്കുക</string>
     <string name="action_connect">കണക്ട് ചെയ്യുക</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">തീയതിയിലേക്ക് പോകുക</string>
     <string name="label_week">ആ</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">ക്രമീകരണങ്ങൾ</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">നിങ്ങളുടെ ഇവന്റുകൾ ഇവിടെ കാണാൻ iCloud കണക്ട് ചെയ്യുക</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">പുതിയത് എന്ത്</string>
-    <string name="whats_new_dismiss">മനസ്സിലായി</string>
+    <string name="whats_new_later">പിന്നീട്</string>
     <string name="whats_new_v598_title">Android തുറന്നുകിടക്കാൻ സഹായിക്കുക</string>
     <string name="whats_new_v598_body">Google നിങ്ങളുടെ ഉപകരണത്തിൽ ആപ്പുകൾ ഇൻസ്റ്റാൾ ചെയ്യുന്ന രീതി മാറ്റുകയാണ്. ഞങ്ങൾക്ക് നിങ്ങളുടെ സഹായം ആവശ്യമാണ്.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org സന്ദർശിക്കുക</string>
+    <string name="whats_new_v732_title">ഒരു ശാശ്വത നന്ദി</string>
+    <string name="whats_new_v732_body">ഈ റിലീസ് KashCal-ന്റെ പിന്തുണക്കാർക്കായി സമർപ്പിക്കുന്നു. ഒരു ചെറിയ സംഭാവന, വീണ്ടും വീണ്ടും ലഭിക്കുന്ന വലിയ പ്രതിഫലം.</string>
+    <string name="whats_new_v732_caption">ഇതുവരെ പിന്തുണക്കാരനായില്ലേ?</string>
+    <string name="whats_new_v732_action_label">നിങ്ങളുടെ പദ്ധതികളിൽ ഞങ്ങളെ ചേർക്കൂ</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud കണക്ട് ചെയ്യുക</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">ഈ സെർവറിൽ കലണ്ടറുകൾ കണ്ടെത്തിയില്ല.</string>
     <string name="caldav_error_unexpected">അപ്രതീക്ഷിത പിശക്. വീണ്ടും ശ്രമിക്കുക.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nഇത് നിങ്ങളുടെ ലോക്കൽ നെറ്റ്‌വർക്കിലുള്ള ഒരു സെർവർ ആണെങ്കിൽ, കണക്റ്റ് ചെയ്യാൻ ലോക്കൽ നെറ്റ്‌വർക്ക് ആക്‌സസ് അനുവദിക്കുക.</string>
+    <string name="caldav_error_connection_refused_insecure">KashCal പിന്തുടരാത്ത ഒരിടത്തേക്ക് (എൻക്രിപ്റ്റ് ചെയ്യാത്ത വിലാസം, അല്ലെങ്കിൽ റീഡയറക്ട് ലൂപ്പ്) സെർവർ കണക്ഷൻ തിരിച്ചുവിട്ടു, അതിനാൽ നിങ്ങളുടെ പാസ്‌വേഡ് അയയ്ക്കുന്നതിന് മുമ്പ് KashCal നിർത്തി. സെർവർ വിലാസം പരിശോധിക്കുക.</string>
     <string name="local_network_banner_title">ലോക്കൽ നെറ്റ്‌വർക്ക് ആക്‌സസ് ആവശ്യമാണ്</string>
     <string name="local_network_banner_body">ഈ സെർവർ നിങ്ങളുടെ ലോക്കൽ നെറ്റ്‌വർക്കിൽ ഉള്ളതായി തോന്നുന്നു. KashCal-ന് ഇതിലേക്ക് കണക്റ്റ് ചെയ്യാൻ ലോക്കൽ നെറ്റ്‌വർക്ക് ആക്‌സസ് അനുവദിക്കുക.</string>
     <string name="local_network_banner_allow">ആക്‌സസ് അനുവദിക്കുക</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">കലണ്ടർ</string>
     <string name="account_detail_sync_calendar_subtitle">ഈ അക്കൗണ്ടിന്റെ കലണ്ടറുകൾ സിങ്ക് ചെയ്യുക</string>
     <string name="account_detail_sync_contacts">കോൺടാക്റ്റുകൾ</string>
-    <string name="account_detail_sync_contacts_subtitle">ഈ അക്കൗണ്ടിന്റെ കോൺടാക്റ്റുകൾ നിങ്ങളുടെ ഫോണിലേക്ക് സിങ്ക് ചെയ്യുക</string>
+    <string name="account_detail_sync_contacts_subtitle">ഈ അക്കൗണ്ടിന്റെ കോൺടാക്റ്റുകൾ സിങ്ക് ചെയ്യുക</string>
     <string name="account_detail_contacts_permission_needed">കോൺടാക്റ്റ് അനുമതി ഓഫാണ്. കോൺടാക്റ്റ് സിങ്ക് തുടരാൻ ആക്‌സസ് നൽകുക.</string>
     <string name="account_detail_contacts_grant">ആക്‌സസ് നൽകുക</string>
     <string name="contact_sync_enabled_for">%1$s-നായി കോൺടാക്റ്റുകൾ സിങ്ക് ചെയ്യുന്നു</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">ഇവന്റ് ശീർഷകങ്ങൾ നിർദ്ദേശിക്കുക</string>
     <string name="settings_suggest_titles_info">നിങ്ങൾ ഒരു പുതിയ ഇവന്റിന് പേരിടുമ്പോൾ, മുമ്പ് ഉപയോഗിച്ച ശീർഷകങ്ങൾ നിർദ്ദേശിക്കുന്നു, അതിനാൽ ആവർത്തിക്കുന്ന ഇവന്റുകൾ ഒരൊറ്റ ടാപ്പിൽ തയ്യാറാകും. നിങ്ങൾ അവ എത്ര തവണ, എത്ര അടുത്തിടെ ഉപയോഗിച്ചു എന്നതിന്റെ അടിസ്ഥാനത്തിൽ ക്രമപ്പെടുത്തുന്നു.</string>
     <string name="settings_week_numbers">ആഴ്ച നമ്പറുകൾ</string>
+    <string name="settings_multiday_in_allday_strip">മുഴുവൻ ദിവസ സ്ട്രിപ്പിലെ ബഹു-ദിവസ ഇവന്റുകൾ</string>
+    <string name="settings_multiday_in_allday_strip_info">ഒരു ദിവസത്തിൽ കൂടുതൽ നീണ്ടുനിൽക്കുന്ന സമയബന്ധിത ഇവന്റുകൾ, ടൈം ഗ്രിഡിന് പകരം ആഴ്ച കാഴ്ചയുടെ മുകളിലുള്ള മുഴുവൻ ദിവസ സ്ട്രിപ്പിൽ കാണിക്കുക. എല്ലാ ദിവസവും അവയെ ടൈം ഗ്രിഡിൽ നിലനിർത്താൻ ഓഫ് ചെയ്യുക.</string>
     <string name="settings_show_declined">നിരസിച്ച ഇവന്റുകൾ കാണിക്കുക</string>
     <string name="settings_widget_event_limit">വിജറ്റ് ഇവന്റ് പരിധി</string>
     <string name="settings_widget_event_limit_hint">വിജറ്റുകളിൽ ഒരു ദിവസം കാണിക്കുന്ന പരമാവധി ഇവന്റുകൾ</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">മാറ്റങ്ങൾ സംരക്ഷിക്കുക</string>
     <string name="dialog_delete_recurring_title">ഇല്ലാതാക്കുക</string>
     <string name="dialog_move_recurring_title">മാറ്റുക</string>
+    <string name="snackbar_event_rescheduled">ഇവന്റിന്റെ സമയം മാറ്റി</string>
+    <string name="snackbar_reschedule_failed">ഇവന്റിന്റെ സമയം മാറ്റാനായില്ല</string>
     <string name="recurring_this_event">ഈ ഇവന്റ്</string>
     <string name="recurring_all_events">എല്ലാ ഇവന്റുകളും</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">ഓരോ %1$d മണിക്കൂറിലും</string>
     <string name="ics_sync_daily">ദിവസവും</string>
     <string name="ics_sync_weekly">ആഴ്ചതോറും</string>
+    <string name="default_calendar_name">കലണ്ടർ</string>
     <string name="ics_url_required">URL ആവശ്യമാണ്</string>
     <string name="ics_url_invalid_scheme">URL http://, https://, അല്ലെങ്കിൽ webcal:// ൽ ആരംഭിക്കണം</string>
     <string name="ics_fetch_error_http">സെർവർ ഒരു പിശക് നൽകി (%1$d). ദയവായി URL പരിശോധിക്കുക.</string>

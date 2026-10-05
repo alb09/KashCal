@@ -85,6 +85,7 @@
     <string name="action_delete">Ištrinti</string>
     <string name="action_confirm">Patvirtinti</string>
     <string name="action_discard">Atmesti</string>
+    <string name="action_discard_confirm">Atmesti?</string>
     <string name="action_dismiss">Uždaryti</string>
     <string name="action_show_all">Rodyti viską</string>
     <string name="action_connect">Prijungti</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Eiti į datą</string>
     <string name="label_week">S</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Nustatymai</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Prijunkite iCloud, kad matytumėte savo įvykius čia</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Kas naujo</string>
-    <string name="whats_new_dismiss">Supratau</string>
+    <string name="whats_new_later">Vėliau</string>
     <string name="whats_new_v598_title">Padėk išlaikyti Android atvirą</string>
     <string name="whats_new_v598_body">Google keičia tai, kaip diegi programėles savo įrenginyje. Mums reikia tavo pagalbos.</string>
     <string name="whats_new_v598_action_label">Apsilankyti keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Nuolatinė padėka</string>
+    <string name="whats_new_v732_body">Ši versija skirta KashCal rėmėjams. Mažas indėlis su didele nuolatine grąža.</string>
+    <string name="whats_new_v732_caption">Dar nesi mūsų rėmėjas?</string>
+    <string name="whats_new_v732_action_label">Įtrauk mus į savo planus</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Prijungti iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Šiame serveryje kalendorių nerasta.</string>
     <string name="caldav_error_unexpected">Netikėta klaida. Bandykite dar kartą.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nJei tai serveris tavo vietiniame tinkle, leisk prieigą prie vietinio tinklo, kad galėtum prisijungti.</string>
+    <string name="caldav_error_connection_refused_insecure">Serveris nukreipė ryšį ten, kur KashCal neseka (į nešifruotą adresą arba peradresavimų ciklą), todėl KashCal sustojo prieš išsiųsdama tavo slaptažodį. Patikrink serverio adresą.</string>
     <string name="local_network_banner_title">Reikia vietinio tinklo prieigos</string>
     <string name="local_network_banner_body">Panašu, kad šis serveris yra tavo vietiniame tinkle. Leisk prieigą prie vietinio tinklo, kad KashCal galėtų prie jo prisijungti.</string>
     <string name="local_network_banner_allow">Leisti prieigą</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Kalendorius</string>
     <string name="account_detail_sync_calendar_subtitle">Sinchronizuoti šios paskyros kalendorius</string>
     <string name="account_detail_sync_contacts">Kontaktai</string>
-    <string name="account_detail_sync_contacts_subtitle">Sinchronizuoti šios paskyros kontaktus su telefonu</string>
+    <string name="account_detail_sync_contacts_subtitle">Sinchronizuoti šios paskyros kontaktus</string>
     <string name="account_detail_contacts_permission_needed">Prieiga prie kontaktų išjungta. Suteik prieigą, kad kontaktai būtų toliau sinchronizuojami.</string>
     <string name="account_detail_contacts_grant">Suteikti prieigą</string>
     <string name="contact_sync_enabled_for">Sinchronizuojami %1$s kontaktai</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Siūlyti įvykių pavadinimus</string>
     <string name="settings_suggest_titles_info">Kai įvardijate naują įvykį, siūlyti anksčiau naudotus pavadinimus, kad pasikartojantys įvykiai būtų sukuriami vienu palietimu. Rikiuojama pagal tai, kaip dažnai ir kaip neseniai juos naudojote.</string>
     <string name="settings_week_numbers">Savaitės numeriai</string>
+    <string name="settings_multiday_in_allday_strip">Kelių dienų įvykiai visos dienos juostoje</string>
+    <string name="settings_multiday_in_allday_strip_info">Rodyti daugiau nei vieną dieną trunkančius įvykius su laiku visos dienos juostoje savaitės rodinio viršuje, o ne laiko tinklelyje. Išjunkite, kad jie liktų laiko tinklelyje kiekvieną dieną.</string>
     <string name="settings_show_declined">Rodyti atmestus įvykius</string>
     <string name="settings_widget_event_limit">Valdiklio įvykių limitas</string>
     <string name="settings_widget_event_limit_hint">Daugiausiai įvykių per dieną valdikliuose</string>
@@ -883,6 +889,8 @@
     <string name="dialog_edit_recurring_title">Įrašyti pakeitimus į</string>
     <string name="dialog_delete_recurring_title">Ištrinti</string>
     <string name="dialog_move_recurring_title">Perkelti</string>
+    <string name="snackbar_event_rescheduled">Įvykis perkeltas</string>
+    <string name="snackbar_reschedule_failed">Nepavyko perkelti įvykio</string>
     <string name="recurring_this_event">Šis įvykis</string>
     <string name="recurring_all_events">Visi įvykiai</string>
 
@@ -1203,6 +1211,7 @@
     <string name="ics_sync_every_n_hours">Kas %1$d valandas</string>
     <string name="ics_sync_daily">Kasdien</string>
     <string name="ics_sync_weekly">Kas savaitę</string>
+    <string name="default_calendar_name">Kalendorius</string>
     <string name="ics_url_required">Reikalingas URL</string>
     <string name="ics_url_invalid_scheme">URL turi prasidėti http://, https:// arba webcal://</string>
     <string name="ics_fetch_error_http">Serveris grąžino klaidą (%1$d). Patikrink URL.</string>

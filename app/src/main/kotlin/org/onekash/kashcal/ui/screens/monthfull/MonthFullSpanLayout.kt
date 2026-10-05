@@ -3,6 +3,7 @@ package org.onekash.kashcal.ui.screens.monthfull
 import androidx.compose.ui.graphics.Color
 import org.onekash.kashcal.domain.model.DisplayEvent
 import org.onekash.kashcal.ui.shared.contrastForegroundOn
+import org.onekash.kashcal.ui.shared.packSpansIntoLanes
 
 // ============================================================
 // Spanning bars across a week row
@@ -58,22 +59,8 @@ fun computeWeekSpans(
         )
     }
 
-    val sortedForPlacement = rawSpans.sortedWith(
-        compareBy({ it.startCol }, { -(it.endCol - it.startCol) })
-    )
-
-    val lanes = mutableListOf<MutableList<WeekSpan>>()
-    var overflow = 0
-    for (span in sortedForPlacement) {
-        val laneIndex = lanes.indexOfFirst { lane ->
-            lane.last().endCol < span.startCol
-        }
-        when {
-            laneIndex >= 0 -> lanes[laneIndex].add(span)
-            lanes.size < maxLanes -> lanes.add(mutableListOf(span))
-            else -> overflow++
-        }
-    }
+    val lanes = packSpansIntoLanes(rawSpans, maxLanes, startCol = { it.startCol }, endCol = { it.endCol })
+    val overflow = rawSpans.size - lanes.sumOf { it.size }
 
     return WeekSpanLayout(
         lanes = lanes,
@@ -83,7 +70,7 @@ fun computeWeekSpans(
 }
 
 // ============================================================
-// Snippet style — for SINGLE-DAY events inside a cell
+// Snippet style for single-day events inside a cell
 // ============================================================
 
 sealed interface SnippetStyle {
@@ -108,7 +95,7 @@ fun snippetStyleFor(displayEvent: DisplayEvent): SnippetStyle {
 }
 
 // ============================================================
-// Span style — for MULTI-DAY events as spanning bars
+// Span style for multi-day events drawn as spanning bars
 // ============================================================
 
 sealed interface SpanStyle {
@@ -185,8 +172,9 @@ fun computeMonthFullWeekRender(
         }
     }
 
-    // 2. For each column, fill remaining slots with cell-only events sorted by
-    //    (all-day busy first, then by startTs).
+    // 2. Fill each column's free slots with its single-day events, ordered by
+    //    [eventOrderRank], then by startTs. When they don't fit, the last free slot
+    //    shows the overflow count.
     for (col in 0..6) {
         val dayCode = weekDayCodes[col]
         val cellEvents = eventsByDayCode[dayCode].orEmpty()
@@ -210,7 +198,7 @@ fun computeMonthFullWeekRender(
                 val overflowCount = cellEvents.size - visibleCount
                 grid[freeSlots[available - 1]][col] = SlotContent.Overflow(overflowCount)
             }
-            // If available == 0, cell events are silently dropped (lanes-win policy).
+            // With no free slot the day's single-day events are silently dropped: bars win.
         }
     }
 
@@ -220,7 +208,7 @@ fun computeMonthFullWeekRender(
     )
 }
 
-/** All-day busy = 0; all-day free = 1; timed = 2. Lower = sorted first. */
+/** Ranks all-day busy 0, all-day free 1, timed 2; lower sorts first. */
 private fun eventOrderRank(event: DisplayEvent): Int = when {
     event.isAllDay && !event.isFree -> 0
     event.isAllDay && event.isFree -> 1

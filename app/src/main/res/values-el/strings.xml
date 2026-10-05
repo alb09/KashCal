@@ -85,6 +85,7 @@
     <string name="action_delete">Διαγραφή</string>
     <string name="action_confirm">Επιβεβαίωση</string>
     <string name="action_discard">Απόρριψη</string>
+    <string name="action_discard_confirm">Να γίνει απόρριψη;</string>
     <string name="action_dismiss">Παράβλεψη</string>
     <string name="action_show_all">Εμφάνιση όλων</string>
     <string name="action_connect">Σύνδεση</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Μετάβαση σε ημερομηνία</string>
     <string name="label_week">Ε</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Ρυθμίσεις</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Συνδέστε το iCloud για να δείτε τα συμβάντα σας εδώ</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Τι νέο</string>
-    <string name="whats_new_dismiss">Κατάλαβα</string>
+    <string name="whats_new_later">Ίσως αργότερα</string>
     <string name="whats_new_v598_title">Βοηθήστε να παραμείνει το Android ανοιχτό</string>
     <string name="whats_new_v598_body">Η Google αλλάζει τον τρόπο με τον οποίο εγκαθιστάτε εφαρμογές στη συσκευή σας. Χρειαζόμαστε τη βοήθειά σας.</string>
     <string name="whats_new_v598_action_label">Επίσκεψη στο keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Ένα διαρκές ευχαριστώ</string>
+    <string name="whats_new_v732_body">Αυτή η έκδοση είναι αφιερωμένη στους υποστηρικτές του KashCal. Μια μικρή συνεισφορά με μεγάλο και διαρκές αντίκρισμα.</string>
+    <string name="whats_new_v732_caption">Δεν είστε ακόμη υποστηρικτής;</string>
+    <string name="whats_new_v732_action_label">Προσθέστε μας στα σχέδιά σας</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Σύνδεση iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Δεν βρέθηκαν ημερολόγια σε αυτόν τον διακομιστή.</string>
     <string name="caldav_error_unexpected">Απρόσμενο σφάλμα. Δοκιμάστε ξανά.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nΑν πρόκειται για διακομιστή στο τοπικό σας δίκτυο, επιτρέψτε την πρόσβαση στο τοπικό δίκτυο για να συνδεθείτε.</string>
+    <string name="caldav_error_connection_refused_insecure">Ο διακομιστής ανακατεύθυνε τη σύνδεση σε σημείο που το KashCal δεν ακολουθεί (μη κρυπτογραφημένη διεύθυνση ή βρόχο ανακατευθύνσεων), οπότε το KashCal σταμάτησε πριν στείλει τον κωδικό σας. Ελέγξτε τη διεύθυνση του διακομιστή.</string>
     <string name="local_network_banner_title">Απαιτείται πρόσβαση στο τοπικό δίκτυο</string>
     <string name="local_network_banner_body">Αυτός ο διακομιστής φαίνεται να βρίσκεται στο τοπικό σας δίκτυο. Επιτρέψτε την πρόσβαση στο τοπικό δίκτυο ώστε το KashCal να μπορεί να συνδεθεί σε αυτόν.</string>
     <string name="local_network_banner_allow">Να επιτραπεί η πρόσβαση</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Ημερολόγιο</string>
     <string name="account_detail_sync_calendar_subtitle">Συγχρονισμός των ημερολογίων αυτού του λογαριασμού</string>
     <string name="account_detail_sync_contacts">Επαφές</string>
-    <string name="account_detail_sync_contacts_subtitle">Συγχρονισμός των επαφών αυτού του λογαριασμού στο τηλέφωνό σας</string>
+    <string name="account_detail_sync_contacts_subtitle">Συγχρονισμός των επαφών αυτού του λογαριασμού</string>
     <string name="account_detail_contacts_permission_needed">Η άδεια για τις Επαφές είναι απενεργοποιημένη. Παραχωρήστε πρόσβαση για να συνεχιστεί ο συγχρονισμός των επαφών.</string>
     <string name="account_detail_contacts_grant">Παραχώρηση πρόσβασης</string>
     <string name="contact_sync_enabled_for">Συγχρονισμός επαφών για %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Πρόταση τίτλων συμβάντων</string>
     <string name="settings_suggest_titles_info">Καθώς ονομάζετε ένα νέο συμβάν, προτείνει τίτλους που έχετε χρησιμοποιήσει στο παρελθόν, ώστε τα επαναλαμβανόμενα συμβάντα να γίνονται με ένα άγγιγμα. Κατατάσσονται ανάλογα με το πόσο συχνά και πόσο πρόσφατα τους έχετε χρησιμοποιήσει.</string>
     <string name="settings_week_numbers">Αριθμοί εβδομάδων</string>
+    <string name="settings_multiday_in_allday_strip">Πολυήμερα συμβάντα στη λωρίδα ολοήμερων</string>
+    <string name="settings_multiday_in_allday_strip_info">Εμφάνιση συμβάντων με ώρα που εκτείνονται σε περισσότερες από μία ημέρες στη λωρίδα ολοήμερων στο πάνω μέρος της εβδομαδιαίας προβολής, αντί στο πλέγμα ωρών. Απενεργοποιήστε το για να παραμένουν στο πλέγμα ωρών κάθε ημέρα.</string>
     <string name="settings_show_declined">Εμφάνιση απορριφθέντων συμβάντων</string>
     <string name="settings_widget_event_limit">Όριο συμβάντων widget</string>
     <string name="settings_widget_event_limit_hint">Μέγιστος αριθμός συμβάντων που εμφανίζονται ανά ημέρα στα γραφικά στοιχεία</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">Αποθήκευση αλλαγών σε</string>
     <string name="dialog_delete_recurring_title">Διαγραφή</string>
     <string name="dialog_move_recurring_title">Μετακίνηση</string>
+    <string name="snackbar_event_rescheduled">Το συμβάν μετακινήθηκε</string>
+    <string name="snackbar_reschedule_failed">Δεν ήταν δυνατή η μετακίνηση του συμβάντος</string>
     <string name="recurring_this_event">Αυτό το συμβάν</string>
     <string name="recurring_all_events">Όλα τα συμβάντα</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">Κάθε %1$d ώρες</string>
     <string name="ics_sync_daily">Καθημερινά</string>
     <string name="ics_sync_weekly">Εβδομαδιαία</string>
+    <string name="default_calendar_name">Ημερολόγιο</string>
     <string name="ics_url_required">Το URL είναι υποχρεωτικό</string>
     <string name="ics_url_invalid_scheme">Το URL πρέπει να ξεκινά με http://, https:// ή webcal://</string>
     <string name="ics_fetch_error_http">Ο διακομιστής επέστρεψε σφάλμα (%1$d). Ελέγξτε το URL.</string>

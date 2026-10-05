@@ -23,23 +23,25 @@ import org.onekash.kashcal.sync.carddav.FakeAddressBook
 import org.onekash.kashcal.sync.carddav.FakeCardDavClient
 import org.onekash.kashcal.sync.carddav.model.CardDavAddressBook
 import org.onekash.kashcal.sync.carddav.model.CardDavContactData
+import org.onekash.kashcal.sync.carddav.model.ContactDeleteResult
 import org.onekash.kashcal.sync.carddav.model.ContactSyncItem
 import org.onekash.kashcal.sync.carddav.model.ContactSyncReport
+import org.onekash.kashcal.sync.carddav.model.ContactUploadResult
 import org.onekash.kashcal.sync.client.model.CalDavResult
+import org.onekash.vcard.VCardParser
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 /**
- * Tests the full-sync core of [ContactPullStrategy]: re-discover books, route each
- * server contact to insert / replace / skip against the device read-back, sweep
- * orphans across the union of ALL books (never per-book), and persist token+ctag.
+ * Tests [ContactPullStrategy]: re-discover books, route each server contact to insert, replace
+ * or skip against the device read-back, sweep orphans across the union of all books (never per
+ * book), and persist sync-token and ctag.
  *
- * Doubles: the shared [FakeCardDavClient] (real discovery + multiget data), a real
- * in-memory Room [org.onekash.kashcal.data.db.dao.AddressBookDao], the shared
- * data-bearing [FakeContactsProviderRepository] (Robolectric's ShadowContentResolver
- * can't execute provider writes, so the real repo could never feed a non-empty
- * read-back — the exact signal routing depends on), and the real
- * [org.onekash.kashcal.data.contacts.VCardContactMapper] inside the strategy.
+ * Doubles: the shared [FakeCardDavClient] (discovery and multiget data), a real in-memory Room
+ * [org.onekash.kashcal.data.db.dao.AddressBookDao], the shared [FakeContactsProviderRepository]
+ * and the real [org.onekash.kashcal.data.contacts.VCardContactMapper] inside the strategy. The
+ * repository is a fake because Robolectric's ShadowContentResolver can't execute provider
+ * writes, so the real one could never return the non-empty read-back that routing depends on.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [34])
@@ -73,9 +75,15 @@ class ContactPullStrategyTest {
         )
 
         provider = FakeContactsProviderRepository()
-        // Real fetcher over the same fake provider: with no pending photos seeded it
-        // is an exact no-op, so the full-sync assertions below are unaffected.
-        strategy = ContactPullStrategy(database.addressBookDao(), provider, ContactPhotoFetcher(provider))
+        // Real photo fetcher and push strategy over the same fake provider. With no pending
+        // photos or local changes seeded, both are no-ops, so they don't affect the pull
+        // assertions below.
+        strategy = ContactPullStrategy(
+            database.addressBookDao(),
+            provider,
+            ContactPhotoFetcher(provider),
+            ContactPushStrategy(provider),
+        )
     }
 
     @After
@@ -96,8 +104,11 @@ class ContactPullStrategyTest {
         url: String = BOOK_URL,
         ctag: String? = "ctag-1",
         contacts: MutableList<CardDavContactData> = mutableListOf(),
+        isReadOnly: Boolean = true,
     ) = FakeAddressBook(
-        book = CardDavAddressBook(href = url, url = url, displayName = "Contacts", ctag = ctag, vcardVersion = "3.0"),
+        book = CardDavAddressBook(
+            href = url, url = url, displayName = "Contacts", ctag = ctag, vcardVersion = "3.0", isReadOnly = isReadOnly,
+        ),
         contacts = contacts,
     )
 
@@ -110,9 +121,8 @@ class ContactPullStrategyTest {
         }
 
     /**
-     * Persist a stored sync-token for [url] before a run, so the next
-     * [ContactPullStrategy.sync] takes the incremental sync-collection branch
-     * rather than a full listing (a book with no stored token full-lists).
+     * Stores a sync-token for [url] so the next [ContactPullStrategy.sync] takes the delta
+     * (sync-collection) path; a book with no stored token takes the full listing.
      */
     private suspend fun seedStoredToken(url: String, token: String) {
         database.addressBookDao().upsert(
@@ -148,9 +158,8 @@ class ContactPullStrategyTest {
 
         strategy.sync(account, SERVER_URL, client)
 
-        // Every run re-asserts the account's UNGROUPED_VISIBLE Settings row so
-        // accounts enabled before this fix (whose row is unset) self-heal on their
-        // next pull rather than staying invisible forever.
+        // Every run sets the account's UNGROUPED_VISIBLE Settings row, so an account whose
+        // row is unset gets it on its next pull instead of staying invisible.
         assertEquals(listOf(ACCOUNT_NAME), provider.ensureVisibilityCalls)
     }
 
@@ -208,8 +217,8 @@ class ContactPullStrategyTest {
 
     @Test
     fun `orphan sweep spans all books - a contact in book B is not deleted by book A's absence`() = runTest {
-        // Both contacts already on device; each lives in a different book. A per-book
-        // sweep would see book A's server list (only /a.vcf) and wrongly delete /b.vcf.
+        // Both contacts are on the device, each in a different book. A per-book sweep would
+        // see book A's server list (only /a.vcf) and delete /b.vcf.
         provider.seed(ACCOUNT_NAME, "/a.vcf", "ea")
         provider.seed(ACCOUNT_NAME, "/b.vcf", "eb")
         val bookA = book(url = "${HOME_URL}bookA/", contacts = mutableListOf(contact("/a.vcf", "ea")))
@@ -227,8 +236,8 @@ class ContactPullStrategyTest {
 
     @Test
     fun `a book that fails to enumerate disables the orphan sweep entirely`() = runTest {
-        // /a.vcf is on device and lives in the book that FAILS to enumerate. If the
-        // failed book were treated as "server has zero hrefs", /a.vcf would be swept.
+        // /a.vcf is on the device and lives in the book that fails to list. If the failed
+        // book read as "server has zero hrefs", /a.vcf would be swept.
         provider.seed(ACCOUNT_NAME, "/a.vcf", "ea")
         provider.seed(ACCOUNT_NAME, "/b.vcf", "eb")
         val bookOk = book(url = "${HOME_URL}ok/", contacts = mutableListOf(contact("/b.vcf", "eb")))
@@ -249,9 +258,9 @@ class ContactPullStrategyTest {
 
     @Test
     fun `a total discovery listing failure surfaces an error and never sweeps`() = runTest {
-        // The account has contacts on device. The only home-set transiently fails to
-        // list its books. This must NOT read as "server has zero contacts" and wipe
-        // the device — it's a systemic error, and no delete may be issued.
+        // The account has contacts on the device and its only home-set fails to list its
+        // books. That must not read as "server has zero contacts" and wipe the device: it
+        // is a systemic error, and no delete may be issued.
         provider.seed(ACCOUNT_NAME, "/a.vcf", "ea")
         provider.seed(ACCOUNT_NAME, "/b.vcf", "eb")
         val client = clientWith().apply {
@@ -266,13 +275,57 @@ class ContactPullStrategyTest {
         assertEquals("device contacts untouched", setOf("/a.vcf", "/b.vcf"), provider.hrefsFor(ACCOUNT_NAME))
     }
 
+    // ---------- zero books discovered must not masquerade as an empty server ----------
+
+    @Test
+    fun `discovery that succeeds with zero address books never sweeps existing device contacts`() = runTest {
+        // The account holds contacts on the device, but discovery succeeds with zero
+        // address books, a real server shape: some servers return an empty home-set, and a
+        // broken well-known can end at a principal that lists no books. Zero books says
+        // nothing about the server's contacts, so it must never allow the orphan sweep, or a
+        // transient or misconfigured discovery wipes every device contact. Unlike the listing
+        // error above (an Error), this is a Success that sweeps nothing. Deletion must follow
+        // a positive signal (a listed book that no longer holds the href, or a
+        // server-reported removal), never the absence of a book.
+        provider.seed(ACCOUNT_NAME, "/a.vcf", "ea")
+        provider.seed(ACCOUNT_NAME, "/b.vcf", "eb")
+        val client = clientWith() // no books -> listAddressBooks succeeds with an empty list
+
+        val result = strategy.sync(account, SERVER_URL, client)
+
+        assertTrue("zero-book discovery is a Success, not an Error", result is ContactPullResult.Success)
+        assertEquals("no contact may be swept when no book was enumerated", 0, (result as ContactPullResult.Success).deleted)
+        assertTrue("no delete statement issued", provider.deleteCalls.isEmpty())
+        assertEquals(
+            "both device contacts survive an empty discovery",
+            setOf("/a.vcf", "/b.vcf"),
+            provider.hrefsFor(ACCOUNT_NAME),
+        )
+    }
+
+    @Test
+    fun `a discovered book that legitimately lists zero contacts still sweeps device orphans`() = runTest {
+        // Unlike zero-book discovery, a book is discovered and listed, and it holds no
+        // contacts (the user emptied it on the server). That is a positive observation of an
+        // empty collection, so its device contact is an orphan and must be swept. This pins
+        // the guard to "at least one book was discovered", not "the union is non-empty",
+        // which would spare an emptied book's stale device contacts.
+        provider.seed(ACCOUNT_NAME, "/gone.vcf", "e-gone")
+        val client = clientWith(book(contacts = mutableListOf())) // book exists, zero cards
+
+        val result = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
+
+        assertEquals("the emptied book's device contact is swept", 1, result.deleted)
+        assertTrue("device now empty for the account", provider.hrefsFor(ACCOUNT_NAME).isEmpty())
+    }
+
     // ---------- stale context path falls back to the host root ----------
 
     @Test
     fun `principal discovery failing at a discovered context path retries at the host root`() = runTest {
-        // The seed URL carries a context path (as a stale DNS TXT path= would). The
-        // server no longer serves a principal there, but does at the host root. The
-        // run must retry at root and complete rather than failing the whole account.
+        // The seed URL carries a context path (as a stale DNS TXT path= would). The server
+        // serves no principal there, but does at the host root. The run must retry at the
+        // root and complete instead of failing the whole account.
         val contextPathUrl = "https://dav.example.test/stale-carddav/"
         val client = clientWith(book(contacts = mutableListOf(contact("/a.vcf", "e1")))).apply {
             principalErrorUrls += contextPathUrl
@@ -291,8 +344,8 @@ class ContactPullStrategyTest {
 
     @Test
     fun `principal discovery is not retried when the seed already is the host root`() = runTest {
-        // No context path to fall back from: a genuine principal failure at the root
-        // must surface as an error, not loop or spuriously succeed.
+        // No context path to fall back from: a principal failure at the root must surface
+        // as an error, not loop or spuriously succeed.
         val rootUrl = "https://dav.example.test"
         val client = clientWith(book(contacts = mutableListOf(contact("/a.vcf", "e1")))).apply {
             principalErrorUrls += rootUrl
@@ -306,8 +359,8 @@ class ContactPullStrategyTest {
 
     @Test
     fun `a host root seed with a trailing slash is not retried against the same location`() = runTest {
-        // The host root can arrive with a trailing slash; trimming it must make the
-        // no-retry guarantee hold, so a genuine failure here isn't re-attempted.
+        // The host root can arrive with a trailing slash; trimming it keeps the no-retry
+        // rule, so a failure here isn't re-attempted.
         val rootWithSlash = "https://dav.example.test/"
         val client = clientWith(book(contacts = mutableListOf(contact("/a.vcf", "e1")))).apply {
             principalErrorUrls += rootWithSlash
@@ -323,6 +376,154 @@ class ContactPullStrategyTest {
         )
     }
 
+    // ---------- principal-seed discovery (well-known redirect or 405) ----------
+
+    /**
+     * Returns an account with a stored CalDAV principal, the shape every account created via
+     * CalDAV login has (account creation fails without a resolved principal). A null
+     * [principalUrl] models the only row that can be null: one migrated from before that
+     * column existed.
+     */
+    private fun accountWithPrincipal(principalUrl: String?): Account =
+        Account(id = accountId, provider = AccountProvider.ICLOUD, email = ACCOUNT_NAME, principalUrl = principalUrl)
+
+    @Test
+    fun `a same-authority stored principal seeds discovery directly, skipping well-known and principal rediscovery`() = runTest {
+        // The stored principal lives on SERVER_URL's authority. Discovery must PROPFIND it
+        // directly for the address-book home, skipping the well-known step that breaks on a
+        // port-dropping redirect (Baikal) or a 405 (SOGo).
+        val storedPrincipal = "https://dav.example.test/dav.php/principals/testuser1/"
+        val client = clientWith(book(contacts = mutableListOf(contact("/a.vcf", "e1"))))
+
+        val result = strategy.sync(accountWithPrincipal(storedPrincipal), SERVER_URL, client)
+
+        assertTrue("the seeded run syncs contacts", result is ContactPullResult.Success)
+        assertEquals("contact synced via the seed path", setOf("/a.vcf"), provider.hrefsFor(ACCOUNT_NAME))
+        assertTrue(
+            "well-known is not probed when seeding from the stored principal",
+            client.discoverWellKnownCalls.isEmpty(),
+        )
+        assertTrue(
+            "principal is not re-discovered when seeding from the stored principal",
+            client.discoverPrincipalCalls.isEmpty(),
+        )
+        assertEquals(
+            "the home-set is PROPFINDed directly against the stored principal",
+            listOf(storedPrincipal),
+            client.discoverAddressBookHomeCalls,
+        )
+    }
+
+    @Test
+    fun `an account with no stored principal falls back to the well-known discovery chain`() = runTest {
+        // Only rows migrated from before the principalUrl column existed are null; they
+        // must fall back to the well-known -> principal chain.
+        val client = clientWith(book(contacts = mutableListOf(contact("/a.vcf", "e1"))))
+
+        val result = strategy.sync(accountWithPrincipal(null), SERVER_URL, client)
+
+        assertTrue("a null-principal account still syncs via well-known", result is ContactPullResult.Success)
+        assertEquals(setOf("/a.vcf"), provider.hrefsFor(ACCOUNT_NAME))
+        assertTrue("well-known is probed on the fallback path", client.discoverWellKnownCalls.isNotEmpty())
+        assertTrue("principal is discovered on the fallback path", client.discoverPrincipalCalls.isNotEmpty())
+    }
+
+    @Test
+    fun `a refused well-known redirect falls back to the derived contacts base URL`() = runTest {
+        // The server's /.well-known/carddav points at plain http elsewhere: the transport
+        // guard refuses that hop and discovery carries on from the account's base URL.
+        val client = clientWith(book(contacts = mutableListOf(contact("/a.vcf", "e1"))))
+        client.wellKnownError = CalDavResult.error(CalDavResult.CODE_TRANSPORT_REFUSED, "refused", isRetryable = true)
+
+        val result = strategy.sync(accountWithPrincipal(null), SERVER_URL, client)
+
+        assertTrue("contacts still sync: $result", result is ContactPullResult.Success)
+        assertEquals(setOf("/a.vcf"), provider.hrefsFor(ACCOUNT_NAME))
+    }
+
+    @Test
+    fun `a stored principal differing only in host case still seeds discovery`() = runTest {
+        // Host is case-insensitive (RFC 3986). A principal whose host case differs from the
+        // CardDAV base must still pass the same-authority gate and take the seed, or it
+        // would silently fall back to the well-known path the seed bypasses.
+        val storedPrincipal = "https://DAV.example.test/dav.php/principals/testuser1/"
+        val client = clientWith(book(contacts = mutableListOf(contact("/a.vcf", "e1"))))
+
+        val result = strategy.sync(accountWithPrincipal(storedPrincipal), SERVER_URL, client)
+
+        assertTrue("the case-differing seed still syncs", result is ContactPullResult.Success)
+        assertTrue(
+            "host case must not defeat the same-authority gate",
+            client.discoverWellKnownCalls.isEmpty(),
+        )
+        assertEquals(
+            "the home-set is PROPFINDed directly against the stored principal",
+            listOf(storedPrincipal),
+            client.discoverAddressBookHomeCalls,
+        )
+    }
+
+    @Test
+    fun `a stored principal on a different authority is not used as the seed`() = runTest {
+        // Split-host providers (iCloud pins CardDAV to contacts.icloud.com, Zoho to
+        // contacts.zoho.com) keep the CalDAV principal on another host than the CardDAV base.
+        // Seeding from it would PROPFIND the wrong host, so the same-authority gate must
+        // reject it and take the well-known chain.
+        val splitHostPrincipal = "https://caldav.example.test/principals/me/"
+        val client = clientWith(book(contacts = mutableListOf(contact("/a.vcf", "e1"))))
+
+        val result = strategy.sync(accountWithPrincipal(splitHostPrincipal), SERVER_URL, client)
+
+        assertTrue("a split-host account still syncs via well-known", result is ContactPullResult.Success)
+        assertTrue("well-known is probed for a split-host principal", client.discoverWellKnownCalls.isNotEmpty())
+        assertTrue("principal is discovered for a split-host principal", client.discoverPrincipalCalls.isNotEmpty())
+        assertFalse(
+            "the split-host principal is never PROPFINDed as the seed",
+            client.discoverAddressBookHomeCalls.contains(splitHostPrincipal),
+        )
+    }
+
+    @Test
+    fun `a seed-path listing failure surfaces the same systemic error as the fallback path`() = runTest {
+        // The seed and fallback share the listAddressBooks tail: a per-home listing failure
+        // with nothing discovered must surface a systemic error and never sweep, as on the
+        // null-principal path. A home-set that resolved but whose books can't be listed
+        // isn't a seed miss, so it must not fall through.
+        provider.seed(ACCOUNT_NAME, "/a.vcf", "ea")
+        val storedPrincipal = "https://dav.example.test/dav.php/principals/testuser1/"
+        val client = clientWith().apply {
+            listAddressBooksError =
+                org.onekash.kashcal.sync.client.model.CalDavResult.Error(503, "unavailable", isRetryable = true)
+        }
+
+        val result = strategy.sync(accountWithPrincipal(storedPrincipal), SERVER_URL, client)
+
+        assertTrue("the shared tail surfaces a systemic error on the seed path too", result is ContactPullResult.Error)
+        assertTrue("no delete issued when the seed-path listing failed", provider.deleteCalls.isEmpty())
+        assertEquals("device contact untouched", setOf("/a.vcf"), provider.hrefsFor(ACCOUNT_NAME))
+    }
+
+    @Test
+    fun `a seed whose principal carries no home-set falls through to well-known`() = runTest {
+        // The seed is an optimization: if the same-authority principal yields no
+        // address-book home, discovery must fall through to well-known instead of failing,
+        // so a server that only answers via well-known still syncs.
+        val storedPrincipal = "https://dav.example.test/dav.php/principals/testuser1/"
+        val client = clientWith(book(contacts = mutableListOf(contact("/a.vcf", "e1")))).apply {
+            addressBookHomeErrorUrls += storedPrincipal
+        }
+
+        val result = strategy.sync(accountWithPrincipal(storedPrincipal), SERVER_URL, client)
+
+        assertTrue("the run recovers via the well-known fallback", result is ContactPullResult.Success)
+        assertEquals("contact synced after falling through", setOf("/a.vcf"), provider.hrefsFor(ACCOUNT_NAME))
+        assertTrue("well-known is probed after the seed misses", client.discoverWellKnownCalls.isNotEmpty())
+        assertTrue(
+            "the seed principal was tried first, before the well-known fallback",
+            client.discoverAddressBookHomeCalls.contains(storedPrincipal),
+        )
+    }
+
     // ---------- re-discovery ----------
 
     @Test
@@ -333,7 +534,7 @@ class ContactPullStrategyTest {
         strategy.sync(account, SERVER_URL, client)
         assertEquals(setOf("/a.vcf"), provider.hrefsFor(ACCOUNT_NAME))
 
-        // Server grows a second book; a re-run must discover and sync it.
+        // The server gains a second book; the next run must discover and sync it.
         client.books += book(url = "${HOME_URL}bookB/", contacts = mutableListOf(contact("/b.vcf", "eb")))
         val result = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
 
@@ -342,14 +543,14 @@ class ContactPullStrategyTest {
         assertEquals("two books persisted", 2, database.addressBookDao().getByAccountIdOnce(accountId).size)
     }
 
-    // ---------- incremental sync-collection (RFC 6578) ----------
+    // ---------- delta sync-collection (RFC 6578) ----------
 
     @Test
     fun `initial run with no stored token full-lists, then the next run syncs incrementally`() = runTest {
         val bk = book(contacts = mutableListOf(contact("/a.vcf", "e1")))
         val client = clientWith(bk)
 
-        // Run 1: no stored token -> full listing enumerates and persists the token.
+        // Run 1: no stored token, so the full listing runs and persists the token.
         val first = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
         assertEquals("first run full-lists and inserts", 1, first.inserted)
         assertEquals("first run used the full-listing path", 1, client.listAllHrefsCalls)
@@ -357,7 +558,7 @@ class ContactPullStrategyTest {
         assertEquals("token persisted for the next run", "token-1",
             database.addressBookDao().getByAccountIdOnce(accountId).single().syncToken)
 
-        // Run 2: token now stored -> incremental delta reports a new contact.
+        // Run 2: the stored token drives a delta that reports a new contact.
         bk.contacts += contact("/b.vcf", "e2")
         bk.syncReports += CalDavResult.success(
             ContactSyncReport(syncToken = "token-2", changed = listOf(ContactSyncItem("/b.vcf", "e2")), deleted = emptyList()),
@@ -374,14 +575,13 @@ class ContactPullStrategyTest {
 
     @Test
     fun `a truncated 507 delta is paged to completion on the returned token`() = runTest {
-        // Seed an existing device contact so the device isn't empty: a stored token
-        // with a wiped device now self-heals to a full listing, which is a different
-        // path — this test exercises delta pagination, the normal populated-device case.
+        // A device contact keeps the device non-empty: a stored token with a wiped device
+        // takes the full listing instead, and this test covers delta paging.
         provider.seed(ACCOUNT_NAME, "/seed.vcf", "e-seed")
         seedStoredToken(BOOK_URL, "token-1")
         val bk = book(contacts = mutableListOf(contact("/a.vcf", "e1"), contact("/b.vcf", "e2")))
-        // Page 1 truncated (partial), page 2 completes — RFC 6578 §3.6: the caller
-        // MUST re-issue on the returned token until not truncated.
+        // Page 1 is truncated, page 2 completes. RFC 6578 §3.6: a truncated response's token
+        // covers the partial set, so the client re-issues on it to page through the rest.
         bk.syncReports += CalDavResult.success(
             ContactSyncReport(syncToken = "token-2", changed = listOf(ContactSyncItem("/a.vcf", "e1")), deleted = emptyList(), truncated = true),
         )
@@ -407,11 +607,10 @@ class ContactPullStrategyTest {
 
     @Test
     fun `deletes on the incremental path come only from the server delta, never a union sweep`() = runTest {
-        // /keep.vcf is on device, unchanged, and NOT in the delta's changed set. A
-        // full-enumeration orphan sweep would wrongly delete it (it isn't in the
-        // enumerated union); the incremental path must delete ONLY /gone.vcf, which
-        // the server explicitly reported removed. This is the incremental-path
-        // false-delete fix: a truncated full enumeration can no longer sweep contacts.
+        // /keep.vcf is on the device, unchanged, and not in the delta's changed set. An
+        // orphan sweep would delete it (it isn't in the union); the delta path must delete
+        // only /gone.vcf, which the server reported removed, so a truncated listing can't
+        // sweep contacts.
         provider.seed(ACCOUNT_NAME, "/gone.vcf", "e-gone")
         provider.seed(ACCOUNT_NAME, "/keep.vcf", "e-keep")
         seedStoredToken(BOOK_URL, "token-1")
@@ -432,10 +631,9 @@ class ContactPullStrategyTest {
 
     @Test
     fun `the full-listing path probes the sync-token before enumerating, never after`() = runTest {
-        // The persisted token must reflect a server state at or before the
-        // enumeration. If it were probed AFTER listAllContactHrefs, a contact
-        // created between the listing and the probe would be missing this run yet
-        // covered by the token, so the next delta would skip it forever.
+        // The persisted token must reflect a server state at or before the listing. Probed
+        // after listAllContactHrefs, it would cover a contact created between the two that
+        // this run missed, and the next delta would skip that contact for good.
         val client = clientWith(book(contacts = mutableListOf(contact("/a.vcf", "e1"))))
 
         strategy.sync(account, SERVER_URL, client)
@@ -448,10 +646,10 @@ class ContactPullStrategyTest {
 
     @Test
     fun `a failed delta delete holds the token so the removal replays next run`() = runTest {
-        // The server reports /gone.vcf removed, but the device delete fails
-        // (transient provider error). Advancing to the delta's token would step
-        // past the server's removed set — the server never re-reports /gone.vcf,
-        // so it would be orphaned on the device forever. The token must be held.
+        // The server reports /gone.vcf removed, but the device delete fails (transient
+        // provider error). Advancing to the delta's token would step past the removed set,
+        // which the server never re-reports, leaving /gone.vcf on the device for good. The
+        // token must be held.
         provider.seed(ACCOUNT_NAME, "/gone.vcf", "e-gone")
         seedStoredToken(BOOK_URL, "token-1")
         provider.deleteResult = Result.failure(RuntimeException("provider unavailable"))
@@ -474,15 +672,14 @@ class ContactPullStrategyTest {
 
     @Test
     fun `a stored token with an empty device self-heals to a full listing`() = runTest {
-        // The wipe-recovery case the app-side purge hooks can't cover: the contacts
-        // were removed out-of-band (user deletes the account in Android Settings, an
-        // OS purge, a failed prior write) so the device holds ZERO of this account's
-        // contacts, yet the server-side cursor survived. A plain delta against the
-        // still-valid token reports only *changes* and would leave the account empty
-        // forever. With nothing on the device, the run must full-list and re-fetch
-        // every server contact instead of taking the incremental path.
+        // The wipe the app-side purge hooks can't cover: the contacts were removed out of
+        // band (the user removes the account in Android Settings, an OS purge, a failed
+        // earlier write), so the device holds none of this account's contacts while the
+        // stored sync-token survives. A delta reports only changes and would leave the
+        // account empty for good, so the run must take the full listing and re-fetch every
+        // server contact.
         seedStoredToken(BOOK_URL, "token-1")
-        // No provider.seed(...) — the device mirror is empty.
+        // No provider.seed(...): the device copy is empty.
         val bk = book(contacts = mutableListOf(contact("/a.vcf", "e1"), contact("/b.vcf", "e2")))
         val client = clientWith(bk)
 
@@ -498,9 +695,8 @@ class ContactPullStrategyTest {
 
     @Test
     fun `a stored token with contacts still on the device stays on the incremental path`() = runTest {
-        // Guard the self-heal's blast radius: when the device DOES hold contacts for
-        // the account, a stored token must still take the incremental delta path —
-        // the empty-device check must not force a full listing on every normal sync.
+        // Bounds the wiped-device check: when the device holds contacts for the account, a
+        // stored token must still take the delta path, not a full listing every sync.
         provider.seed(ACCOUNT_NAME, "/a.vcf", "e1")
         seedStoredToken(BOOK_URL, "token-1")
         val bk = book(contacts = mutableListOf(contact("/a.vcf", "e1")))
@@ -518,14 +714,243 @@ class ContactPullStrategyTest {
             database.addressBookDao().getByAccountIdOnce(accountId).single().syncToken)
     }
 
+    // ---------- push (local edits and deletes) runs before the per-book pull ----------
+
+    @Test
+    fun `push uploads the local edit before the per-book pull fetches new server contacts`() = runTest {
+        // A local edit at /ab/default/edit.vcf (stored etag v1, unchanged on the server, so
+        // the pull would skip it) and a net-new server contact /ab/default/new.vcf the pull
+        // must insert. The push must GET its patch base before the pull fetches the new
+        // contact, so the edit is delivered ahead of the reconciling read.
+        val editHref = "$BOOK_PATH/edit.vcf"
+        val newHref = "$BOOK_PATH/new.vcf"
+        val editBody = vcard("edit-uid", "Server Edit")
+        val bk = book(
+            isReadOnly = false,
+            contacts = mutableListOf(
+                CardDavContactData(href = editHref, url = "$BOOK_URL$editHref", etag = "v1", vcardBody = editBody),
+                contact(newHref, "e-new"),
+            ),
+        )
+        val client = clientWith(bk, syncToken = null)
+        // The server copy is unchanged (still v1), so keeping the stored etag at v1 lets the
+        // pull skip /edit.vcf and fetch only /new.vcf.
+        client.putContactResult = ContactUploadResult.Success(etag = "v1")
+        provider.seed(ACCOUNT_NAME, editHref, "v1")
+        provider.pendingChanges = LocalContactChanges(
+            edited = listOf(
+                LocalContactEdit(
+                    href = editHref, uid = "edit-uid", storedEtag = "v1",
+                    contact = VCardParser().parse(editBody).single().copy(displayName = "Edited", rawVCard = ""),
+                ),
+            ),
+            deleted = emptyList(),
+        )
+
+        val result = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
+
+        assertEquals("the edit was PUT during the run", 1, client.putContactCalls.size)
+        assertEquals("only the new server contact is inserted", 1, result.inserted)
+        // The push GET of the edited href precedes the pull's insert-fetch of the new href.
+        val pushGet = client.fetchByHrefCalls.indexOfFirst { editHref in it.second }
+        val pullFetch = client.fetchByHrefCalls.indexOfFirst { newHref in it.second }
+        assertTrue("both the push GET and the pull fetch ran", pushGet >= 0 && pullFetch >= 0)
+        assertTrue("push GET happens before the per-book pull fetch", pushGet < pullFetch)
+    }
+
+    @Test
+    fun `a partial push failure holds the sync token so the run is retried`() = runTest {
+        // The device holds a contact, and a local tombstone's server DELETE fails in
+        // transport. The push is not clean but not pull-unsafe (a delete creates no server
+        // row for the pull to duplicate), so the pull still runs, and every book's sync-token
+        // stays at its pre-run value so the run replays until it reconciles.
+        provider.seed(ACCOUNT_NAME, "$BOOK_PATH/a.vcf", "e1")
+        seedStoredToken(BOOK_URL, "token-1")
+        provider.pendingChanges = LocalContactChanges(
+            edited = emptyList(),
+            deleted = listOf(LocalContactTombstone(href = "$BOOK_PATH/gone.vcf", storedEtag = "d1")),
+        )
+        val bk = book(isReadOnly = false, contacts = mutableListOf(contact("$BOOK_PATH/a.vcf", "e1")))
+        bk.syncReports += CalDavResult.success(
+            ContactSyncReport(syncToken = "token-2", changed = emptyList(), deleted = emptyList()),
+        )
+        val client = clientWith(bk)
+        client.deleteContactResult = ContactDeleteResult.Failed(code = 0, message = "network", isRetryable = true)
+
+        val result = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
+
+        assertEquals("the DELETE was attempted", 1, client.deleteContactCalls.size)
+        assertTrue("a failed push counts against the run", result.booksFailed >= 1)
+        assertEquals(
+            "the sync token is HELD at the pre-run value, not advanced past an incomplete push",
+            "token-1",
+            database.addressBookDao().getByAccountIdOnce(accountId).single().syncToken,
+        )
+    }
+
+    @Test
+    fun `a push-induced local wipe re-triggers the full-listing self-heal`() = runTest {
+        // A local tombstone deletes the account's only device contact. The pull reads the
+        // device snapshot after the push, so the now-empty device trips the wiped-device
+        // check: the stored token must not drive a delta, which would report only changes
+        // and leave contacts missing.
+        provider.seed(ACCOUNT_NAME, "$BOOK_PATH/a.vcf", "e1")
+        seedStoredToken(BOOK_URL, "token-1")
+        provider.pendingChanges = LocalContactChanges(
+            edited = emptyList(),
+            deleted = listOf(LocalContactTombstone(href = "$BOOK_PATH/a.vcf", storedEtag = "e1")),
+        )
+        // After the push deletes /a.vcf on the server too, the collection lists only a
+        // separate contact the wiped device must re-fetch via the full listing.
+        val bk = book(isReadOnly = false, contacts = mutableListOf(contact("$BOOK_PATH/c.vcf", "e-c")))
+        val client = clientWith(bk)
+        client.deleteContactResult = ContactDeleteResult.Deleted
+
+        val result = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
+
+        assertTrue("the DELETE was delivered and the local row hard-deleted", client.deleteContactCalls.size == 1)
+        assertTrue("the wiped device must NOT drive an incremental delta", client.syncCollectionCalls.isEmpty())
+        assertEquals("the empty device forces a full listing", 1, client.listAllHrefsCalls)
+        assertEquals("the full re-listing repopulates from the server", setOf("$BOOK_PATH/c.vcf"), provider.hrefsFor(ACCOUNT_NAME))
+        assertEquals("the new server contact is inserted", 1, result.inserted)
+    }
+
+    @Test
+    fun `a net-new device contact syncs up once and is not duplicated by the following pull`() = runTest {
+        // A contact created on the device (blank href, DIRTY, no server resource yet) is
+        // pushed as a create. Its new href and etag must be written back onto the
+        // originating row by its provider _ID (the href-keyed write-back can't reach a blank
+        // href) and DIRTY cleared, so the pull that follows sees a matching href and skips
+        // it instead of mirroring the server copy as a second row.
+        val createdHref = "$BOOK_PATH/uid-new.vcf"
+        val bk = book(isReadOnly = false, contacts = mutableListOf())
+        val client = clientWith(bk, syncToken = null)
+        client.putContactResult = ContactUploadResult.Success(etag = "srv-1")
+        // FakeCardDavClient.putContact doesn't add the created resource to the book pool, so
+        // the accepted create is modelled by seeding it into the set the pull lists.
+        bk.contacts += contact(createdHref, "srv-1", uid = "uid-new", fn = "New Person")
+        provider.pendingChanges = LocalContactChanges(
+            edited = listOf(
+                LocalContactEdit(
+                    href = "", uid = "uid-new", storedEtag = null, localId = 100L,
+                    contact = VCardParser().parse(vcard("uid-new", "New Person")).single().copy(rawVCard = ""),
+                ),
+            ),
+            deleted = emptyList(),
+        )
+
+        strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
+
+        assertEquals("the net-new contact was created on the server exactly once", 1, client.putContactCalls.size)
+        assertEquals(
+            "exactly one device row survives: the originating contact, now stamped with its server href (no duplicate)",
+            1,
+            provider.deviceRowCount(ACCOUNT_NAME),
+        )
+        assertEquals("the surviving row carries the created server href", setOf(createdHref), provider.hrefsFor(ACCOUNT_NAME))
+        assertTrue("no net-new edit is left pending", provider.pendingChanges.edited.isEmpty())
+    }
+
+    @Test
+    fun `a net-new create whose write-back fails skips the pull so no duplicate materializes`() = runTest {
+        // The server accepts the net-new create, but the _ID write-back (stamp SOURCE_ID,
+        // clear DIRTY) fails, so the originating row stays blank-href and DIRTY. The pull must
+        // be skipped: listing would find the created href absent from the device snapshot
+        // and insert it as a second row beside the pending edit. Skipping holds every token
+        // and replays the whole run.
+        val createdHref = "$BOOK_PATH/uid-new.vcf"
+        val bk = book(isReadOnly = false, contacts = mutableListOf())
+        val client = clientWith(bk, syncToken = null)
+        client.putContactResult = ContactUploadResult.Success(etag = "srv-1")
+        // The accepted create, seeded as the resource the pull would list: the duplicate
+        // source the skip must keep the pull from reaching.
+        bk.contacts += contact(createdHref, "srv-1", uid = "uid-new", fn = "New Person")
+        // markNewContactUploaded fails, so the push is not clean and the originating edit
+        // stays pending.
+        provider.markNewUploadedResult = Result.failure(RuntimeException("write-back failed"))
+        seedStoredToken(BOOK_URL, "token-1")
+        provider.pendingChanges = LocalContactChanges(
+            edited = listOf(
+                LocalContactEdit(
+                    href = "", uid = "uid-new", storedEtag = null, localId = 100L,
+                    contact = VCardParser().parse(vcard("uid-new", "New Person")).single().copy(rawVCard = ""),
+                ),
+            ),
+            deleted = emptyList(),
+        )
+
+        val result = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
+
+        assertEquals("the create was attempted exactly once", 1, client.putContactCalls.size)
+        assertEquals("the write-back was attempted and failed", 1, provider.markNewUploadedCalls.size)
+        assertTrue("the not-clean push counts against the run", result.booksFailed >= 1)
+        // The pull never ran: no enumeration, no delta, no insert.
+        assertEquals("the pull did not enumerate", 0, client.listAllHrefsCalls)
+        assertTrue("the pull did not probe the incremental delta", client.syncCollectionCalls.isEmpty())
+        assertTrue("the pull materialized nothing", provider.insertCalls.isEmpty())
+        assertEquals(
+            "exactly one device row exists: the still-pending originating contact, no server-copy duplicate",
+            1,
+            provider.deviceRowCount(ACCOUNT_NAME),
+        )
+        assertEquals(
+            "the sync token is HELD at the pre-run value for a full replay next run",
+            "token-1",
+            database.addressBookDao().getByAccountIdOnce(accountId).single().syncToken,
+        )
+    }
+
+    @Test
+    fun `a non-net-new push failure still lets inbound contacts materialize while holding the token`() = runTest {
+        // A local tombstone's server DELETE fails in transport: the push is not clean, but a
+        // delete creates no server row, so it isn't pull-unsafe. The pull must still run
+        // (one persistently rejected local change must never freeze all inbound sync), so a
+        // net-new contact in the delta reaches the device, while the book's sync-token stays
+        // at its pre-run value so the run replays until the stuck delete reconciles.
+        provider.seed(ACCOUNT_NAME, "$BOOK_PATH/a.vcf", "e1")
+        seedStoredToken(BOOK_URL, "token-1")
+        provider.pendingChanges = LocalContactChanges(
+            edited = emptyList(),
+            deleted = listOf(LocalContactTombstone(href = "$BOOK_PATH/gone.vcf", storedEtag = "d1")),
+        )
+        val bk = book(isReadOnly = false, contacts = mutableListOf(contact("$BOOK_PATH/a.vcf", "e1")))
+        // The delta reports a new inbound contact unrelated to the stuck delete.
+        bk.contacts += contact("$BOOK_PATH/inbound.vcf", "e-in", uid = "uid-in", fn = "Inbound Person")
+        bk.syncReports += CalDavResult.success(
+            ContactSyncReport(
+                syncToken = "token-2",
+                changed = listOf(ContactSyncItem("$BOOK_PATH/inbound.vcf", "e-in")),
+                deleted = emptyList(),
+            ),
+        )
+        val client = clientWith(bk)
+        client.deleteContactResult = ContactDeleteResult.Failed(code = 0, message = "network", isRetryable = true)
+
+        val result = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
+
+        assertEquals("the DELETE was attempted and failed", 1, client.deleteContactCalls.size)
+        assertTrue("the not-clean push counts against the run", result.booksFailed >= 1)
+        assertEquals("the pull still enumerated the delta despite the stuck delete", 1, result.inserted)
+        assertTrue(
+            "the brand-new inbound contact materialized — inbound sync is NOT frozen by the stuck push",
+            provider.hrefsFor(ACCOUNT_NAME).contains("$BOOK_PATH/inbound.vcf"),
+        )
+        assertEquals(
+            "the sync token is HELD at the pre-run value so the stuck delete replays next run",
+            "token-1",
+            database.addressBookDao().getByAccountIdOnce(accountId).single().syncToken,
+        )
+    }
+
     @Test
     fun `an invalid or expired sync-token falls back to a full listing`() = runTest {
         // Device has a stale contact; the stored token is rejected by the server.
         provider.seed(ACCOUNT_NAME, "/a.vcf", "old-etag")
         seedStoredToken(BOOK_URL, "expired-token")
         val bk = book(contacts = mutableListOf(contact("/a.vcf", "new-etag")))
-        // 410 Gone (RFC 6578 §3.6): the token is invalid; the client surfaces it
-        // non-retryable so the strategy re-syncs the book from a full listing.
+        // A 410 rejects the stored token as invalid (RFC 6578 §3.2 lets a server invalidate
+        // tokens, and the client falls back to full synchronization). The client surfaces it
+        // non-retryable, so the strategy re-syncs the book from a full listing.
         bk.syncReports += CalDavResult.error(410, "Sync token invalid", isRetryable = false)
         val client = clientWith(bk)
 
@@ -539,12 +964,91 @@ class ContactPullStrategyTest {
             database.addressBookDao().getByAccountIdOnce(accountId).single().syncToken)
     }
 
+    // ---------- an unreadable contact holds the sync-token ----------
+
+    @Test
+    fun `a book with an unreadable contact holds its sync-token and re-lists next run`() = runTest {
+        // One readable contact and one body the read yields no contact from: junk parses to
+        // zero cards in ez-vcard, standing in for any read that yields nothing, such as
+        // ez-vcard constructors stripped by R8 on a release build. The good contact reaches
+        // the device, but the book stays unconfirmed, so its sync-token must not advance. The
+        // next run must take the full listing and re-fetch the held href instead of leaving
+        // it behind a token that claims it is synced (RFC 6578 §3.1).
+        val badBody = "this is not a vcard at all"
+        val bk = book(
+            contacts = mutableListOf(
+                contact("/good.vcf", "eg"),
+                CardDavContactData(href = "/bad.vcf", url = "$BOOK_URL/bad.vcf", etag = "eb", vcardBody = badBody),
+            ),
+        )
+        val client = clientWith(bk)
+
+        val first = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
+
+        assertEquals("the readable contact still inserts", 1, first.inserted)
+        assertEquals("the unreadable contact marks the book failed", 1, first.booksFailed)
+        assertEquals(
+            "the sync-token is HELD (null), never advanced past the unread contact",
+            null,
+            database.addressBookDao().getByAccountIdOnce(accountId).single().syncToken,
+        )
+
+        // Next run: the held null token forces a full listing again (no delta), and the
+        // unreadable href is re-fetched instead of skipped.
+        val listsBefore = client.listAllHrefsCalls
+        strategy.sync(account, SERVER_URL, client)
+
+        assertTrue(
+            "the held book is re-enumerated next run, not skipped by an incremental delta",
+            client.listAllHrefsCalls > listsBefore,
+        )
+        assertTrue("no incremental probe while the cursor is held", client.syncCollectionCalls.isEmpty())
+        assertTrue(
+            "the previously-unreadable href is re-fetched next run",
+            client.fetchByHrefCalls.any { it.second.contains("/bad.vcf") },
+        )
+    }
+
+    @Test
+    fun `a KIND group contact is confirmed so the book advances its token and never re-lists`() = runTest {
+        // A group vCard is dropped on purpose, not a parse failure, so it must not hold the
+        // book's sync-token, or any book with a distribution list would re-list forever. A
+        // clean run (one person, one group) advances the token, and the next run takes the
+        // delta path.
+        val groupBody =
+            "BEGIN:VCARD\r\nVERSION:3.0\r\nUID:team\r\nFN:Team\r\nN:Team;;;;\r\n" +
+                "X-ADDRESSBOOKSERVER-KIND:group\r\nEND:VCARD\r\n"
+        val bk = book(
+            contacts = mutableListOf(
+                contact("/alice.vcf", "ea"),
+                CardDavContactData(href = "/team.vcf", url = "$BOOK_URL/team.vcf", etag = "et", vcardBody = groupBody),
+            ),
+        )
+        val client = clientWith(bk)
+
+        val first = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
+
+        assertEquals("only the real person inserts; the group is dropped", 1, first.inserted)
+        assertEquals("a group drop is NOT a failure", 0, first.booksFailed)
+        assertEquals(
+            "the token advances after a clean run (no held cursor for a deliberate drop)",
+            "token-1",
+            database.addressBookDao().getByAccountIdOnce(accountId).single().syncToken,
+        )
+
+        // Next run: the stored token drives the delta path; the group didn't wedge the book
+        // into a permanent re-list.
+        strategy.sync(account, SERVER_URL, client)
+
+        assertEquals("the book advanced to the incremental path", listOf(BOOK_URL to "token-1"), client.syncCollectionCalls)
+        assertEquals("no re-listing after the group-containing run", 1, client.listAllHrefsCalls)
+    }
+
     // ---------- ctag skip on no-sync-token servers ----------
 
     /**
-     * Persist a stored ctag (and no sync-token) for [url] before a run, so the
-     * next [ContactPullStrategy.sync] takes the ctag-skip decision on the
-     * full-listing path (a book with no token can't drive an incremental delta).
+     * Stores a ctag and no sync-token for [url], so the next [ContactPullStrategy.sync]
+     * makes the ctag-skip decision (a book with no token can't drive a delta).
      */
     private suspend fun seedStoredCtag(url: String, ctag: String) {
         database.addressBookDao().upsert(
@@ -554,9 +1058,9 @@ class ContactPullStrategyTest {
 
     @Test
     fun `an unchanged ctag with no sync-token skips enumeration entirely`() = runTest {
-        // A no-sync-token server full-lists every run. When the collection ctag is
-        // unchanged since the last full-list AND the device still holds contacts,
-        // nothing changed — the enumeration is skipped, saving the PROPFIND.
+        // A server without sync-tokens takes the full listing every run. When the ctag is
+        // unchanged since the last full listing and the device still holds contacts, nothing
+        // changed, so the listing is skipped, saving the PROPFIND.
         provider.seed(ACCOUNT_NAME, "/a.vcf", "e1")
         seedStoredCtag(BOOK_URL, "ctag-1")
         val client = clientWith(book(ctag = "ctag-1", contacts = mutableListOf(contact("/a.vcf", "e1"))))
@@ -574,8 +1078,8 @@ class ContactPullStrategyTest {
 
     @Test
     fun `a changed ctag with no sync-token still full-lists`() = runTest {
-        // When the server bumps the ctag, the cheap-skip is off and the book is
-        // fully enumerated as before, so real changes are still applied.
+        // When the server bumps the ctag, the skip is off and the book is fully listed, so
+        // real changes are still applied.
         provider.seed(ACCOUNT_NAME, "/a.vcf", "e1")
         seedStoredCtag(BOOK_URL, "ctag-old")
         val client = clientWith(book(ctag = "ctag-new", contacts = mutableListOf(contact("/a.vcf", "e2"))))
@@ -589,11 +1093,11 @@ class ContactPullStrategyTest {
 
     @Test
     fun `an unchanged ctag with an empty device still full-lists to self-heal`() = runTest {
-        // Guard the skip's blast radius: if the device holds NONE of this account's
-        // contacts (out-of-band purge) but the stored ctag matches, skipping would
-        // leave the account empty forever. The empty device forces a full listing.
+        // Bounds the skip: if the device holds none of this account's contacts (an
+        // out-of-band purge) but the stored ctag matches, skipping would leave the account
+        // empty for good. The empty device forces a full listing.
         seedStoredCtag(BOOK_URL, "ctag-1")
-        // No provider.seed(...) — the device mirror is empty.
+        // No provider.seed(...): the device copy is empty.
         val client = clientWith(book(ctag = "ctag-1", contacts = mutableListOf(contact("/a.vcf", "e1"))))
 
         val result = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
@@ -605,10 +1109,9 @@ class ContactPullStrategyTest {
 
     @Test
     fun `a ctag-skipped book disables the orphan sweep so other books' contacts survive`() = runTest {
-        // Book A is ctag-unchanged (skipped, contributes no hrefs to the union) and
-        // Book B enumerates normally. A union sweep would see only Book B's hrefs and
-        // wrongly delete Book A's /a.vcf. The skip must disable the sweep, like the
-        // delta path, so /a.vcf survives.
+        // Book A's ctag is unchanged (skipped, adds no hrefs to the union) and book B is
+        // listed. A sweep would see only book B's hrefs and delete book A's /a.vcf. The skip
+        // must turn off the sweep, as the delta path does, so /a.vcf survives.
         provider.seed(ACCOUNT_NAME, "/a.vcf", "ea")
         provider.seed(ACCOUNT_NAME, "/b.vcf", "eb")
         seedStoredCtag("${HOME_URL}bookA/", "ctag-A")
@@ -628,14 +1131,14 @@ class ContactPullStrategyTest {
 
     @Test
     fun `a pending photo is fetched and written at the end of the pull`() = runTest {
-        // A contact already on device carries the photo-pending flag; its book lists
-        // it with a URL photo. The pull's deferred fetch step must download and write
-        // the photo (proving fetchPending runs with the discovered book + client).
+        // A contact on the device carries the photo-pending flag, and its book lists it with
+        // a URL photo. The pull's photo step must download and write the photo, proving
+        // fetchPending runs with the discovered book and client.
         val photoUrl = "https://gateway.icloud.com/photo/a.jpg"
         val urlPhotoBody =
             "BEGIN:VCARD\r\nVERSION:3.0\r\nUID:a\r\nFN:A\r\nN:A;;;;\r\nPHOTO;VALUE=URI:$photoUrl\r\nEND:VCARD\r\n"
-        // A real contact href lives UNDER its collection path, which is what the
-        // deferred fetch's book-grouping matches on.
+        // A real contact href lives under its collection path, which the photo fetch's book
+        // grouping matches on.
         val href = "/ab/default/a.vcf"
         val bk = book(
             contacts = mutableListOf(
@@ -664,10 +1167,166 @@ class ContactPullStrategyTest {
         assertTrue("no photo GET issued when nothing is pending", client.fetchPhotoCalls.isEmpty())
     }
 
+    // ---------- iCloud self-href on the delta path ----------
+
+    @Test
+    fun `the collection self-href in a delta is ignored, never held as unreadable`() = runTest {
+        // iCloud's sync-collection REPORT lists the collection itself in its changed set,
+        // without a trailing slash and with no resourcetype, so it slips past the parser's
+        // self-row filter into the requested href set. The multiget drops it (a non-contact
+        // collection href 400s the whole batch), so it never yields a contact. It must not
+        // count as unreadable, or the book would hold its sync-token forever and
+        // booksFailed > 0 would turn off the orphan sweep for good. The test drives the
+        // delta path, where iCloud delivers it.
+        provider.seed(ACCOUNT_NAME, "/keep.vcf", "e-keep")
+        seedStoredToken(BOOK_URL, "token-1")
+        val bk = book(contacts = mutableListOf(contact("/keep.vcf", "e-keep"), contact("/new.vcf", "e-new")))
+        // The slashless collection self-href, exactly as iCloud reports it.
+        val selfHref = BOOK_URL.trimEnd('/')
+        bk.syncReports += CalDavResult.success(
+            ContactSyncReport(
+                syncToken = "token-2",
+                changed = listOf(ContactSyncItem(selfHref, null), ContactSyncItem("/new.vcf", "e-new")),
+                deleted = emptyList(),
+            ),
+        )
+        val client = clientWith(bk)
+
+        val result = strategy.sync(account, SERVER_URL, client) as ContactPullResult.Success
+
+        assertEquals("the real new contact is inserted", 1, result.inserted)
+        assertEquals("the self-href does not fail the book", 0, result.booksFailed)
+        assertEquals(
+            "the token advances — the self-href never holds the cursor",
+            "token-2",
+            database.addressBookDao().getByAccountIdOnce(accountId).single().syncToken,
+        )
+
+        // Next run: the book stays on the delta path; the self-href didn't wedge it into a
+        // permanent re-list, and the device matches the server.
+        strategy.sync(account, SERVER_URL, client)
+        assertEquals(
+            "stays on the incremental path across runs",
+            listOf(BOOK_URL to "token-1", BOOK_URL to "token-2"),
+            client.syncCollectionCalls,
+        )
+        assertEquals("device converged to the server set", setOf("/keep.vcf", "/new.vcf"), provider.hrefsFor(ACCOUNT_NAME))
+    }
+
+    // ---------- model-based convergence (a token advanced past unread contacts) ----------
+
+    @Test
+    fun `random run sequences with transient failures always converge device to server`() = runTest {
+        // However server mutations and transient per-run read failures interleave, once the
+        // system quiesces the device must equal the server (RFC 6578 §3.1: repeat until no
+        // changes are returned). A sync-token that advances past a contact the run didn't
+        // retrieve breaks this: the delta never re-reports it, so it is missing for good. The test
+        // drives the delta path against a small model of a sync-collection server, which
+        // re-delivers the same changes on a held token, so a held token heals and a wrongly
+        // advanced one loses the contact.
+        val rng = java.util.Random(20260809L)
+
+        // The server's current state (href -> etag) and each contact's body. /c1.vcf is
+        // pinned present so the device never empties: an empty device would force the full
+        // listing, which this delta-path model doesn't cover.
+        val server = LinkedHashMap<String, String>()
+        val bodies = HashMap<String, String>()
+        val hrefs = (1..6).map { "/c$it.vcf" }
+        fun put(href: String) {
+            server[href] = "e-${href.drop(1)}-${rng.nextInt(100000)}"
+            bodies[href] = vcard(href, "Person $href")
+        }
+        put("/c1.vcf")
+
+        // The (token, state) the client last acknowledged by persisting an advanced
+        // token. Deltas are recomputed from here every run, so a held token re-delivers.
+        var ackedToken: String? = "token-0"
+        var ackedState = HashMap(server)
+        var tokenSeq = 0
+
+        val bk = book(ctag = null)
+        // The initial full listing persists this token, putting the book on the delta
+        // path; delta tokens (token-1, token-2, ...) advance from there.
+        val client = clientWith(bk, syncToken = "token-0")
+
+        fun reflectServerIntoBook() {
+            bk.contacts.clear()
+            server.forEach { (h, e) -> bk.contacts += CardDavContactData(h, "$BOOK_URL$h", e, bodies[h]!!) }
+        }
+
+        // Establish the initial sync-token with a full listing.
+        reflectServerIntoBook()
+        strategy.sync(account, SERVER_URL, client)
+
+        fun programDelta(injectFailure: Boolean) {
+            reflectServerIntoBook()
+            // What a real server reports for the client's current (possibly held) token:
+            // everything changed since ackedState, plus everything removed since then.
+            val changed = server.filter { (h, e) -> ackedState[h] != e }.map { ContactSyncItem(it.key, it.value) }
+            val deleted = (ackedState.keys - server.keys).toList()
+            // Corrupt one changed body so the reader yields no contact for it: the run must
+            // hold the token, and the next run re-delivers and heals.
+            if (injectFailure && changed.isNotEmpty()) {
+                val victim = changed[rng.nextInt(changed.size)].href
+                bk.contacts.replaceAll { if (it.href == victim) it.copy(vcardBody = "not a vcard") else it }
+            }
+            bk.syncReports.clear()
+            bk.syncReports += CalDavResult.success(
+                ContactSyncReport(syncToken = "token-${++tokenSeq}", changed = changed, deleted = deleted),
+            )
+        }
+
+        suspend fun runOnceThenReconcileAck() {
+            strategy.sync(account, SERVER_URL, client)
+            // If the persisted token advanced, the run fully reconciled to the current
+            // server state; snapshot it as the new acked baseline. If it was held, the
+            // baseline is unchanged and the next delta re-delivers.
+            val stored = database.addressBookDao().getByAccountIdOnce(accountId).single().syncToken
+            if (stored != ackedToken) {
+                ackedToken = stored
+                ackedState = HashMap(server)
+            }
+        }
+
+        repeat(20) {
+            // 1-2 mutations: add or modify any href, or delete one of c2..c6 (c1 pinned).
+            repeat(1 + rng.nextInt(2)) {
+                if (rng.nextInt(4) == 0) {
+                    val victim = hrefs.drop(1)[rng.nextInt(hrefs.size - 1)]
+                    server.remove(victim)
+                } else {
+                    put(hrefs[rng.nextInt(hrefs.size)])
+                }
+            }
+            programDelta(injectFailure = rng.nextInt(10) < 4)
+            runOnceThenReconcileAck()
+        }
+
+        // Quiesce: stop mutating and injecting failures, and let it settle. A held token
+        // converges within one clean run; a few runs cover any held tail.
+        repeat(4) {
+            programDelta(injectFailure = false)
+            runOnceThenReconcileAck()
+        }
+
+        assertTrue("the server must be non-empty for a meaningful convergence check", server.isNotEmpty())
+        assertEquals(
+            "after settling, the device href set must equal the server's — no orphan left behind a cursor",
+            server.keys,
+            provider.hrefsFor(ACCOUNT_NAME),
+        )
+        server.forEach { (href, etag) ->
+            assertEquals("device etag for $href must match the server", etag, provider.etagFor(ACCOUNT_NAME, href))
+        }
+    }
+
     private companion object {
         const val ACCOUNT_NAME = "alice@example.test"
         const val SERVER_URL = "https://dav.example.test/"
         const val HOME_URL = "https://dav.example.test/ab/"
         const val BOOK_URL = "https://dav.example.test/ab/default/"
+        // The path portion of BOOK_URL: local push hrefs must sit under this so
+        // ContactPushStrategy.bookForHref (longest-prefix path match) routes them.
+        const val BOOK_PATH = "/ab/default"
     }
 }

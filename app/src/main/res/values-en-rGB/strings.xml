@@ -85,6 +85,7 @@
     <string name="action_delete">Delete</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_discard">Discard</string>
+    <string name="action_discard_confirm">Discard?</string>
     <string name="action_dismiss">Dismiss</string>
     <string name="action_show_all">Show All</string>
     <string name="action_connect">Connect</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Go to date</string>
     <string name="label_week">W</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Settings</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Connect iCloud to see your events here</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">What\'s new</string>
-    <string name="whats_new_dismiss">Got it</string>
+    <string name="whats_new_later">Later</string>
     <string name="whats_new_v598_title">Help keep Android open</string>
     <string name="whats_new_v598_body">Google is changing the way you install apps on your device. We need your help.</string>
     <string name="whats_new_v598_action_label">Visit keepandroidopen.org</string>
+    <string name="whats_new_v732_title">A standing thank-you</string>
+    <string name="whats_new_v732_body">This release is dedicated to KashCal\'s supporters. A small entry with a big recurring payoff.</string>
+    <string name="whats_new_v732_caption">Not a supporter yet?</string>
+    <string name="whats_new_v732_action_label">Add us to your plans</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Connect iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">No calendars found on this server.</string>
     <string name="caldav_error_unexpected">Unexpected error. Please try again.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nIf this is a server on your local network, allow local network access to connect.</string>
+    <string name="caldav_error_connection_refused_insecure">The server redirected the connection somewhere KashCal won\'t follow (an unencrypted address, or a redirect loop), so KashCal stopped before sending your password. Check the server address.</string>
     <string name="local_network_banner_title">Local network access needed</string>
     <string name="local_network_banner_body">This server looks like it\'s on your local network. Allow local network access so KashCal can connect to it.</string>
     <string name="local_network_banner_allow">Allow access</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Calendar</string>
     <string name="account_detail_sync_calendar_subtitle">Sync this account\'s calendars</string>
     <string name="account_detail_sync_contacts">Contacts</string>
-    <string name="account_detail_sync_contacts_subtitle">Sync this account\'s contacts to your phone</string>
+    <string name="account_detail_sync_contacts_subtitle">Sync this account\'s contacts</string>
     <string name="account_detail_contacts_permission_needed">Contacts permission is off. Grant access to keep contacts syncing.</string>
     <string name="account_detail_contacts_grant">Grant access</string>
     <string name="contact_sync_enabled_for">Syncing contacts for %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Suggest event titles</string>
     <string name="settings_suggest_titles_info">As you name a new event, suggest titles you\'ve used before, so repeat events are one tap. Ranked by how often and how recently you\'ve used them.</string>
     <string name="settings_week_numbers">Week Numbers</string>
+    <string name="settings_multiday_in_allday_strip">Multi-day events in all-day strip</string>
+    <string name="settings_multiday_in_allday_strip_info">Show timed events that span more than one day in the all-day strip at the top of the week view, instead of in the timed grid. Turn off to keep them in the timed grid on each day.</string>
     <string name="settings_show_declined">Show declined events</string>
     <string name="settings_widget_event_limit">Widget Event Limit</string>
     <string name="settings_widget_event_limit_hint">Most events shown per day in widgets</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">Save changes to</string>
     <string name="dialog_delete_recurring_title">Delete</string>
     <string name="dialog_move_recurring_title">Move</string>
+    <string name="snackbar_event_rescheduled">Event rescheduled</string>
+    <string name="snackbar_reschedule_failed">Couldn\'t reschedule event</string>
     <string name="recurring_this_event">This event</string>
     <string name="recurring_all_events">All events</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">Every %1$d hours</string>
     <string name="ics_sync_daily">Daily</string>
     <string name="ics_sync_weekly">Weekly</string>
+    <string name="default_calendar_name">Calendar</string>
     <string name="ics_url_required">URL is required</string>
     <string name="ics_url_invalid_scheme">URL must start with http://, https://, or webcal://</string>
     <string name="ics_fetch_error_http">Server returned an error (%1$d). Please check the URL.</string>

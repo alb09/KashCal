@@ -15,8 +15,6 @@ object TopBarTitleFormatter {
         viewingMonth: Int,
         weekViewPagerPosition: Int,
         firstDayOfWeek: Int,
-        weekPrefix: String,
-        weekSuffixTemplate: String,
         yearLabel: String,
         locale: Locale = Locale.getDefault(),
         today: LocalDate = LocalDate.now(),
@@ -27,17 +25,13 @@ object TopBarTitleFormatter {
             }
             ViewMode.YEAR -> yearLabel
             ViewMode.WEEK -> {
+                // Month and year only; the week number is in the week grid's header corner so
+                // the top bar isn't crowded.
                 val centerDate = WeekViewUtils.weekPageToStartDate(
                     weekViewPagerPosition,
                     firstDayOfWeek,
                 )
-                val monthYear = WeekViewUtils.formatMonthYear(centerDate)
-                val weekLabel = WeekViewUtils.formatWeekLabel(
-                    centerDate,
-                    firstDayOfWeek,
-                    weekPrefix,
-                )
-                weekSuffixTemplate.format(monthYear, weekLabel)
+                WeekViewUtils.formatMonthYear(centerDate)
             }
             ViewMode.THREE_DAYS -> {
                 val centerDate = WeekViewUtils.pageToDate(weekViewPagerPosition + 1)

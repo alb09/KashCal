@@ -85,6 +85,7 @@
     <string name="action_delete">Kustuta</string>
     <string name="action_confirm">Kinnita</string>
     <string name="action_discard">Loobu</string>
+    <string name="action_discard_confirm">Loobu?</string>
     <string name="action_dismiss">Sulge</string>
     <string name="action_show_all">Kuva kõik</string>
     <string name="action_connect">Ühenda</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Mine kuupäevale</string>
     <string name="label_week">N</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Seaded</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Ühenda iCloud, et näha siin oma sündmusi</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Mis on uut</string>
-    <string name="whats_new_dismiss">Sain aru</string>
+    <string name="whats_new_later">Hiljem</string>
     <string name="whats_new_v598_title">Aita hoida Android avatuna</string>
     <string name="whats_new_v598_body">Google muudab seda, kuidas sa rakendusi seadmesse paigaldad. Vajame sinu abi.</string>
     <string name="whats_new_v598_action_label">Külasta keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Püsiv tänu</string>
+    <string name="whats_new_v732_body">See versioon on pühendatud KashCali toetajatele. Väike panus suure korduva tuluga.</string>
+    <string name="whats_new_v732_caption">Kas sa pole veel toetaja?</string>
+    <string name="whats_new_v732_action_label">Lisa meid oma plaanidesse</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Ühenda iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Sellel serveril kalendreid ei leitud.</string>
     <string name="caldav_error_unexpected">Ootamatu viga. Proovige uuesti.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nKui see on server sinu kohtvõrgus, luba juurdepääs kohtvõrgule, et ühendus luua.</string>
+    <string name="caldav_error_connection_refused_insecure">Server suunas ühenduse kohta, kuhu KashCal ei järgne (krüptimata aadressile või ümbersuunamiste tsüklisse), seega peatus KashCal enne sinu parooli saatmist. Kontrolli serveri aadressi.</string>
     <string name="local_network_banner_title">Vajalik on juurdepääs kohtvõrgule</string>
     <string name="local_network_banner_body">Tundub, et see server on sinu kohtvõrgus. Luba juurdepääs kohtvõrgule, et KashCal saaks sellega ühenduse luua.</string>
     <string name="local_network_banner_allow">Luba juurdepääs</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Kalender</string>
     <string name="account_detail_sync_calendar_subtitle">Sünkrooni selle konto kalendrid</string>
     <string name="account_detail_sync_contacts">Kontaktid</string>
-    <string name="account_detail_sync_contacts_subtitle">Sünkrooni selle konto kontaktid oma telefoni</string>
+    <string name="account_detail_sync_contacts_subtitle">Sünkrooni selle konto kontaktid</string>
     <string name="account_detail_contacts_permission_needed">Kontaktide luba on välja lülitatud. Anna juurdepääs, et kontaktid jätkaksid sünkroonimist.</string>
     <string name="account_detail_contacts_grant">Anna juurdepääs</string>
     <string name="contact_sync_enabled_for">Kontaktide sünkroonimine kontole %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Soovita sündmuste pealkirju</string>
     <string name="settings_suggest_titles_info">Uut sündmust nimetades pakub varem kasutatud pealkirju, nii et korduvad sündmused tekivad ühe puudutusega. Järjestatud selle järgi, kui sageli ja kui hiljuti oled neid kasutanud.</string>
     <string name="settings_week_numbers">Nädalanumbrid</string>
+    <string name="settings_multiday_in_allday_strip">Mitmepäevased sündmused kogu päeva ribal</string>
+    <string name="settings_multiday_in_allday_strip_info">Kuva ajaga sündmused, mis kestavad üle ühe päeva, kogu päeva ribal nädalavaate ülaosas, mitte ajagraafikus. Lülita välja, et hoida neid iga päev ajagraafikus.</string>
     <string name="settings_show_declined">Kuva tagasi lükatud sündmused</string>
     <string name="settings_widget_event_limit">Vidina sündmuste limiit</string>
     <string name="settings_widget_event_limit_hint">Sündmuste maksimum päevas vidinates</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">Salvesta muudatused</string>
     <string name="dialog_delete_recurring_title">Kustuta</string>
     <string name="dialog_move_recurring_title">Liiguta</string>
+    <string name="snackbar_event_rescheduled">Sündmus ajastati ümber</string>
+    <string name="snackbar_reschedule_failed">Sündmust ei õnnestunud ümber ajastada</string>
     <string name="recurring_this_event">See sündmus</string>
     <string name="recurring_all_events">Kõik sündmused</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">Iga %1$d tunni järel</string>
     <string name="ics_sync_daily">Iga päev</string>
     <string name="ics_sync_weekly">Iga nädal</string>
+    <string name="default_calendar_name">Kalender</string>
     <string name="ics_url_required">URL on nõutud</string>
     <string name="ics_url_invalid_scheme">URL peab algama http://, https:// või webcal://</string>
     <string name="ics_fetch_error_http">Server tagastas vea (%1$d). Kontrolli URL-i.</string>

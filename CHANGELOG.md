@@ -1,3 +1,165 @@
+## [2026.09.27]
+
+### Everything in this release
+
+- Added calendar colors to the Insights day bars, so each day shows how its hours split across your calendars
+- Changed the app icon and store art to an aubergine background
+- Improved sync reliability: an edit that meets a change made elsewhere now merges instead of overwriting it, a redirected or unreadable server reply can no longer lose edits or delete events, and a flaky network or a calendar the server briefly stops listing no longer removes calendars
+- Changed sign-in and calendar discovery to refuse a server that redirects to an unencrypted address or loops, before your password is sent
+- Fixed edits, invite replies and drag-to-reschedule on repeating events losing changed occurrences, the repeat rule, the time zone, or details KashCal doesn't display
+- Fixed a set of device-calendar edits (this and future, all events, dragging to another day, making one occurrence all-day) leaving old occurrences behind or dropping guests, organizer, tags, reminders or color
+- Fixed reminders on very busy calendars, which could be lost or stop KashCal from opening at Android's alarm limit, and reminders firing late on Android 12
+- Fixed events created in KashCal on Stalwart not being readable, movable or deletable
+- Fixed narrowing the sync lookback removing local events
+- Fixed the month home-screen widget failing on busy months, #373, and TalkBack reading each widget day twice
+
+## [2026.09.19]
+
+### Everything in this release
+
+- Changed the new-event form to open full-screen with the title focused and the keyboard ready to type
+- Added a setting to show multi-day timed events in the week-view all-day strip, #367
+- Fixed the month home-screen widget showing "Can't show content" on dense months, #373
+- Changed the navigation drawer to a tighter calendar-list spacing
+
+## [2026.09.12]
+
+KashCal is stubborn about exactly one thing: it answers to the person holding the phone and nobody else. Not advertisers, not an engagement dashboard, not whoever hands out design awards. It shows you your day and then gets out of your way. That is, in our unabashedly biased opinion, why nothing else on Android feels quite like it. We make the case in full [over here](https://kashcal.onekash.org/features/beautiful-calendar-android).
+
+This release aims the same stubbornness at a new audience: the people who want to help build the thing. Opening the KashCal codebase for the first time used to be a bit like being handed a city with no map. Now there is one, a [browsable guide to how the app fits together](https://deepwiki.com/KashCal/KashCal) you can actually ask questions of, alongside a [recommended workflow](https://github.com/KashZod/devloop) for anyone building a change with an AI in the passenger seat, so contributions turn up tested and reviewed rather than merely well-intentioned. The calendar you rely on improves fastest when its would-be improvers are not lost on arrival.
+
+### Everything in this release
+
+- Fixed the account bottom sheets jittering while you dragged them; they now sit still like well-behaved furniture, #369
+- Added a browsable architecture overview via [DeepWiki](https://deepwiki.com/KashCal/KashCal), so new contributors can learn how the app fits together, and interrogate it, before touching a line
+- Added a recommended test-driven, review-gated workflow, [devloop](https://github.com/KashZod/devloop), for AI-assisted contributions, plus a clearer pull-request checklist
+
+## [2026.09.05]
+
+### Everything in this release
+
+- Fixed an event with two reminders showing both notifications at once; the newer one now replaces the older one, and both still ring, #362
+- Fixed events vanishing on the next sync after you moved them out of a CalDAV calendar, including the edited occurrences of a repeating event, #365
+
+## [2026.09.04]
+
+We put KashCal on [Google Play](https://googleplay.onekash.org). Yes, the open source calendar that runs no ads and phones no one home is now stocked in a store built by an advertising company. Make of that what you will. It is the same build that ships on F-Droid, so install it from whichever store you distrust less.
+
+Contacts get an experiment this release: two-way CardDAV sync, marked beta because it is. Edit or delete a contact and it now travels back up to your server instead of sulking on your phone.
+
+### Everything in this release
+
+- Added a [Google Play listing](https://googleplay.onekash.org) as another way to install KashCal and get updates, alongside F-Droid
+- Added two-way CardDAV contact sync as a beta: local contact edits, deletes, and photos now push to the server
+- Changed the top-bar today button to an outline calendar icon showing the date, with the numeral at full emphasis and the outline dimmed
+- Changed the home-screen date widget to be resizable, starting as a 1x1 icon and growing into a full date card
+- Added a two-tap discard confirmation to the event form: Cancel and the system back button now ask "Discard?" before throwing away an in-progress event
+- Fixed duplicated events losing their tags, so a duplicate now carries the original's categories, #363
+- Fixed duplicating a device-calendar event switching to the default calendar; the copy now defaults to its source device calendar
+- Fixed account-hub row labels being truncated when the value beside them was long
+
+## [2026.08.29]
+
+### Everything in this release
+
+- Fixed a pull-to-refresh spinner that stayed stuck at the top of the calendar for anyone with no CalDAV or iCloud account set up, such as a device-calendar-only user; it no longer appears without an account and no longer survives restarting the app or rebooting the phone, #356
+- Fixed app-open and app-resume sync so it stays genuinely silent after the app's process is recreated, instead of a queued background sync resurfacing the spinner on the next cold start, #356
+- Changed the colored sync status strip so a silent startup sync that fails or stays queued while offline no longer forces it open on a normal app open; a force sync and the first sync after adding an account still show it, #356
+- Fixed the "Syncing…" system notification so ordinary background syncs on app open no longer post one; only a user-started force full sync shows it now, #356
+
+## [2026.08.25]
+
+### Everything in this release
+
+- Fixed a subscribed calendar (`.ics`/webcal) feed's chosen refresh interval not taking effect; background refresh worked, but setting a feed to refresh more often, such as every hour, kept using the default schedule instead, #351
+- Changed the month home-screen widget to keep the full month name on a single line instead of wrapping or clipping it on narrow widgets and in languages with long month names
+
+## [2026.08.22]
+
+This release of KashCal has a name instead of a changelog: Thank You for Supporting Us.
+
+KashCal spends its whole life fussing over recurring events. Today we are celebrating our favorite one: the people who keep KashCal free and open. Here is a look back at what a year of your support built.
+
+**We got out more.** KashCal started life fluent in exactly one server, iCloud, and nothing else. It now holds a conversation with Nextcloud, Fastmail, Radicale, Baikal, SOGo, Zoho, and most of the rest. Bring your calendar from wherever it lives; we have learned the local dialect.
+
+**We stopped talking to ourselves.** A calendar you keep only for yourself is a diary with ambitions. So KashCal learned invitations and replies: the plan now reaches the people in it, and they can say yes before you have booked the room.
+
+**We learned to read your handwriting.** "Lunch with Sam Friday at 1 at the usual place" used to be a sentence you then had to retype into a form. Now you write it the way you would say it, and KashCal sorts out the when, the where, and the what.
+
+None of that built itself. Every server we learned to speak to, someone asked for first. Every rough edge we filed down, someone reported. Some of you sent code, some sent translations, some sent one well-timed bug report that saved everyone else the trouble. If you have ever opened an issue, requested a feature, or fixed a clumsy translation in your language, this thank-you has your name on it too.
+
+You spent this summer on the good things: the trips, the dinners, the plans worth keeping, and KashCal kept every one of them straight. If you want to make it a summer to remember, here is one more date worth marking: a little support to keep this going. https://kashcal.onekash.org/donate/
+
+## [2026.08.20]
+
+### Everything in this release
+
+- Fixed a certificate-validation weakness on the subscribed-calendar fetch path: when an `.ics` feed's server offered an incomplete certificate chain, the fallback that retrieves the missing certificate could accept one that did not chain to a trusted root; the fetched certificate is now validated against the system trust store before it is trusted, and the fetch itself is restricted to public addresses and a bounded response size, GHSA-53rw-qfc6-v32g
+- Added tapping an event in the month home-screen widget to open its quick view: in titles mode an event's title opens that event, and in dots mode the day's first event opens, while the rest of a day cell still opens the day
+- Fixed the month widget's week-number gutter collapsing or clipping the day grid to fewer rows when titles and week numbers were both shown, so turning on week numbers no longer distorts the month layout
+- Improved the month widget in titles mode to stretch every week row to an even height with each cell's content aligned to the top
+
+## [2026.08.19]
+
+### Everything in this release
+
+- Fixed subscribed calendar feeds that showed events in the preview but none after refreshing, when the feed defined its own time zone under a non-standard name; the real zone is now taken from the feed's `X-LIC-LOCATION` hint and any that still cannot be resolved fall back to a floating time instead of dropping every event, #346
+- Changed the month home-screen widget to show event titles at its normal placed size and across more sizes, instead of only when stretched much larger, so a freshly placed widget shows titles and only the smallest sizes fall back to dots
+- Improved month-widget titles to fill each day cell's width without a trailing ellipsis, with a day-of-month number sized to match the in-app month view, so more of each title is readable
+- Changed the month widget's minimum resize size so it can be shrunk smaller on the home screen
+
+## [2026.08.17]
+
+A colored dot can tell you that a day is busy. It can't tell you with what. The month widget now can.
+
+Give the widget a little height and its day cells stop hinting and start naming: a timed event shows as a color stripe with its title, an all-day event as a filled chip, reading the way the month view inside the app already does. There is no switch to hunt for. The widget measures the room you have given it and decides for itself, dots when it is slim, titles the moment a title will actually fit, so a narrow strip stays clean and a tall square earns its space.
+
+The idea came from the community, contributed by langfeld; the version shipping here grew a sense of its own size, so it needs no setting at all.
+
+Drag a corner and watch it change its mind.
+
+### Everything in this release
+
+- Added event titles to the month home-screen widget: day cells can show a timed event as a color stripe with its title and an all-day event as a filled chip, mirroring the in-app month view, and the widget switches between dots and titles on its own based on how tall you size it, with no setting to manage, contributed by langfeld in #336
+- Added tapping the `+n` overflow marker in a month-widget day cell to open that day
+- Added pull-to-refresh to the full-height Month view
+- Fixed calendar invitations not being emailed for events created on servers such as Nextcloud; the organizer was written as an internal server path instead of an email address, so the server rejected it as an invalid calendar user and sent nothing, #340
+- Fixed the current-time line jumping away from the real time when you pinch-zoom the week grid, #339
+- Fixed the quick-view sheet still showing an event's old title and details right after you edited it, #338
+- Fixed calendar views not updating immediately after you add, edit, or delete an event on a device calendar from inside KashCal
+- Changed the current-time indicator to size itself in density-independent units so it looks consistent across screen densities
+- Added an info tooltip to the Contacts sync toggle in each account's settings, explaining what read-only contact sync does
+- Localized the ICS subscription sync-interval labels and the default subscribed-calendar name, so both appear in your language
+
+## [2026.08.14]
+
+### Everything in this release
+
+- Fixed CardDAV contacts failing to sync on accounts whose server hands back a broken auto-discovery response, such as a server running behind a reverse proxy on a non-standard port, or one that rejects the discovery probe outright; contact sync now reuses the connection details the account already worked out when you set up its calendar, so contacts come through on servers where before only the calendars synced
+- Fixed a rare case where all of an account's synced contacts could be wiped from the phone when contact discovery momentarily returned no address books; an empty discovery is now treated as no signal rather than a reason to remove contacts already synced
+- Added a Beta badge to the Contacts toggle in each account's settings, marking read-only contact sync as still stabilizing
+- Improved the change-password field so it uses a password keyboard and lets your credential manager offer to fill and save the new password, matching the sign-in fields
+
+## [2026.08.09]
+
+### Everything in this release
+
+- Fixed a deleted event not disappearing from KashCal after another client removed it on the server; when the server echoes the event's address with the `@` in its filename written as `%40`, the deletion is now matched and applied instead of silently skipped, #333
+- Changed pull-to-refresh to sync CardDAV contacts as well as calendar events, so a swipe-down picks up contacts added on the server right away instead of waiting for the next periodic sync
+- Fixed contact sync skipping past a contact it could not read and never coming back to it; a contact whose card failed to parse no longer gets stranded, and the next sync retries it
+
+## [2026.08.08]
+
+### Everything in this release
+
+- Fixed CardDAV contact sync bringing over almost no contacts and no photos once installed; every vCard was silently failing to parse on release builds, so an account that looked fine in testing landed a nearly empty address book on the phone, #10
+- Fixed real calendars and address books being hidden when their path or account name merely contained a word like inbox, outbox, or tasks; only genuine scheduling and task collections are skipped now
+- Added drilling into Day view by tapping a day-column header in Week or 3-Day view, with a back press returning to the exact week or span you came from, contributed by @Wqrld
+- Changed the Quick View buttons for Edit, Delete, Duplicate, and Share to icons so they no longer wrap in longer languages, contributed by @Wqrld
+- Shortened the all-day overflow badge in Week and 3-Day view to +N with a larger tap target, contributed by @Wqrld
+- Enlarged the week-view day-header letter and date number to match the 3-day header
+- Changed the delete-confirmation buttons to a single centered line and relabeled the editor's "Confirm Delete" to "Confirm" to match Quick View
+
 ## [2026.08.07]
 
 Your calendar account has always known your contacts existed. Now it can bring them with it.

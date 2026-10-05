@@ -85,6 +85,7 @@
     <string name="action_delete">Susa</string>
     <string name="action_confirm">Qinisekisa</string>
     <string name="action_discard">Lahla</string>
+    <string name="action_discard_confirm">Kulahlwe?</string>
     <string name="action_dismiss">Chitha</string>
     <string name="action_show_all">Bonisa Konke</string>
     <string name="action_connect">Xhuma</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Iya osukwini</string>
     <string name="label_week">Iv</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Izilungiselelo</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Xhuma iCloud ukuze ubone imicimbi yakho lapha</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Yini entsha</string>
-    <string name="whats_new_dismiss">Ngizwile</string>
+    <string name="whats_new_later">Kamuva</string>
     <string name="whats_new_v598_title">Siza ukugcina i-Android ivuliwe</string>
     <string name="whats_new_v598_body">I-Google iyashintsha indlela ofaka ngayo izinhlelo zokusebenza ku-divayisi yakho. Sidinga usizo lwakho.</string>
     <string name="whats_new_v598_action_label">Vakashela i-keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Ukubonga okungapheli</string>
+    <string name="whats_new_v732_body">Le nguqulo inikezelwe kubasekeli be-KashCal. Umnikelo omncane onenzuzo enkulu ephindaphindayo.</string>
+    <string name="whats_new_v732_caption">Awukabi ngumsekeli?</string>
+    <string name="whats_new_v732_action_label">Sifake ezinhlelweni zakho</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Xhuma iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Akukho amakhalenda atholakele kule seva.</string>
     <string name="caldav_error_unexpected">Iphutha elingalindelekile. Sicela uzame futhi.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nUma le seva ikwinethiwekhi yakho yendawo, vumela ukufinyelela kwinethiwekhi yendawo ukuze uxhume.</string>
+    <string name="caldav_error_connection_refused_insecure">Iseva iqondise kabusha uxhumano endaweni i-KashCal engayilandeli (ikheli elingabethelwe, noma uluphu lokuqondisa kabusha), ngakho i-KashCal imile ngaphambi kokuthumela iphasiwedi yakho. Hlola ikheli leseva.</string>
     <string name="local_network_banner_title">Kudingeka ukufinyelela kwinethiwekhi yendawo</string>
     <string name="local_network_banner_body">Le seva ibukeka ingathi ikwinethiwekhi yakho yendawo. Vumela ukufinyelela kwinethiwekhi yendawo ukuze i-KashCal ikwazi ukuxhuma kuyo.</string>
     <string name="local_network_banner_allow">Vumela ukufinyelela</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Ikhalenda</string>
     <string name="account_detail_sync_calendar_subtitle">Vumelanisa amakhalenda ale akhawunti</string>
     <string name="account_detail_sync_contacts">Oxhumana nabo</string>
-    <string name="account_detail_sync_contacts_subtitle">Vumelanisa oxhumana nabo bale akhawunti kufoni yakho</string>
+    <string name="account_detail_sync_contacts_subtitle">Vumelanisa oxhumana nabo bale akhawunti</string>
     <string name="account_detail_contacts_permission_needed">Imvume yoxhumana nabo ivaliwe. Nikeza ukufinyelela ukuze uqhubeke uvumelanise oxhumana nabo.</string>
     <string name="account_detail_contacts_grant">Nikeza ukufinyelela</string>
     <string name="contact_sync_enabled_for">Kuvumelaniswa oxhumana nabo ku-%1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Phakamisa izihloko zemicimbi</string>
     <string name="settings_suggest_titles_info">Njengoba uqamba umcimbi omusha, iphakamisa izihloko osuke wazisebenzisa ngaphambili, ngakho imicimbi ephindaphindwayo ithatha ukuthinta okukodwa. Ihlelwe ngokuthi uzisebenzise kangaki nangokuthi uzisebenzise nini muva nje.</string>
     <string name="settings_week_numbers">Izinombolo Zamasonto</string>
+    <string name="settings_multiday_in_allday_strip">Izehlakalo zezinsuku eziningi kubande losuku lonke</string>
+    <string name="settings_multiday_in_allday_strip_info">Bonisa izehlakalo ezinesikhathi ezithatha isikhathi esingaphezu kosuku olulodwa kubande losuku lonke phezulu kokubukwa kwesonto, esikhundleni sohlaka lwesikhathi. Vala ukuze uzigcine ohlakeni lwesikhathi zonke izinsuku.</string>
     <string name="settings_show_declined">Bonisa imicimbi enqatshelwe</string>
     <string name="settings_widget_event_limit">Umkhawulo Womcimbi We-Widget</string>
     <string name="settings_widget_event_limit_hint">Imicimbi eminingi eboniswa ngosuku kuma-widget</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">Londoloza izinguquko</string>
     <string name="dialog_delete_recurring_title">Susa</string>
     <string name="dialog_move_recurring_title">Hambisa</string>
+    <string name="snackbar_event_rescheduled">Umcimbi uhlelwe kabusha</string>
+    <string name="snackbar_reschedule_failed">Ayikwazanga ukuhlela kabusha umcimbi</string>
     <string name="recurring_this_event">Lo mcimbi</string>
     <string name="recurring_all_events">Yonke imicimbi</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">Njalo emahora angu-%1$d</string>
     <string name="ics_sync_daily">Nsuku zonke</string>
     <string name="ics_sync_weekly">Njalo ngeviki</string>
+    <string name="default_calendar_name">Ikhalenda</string>
     <string name="ics_url_required">I-URL iyadingeka</string>
     <string name="ics_url_invalid_scheme">I-URL kumele iqale nge-http://, https://, noma webcal://</string>
     <string name="ics_fetch_error_http">Iseva ibuyisele iphutha (%1$d). Sicela uhlole i-URL.</string>

@@ -85,6 +85,7 @@
     <string name="action_delete">Dileu</string>
     <string name="action_confirm">Cadarnhau</string>
     <string name="action_discard">Taflu</string>
+    <string name="action_discard_confirm">Taflu\'r newidiadau?</string>
     <string name="action_dismiss">Diswyddo</string>
     <string name="action_show_all">Dangos Popeth</string>
     <string name="action_connect">Cysylltu</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Mynd i ddyddiad</string>
     <string name="label_week">W</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Gosodiadau</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Cysylltwch iCloud i weld eich digwyddiadau yma</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Beth sy\'n newydd</string>
-    <string name="whats_new_dismiss">Iawn</string>
+    <string name="whats_new_later">Nes ymlaen</string>
     <string name="whats_new_v598_title">Helpwch i gadw Android yn agored</string>
     <string name="whats_new_v598_body">Mae Google yn newid y ffordd rydych chi\'n gosod apiau ar eich dyfais. Mae arnom angen eich help.</string>
     <string name="whats_new_v598_action_label">Ymwelwch â keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Diolch parhaus</string>
+    <string name="whats_new_v732_body">Mae\'r rhyddhad hwn wedi\'i gyflwyno i gefnogwyr KashCal. Cyfraniad bach gyda budd mawr a pharhaus.</string>
+    <string name="whats_new_v732_caption">Ddim yn gefnogwr eto?</string>
+    <string name="whats_new_v732_action_label">Ychwanegwch ni at eich cynlluniau</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Cysylltu iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Ni chanfuwyd unrhyw galendrau ar y gweinydd hwn.</string>
     <string name="caldav_error_unexpected">Gwall annisgwyl. Rhowch gynnig arall arni.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nOs yw hwn yn weinydd ar eich rhwydwaith lleol, caniatewch fynediad i\'r rhwydwaith lleol i gysylltu.</string>
+    <string name="caldav_error_connection_refused_insecure">Ailgyfeiriodd y gweinydd y cysylltiad i rywle na fydd KashCal yn ei ddilyn (cyfeiriad heb ei amgryptio, neu ddolen ailgyfeirio), felly stopiodd KashCal cyn anfon dy gyfrinair. Gwiria gyfeiriad y gweinydd.</string>
     <string name="local_network_banner_title">Mae angen mynediad i\'r rhwydwaith lleol</string>
     <string name="local_network_banner_body">Mae\'n edrych fel bod y gweinydd hwn ar eich rhwydwaith lleol. Caniatewch fynediad i\'r rhwydwaith lleol fel y gall KashCal gysylltu ag ef.</string>
     <string name="local_network_banner_allow">Caniatáu mynediad</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Calendr</string>
     <string name="account_detail_sync_calendar_subtitle">Cysoni calendrau\'r cyfrif hwn</string>
     <string name="account_detail_sync_contacts">Cysylltiadau</string>
-    <string name="account_detail_sync_contacts_subtitle">Cysoni cysylltiadau\'r cyfrif hwn i\'ch ffôn</string>
+    <string name="account_detail_sync_contacts_subtitle">Cysoni cysylltiadau\'r cyfrif hwn</string>
     <string name="account_detail_contacts_permission_needed">Mae caniatâd cysylltiadau wedi\'i ddiffodd. Rhowch fynediad i barhau i gysoni cysylltiadau.</string>
     <string name="account_detail_contacts_grant">Rhoi mynediad</string>
     <string name="contact_sync_enabled_for">Cysoni cysylltiadau %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Awgrymu teitlau digwyddiadau</string>
     <string name="settings_suggest_titles_info">Wrth i chi enwi digwyddiad newydd, mae\'n awgrymu teitlau rydych wedi\'u defnyddio o\'r blaen, fel bod digwyddiadau ailadroddus yn un tap. Wedi\'u trefnu yn ôl pa mor aml a pha mor ddiweddar rydych wedi\'u defnyddio.</string>
     <string name="settings_week_numbers">Rhifau Wythnosau</string>
+    <string name="settings_multiday_in_allday_strip">Digwyddiadau aml-ddiwrnod yn y stribed drwy\'r dydd</string>
+    <string name="settings_multiday_in_allday_strip_info">Dangos digwyddiadau ag amser sy\'n rhychwantu mwy nag un diwrnod yn y stribed drwy\'r dydd ar frig y golwg wythnosol, yn lle\'r grid amser. Diffoddwch i\'w cadw yn y grid amser bob dydd.</string>
     <string name="settings_show_declined">Dangos digwyddiadau a wrthodwyd</string>
     <string name="settings_widget_event_limit">Terfyn Digwyddiadau Widget</string>
     <string name="settings_widget_event_limit_hint">Y mwyaf o ddigwyddiadau a ddangosir bob dydd mewn widgets</string>
@@ -947,6 +953,8 @@
     <string name="dialog_edit_recurring_title">Cadw newidiadau</string>
     <string name="dialog_delete_recurring_title">Dileu</string>
     <string name="dialog_move_recurring_title">Symud</string>
+    <string name="snackbar_event_rescheduled">Digwyddiad wedi\'i aildrefnu</string>
+    <string name="snackbar_reschedule_failed">Methu aildrefnu\'r digwyddiad</string>
     <string name="recurring_this_event">Y digwyddiad hwn</string>
     <string name="recurring_all_events">Pob digwyddiad</string>
 
@@ -1299,6 +1307,7 @@
     <string name="ics_sync_every_n_hours">Bob %1$d awr</string>
     <string name="ics_sync_daily">Yn ddyddiol</string>
     <string name="ics_sync_weekly">Yn wythnosol</string>
+    <string name="default_calendar_name">Calendr</string>
     <string name="ics_url_required">Mae angen URL</string>
     <string name="ics_url_invalid_scheme">Rhaid i\'r URL ddechrau gyda http://, https://, neu webcal://</string>
     <string name="ics_fetch_error_http">Dychwelodd y gweinydd wall (%1$d). Gwiriwch yr URL.</string>

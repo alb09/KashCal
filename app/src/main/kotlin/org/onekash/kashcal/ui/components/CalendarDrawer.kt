@@ -50,13 +50,16 @@ import org.onekash.kashcal.ui.model.CalendarGroup
 import org.onekash.kashcal.ui.viewmodels.ViewMode
 
 /**
- * Navigation drawer combining view mode switching and calendar visibility.
+ * Shows the navigation drawer: view-mode switching and calendar visibility.
  *
- * Top: "KashCal" branding header.
- * View section: Compact rows for each view mode with selected state.
- * Calendars section: Room calendars grouped by account with checkboxes (left side).
- * Contacts section: Birthday/anniversary calendars under a single "Contacts" header.
- * Device calendars section: Only when feature enabled, with visibility toggles.
+ * From the top:
+ * - the "KashCal" branding header, then Insights and a compact row per view mode, each
+ *   showing its selected state
+ * - Room calendars grouped by account, with leading checkboxes
+ * - birthday and anniversary calendars under one "Contacts" header
+ * - device calendars grouped by account, only when the feature is enabled and at least one
+ *   device calendar is enabled
+ * - Settings and the Feedback link
  */
 @Composable
 fun CalendarDrawer(
@@ -172,7 +175,7 @@ fun CalendarDrawer(
             // ===== Calendars Section =====
             if (regularGroups.isNotEmpty()) {
                 item(key = "cal_divider") {
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
                 }
 
                 item(key = "cal_header") {
@@ -182,7 +185,7 @@ fun CalendarDrawer(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
-                            .padding(horizontal = 28.dp, vertical = 8.dp)
+                            .padding(horizontal = 28.dp, vertical = 6.dp)
                             .semantics { heading() }
                     )
                 }
@@ -197,8 +200,7 @@ fun CalendarDrawer(
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 28.dp, vertical = 4.dp)
-                                .padding(top = 4.dp)
+                                .padding(horizontal = 28.dp, vertical = 2.dp)
                         )
                     }
 
@@ -226,13 +228,12 @@ fun CalendarDrawer(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
-                            .padding(horizontal = 28.dp, vertical = 8.dp)
-                            .padding(top = 4.dp)
+                            .padding(horizontal = 28.dp, vertical = 6.dp)
                             .semantics { heading() }
                     )
                 }
 
-                // Flatten all contacts calendars — no per-account sub-headers
+                // No per-account sub-headers for contacts calendars.
                 contactsGroups.forEach { group ->
                     items(
                         items = group.calendars,
@@ -251,7 +252,7 @@ fun CalendarDrawer(
             // ===== Device Calendars Section =====
             if (deviceCalendarsEnabled && enabledDeviceCalendars.isNotEmpty()) {
                 item(key = "device_divider") {
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
                 }
 
                 item(key = "device_header") {
@@ -261,7 +262,7 @@ fun CalendarDrawer(
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
-                            .padding(horizontal = 28.dp, vertical = 8.dp)
+                            .padding(horizontal = 28.dp, vertical = 6.dp)
                             .semantics { heading() }
                     )
                 }
@@ -275,8 +276,7 @@ fun CalendarDrawer(
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 28.dp, vertical = 4.dp)
-                                .padding(top = 4.dp)
+                                .padding(horizontal = 28.dp, vertical = 2.dp)
                         )
                     }
 
@@ -358,7 +358,7 @@ fun CalendarDrawer(
 }
 
 @Composable
-private fun CalendarCheckboxRow(
+internal fun CalendarCheckboxRow(
     name: String,
     color: Color,
     checked: Boolean,
@@ -369,7 +369,7 @@ private fun CalendarCheckboxRow(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 4.dp),
+            .padding(horizontal = 16.dp, vertical = 2.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -10,31 +10,40 @@ import okhttp3.mockwebserver.MockWebServer
 import okio.Buffer
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import java.io.ByteArrayInputStream
 import java.math.BigInteger
 import java.security.KeyPair
 import java.security.KeyPairGenerator
-import java.security.KeyStore
 import java.security.Signature
+import java.security.cert.CertificateException
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
 /**
- * Tests for AiaCertificateChainCompleter.
+ * Tests [AiaCertificateChainCompleter]: AIA URL extraction, the guarded download (SSRF
+ * refusal, no redirects, timeout, size cap), the trust manager that never makes the download
+ * an anchor or caches a rejected one, and chain completion that returns Failed instead of
+ * throwing.
  *
- * Test certificates are generated programmatically using raw DER construction
- * and Java's CertificateFactory. No external dependencies or sun.security.* APIs.
+ * Test certificates are built from raw DER and parsed by Java's CertificateFactory, with no
+ * external dependencies or sun.security.* APIs.
  */
 class AiaCertificateChainCompleterTest {
 
     private val completer = AiaCertificateChainCompleter()
+
+    // MockWebServer binds to loopback, which the production SSRF guard refuses.
+    // Download tests that need a real fetch opt into allowing local targets.
+    private val localCompleter = AiaCertificateChainCompleter(allowLocalFetchTargets = true)
 
     @Before
     fun setup() {
@@ -86,9 +95,9 @@ class AiaCertificateChainCompleterTest {
 
     @Test
     fun `extractAiaCaIssuersUrl - trims ASN1 junk when OCSP entry follows caIssuers`() {
-        // Real-world pattern: Sectigo certs have both caIssuers + OCSP in AIA.
-        // The DER encoding leaves ASN.1 tag bytes (e.g., 0x30 = '0') appended
-        // to the caIssuers URL when using the heuristic scanner.
+        // Real-world pattern: a public CA's leaf carries both caIssuers and OCSP in AIA.
+        // The heuristic scanner then reads the next ASN.1 tag byte (0x30 = '0') as part
+        // of the caIssuers URL.
         val caIssuersUrl = "http://crt.sectigo.com/SectigoPublicServerAuthenticationCADVR36.crt"
         val ocspUrl = "http://ocsp.sectigo.com"
         val cert = createCertWithAiaAndOcsp(caIssuersUrl, ocspUrl)
@@ -114,7 +123,7 @@ class AiaCertificateChainCompleterTest {
                     .setHeader("Content-Type", "application/x-x509-ca-cert")
             )
 
-            val downloaded = completer.downloadCertificate(mockServer.url("/intermediate.cer").toString())
+            val downloaded = localCompleter.downloadCertificate(mockServer.url("/intermediate.cer").toString())
 
             assertNotNull("Should parse DER certificate", downloaded)
             assertEquals(cert.subjectX500Principal, downloaded!!.subjectX500Principal)
@@ -128,15 +137,15 @@ class AiaCertificateChainCompleterTest {
         val mockServer = MockWebServer()
         mockServer.start()
         try {
-            // Response body delay exceeds the 5s read timeout in downloadCertificate.
-            // Use setBodyDelay instead of throttleBody to avoid slow trickle.
+            // The body delay exceeds downloadCertificate's 5 s read timeout. setBodyDelay
+            // holds the whole body back; throttleBody would trickle it.
             mockServer.enqueue(
                 MockResponse()
                     .setBody(Buffer().write(ByteArray(100)))
                     .setBodyDelay(10, TimeUnit.SECONDS)
             )
 
-            val downloaded = completer.downloadCertificate(mockServer.url("/slow.cer").toString())
+            val downloaded = localCompleter.downloadCertificate(mockServer.url("/slow.cer").toString())
 
             assertNull("Should return null on timeout", downloaded)
         } finally {
@@ -155,7 +164,7 @@ class AiaCertificateChainCompleterTest {
                     .setHeader("Content-Type", "text/plain")
             )
 
-            val downloaded = completer.downloadCertificate(mockServer.url("/garbage.cer").toString())
+            val downloaded = localCompleter.downloadCertificate(mockServer.url("/garbage.cer").toString())
 
             assertNull("Should return null for invalid certificate data", downloaded)
         } finally {
@@ -165,36 +174,149 @@ class AiaCertificateChainCompleterTest {
 
     @Test
     fun `downloadCertificate - returns null for connection refused`() {
-        // Port 1 on localhost should refuse connections quickly
-        val downloaded = completer.downloadCertificate("http://127.0.0.1:1/unreachable.cer")
+        // Port 1 on localhost refuses connections quickly. The local-allowing completer
+        // keeps the SSRF guard from refusing first, so the connection failure is tested.
+        val downloaded = localCompleter.downloadCertificate("http://127.0.0.1:1/unreachable.cer")
 
         assertNull("Should return null for connection refused", downloaded)
+    }
+
+    @Test
+    fun `downloadCertificate - refuses fetch to loopback or private addresses`() {
+        // An attacker-controlled AIA URL must not probe the device's own network
+        // (blind SSRF). The production completer resolves the host and refuses it if
+        // any address is loopback, link-local, private, any-local, multicast or another
+        // non-routable range (0.0.0.0/8, CGNAT, broadcast, IPv6 unique-local).
+        assertFalse("loopback must be refused", completer.isAllowedFetchUrl("http://127.0.0.1/ca.crt"))
+        assertFalse("any-local must be refused", completer.isAllowedFetchUrl("http://0.0.0.0/ca.crt"))
+        assertFalse("link-local must be refused", completer.isAllowedFetchUrl("http://169.254.1.1/ca.crt"))
+        assertFalse("private 10/8 must be refused", completer.isAllowedFetchUrl("http://10.0.0.5/ca.crt"))
+        assertFalse("private 192.168/16 must be refused", completer.isAllowedFetchUrl("http://192.168.1.1/ca.crt"))
+        // Ranges the JDK helpers don't cover.
+        assertFalse("CGNAT 100.64/10 must be refused", completer.isAllowedFetchUrl("http://100.64.0.1/ca.crt"))
+        assertFalse("0.0.0.0/8 must be refused", completer.isAllowedFetchUrl("http://0.1.2.3/ca.crt"))
+        assertFalse("IPv6 ULA fc00::/7 must be refused", completer.isAllowedFetchUrl("http://[fd00::1]/ca.crt"))
+
+        // A routable public address is allowed (literal IP so no DNS is needed).
+        assertTrue("public address must be allowed", completer.isAllowedFetchUrl("http://8.8.8.8/ca.crt"))
+        assertTrue("public IPv6 must be allowed", completer.isAllowedFetchUrl("http://[2001:4860:4860::8888]/ca.crt"))
+
+        // The test-only opt-in bypasses the guard so MockWebServer (loopback) works.
+        assertTrue(
+            "allowLocalFetchTargets must permit loopback",
+            localCompleter.isAllowedFetchUrl("http://127.0.0.1/ca.crt")
+        )
+    }
+
+    @Test
+    fun `downloadCertificate - does not follow redirects`() {
+        // The SSRF guard clears only the original host, so an AIA endpoint that 302s
+        // to an internal address must not be followed. The fetch fails even when a
+        // valid cert sits behind the redirect.
+        val cert = createSelfSignedCert()
+        val mockServer = MockWebServer()
+        mockServer.start()
+        try {
+            mockServer.enqueue(
+                MockResponse()
+                    .setResponseCode(302)
+                    .setHeader("Location", "/real.cer")
+            )
+            // Returned only if the redirect were followed.
+            mockServer.enqueue(
+                MockResponse()
+                    .setBody(Buffer().write(cert.encoded))
+                    .setHeader("Content-Type", "application/x-x509-ca-cert")
+            )
+
+            val downloaded = localCompleter.downloadCertificate(mockServer.url("/redirect.cer").toString())
+
+            assertNull("Must not follow an AIA redirect, even to a valid cert", downloaded)
+        } finally {
+            mockServer.shutdown()
+        }
+    }
+
+    @Test
+    fun `downloadCertificate - returns null when response exceeds size cap`() {
+        val mockServer = MockWebServer()
+        mockServer.start()
+        try {
+            // One byte over the 1 MB cap. A real intermediate is a few KB, so this can
+            // only be a misconfigured endpoint or a memory-exhaustion attempt.
+            mockServer.enqueue(
+                MockResponse()
+                    .setBody(Buffer().write(ByteArray(1 * 1024 * 1024 + 1)))
+                    .setHeader("Content-Type", "application/x-x509-ca-cert")
+            )
+
+            val downloaded = localCompleter.downloadCertificate(mockServer.url("/huge.cer").toString())
+
+            assertNull("Should return null for an oversized response", downloaded)
+        } finally {
+            mockServer.shutdown()
+        }
     }
 
     // ==================== buildTrustManager ====================
 
     @Test
-    fun `buildTrustManager - creates trust manager with intermediate`() {
-        val intermediate = createSelfSignedCert("CN=Test Intermediate CA")
+    fun `buildTrustManager - rogue cert is not installed as a trust anchor`() {
+        // The downloaded cert is validated as an intermediate that must chain to a
+        // system root, never installed as a trust anchor itself. A self-signed cert
+        // that reaches no system root must be rejected.
+        val rogue = createSelfSignedCert("CN=Rogue CA")
 
-        val trustManager = completer.buildTrustManager(
-            intermediate,
-            systemStoreType = KeyStore.getDefaultType()
+        val trustManager = completer.buildTrustManager(rogue, "rogue.example")
+
+        assertNotNull("Should still return a trust manager", trustManager)
+
+        // It must not appear among the accepted issuers, so it is not an anchor.
+        assertTrue(
+            "Downloaded cert must not become a trust anchor",
+            trustManager!!.acceptedIssuers.none {
+                it.subjectX500Principal == rogue.subjectX500Principal
+            }
         )
 
-        assertNotNull("Should create trust manager", trustManager)
-        val issuers = trustManager!!.acceptedIssuers
-        val hasIntermediate = issuers.any {
-            it.subjectX500Principal == intermediate.subjectX500Principal
+        // Presenting that same untrusted cert as the server chain must be rejected,
+        // because it does not chain to any system trust anchor.
+        try {
+            trustManager.checkServerTrusted(arrayOf(rogue), "RSA")
+            fail("Expected CertificateException: a rogue cert must not validate")
+        } catch (expected: CertificateException) {
+            // expected: the platform validator found no path to a system root
         }
-        assertTrue("Trust manager should contain the intermediate cert", hasIntermediate)
+    }
+
+    @Test
+    fun `buildTrustManager - rejected chain does not poison the cache`() {
+        // An on-path attacker who seeds a bogus intermediate must not get it cached:
+        // it is cached only after the platform validator accepts a completed chain.
+        AiaCertificateChainCompleter.clearCacheForTesting()
+        val rogue = createSelfSignedCert("CN=Rogue CA")
+        val host = "poison.example"
+
+        val trustManager = completer.buildTrustManager(rogue, host)!!
+
+        try {
+            trustManager.checkServerTrusted(arrayOf(rogue), "RSA")
+            fail("Expected CertificateException")
+        } catch (expected: CertificateException) {
+            // expected
+        }
+
+        assertTrue(
+            "A cert that failed validation must not be cached",
+            !AiaCertificateChainCompleter.isIntermediateCachedForTesting(host)
+        )
     }
 
     // ==================== attemptChainCompletion ====================
 
     @Test
     fun `attemptChainCompletion - returns Failed when connection refused`() {
-        // Port 1 on localhost refuses connections quickly (no timeout wait)
+        // Port 1 on localhost refuses connections quickly, with no timeout wait
         val result = completer.attemptChainCompletion(
             hostname = "localhost",
             port = 1,
@@ -229,21 +351,21 @@ class AiaCertificateChainCompleterTest {
 
     @Test
     fun `cache - clearCacheForTesting clears the cache`() {
-        // Verify the test utility works (prevents test pollution)
-        // Build a trust manager to indirectly confirm cache behavior
+        // The helper tearDown relies on to keep tests from sharing cache state. This
+        // asserts nothing about the cache: building a trust manager caches nothing.
         val intermediate = createSelfSignedCert("CN=Cache Test CA")
-        val trustManager = completer.buildTrustManager(intermediate, KeyStore.getDefaultType())
+        val trustManager = completer.buildTrustManager(intermediate, "cache.example")
         assertNotNull(trustManager)
 
         AiaCertificateChainCompleter.clearCacheForTesting()
-        // No assertion needed — if clearCacheForTesting() throws, the test fails
+        // No assertion: the test fails only if clearCacheForTesting() throws
     }
 
     // ==================== Test certificate helpers ====================
 
     /**
-     * Create a self-signed X.509v3 certificate without AIA extension.
-     * Built from raw DER bytes + CertificateFactory — no sun.security.* APIs.
+     * Creates a self-signed X.509v3 certificate without an AIA extension, from raw DER
+     * bytes and CertificateFactory.
      */
     private fun createSelfSignedCert(dn: String = "CN=Test Self-Signed"): X509Certificate {
         val keyPair = generateKeyPair()
@@ -251,7 +373,7 @@ class AiaCertificateChainCompleterTest {
     }
 
     /**
-     * Create a self-signed X.509v3 certificate with an AIA extension.
+     * Creates a self-signed X.509v3 certificate with an AIA caIssuers extension.
      */
     private fun createCertWithAia(aiaUrl: String): X509Certificate {
         val keyPair = generateKeyPair()
@@ -260,9 +382,9 @@ class AiaCertificateChainCompleterTest {
     }
 
     /**
-     * Create a cert with AIA containing both caIssuers and OCSP entries.
-     * This reproduces the real-world DER layout where the OCSP SEQUENCE tag
-     * (0x30 = ASCII '0') immediately follows the caIssuers URL bytes.
+     * Creates a cert with AIA holding both caIssuers and OCSP entries: the real-world DER
+     * layout where the OCSP SEQUENCE tag (0x30 = ASCII '0') directly follows the caIssuers
+     * URL bytes.
      */
     private fun createCertWithAiaAndOcsp(caIssuersUrl: String, ocspUrl: String): X509Certificate {
         val keyPair = generateKeyPair()
@@ -277,10 +399,8 @@ class AiaCertificateChainCompleterTest {
     }
 
     /**
-     * Build an X.509v3 certificate from raw DER.
-     *
-     * This constructs the TBSCertificate, signs it, and wraps it in a SEQUENCE.
-     * The result is parsed by CertificateFactory to produce a proper X509Certificate.
+     * Builds an X.509v3 certificate from raw DER: signs the TBSCertificate, wraps it in a
+     * SEQUENCE and parses the result with CertificateFactory.
      */
     private fun buildX509v3Cert(
         subjectDn: String,
@@ -289,7 +409,8 @@ class AiaCertificateChainCompleterTest {
         extensions: ByteArray
     ): X509Certificate {
         val algorithmId = derSequence(
-            // OID for SHA256withRSA: 1.2.840.113549.1.1.11
+            // Meant as SHA256withRSA, 1.2.840.113549.1.1.11; the 0xFD byte (0xF7 in
+            // that OID) encodes a different, unknown OID.
             derOid(byteArrayOf(
                 0x2A, 0x86.toByte(), 0x48, 0x86.toByte(), 0xFD.toByte(), 0x0D, 0x01, 0x01, 0x0B
             )),
@@ -331,7 +452,7 @@ class AiaCertificateChainCompleterTest {
         // Subject public key info (use encoded form directly)
         tbsComponents.add(subjectPublicKeyInfo)
 
-        // Extensions (explicit tag [3]) — only if non-empty
+        // Extensions (explicit tag [3]), only if non-empty
         if (extensions.isNotEmpty()) {
             tbsComponents.add(derExplicit(3, derSequence(extensions)))
         }
@@ -358,7 +479,7 @@ class AiaCertificateChainCompleterTest {
     // ==================== AIA extension builder ====================
 
     /**
-     * Build the DER-encoded AIA extension as a complete X.509v3 extension SEQUENCE:
+     * Builds the DER-encoded AIA extension as a complete X.509v3 extension SEQUENCE:
      *
      * Extension ::= SEQUENCE {
      *     extnID      OBJECT IDENTIFIER,    -- 1.3.6.1.5.5.7.1.1
@@ -396,8 +517,8 @@ class AiaCertificateChainCompleterTest {
     }
 
     /**
-     * Build AIA extension with both caIssuers and OCSP access descriptions.
-     * Matches real-world Sectigo/Moodle cert layout.
+     * Builds an AIA extension with caIssuers then OCSP access descriptions, the layout seen
+     * on real public CA leaf certs.
      */
     private fun buildAiaExtensionWithOcsp(caIssuersUrl: String, ocspUrl: String): ByteArray {
         // AIA OID: 1.3.6.1.5.5.7.1.1

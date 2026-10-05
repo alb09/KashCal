@@ -85,6 +85,7 @@
     <string name="action_delete">删除</string>
     <string name="action_confirm">确认</string>
     <string name="action_discard">丢弃</string>
+    <string name="action_discard_confirm">丢弃更改？</string>
     <string name="action_dismiss">关闭</string>
     <string name="action_show_all">显示全部</string>
     <string name="action_connect">连接</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">跳转到日期</string>
     <string name="label_week">周</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩・⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">设置</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">连接 iCloud 查看你的事件</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">新功能</string>
-    <string name="whats_new_dismiss">知道了</string>
+    <string name="whats_new_later">以后再说</string>
     <string name="whats_new_v598_title">帮助保持 Android 开放</string>
     <string name="whats_new_v598_body">Google 正在改变你在设备上安装应用的方式。我们需要你的帮助。</string>
     <string name="whats_new_v598_action_label">访问 keepandroidopen.org</string>
+    <string name="whats_new_v732_title">长久的感谢</string>
+    <string name="whats_new_v732_body">本次更新献给 KashCal 的支持者。小小的付出，却能带来长久的回报。</string>
+    <string name="whats_new_v732_caption">还不是支持者吗？</string>
+    <string name="whats_new_v732_action_label">加入你的计划</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">连接 iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">在此服务器上找不到日历。</string>
     <string name="caldav_error_unexpected">意外错误。请重试。</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\n如果这是本地网络上的服务器，请允许访问本地网络以进行连接。</string>
+    <string name="caldav_error_connection_refused_insecure">服务器将连接重定向到了 KashCal 不会跟随的地方（未加密的地址或重定向循环），因此 KashCal 在发送你的密码之前已停止。请检查服务器地址。</string>
     <string name="local_network_banner_title">需要访问本地网络</string>
     <string name="local_network_banner_body">此服务器似乎位于您的本地网络中。请允许访问本地网络，以便 KashCal 可以连接到它。</string>
     <string name="local_network_banner_allow">允许访问</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">日历</string>
     <string name="account_detail_sync_calendar_subtitle">同步此账户的日历</string>
     <string name="account_detail_sync_contacts">联系人</string>
-    <string name="account_detail_sync_contacts_subtitle">将此账户的联系人同步到手机</string>
+    <string name="account_detail_sync_contacts_subtitle">同步此账户的联系人</string>
     <string name="account_detail_contacts_permission_needed">联系人权限已关闭。请授予访问权限以继续同步联系人。</string>
     <string name="account_detail_contacts_grant">授予访问权限</string>
     <string name="contact_sync_enabled_for">正在同步 %1$s 的联系人</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">建议事件标题</string>
     <string name="settings_suggest_titles_info">在为新活动命名时，建议你以前用过的标题，让重复的活动一键完成。按使用频率和最近使用情况排序。</string>
     <string name="settings_week_numbers">周数</string>
+    <string name="settings_multiday_in_allday_strip">全天条中的多天事件</string>
+    <string name="settings_multiday_in_allday_strip_info">在周视图顶部的全天条中显示跨越多天的定时事件，而不是在时间网格中显示。关闭此选项可将它们每天保留在时间网格中。</string>
     <string name="settings_show_declined">显示已拒绝的事件</string>
     <string name="settings_widget_event_limit">小部件事件上限</string>
     <string name="settings_widget_event_limit_hint">小部件中每天显示的最多事件数</string>
@@ -787,6 +793,8 @@
     <string name="dialog_edit_recurring_title">保存更改至</string>
     <string name="dialog_delete_recurring_title">删除</string>
     <string name="dialog_move_recurring_title">移动</string>
+    <string name="snackbar_event_rescheduled">已重新安排事件</string>
+    <string name="snackbar_reschedule_failed">无法重新安排事件</string>
     <string name="recurring_this_event">仅此事件</string>
     <string name="recurring_all_events">所有事件</string>
 
@@ -1059,6 +1067,7 @@
     <string name="ics_sync_every_n_hours">每%1$d小时</string>
     <string name="ics_sync_daily">每天</string>
     <string name="ics_sync_weekly">每周</string>
+    <string name="default_calendar_name">日历</string>
     <string name="ics_url_required">需要URL</string>
     <string name="ics_url_invalid_scheme">URL必须以http://、https://或webcal://开头</string>
     <string name="ics_fetch_error_http">服务器返回了错误（%1$d）。请检查URL。</string>

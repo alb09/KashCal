@@ -85,6 +85,7 @@
     <string name="action_delete">ဖျက်</string>
     <string name="action_confirm">အတည်ပြု</string>
     <string name="action_discard">စွန့်ပစ်</string>
+    <string name="action_discard_confirm">စွန့်ပစ်မလား?</string>
     <string name="action_dismiss">ပယ်</string>
     <string name="action_show_all">အားလုံးပြ</string>
     <string name="action_connect">ချိတ်ဆက်</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">ရက်စွဲသို့ သွားရန်</string>
     <string name="label_week">ပ</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">ဆက်တင်များ</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">သင့်ပွဲများကို ဤနေရာတွင် ကြည့်ရန် iCloud ချိတ်ဆက်ပါ</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">အသစ်တင်ထားသောအရာများ</string>
-    <string name="whats_new_dismiss">ရပါပြီ</string>
+    <string name="whats_new_later">နောက်မှ</string>
     <string name="whats_new_v598_title">Android ဖွင့်ထားရန် ကူညီပါ</string>
     <string name="whats_new_v598_body">Google သည် သင့်စက်ပစ္စည်းတွင် အက်ပ်များ တပ်ဆင်ပုံကို ပြောင်းလဲနေသည်။ သင့်အကူအညီ လိုအပ်သည်။</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org သို့ သွားပါ</string>
+    <string name="whats_new_v732_title">ထာဝရ ကျေးဇူးတင်စကား</string>
+    <string name="whats_new_v732_body">ဤဗားရှင်းကို KashCal ကို ထောက်ပံ့သူများအတွက် ရည်စူးပါသည်။ သေးငယ်သော ပံ့ပိုးမှုတစ်ခုက ကြီးမားပြီး အဆက်မပြတ် အကျိုးပြုပါသည်။</string>
+    <string name="whats_new_v732_caption">ထောက်ပံ့သူ မဖြစ်သေးဘူးလား?</string>
+    <string name="whats_new_v732_action_label">သင့်အစီအစဉ်တွင် ကျွန်ုပ်တို့ကို ထည့်ပါ</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud ချိတ်ဆက်</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">ဤဆာဗာတွင် ပြက္ခဒိန်များ မတွေ့ရှိပါ။</string>
     <string name="caldav_error_unexpected">မမျှော်လင့်သော အမှားတစ်ခု။ ထပ်စမ်းကြည့်ပါ။</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nဤသည်မှာ သင့်ဒေသတွင်း ကွန်ရက်ရှိ ဆာဗာဖြစ်ပါက ချိတ်ဆက်ရန် ဒေသတွင်း ကွန်ရက်သုံးခွင့်ကို ခွင့်ပြုပါ။</string>
+    <string name="caldav_error_connection_refused_insecure">ဆာဗာက ချိတ်ဆက်မှုကို KashCal မလိုက်သည့်နေရာ (ကုဒ်မပြောင်းထားသော လိပ်စာ သို့မဟုတ် လမ်းကြောင်းလွှဲ ပတ်လည်) သို့ လွှဲလိုက်သဖြင့် သင့်စကားဝှက်ကို မပို့မီ KashCal ရပ်လိုက်ပါသည်။ ဆာဗာလိပ်စာကို စစ်ဆေးပါ။</string>
     <string name="local_network_banner_title">ဒေသတွင်း ကွန်ရက်သုံးခွင့် လိုအပ်သည်</string>
     <string name="local_network_banner_body">ဤဆာဗာသည် သင့်ဒေသတွင်း ကွန်ရက်ပေါ်တွင် ရှိပုံရသည်။ KashCal က ၎င်းသို့ ချိတ်ဆက်နိုင်ရန် ဒေသတွင်း ကွန်ရက်သုံးခွင့်ကို ခွင့်ပြုပါ။</string>
     <string name="local_network_banner_allow">သုံးခွင့်ပြု</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">ပြက္ခဒိန်</string>
     <string name="account_detail_sync_calendar_subtitle">ဤအကောင့်၏ ပြက္ခဒိန်များကို ချိန်ကိုက်ပါ</string>
     <string name="account_detail_sync_contacts">အဆက်အသွယ်များ</string>
-    <string name="account_detail_sync_contacts_subtitle">ဤအကောင့်၏ အဆက်အသွယ်များကို သင့်ဖုန်းသို့ ချိန်ကိုက်ပါ</string>
+    <string name="account_detail_sync_contacts_subtitle">ဤအကောင့်၏ အဆက်အသွယ်များကို ချိန်ကိုက်ပါ</string>
     <string name="account_detail_contacts_permission_needed">အဆက်အသွယ် ခွင့်ပြုချက် ပိတ်ထားသည်။ အဆက်အသွယ်များ ဆက်လက်ချိန်ကိုက်ရန် ဝင်ရောက်ခွင့် ပေးပါ။</string>
     <string name="account_detail_contacts_grant">ဝင်ရောက်ခွင့်ပေးပါ</string>
     <string name="contact_sync_enabled_for">%1$s အတွက် အဆက်အသွယ်များ ချိန်ကိုက်နေသည်</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">ပွဲစဉ်ခေါင်းစဉ်များကိုအကြံပြုပါ</string>
     <string name="settings_suggest_titles_info">ပွဲအသစ်ကို အမည်ပေးနေစဉ် ယခင်က သင်သုံးခဲ့သော ခေါင်းစဉ်များကို အကြံပြုသည်၊ ထို့ကြောင့် ထပ်ခါထပ်ခါ ပွဲများသည် တစ်ချက်နှိပ်ရုံဖြင့် ရသည်။ သင် မည်မျှမကြာခဏနှင့် မကြာသေးမီက သုံးခဲ့သည်ကို အခြေခံ၍ အဆင့်သတ်မှတ်ထားသည်။</string>
     <string name="settings_week_numbers">အပတ် နံပါတ်များ</string>
+    <string name="settings_multiday_in_allday_strip">တစ်နေ့လုံးဇုန်ရှိ ရက်များစွာဖြစ်ရပ်များ</string>
+    <string name="settings_multiday_in_allday_strip_info">တစ်ရက်ထက်ပိုကြာသော အချိန်သတ်မှတ်ဖြစ်ရပ်များကို အချိန်ဇယားအစား ရက်သတ္တပတ်မြင်ကွင်း၏ ထိပ်ရှိ တစ်နေ့လုံးဇုန်တွင် ပြပါ။ နေ့စဉ် အချိန်ဇယားတွင်ထားရှိရန် ပိတ်ထားပါ။</string>
     <string name="settings_show_declined">ငြင်းပယ်ထားသော ပွဲများကို ပြပါ</string>
     <string name="settings_widget_event_limit">ဝစ်ဂျက် ပွဲ ကန့်သတ်ချက်</string>
     <string name="settings_widget_event_limit_hint">ဝိဂျက်များတွင် တစ်ရက်လျှင် ပြသမည့် အများဆုံးဖြစ်ရပ်များ</string>
@@ -787,6 +793,8 @@
     <string name="dialog_edit_recurring_title">ပြောင်းလဲမှုများကို သိမ်းရန်</string>
     <string name="dialog_delete_recurring_title">ဖျက်ရန်</string>
     <string name="dialog_move_recurring_title">ရွှေ့ရန်</string>
+    <string name="snackbar_event_rescheduled">ပွဲကို အချိန်ပြောင်းပြီးပါပြီ</string>
+    <string name="snackbar_reschedule_failed">ပွဲကို အချိန်ပြောင်း၍ မရပါ</string>
     <string name="recurring_this_event">ဤပွဲ</string>
     <string name="recurring_all_events">ပွဲအားလုံး</string>
 
@@ -1060,6 +1068,7 @@
     <string name="ics_sync_every_n_hours">%1$d နာရီတိုင်း</string>
     <string name="ics_sync_daily">နေ့စဉ်</string>
     <string name="ics_sync_weekly">အပတ်စဉ်</string>
+    <string name="default_calendar_name">ပြက္ခဒိန်</string>
     <string name="ics_url_required">URL လိုအပ်ပါသည်</string>
     <string name="ics_url_invalid_scheme">URL သည် http://, https://, သို့မဟုတ် webcal:// ဖြင့်စရမည်</string>
     <string name="ics_fetch_error_http">ဆာဗာက အမှားတစ်ခု ပြန်ပို့ခဲ့သည် (%1$d)။ URL ကို စစ်ဆေးပါ။</string>

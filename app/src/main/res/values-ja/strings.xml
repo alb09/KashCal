@@ -85,6 +85,7 @@
     <string name="action_delete">削除</string>
     <string name="action_confirm">確認</string>
     <string name="action_discard">破棄</string>
+    <string name="action_discard_confirm">破棄しますか？</string>
     <string name="action_dismiss">閉じる</string>
     <string name="action_show_all">すべて表示</string>
     <string name="action_connect">接続</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">日付に移動</string>
     <string name="label_week">週</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩・⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">設定</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">iCloudに接続して予定を表示</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">新着情報</string>
-    <string name="whats_new_dismiss">OK</string>
+    <string name="whats_new_later">後で</string>
     <string name="whats_new_v598_title">Androidをオープンに保つお手伝いを</string>
     <string name="whats_new_v598_body">Googleは、あなたが端末にアプリをインストールする方法を変更しようとしています。皆さんのご協力が必要です。</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org を開く</string>
+    <string name="whats_new_v732_title">変わらぬ感謝を込めて</string>
+    <string name="whats_new_v732_body">このリリースは、KashCalを支えてくださる皆さまに捧げます。小さなご支援が、繰り返し大きな力になります。</string>
+    <string name="whats_new_v732_caption">まだ支援されていませんか？</string>
+    <string name="whats_new_v732_action_label">予定に加える</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloudに接続</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">このサーバーでカレンダーが見つかりませんでした。</string>
     <string name="caldav_error_unexpected">予期しないエラーが発生しました。もう一度お試しください。</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nこのサーバーがローカルネットワーク上にある場合は、接続するためにローカルネットワークへのアクセスを許可してください。</string>
+    <string name="caldav_error_connection_refused_insecure">サーバーが KashCal の追わない接続先（暗号化されていないアドレス、またはリダイレクトのループ）に転送したため、パスワードを送信する前に KashCal は中止しました。サーバーのアドレスを確認してください。</string>
     <string name="local_network_banner_title">ローカルネットワークへのアクセスが必要です</string>
     <string name="local_network_banner_body">このサーバーはローカルネットワーク上にあるようです。KashCal が接続できるように、ローカルネットワークへのアクセスを許可してください。</string>
     <string name="local_network_banner_allow">アクセスを許可</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">カレンダー</string>
     <string name="account_detail_sync_calendar_subtitle">このアカウントのカレンダーを同期します</string>
     <string name="account_detail_sync_contacts">連絡先</string>
-    <string name="account_detail_sync_contacts_subtitle">このアカウントの連絡先を携帯電話に同期します</string>
+    <string name="account_detail_sync_contacts_subtitle">このアカウントの連絡先を同期します</string>
     <string name="account_detail_contacts_permission_needed">連絡先の権限がオフです。連絡先の同期を続けるにはアクセスを許可してください。</string>
     <string name="account_detail_contacts_grant">アクセスを許可</string>
     <string name="contact_sync_enabled_for">%1$s の連絡先を同期しています</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">予定のタイトルを提案</string>
     <string name="settings_suggest_titles_info">新しい予定に名前を付けるときに、以前に使ったタイトルを提案するので、繰り返しの予定はワンタップです。使用頻度と最近使ったかどうかで並べ替えられます。</string>
     <string name="settings_week_numbers">週番号</string>
+    <string name="settings_multiday_in_allday_strip">終日欄内の複数日イベント</string>
+    <string name="settings_multiday_in_allday_strip_info">1日を超えて続く時間指定イベントを、時間グリッドではなく、週表示の上部にある終日欄に表示します。オフにすると、毎日時間グリッドに表示されたままになります。</string>
     <string name="settings_show_declined">辞退した予定を表示</string>
     <string name="settings_widget_event_limit">ウィジェットの予定上限</string>
     <string name="settings_widget_event_limit_hint">ウィジェットに1日あたり表示する予定の最大数</string>
@@ -787,6 +793,8 @@
     <string name="dialog_edit_recurring_title">変更の適用先</string>
     <string name="dialog_delete_recurring_title">削除</string>
     <string name="dialog_move_recurring_title">移動</string>
+    <string name="snackbar_event_rescheduled">予定を移動しました</string>
+    <string name="snackbar_reschedule_failed">予定を移動できませんでした</string>
     <string name="recurring_this_event">この予定のみ</string>
     <string name="recurring_all_events">すべての予定</string>
 
@@ -1059,6 +1067,7 @@
     <string name="ics_sync_every_n_hours">%1$d時間ごと</string>
     <string name="ics_sync_daily">毎日</string>
     <string name="ics_sync_weekly">毎週</string>
+    <string name="default_calendar_name">カレンダー</string>
     <string name="ics_url_required">URLが必要です</string>
     <string name="ics_url_invalid_scheme">URLはhttp://、https://、またはwebcal://で始まる必要があります</string>
     <string name="ics_fetch_error_http">サーバーがエラー（%1$d）を返しました。URLを確認してください。</string>

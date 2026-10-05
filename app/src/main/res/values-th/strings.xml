@@ -85,6 +85,7 @@
     <string name="action_delete">ลบ</string>
     <string name="action_confirm">ยืนยัน</string>
     <string name="action_discard">ละทิ้ง</string>
+    <string name="action_discard_confirm">ละทิ้งการเปลี่ยนแปลงไหม</string>
     <string name="action_dismiss">ปิด</string>
     <string name="action_show_all">แสดงทั้งหมด</string>
     <string name="action_connect">เชื่อมต่อ</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">ไปที่วันที่</string>
     <string name="label_week">ส</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">การตั้งค่า</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">เชื่อมต่อ iCloud เพื่อดูกิจกรรมของคุณ</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">มีอะไรใหม่</string>
-    <string name="whats_new_dismiss">เข้าใจแล้ว</string>
+    <string name="whats_new_later">ไว้ก่อน</string>
     <string name="whats_new_v598_title">ช่วยให้ Android ยังคงเปิดกว้าง</string>
     <string name="whats_new_v598_body">Google กำลังเปลี่ยนวิธีที่คุณติดตั้งแอปบนอุปกรณ์ของคุณ เราต้องการความช่วยเหลือจากคุณ</string>
     <string name="whats_new_v598_action_label">ไปที่ keepandroidopen.org</string>
+    <string name="whats_new_v732_title">คำขอบคุณที่คงอยู่เสมอ</string>
+    <string name="whats_new_v732_body">อัปเดตนี้ขออุทิศให้ผู้สนับสนุน KashCal การสนับสนุนเพียงเล็กน้อยแต่ให้ผลตอบแทนที่ยิ่งใหญ่อย่างต่อเนื่อง</string>
+    <string name="whats_new_v732_caption">ยังไม่ได้เป็นผู้สนับสนุนใช่ไหม?</string>
+    <string name="whats_new_v732_action_label">เพิ่มเราในแผนของคุณ</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">เชื่อมต่อ iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">ไม่พบปฏิทินบนเซิร์ฟเวอร์นี้</string>
     <string name="caldav_error_unexpected">เกิดข้อผิดพลาดที่ไม่คาดคิด โปรดลองอีกครั้ง</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nหากนี่คือเซิร์ฟเวอร์บนเครือข่ายภายในของคุณ ให้อนุญาตการเข้าถึงเครือข่ายภายในเพื่อเชื่อมต่อ</string>
+    <string name="caldav_error_connection_refused_insecure">เซิร์ฟเวอร์เปลี่ยนเส้นทางการเชื่อมต่อไปยังที่ที่ KashCal ไม่ตามไป (ที่อยู่ที่ไม่เข้ารหัส หรือการเปลี่ยนเส้นทางวนซ้ำ) KashCal จึงหยุดก่อนส่งรหัสผ่านของคุณ โปรดตรวจสอบที่อยู่เซิร์ฟเวอร์</string>
     <string name="local_network_banner_title">ต้องอนุญาตการเข้าถึงเครือข่ายภายใน</string>
     <string name="local_network_banner_body">เซิร์ฟเวอร์นี้ดูเหมือนจะอยู่บนเครือข่ายภายในของคุณ อนุญาตการเข้าถึงเครือข่ายภายในเพื่อให้ KashCal เชื่อมต่อได้</string>
     <string name="local_network_banner_allow">อนุญาตการเข้าถึง</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">ปฏิทิน</string>
     <string name="account_detail_sync_calendar_subtitle">ซิงค์ปฏิทินของบัญชีนี้</string>
     <string name="account_detail_sync_contacts">รายชื่อติดต่อ</string>
-    <string name="account_detail_sync_contacts_subtitle">ซิงค์รายชื่อติดต่อของบัญชีนี้ไปยังโทรศัพท์ของคุณ</string>
+    <string name="account_detail_sync_contacts_subtitle">ซิงค์รายชื่อติดต่อของบัญชีนี้</string>
     <string name="account_detail_contacts_permission_needed">สิทธิ์การเข้าถึงรายชื่อติดต่อถูกปิดอยู่ โปรดอนุญาตการเข้าถึงเพื่อให้ซิงค์รายชื่อติดต่อต่อไป</string>
     <string name="account_detail_contacts_grant">อนุญาตการเข้าถึง</string>
     <string name="contact_sync_enabled_for">กำลังซิงค์รายชื่อติดต่อสำหรับ %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">แนะนำชื่อกิจกรรม</string>
     <string name="settings_suggest_titles_info">ขณะที่คุณตั้งชื่อกิจกรรมใหม่ ระบบจะแนะนำชื่อเรื่องที่คุณเคยใช้มาก่อน เพื่อให้กิจกรรมที่เกิดซ้ำทำได้ในแตะเดียว จัดอันดับตามความถี่และความใหม่ของการใช้งาน</string>
     <string name="settings_week_numbers">หมายเลขสัปดาห์</string>
+    <string name="settings_multiday_in_allday_strip">กิจกรรมหลายวันในแถบตลอดวัน</string>
+    <string name="settings_multiday_in_allday_strip_info">แสดงกิจกรรมที่มีเวลาซึ่งกินเวลามากกว่าหนึ่งวันในแถบตลอดวันที่ด้านบนของมุมมองสัปดาห์ แทนที่จะแสดงในตารางเวลา ปิดเพื่อให้กิจกรรมเหล่านี้อยู่ในตารางเวลาในแต่ละวัน</string>
     <string name="settings_show_declined">แสดงกิจกรรมที่ปฏิเสธ</string>
     <string name="settings_widget_event_limit">จำนวนกิจกรรมสูงสุดในวิดเจ็ต</string>
     <string name="settings_widget_event_limit_hint">จำนวนกิจกรรมสูงสุดที่แสดงต่อวันในวิดเจ็ต</string>
@@ -787,6 +793,8 @@
     <string name="dialog_edit_recurring_title">บันทึกการเปลี่ยนแปลงที่</string>
     <string name="dialog_delete_recurring_title">ลบ</string>
     <string name="dialog_move_recurring_title">ย้าย</string>
+    <string name="snackbar_event_rescheduled">เลื่อนกิจกรรมแล้ว</string>
+    <string name="snackbar_reschedule_failed">เลื่อนกิจกรรมไม่สำเร็จ</string>
     <string name="recurring_this_event">กิจกรรมนี้เท่านั้น</string>
     <string name="recurring_all_events">กิจกรรมทั้งหมด</string>
 
@@ -1059,6 +1067,7 @@
     <string name="ics_sync_every_n_hours">ทุก %1$d ชั่วโมง</string>
     <string name="ics_sync_daily">ทุกวัน</string>
     <string name="ics_sync_weekly">ทุกสัปดาห์</string>
+    <string name="default_calendar_name">ปฏิทิน</string>
     <string name="ics_url_required">ต้องระบุ URL</string>
     <string name="ics_url_invalid_scheme">URL ต้องเริ่มด้วย http://, https:// หรือ webcal://</string>
     <string name="ics_fetch_error_http">เซิร์ฟเวอร์แสดงข้อผิดพลาด (%1$d) โปรดตรวจสอบ URL</string>

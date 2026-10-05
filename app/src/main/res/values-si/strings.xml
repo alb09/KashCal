@@ -85,6 +85,7 @@
     <string name="action_delete">මකන්න</string>
     <string name="action_confirm">තහවුරු කරන්න</string>
     <string name="action_discard">ඉවතලන්න</string>
+    <string name="action_discard_confirm">ඉවතලන්නද?</string>
     <string name="action_dismiss">ඉවත් කරන්න</string>
     <string name="action_show_all">සියල්ල පෙන්වන්න</string>
     <string name="action_connect">සම්බන්ධ කරන්න</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">දිනය වෙත යන්න</string>
     <string name="label_week">ස</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">සැකසීම්</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">ඔබේ සිදුවීම් මෙහි බැලීමට iCloud සම්බන්ධ කරන්න</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">අලුත් මොනවද</string>
-    <string name="whats_new_dismiss">තේරුණා</string>
+    <string name="whats_new_later">පසුව</string>
     <string name="whats_new_v598_title">Android විවෘතව තබා ගැනීමට උදව් වන්න</string>
     <string name="whats_new_v598_body">Google ඔබේ උපාංගයේ යෙදුම් ස්ථාපනය කරන ආකාරය වෙනස් කරමින් සිටී. අපට ඔබේ උදව් අවශ්‍යයි.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org වෙත යන්න</string>
+    <string name="whats_new_v732_title">සදා පවතින ස්තූතියක්</string>
+    <string name="whats_new_v732_body">මෙම නිකුතුව KashCal හි ආධාරකරුවන්ට කැප කෙරේ. කුඩා දායකත්වයක්, විශාල හා නිරන්තර ප්‍රතිලාභයක්.</string>
+    <string name="whats_new_v732_caption">තවම ආධාරකරුවෙක් නොවේද?</string>
+    <string name="whats_new_v732_action_label">ඔබේ සැලසුම්වලට අප එක් කරන්න</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud සම්බන්ධ කරන්න</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">මෙම සේවාදායකයේ දින දසුන් හමු නොවීය.</string>
     <string name="caldav_error_unexpected">බලාපොරොත්තු නොවූ දෝෂයක්. නැවත උත්සාහ කරන්න.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nමෙය ඔබේ ස්ථානීය ජාලයේ සේවාදායකයක් නම්, සම්බන්ධ වීමට ස්ථානීය ජාල ප්‍රවේශයට ඉඩ දෙන්න.</string>
+    <string name="caldav_error_connection_refused_insecure">KashCal නොයන තැනකට (සංකේතනය නොකළ ලිපිනයකට, හෝ නැවත යොමු කිරීමේ ලූපයකට) සේවාදායකය සම්බන්ධතාවය හරවා යැවූ නිසා, ඔබේ මුරපදය යැවීමට පෙර KashCal නැවතුණි. සේවාදායක ලිපිනය පරීක්ෂා කරන්න.</string>
     <string name="local_network_banner_title">ස්ථානීය ජාල ප්‍රවේශය අවශ්‍යයි</string>
     <string name="local_network_banner_body">මෙම සේවාදායකය ඔබේ ස්ථානීය ජාලයේ ඇති බව පෙනේ. KashCal හට එයට සම්බන්ධ විය හැකි වන පරිදි ස්ථානීය ජාල ප්‍රවේශයට ඉඩ දෙන්න.</string>
     <string name="local_network_banner_allow">ප්‍රවේශයට ඉඩ දෙන්න</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">දින දර්ශනය</string>
     <string name="account_detail_sync_calendar_subtitle">මෙම ගිණුමේ දින දර්ශන සමමුහුර්ත කරන්න</string>
     <string name="account_detail_sync_contacts">සම්බන්ධතා</string>
-    <string name="account_detail_sync_contacts_subtitle">මෙම ගිණුමේ සම්බන්ධතා ඔබගේ දුරකථනයට සමමුහුර්ත කරන්න</string>
+    <string name="account_detail_sync_contacts_subtitle">මෙම ගිණුමේ සම්බන්ධතා සමමුහුර්ත කරන්න</string>
     <string name="account_detail_contacts_permission_needed">සම්බන්ධතා අවසරය අක්‍රියයි. සම්බන්ධතා සමමුහුර්ත වෙමින් තබා ගැනීමට ප්‍රවේශය දෙන්න.</string>
     <string name="account_detail_contacts_grant">ප්‍රවේශය දෙන්න</string>
     <string name="contact_sync_enabled_for">%1$s සඳහා සම්බන්ධතා සමමුහුර්ත කරමින්</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">සිදුවීම් මාතෘකා යෝජනා කරන්න</string>
     <string name="settings_suggest_titles_info">ඔබ නව සිදුවීමක් නම් කරන විට, ඔබ මීට පෙර භාවිත කළ මාතෘකා යෝජනා කරයි, එවිට නැවත නැවත සිදුවන සිදුවීම් එක් ස්පර්ශයකින් සිදු වේ. ඔබ ඒවා කොපමණ නිතර සහ කොපමණ මෑතකදී භාවිත කළේද යන්න මත පදනම්ව ශ්‍රේණිගත කර ඇත.</string>
     <string name="settings_week_numbers">සතිය අංක</string>
+    <string name="settings_multiday_in_allday_strip">මුළු දින තීරුවේ බහු-දින සිදුවීම්</string>
+    <string name="settings_multiday_in_allday_strip_info">එක් දිනකට වඩා පවතින කාල සටහන් සිදුවීම් කාල පැනලයට වඩා සතිපතා දර්ශනයේ ඉහළින් ඇති මුළු දින තීරුවේ පෙන්වන්න. ඒවා සෑම දිනකම කාල පැනලයේ තබා ගැනීමට අක්‍රිය කරන්න.</string>
     <string name="settings_show_declined">ප්‍රතික්ෂේප කළ සිදුවීම් පෙන්වන්න</string>
     <string name="settings_widget_event_limit">විජට් සිදුවීම් සීමාව</string>
     <string name="settings_widget_event_limit_hint">විජට්වල දිනකට පෙන්වන උපරිම සිදුවීම් ගණන</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">වෙනස්කම් සුරකින්න</string>
     <string name="dialog_delete_recurring_title">මකන්න</string>
     <string name="dialog_move_recurring_title">ගෙනයන්න</string>
+    <string name="snackbar_event_rescheduled">සිදුවීම නැවත කාලසටහන් කරන ලදී</string>
+    <string name="snackbar_reschedule_failed">සිදුවීම නැවත කාලසටහන් කළ නොහැකි විය</string>
     <string name="recurring_this_event">මෙම සිදුවීම</string>
     <string name="recurring_all_events">සියලු සිදුවීම්</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">සෑම පැය %1$d කටම</string>
     <string name="ics_sync_daily">දිනපතා</string>
     <string name="ics_sync_weekly">සතිපතා</string>
+    <string name="default_calendar_name">දින දර්ශනය</string>
     <string name="ics_url_required">URL අවශ්‍යයි</string>
     <string name="ics_url_invalid_scheme">URL http://, https://, හෝ webcal:// වලින් ආරම්භ විය යුතුයි</string>
     <string name="ics_fetch_error_http">සේවාදායකය දෝෂයක් ලබා දුන්නේය (%1$d). කරුණාකර URL පරීක්ෂා කරන්න.</string>

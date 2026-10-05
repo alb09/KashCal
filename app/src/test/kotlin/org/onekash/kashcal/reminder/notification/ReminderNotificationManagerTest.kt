@@ -1,6 +1,7 @@
 package org.onekash.kashcal.reminder.notification
 
 import android.app.Notification
+import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -19,7 +20,9 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -38,16 +41,19 @@ import java.util.Locale
 import java.util.TimeZone
 
 /**
- * Unit tests for ReminderNotificationManager.
+ * Tests [ReminderNotificationManager] over the real platform notification manager, in
+ * America/New_York with Locale.US.
  *
- * Tests verify:
- * - Notification building works correctly
- * - Absolute event time formatting is correct
- * - Cross-day date qualifiers work
- * - Constants are correctly defined for deep linking
+ * - The deep-link action and extra keys.
+ * - Building: auto-cancel, a content intent, and Snooze and Dismiss actions.
+ * - Timed body text: the start time in the 12h or 24h preference, "Starting now" when the
+ *   trigger is at or after the start, and the "Tomorrow" and weekday qualifiers.
+ * - All-day body text: "Today", "Tomorrow" or "In N days" by calendar date, with no clock
+ *   time, including a snoozed reminder on the event day.
+ * - The header time: the start plus 30 seconds for a timed reminder, hidden for all-day.
+ * - Post and cancel target the same id, and each reminder row posts under its own id.
  *
- * Note: The actual intent creation is tested indirectly through the notification
- * content intent. Integration testing (manual) verifies the deep link flow.
+ * Intents are checked only for presence; the deep link flow they start isn't tested here.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)
@@ -57,6 +63,7 @@ class ReminderNotificationManagerTest {
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var dataStoreScope: CoroutineScope
     private lateinit var context: Context
+    private lateinit var notificationManager: NotificationManager
     private lateinit var channels: ReminderNotificationChannels
     private lateinit var dataStore: KashCalDataStore
     private lateinit var manager: ReminderNotificationManager
@@ -80,13 +87,14 @@ class ReminderNotificationManagerTest {
         every { Log.e(any(), any()) } returns 0
 
         context = RuntimeEnvironment.getApplication()
+        notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         channels = ReminderNotificationChannels(context)
         channels.createChannels()
 
-        // Use a dedicated CoroutineScope (not TestScope) for DataStore to avoid
-        // UncaughtExceptionsBeforeTest: runTest/testScope.runTest catches leaked
-        // coroutines from other test classes in the same JVM fork. Using a real
-        // scope + runBlocking sidesteps this entirely.
+        // A real scope (not TestScope) for DataStore: runTest catches coroutines leaked by
+        // other classes in the same JVM fork and fails with UncaughtExceptionsBeforeTest, which
+        // a real scope and runBlocking avoid.
         dataStoreScope = CoroutineScope(Dispatchers.Unconfined + SupervisorJob())
         testDataStoreFile = File(context.filesDir, "test_prefs_${System.nanoTime()}.preferences_pb")
         val testPrefsDataStore = PreferenceDataStoreFactory.create(
@@ -354,7 +362,8 @@ class ReminderNotificationManagerTest {
 
     @Test
     fun `all-day reminder firing a week before shows In 6 days`() = runBlocking {
-        // 1w chip (-PT159H = 6d15h): fires 9 AM, 6 calendar days before.
+        // Fires 9 AM six calendar days before. The 1w chip (-PT159H) fires seven days
+        // before (Jan 6 here), which reads "In 7 days"; this input isn't that chip.
         val zone = ZoneId.of("America/New_York")
         val reminder = allDayReminder(
             LocalDate.of(2026, 1, 13),
@@ -383,7 +392,7 @@ class ReminderNotificationManagerTest {
 
     @Test
     fun `snoozed all-day reminder past local midnight shows Today`() = runBlocking {
-        // Snooze pushes the trigger to noon on the event day -> still "Today".
+        // A snooze moves the trigger to noon on the event day, which still reads "Today".
         val zone = ZoneId.of("America/New_York")
         val reminder = allDayReminder(
             LocalDate.of(2026, 1, 6),
@@ -472,9 +481,8 @@ class ReminderNotificationManagerTest {
 
     @Test
     fun `buildNotification hides header time for all-day reminder`() = runBlocking {
-        // All-day events store occurrenceTime as UTC midnight. Showing it in the
-        // notification header renders a misleading timezone-shifted clock time, so
-        // the header timestamp must be suppressed for all-day reminders.
+        // All-day events store occurrenceTime as UTC midnight, which the header would show
+        // as a zone-shifted clock time, so all-day reminders must hide it.
         val occurrenceTime = ZonedDateTime.of(
             LocalDate.of(2026, 1, 6), LocalTime.MIDNIGHT, ZoneId.of("UTC")
         ).toInstant().toEpochMilli()
@@ -515,7 +523,53 @@ class ReminderNotificationManagerTest {
         )
     }
 
-    // Helper function to create test reminders
+    // ==================== Post / Cancel Round-trip ====================
+
+    @Test
+    fun `cancelNotification clears the notification showNotification posted`() = runBlocking {
+        // Post and cancel each derive the id from the row, so re-keying one without the
+        // other would silently strand notifications in the shade.
+        val reminder = createTestReminder(
+            id = 42L,
+            eventId = 1L,
+            eventTitle = "Standup",
+            occurrenceTime = 1_800_000_000_000L
+        )
+
+        val postedId = manager.showNotification(reminder)
+        assertNotNull(activeById(postedId))
+
+        manager.cancelNotification(reminder.id)
+
+        assertNull("Cancel must target the id that was posted", activeById(postedId))
+    }
+
+    @Test
+    fun `two reminders on the same occurrence post under different ids`() = runBlocking {
+        // Nothing collapses on its own: ids are per reminder row, so a firing reminder has
+        // to clear its siblings itself.
+        val occurrenceTime = 1_800_000_000_000L
+        val hourBefore = createTestReminder(
+            id = 42L, eventId = 1L, eventTitle = "Standup",
+            occurrenceTime = occurrenceTime,
+            triggerTime = occurrenceTime - 3_600_000, reminderOffset = "-PT1H"
+        )
+        val quarterHourBefore = createTestReminder(
+            id = 43L, eventId = 1L, eventTitle = "Standup",
+            occurrenceTime = occurrenceTime
+        )
+
+        val firstId = manager.showNotification(hourBefore)
+        val secondId = manager.showNotification(quarterHourBefore)
+
+        assertNotEquals(firstId, secondId)
+        assertNotNull(activeById(firstId))
+        assertNotNull(activeById(secondId))
+    }
+
+    private fun activeById(id: Int) =
+        notificationManager.activeNotifications.firstOrNull { it.id == id }
+
     private fun createTestReminder(
         id: Long,
         eventId: Long,

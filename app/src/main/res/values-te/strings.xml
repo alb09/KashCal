@@ -85,6 +85,7 @@
     <string name="action_delete">తొలగించు</string>
     <string name="action_confirm">నిర్ధారించు</string>
     <string name="action_discard">విస్మరించు</string>
+    <string name="action_discard_confirm">మార్పులను విస్మరించాలా?</string>
     <string name="action_dismiss">తీసివేయి</string>
     <string name="action_show_all">అన్నీ చూపించు</string>
     <string name="action_connect">కనెక్ట్ చేయి</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">తేదీకి వెళ్ళు</string>
     <string name="label_week">వా</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">సెట్టింగ్‌లు</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">మీ ఈవెంట్‌లు ఇక్కడ చూడటానికి iCloud కనెక్ట్ చేయండి</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">కొత్తగా ఏముంది</string>
-    <string name="whats_new_dismiss">అర్థమైంది</string>
+    <string name="whats_new_later">తర్వాత</string>
     <string name="whats_new_v598_title">Android-ని తెరిచి ఉంచడంలో సహాయం చేయండి</string>
     <string name="whats_new_v598_body">Google మీ పరికరంలో అనువర్తనాలను ఇన్‌స్టాల్ చేసే విధానాన్ని మారుస్తోంది. మాకు మీ సహాయం అవసరం.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org-కి వెళ్లండి</string>
+    <string name="whats_new_v732_title">ఒక శాశ్వత ధన్యవాదం</string>
+    <string name="whats_new_v732_body">ఈ విడుదల KashCal మద్దతుదారులకు అంకితం. ఒక చిన్న సహకారం, పదే పదే అందే పెద్ద ప్రయోజనం.</string>
+    <string name="whats_new_v732_caption">ఇంకా మద్దతుదారు కాలేదా?</string>
+    <string name="whats_new_v732_action_label">మీ ప్రణాళికలలో మమ్మల్ని చేర్చండి</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud కనెక్ట్ చేయి</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">ఈ సర్వర్‌లో క్యాలెండర్లు కనుగొనబడలేదు.</string>
     <string name="caldav_error_unexpected">ఊహించని లోపం. దయచేసి మళ్లీ ప్రయత్నించండి.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nఇది మీ లోకల్ నెట్‌వర్క్‌లోని సర్వర్ అయితే, కనెక్ట్ కావడానికి లోకల్ నెట్‌వర్క్ యాక్సెస్‌ను అనుమతించండి.</string>
+    <string name="caldav_error_connection_refused_insecure">KashCal అనుసరించని చోటికి (ఎన్‌క్రిప్ట్ చేయని చిరునామా, లేదా రీడైరెక్ట్ లూప్) సర్వర్ కనెక్షన్‌ను మళ్లించింది, కాబట్టి మీ పాస్‌వర్డ్ పంపే ముందే KashCal ఆగిపోయింది. సర్వర్ చిరునామాను తనిఖీ చేయండి.</string>
     <string name="local_network_banner_title">లోకల్ నెట్‌వర్క్ యాక్సెస్ అవసరం</string>
     <string name="local_network_banner_body">ఈ సర్వర్ మీ లోకల్ నెట్‌వర్క్‌లో ఉన్నట్లు కనిపిస్తోంది. KashCal దీనికి కనెక్ట్ కావడానికి లోకల్ నెట్‌వర్క్ యాక్సెస్‌ను అనుమతించండి.</string>
     <string name="local_network_banner_allow">యాక్సెస్‌ను అనుమతించు</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">క్యాలెండర్</string>
     <string name="account_detail_sync_calendar_subtitle">ఈ ఖాతా క్యాలెండర్‌లను సింక్ చేయి</string>
     <string name="account_detail_sync_contacts">పరిచయాలు</string>
-    <string name="account_detail_sync_contacts_subtitle">ఈ ఖాతా పరిచయాలను మీ ఫోన్‌కు సింక్ చేయి</string>
+    <string name="account_detail_sync_contacts_subtitle">ఈ ఖాతా పరిచయాలను సింక్ చేయి</string>
     <string name="account_detail_contacts_permission_needed">పరిచయాల అనుమతి ఆఫ్‌లో ఉంది. పరిచయాల సింక్ కొనసాగించడానికి యాక్సెస్ ఇవ్వండి.</string>
     <string name="account_detail_contacts_grant">యాక్సెస్ ఇవ్వండి</string>
     <string name="contact_sync_enabled_for">%1$s కోసం పరిచయాలు సింక్ అవుతున్నాయి</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">ఈవెంట్ శీర్షికలను సూచించండి</string>
     <string name="settings_suggest_titles_info">మీరు కొత్త ఈవెంట్‌కు పేరు పెట్టేటప్పుడు, మీరు ఇంతకు ముందు ఉపయోగించిన శీర్షికలను సూచిస్తుంది, తద్వారా పునరావృత ఈవెంట్‌లు ఒకే ట్యాప్‌లో సిద్ధమవుతాయి. మీరు వాటిని ఎంత తరచుగా, ఎంత ఇటీవల ఉపయోగించారో దాని ఆధారంగా వరుసలో ఉంచబడతాయి.</string>
     <string name="settings_week_numbers">వారం సంఖ్యలు</string>
+    <string name="settings_multiday_in_allday_strip">పూర్తి రోజు స్ట్రిప్\'లో బహుళ-రోజుల ఈవెంట్\'లు</string>
+    <string name="settings_multiday_in_allday_strip_info">ఒక రోజు కంటే ఎక్కువ కాలం ఉండే సమయ-నిర్ధారిత ఈవెంట్\'లను టైమ్ గ్రిడ్\'కు బదులుగా వార వీక్షణ పైభాగంలో ఉన్న పూర్తి రోజు స్ట్రిప్\'లో చూపించు. ప్రతిరోజూ వాటిని టైమ్ గ్రిడ్\'లో ఉంచడానికి ఆఫ్ చేయండి.</string>
     <string name="settings_show_declined">తిరస్కరించిన ఈవెంట్‌లను చూపించు</string>
     <string name="settings_widget_event_limit">విడ్జెట్ ఈవెంట్ పరిమితి</string>
     <string name="settings_widget_event_limit_hint">విడ్జెట్‌లలో రోజుకు చూపబడే గరిష్ఠ ఈవెంట్‌లు</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">మార్పులను సేవ్ చేయండి</string>
     <string name="dialog_delete_recurring_title">తొలగించు</string>
     <string name="dialog_move_recurring_title">తరలించు</string>
+    <string name="snackbar_event_rescheduled">ఈవెంట్ సమయం మార్చబడింది</string>
+    <string name="snackbar_reschedule_failed">ఈవెంట్ సమయం మార్చడం సాధ్యం కాలేదు</string>
     <string name="recurring_this_event">ఈ ఈవెంట్</string>
     <string name="recurring_all_events">అన్ని ఈవెంట్‌లు</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">ప్రతి %1$d గంటలకు</string>
     <string name="ics_sync_daily">రోజువారీ</string>
     <string name="ics_sync_weekly">వారానికి ఒకసారి</string>
+    <string name="default_calendar_name">క్యాలెండర్</string>
     <string name="ics_url_required">URL అవసరం</string>
     <string name="ics_url_invalid_scheme">URL http://, https://, లేదా webcal:// తో మొదలవ్వాలి</string>
     <string name="ics_fetch_error_http">సర్వర్ ఒక లోపాన్ని అందించింది (%1$d). దయచేసి URL తనిఖీ చేయండి.</string>

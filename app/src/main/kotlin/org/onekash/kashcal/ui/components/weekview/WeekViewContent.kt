@@ -21,6 +21,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -69,9 +72,14 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalViewConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -81,6 +89,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -105,21 +114,22 @@ import kotlin.math.abs
 
 private const val TAG = "WeekViewContent"
 
+// Test tags `AllDayStripOcclusionTest` uses to check that the all-day strip doesn't cover the
+// timed grid's earliest hours.
+internal const val TEST_TAG_ALL_DAY_STRIP = "allDayStrip"
+internal const val TEST_TAG_FIRST_TIME_LABEL = "firstTimeLabel"
+
 /**
- * Main container for the week view with infinite day pager.
+ * Shows the day, 3-day and week time grids over a pseudo-infinite pager.
  *
- * Architecture:
- * - Uses pseudo-infinite pager (Int.MAX_VALUE pages) where each page = 1 day
- * - CENTER_DAY_PAGE corresponds to today
- * - Headers scroll WITH content (like monthly view) for smooth, non-jarring scrolling
- * - Debounced event loading in ViewModel
+ * With [visibleDays] 1 or 3, each page is one day and [WeekViewUtils.CENTER_DAY_PAGE] is today;
+ * with 7, each page is one week starting on [firstDayOfWeek] and
+ * [WeekViewUtils.CENTER_WEEK_PAGE] is the current week. The settled page goes to
+ * [onPageChanged].
  *
- * Each page contains:
- * - Day header (Mon 6, Tue 7, etc.)
- * - All-day events (1 item + "+N more" with bottom picker)
- * - Early overflow events (before 6am) with contrast background
- * - Time grid with timed events
- * - Late overflow events (after 11pm) with contrast background
+ * Top to bottom: day headers (not in Day view), the all-day strip, then the 24-hour grid. The
+ * headers and the strip sit above the pager and follow its current page. A "+N" badge opens
+ * [OverlapListSheet].
  */
 @Composable
 fun WeekViewContent(
@@ -135,6 +145,11 @@ fun WeekViewContent(
     timePattern: String = "h:mma",
     visibleDays: Int = 3,
     firstDayOfWeek: Int = java.util.Calendar.SUNDAY,
+    /**
+     * Localized prefix for the week-number label ("W") in the header corner, left of the day
+     * headers. Shown only in the 7-day week view; blank hides it.
+     */
+    weekLabelPrefix: String = "",
     allDayRowsExpanded: Boolean = false,
     onAllDayRowsToggle: () -> Unit = {},
     onDatePickerRequest: () -> Unit,
@@ -146,18 +161,20 @@ fun WeekViewContent(
     pendingNavigateToPage: Int? = null,
     onNavigationConsumed: () -> Unit = {},
     onReschedule: (DisplayEvent, LocalDate, Int) -> Unit = { _, _, _ -> },
+    /** Called with the date of a tapped day header. */
+    onDayHeaderClick: (LocalDate) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    // Grid time range: full 24h for both views
+    // The grid covers the full 24 hours in every view.
     val startHour = WeekViewUtils.START_HOUR
     val endHour = WeekViewUtils.END_HOUR
     val totalHours = WeekViewUtils.TOTAL_HOURS
 
-    // DAY view (visibleDays=1) raises the side-by-side cap to 5 since each event has the full
-    // viewport width available; multi-day views stay at the default 2 to keep columns readable.
+    // Day view (visibleDays = 1) raises the side-by-side cap to 5 since events get the full
+    // width; multi-day views keep the default 2 so columns stay readable.
     val maxVisibleOverlap = if (visibleDays == 1) 5 else WeekViewUtils.MAX_VISIBLE_OVERLAP
 
-    // Pager: day-based (DAY/THREE_DAYS) or week-based (WEEK)
+    // One page per day (Day, 3-day) or per week (Week).
     val pagerState = if (visibleDays == 7) {
         rememberPagerState(
             initialPage = WeekViewUtils.CENTER_WEEK_PAGE,
@@ -170,21 +187,20 @@ fun WeekViewContent(
         )
     }
 
-    // Track pager position changes - use settledPage for debounced loading
+    // Report the settled page only, so a swipe in progress doesn't trigger loads.
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.settledPage }
-            .distinctUntilChanged()  // Prevent duplicate emissions
+            .distinctUntilChanged()
             .collect { page ->
                 Log.d(TAG, "Pager settled on page $page")
                 onPageChanged(page)
             }
     }
 
-    // Handle programmatic navigation (from Today button, date picker)
-    // Wait for any ongoing gesture to complete before animating
+    // Programmatic navigation, for example the Today button or the date picker.
     LaunchedEffect(pendingNavigateToPage) {
         pendingNavigateToPage?.let { targetPage ->
-            // Wait for user gesture to complete (prevents racing with user scroll)
+            // Wait for any user scroll to finish so the animation doesn't race it.
             snapshotFlow { pagerState.isScrollInProgress }
                 .filter { !it }
                 .first()
@@ -204,24 +220,20 @@ fun WeekViewContent(
     )
     val scrollState = rememberScrollState(initial = initialScrollPx)
 
-    // Group events by date (LocalDate key)
     val timedEventsByDate = remember(timedEvents) {
         groupEventsByDate(timedEvents.toList())
     }
 
-    val allDayEventsByDate = remember(allDayEvents) {
-        groupEventsByDate(allDayEvents.toList())
-    }
+    val allDayEventsList = remember(allDayEvents) { allDayEvents.toList() }
 
-    // All timed events go directly to the grid (full 24h range, no overflow separation)
+    // Every timed event goes to the grid, which covers the full 24 hours.
     val normalEventsByDate = timedEventsByDate
 
-    // State for overflow sheet
+    // Events of the tapped "+N" badge; non-null shows OverlapListSheet.
     var overflowEvents by remember { mutableStateOf<List<DisplayEvent>?>(null) }
 
-    // Main content — always render the grid immediately so the structure
-    // (time labels, grid lines, headers) appears without a spinner flash.
-    // Events populate when the Flow emits. Empty columns are fine during load.
+    // Render the grid at once, while loading too, so time labels, grid lines and headers
+    // appear without a spinner flash; events fill in when the Flow emits.
     when {
         error != null -> {
             Box(
@@ -238,16 +250,16 @@ fun WeekViewContent(
             }
         }
         else -> {
-            // Time grid with unified day columns (headers inside pager)
             UnifiedTimeGrid(
                 pagerState = pagerState,
                 normalEventsByDate = normalEventsByDate,
-                allDayEventsByDate = allDayEventsByDate,
+                allDayEvents = allDayEventsList,
                 startHour = startHour,
                 endHour = endHour,
                 totalHours = totalHours,
                 visibleDays = visibleDays,
                 firstDayOfWeek = firstDayOfWeek,
+                weekLabelPrefix = weekLabelPrefix,
                 allDayRowsExpanded = allDayRowsExpanded,
                 onAllDayRowsToggle = onAllDayRowsToggle,
                 hourHeight = hourHeight.dp,
@@ -262,12 +274,12 @@ fun WeekViewContent(
                 onScrollPositionChange = onScrollPositionChange,
                 onScrollMinutesChange = onScrollMinutesChange,
                 onReschedule = onReschedule,
+                onDayHeaderClick = onDayHeaderClick,
                 modifier = modifier.fillMaxSize()
             )
         }
     }
 
-    // Overflow sheet
     overflowEvents?.let { events ->
         OverlapListSheet(
             events = events,
@@ -280,19 +292,22 @@ fun WeekViewContent(
 }
 
 /**
- * Unified time grid where each page contains header + all sections.
- * This creates smooth scrolling (like monthly view) because headers move with content.
+ * Lays out the day headers, the all-day strip and the scrolling time grid.
+ *
+ * The grid handles pinch-zoom of the hour height, long-press drag to reschedule
+ * ([onReschedule] on release), edge auto-scroll while dragging, and the current-time line.
  */
 @Composable
 private fun UnifiedTimeGrid(
     pagerState: PagerState,
     normalEventsByDate: Map<LocalDate, List<DisplayEvent>>,
-    allDayEventsByDate: Map<LocalDate, List<DisplayEvent>>,
+    allDayEvents: List<DisplayEvent>,
     startHour: Int = WeekViewUtils.START_HOUR,
     endHour: Int = WeekViewUtils.END_HOUR,
     totalHours: Int = WeekViewUtils.TOTAL_HOURS,
     visibleDays: Int = 3,
     firstDayOfWeek: Int = java.util.Calendar.SUNDAY,
+    weekLabelPrefix: String = "",
     allDayRowsExpanded: Boolean = false,
     onAllDayRowsToggle: () -> Unit = {},
     hourHeight: Dp = WeekViewUtils.HOUR_HEIGHT,
@@ -307,16 +322,21 @@ private fun UnifiedTimeGrid(
     onScrollPositionChange: (Int) -> Unit = {},
     onScrollMinutesChange: (Int) -> Unit = {},
     onReschedule: (DisplayEvent, LocalDate, Int) -> Unit = { _, _, _ -> },
+    onDayHeaderClick: (LocalDate) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val is24Hour = timePattern.startsWith("H")
     val totalHeight = hourHeight * totalHours
-    val timeColumnWidth = 48.dp
+    val timeColumnWidth = WeekViewUtils.TIME_COLUMN_WIDTH
     val today = LocalDate.now()
 
     var dragState by remember { mutableStateOf(WeekViewUtils.DragState.Idle) }
     val isDragging by remember { derivedStateOf { dragState.isDragging } }
     var viewportHeightPx by remember { mutableFloatStateOf(0f) }
+    // Scroll offset a pinch-zoom wants to settle on, applied once the grid has re-measured
+    // to its new height (see the recentring LaunchedEffect below). Applying it inline during
+    // the gesture would let the framework re-clamp against the stale, pre-zoom scroll range.
+    var pendingZoomScrollPx by remember { mutableStateOf<Float?>(null) }
     val hapticFeedback = LocalHapticFeedback.current
 
     val dragScale by animateFloatAsState(
@@ -344,38 +364,53 @@ private fun UnifiedTimeGrid(
         }
     }
 
-    // Density / hour-height are needed both here (to persist scroll as clock minutes) and
-    // by the grid body below. rememberUpdatedState lets the debounced collectors read the
-    // live hour-height without restarting on every pinch-zoom.
+    // rememberUpdatedState lets the scroll-minutes collector, the pinch gesture and the drag
+    // callbacks read the live hour height without restarting on every pinch-zoom.
     val density = LocalDensity.current
     val hourHeightPx = with(density) { hourHeight.toPx() }
     val currentHourHeight by rememberUpdatedState(hourHeight)
     val currentHourHeightPx by rememberUpdatedState(hourHeightPx)
 
-    // Track scroll position changes - debounced to prevent per-pixel state updates
+    // Report the scroll position, debounced so scrolling doesn't update state every pixel.
     LaunchedEffect(scrollState) {
         @OptIn(FlowPreview::class)
         snapshotFlow { scrollState.value }
-            .debounce(100)  // 100ms debounce prevents recomposition storms
+            .debounce(100)
             .collect { position ->
                 onScrollPositionChange(position)
             }
     }
 
-    // Persist the scroll position as clock minutes for cross-restart restore. Longer debounce
-    // than the in-memory pixel path above so active scrolling doesn't hammer DataStore — only
-    // the settled position matters for restore. Uses the live hour-height so a pinch-zoom
-    // before settling still records the correct clock time.
+    // Report the scroll position as clock minutes, restored after a restart. The longer
+    // debounce keeps active scrolling from hammering DataStore; only the settled position
+    // matters. The live hour height keeps the minutes right after a pinch-zoom.
     LaunchedEffect(scrollState) {
         @OptIn(FlowPreview::class)
         snapshotFlow { scrollState.value }
             .debounce(1000)
             .map { position -> WeekViewUtils.pixelsToMinutesOfDay(position.toFloat(), currentHourHeightPx) }
-            .distinctUntilChanged()  // don't re-persist when the settled clock-minute is unchanged
+            .distinctUntilChanged()
             .collect { minutes -> onScrollMinutesChange(minutes) }
     }
 
-    // Derive visible dates once — shared by headers, all-day, overflow, and time indicator.
+    // Recenter the grid after a pinch-zoom. The gesture changes the hour height and records
+    // the scroll offset that keeps the clock time under the viewport center fixed. Scrolling
+    // before the grid re-measures would clamp against the pre-zoom max, leaving the recenter
+    // short and sliding the current-time line and every event off their time when zooming in.
+    LaunchedEffect(pendingZoomScrollPx) {
+        val target = pendingZoomScrollPx ?: return@LaunchedEffect
+        // Wait for the grid to grow to the target. The timeout stops a rounding mismatch
+        // between the target and the measured max from suspending forever; by then the
+        // re-measure has landed, so scrollTo() clamps against the new max.
+        withTimeoutOrNull(250) {
+            snapshotFlow { scrollState.maxValue }.first { it.toFloat() >= target - 1f }
+        }
+        scrollState.scrollTo(target.toInt())
+        pendingZoomScrollPx = null
+    }
+
+    // The current page's dates, shared by the headers, the week label, the all-day strip and
+    // drag targeting.
     val visibleDates by remember(visibleDays, firstDayOfWeek) {
         derivedStateOf {
             if (visibleDays == 7) {
@@ -389,11 +424,33 @@ private fun UnifiedTimeGrid(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        // Per-column day headers — skipped in Day view since the screen-level
-        // header already labels the single day.
+        // Day headers, skipped in Day view since the screen-level header already labels the
+        // single day.
         if (visibleDays > 1) {
             Row(modifier = Modifier.fillMaxWidth()) {
-                Box(modifier = Modifier.width(timeColumnWidth))
+                // Header corner, left of the day headers. In the 7-day week view it carries
+                // the week-number label so the top bar stays uncrowded; otherwise it's the
+                // blank spacer above the all-day gutter.
+                Box(
+                    modifier = Modifier.width(timeColumnWidth),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (visibleDays == 7 && weekLabelPrefix.isNotEmpty()) {
+                        val weekLabel = remember(visibleDates, firstDayOfWeek, weekLabelPrefix) {
+                            WeekViewUtils.formatWeekLabel(
+                                visibleDates.first(),
+                                firstDayOfWeek,
+                                weekLabelPrefix,
+                            )
+                        }
+                        Text(
+                            text = weekLabel,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
 
                 Row(modifier = Modifier.weight(1f)) {
                     visibleDates.forEach { date ->
@@ -402,6 +459,7 @@ private fun UnifiedTimeGrid(
                             isToday = date == today,
                             isWeekend = WeekViewUtils.isWeekend(date),
                             compact = visibleDays == 7,
+                            onClick = { onDayHeaderClick(date) },
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -409,346 +467,385 @@ private fun UnifiedTimeGrid(
             }
         }
 
-        // All-day events row
+        // The all-day strip is its own row above the timed grid, so the grid starts below it
+        // and the earliest hours are never hidden behind it.
         AllDayEventsPagerRow(
             visibleDates = visibleDates,
-            allDayEventsByDate = allDayEventsByDate,
+            allDayEvents = allDayEvents,
             timeColumnWidth = timeColumnWidth,
             allDayRowsExpanded = allDayRowsExpanded,
             onAllDayRowsToggle = onAllDayRowsToggle,
             showEventEmojis = showEventEmojis,
+            timePattern = timePattern,
             onEventClick = onEventClick,
             onOverflowClick = onOverflowClick
         )
 
-        // Main time grid area (density / hour-height hoisted above the scroll collectors)
-        Row(modifier = Modifier.weight(1f)) {
-            // Time labels column (fixed)
-            Column(
-                modifier = Modifier
-                    .width(timeColumnWidth)
-                    .verticalScroll(scrollState)
-                    .height(totalHeight)
-            ) {
-                for (hour in startHour until endHour) {
-                    TimeLabel(hour = hour, height = hourHeight, is24Hour = is24Hour)
-                }
-            }
-
-            // Day columns area
-            BoxWithConstraints(modifier = Modifier.weight(1f)) {
-                val columnWidth = this.maxWidth / visibleDays
-                val localViewportHeight = with(density) { this@BoxWithConstraints.maxHeight.toPx() }
-                viewportHeightPx = localViewportHeight
-
-                val touchSlop = LocalViewConfiguration.current.touchSlop * 0.5f
-
+        Box(modifier = Modifier.weight(1f)) {
+            Row(modifier = Modifier.fillMaxSize()) {
+                // Hour labels, scrolling vertically with the grid but not paging.
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .pointerInput(Unit) {
-                            val pass = PointerEventPass.Initial
-                            awaitEachGesture {
-                                awaitFirstDown(requireUnconsumed = false, pass = pass)
-                                var pastSlop = false
-                                do {
-                                    val event = awaitPointerEvent(pass)
-                                    if (event.changes.count { it.pressed } < 2) continue
-                                    val zoom = event.calculateZoom()
-                                    val pan = event.calculatePan()
-                                    if (!pastSlop) {
-                                        val centroidSize = event.calculateCentroidSize(useCurrent = false)
-                                        val effectiveSize = centroidSize.coerceAtLeast(48f)
-                                        if (abs(1 - zoom) * effectiveSize > touchSlop) {
-                                            pastSlop = true
-                                        } else continue
-                                    }
-                                    event.changes.forEach { it.consume() }
-                                    if (abs(zoom - 1f) > 0.001f) {
-                                        val oldHourHeightPx = currentHourHeightPx
-                                        val newHourHeight = (currentHourHeight.value * zoom)
-                                            .coerceIn(WeekViewUtils.MIN_HOUR_HEIGHT_DP, WeekViewUtils.MAX_HOUR_HEIGHT_DP)
-                                        if (abs(newHourHeight - currentHourHeight.value) > 0.01f) {
-                                            val newHourHeightPx = newHourHeight * density.density
-                                            val viewportCenterTime = (scrollState.value + localViewportHeight / 2) / oldHourHeightPx
-                                            val newScrollPx = viewportCenterTime * newHourHeightPx - localViewportHeight / 2
-                                            onHourHeightChange(newHourHeight)
-                                            scrollState.dispatchRawDelta(newScrollPx - scrollState.value - pan.y)
-                                        }
-                                    } else if (abs(pan.y) > 0.5f) {
-                                        scrollState.dispatchRawDelta(-pan.y)
-                                    }
-                                } while (event.changes.any { it.pressed })
-                            }
-                        }
+                        .width(timeColumnWidth)
                         .verticalScroll(scrollState)
+                        .height(totalHeight)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(totalHeight)
-                    ) {
-                        // Grid lines
-                        GridLines(
-                            hourHeight = hourHeight,
-                            totalHours = totalHours
-                        )
-
-                        val columnWidthPx = with(density) { columnWidth.toPx() }
-
-                        val handleDragEnd: () -> Unit = {
-                            val ds = dragState
-                            val event = ds.draggedEvent
-                            val target = ds.targetDate
-                            if (ds.isDragging && event != null && target != null) {
-                                onReschedule(event, target, ds.targetStartMinutes)
+                    for (hour in startHour until endHour) {
+                        TimeLabel(
+                            hour = hour,
+                            height = hourHeight,
+                            is24Hour = is24Hour,
+                            modifier = if (hour == startHour) {
+                                Modifier.testTag(TEST_TAG_FIRST_TIME_LABEL)
+                            } else {
+                                Modifier
                             }
-                            dragState = WeekViewUtils.DragState.Idle
-                        }
-                        val handleDragCancel: () -> Unit = {
-                            dragState = WeekViewUtils.DragState.Idle
-                        }
+                        )
+                    }
+                }
 
-                        if (visibleDays == 7) {
-                            // Week mode: 1 page = 1 week (Row of 7 DayColumns)
-                            HorizontalPager(
-                                state = pagerState,
-                                modifier = Modifier.fillMaxSize(),
-                                userScrollEnabled = !isDragging,
-                                beyondViewportPageCount = 1,
-                                key = { page -> "week_$page" }
-                            ) { page ->
-                                val weekStart = WeekViewUtils.weekPageToStartDate(page, firstDayOfWeek)
+                BoxWithConstraints(modifier = Modifier.weight(1f)) {
+                    val columnWidth = this.maxWidth / visibleDays
+                    val localViewportHeight = with(density) { this@BoxWithConstraints.maxHeight.toPx() }
+                    viewportHeightPx = localViewportHeight
 
-                                Row(modifier = Modifier.fillMaxSize()) {
-                                    for (dayOffset in 0 until 7) {
-                                        val date = weekStart.plusDays(dayOffset.toLong())
-                                        val dayEvents = normalEventsByDate[date].orEmpty()
+                    val touchSlop = LocalViewConfiguration.current.touchSlop * 0.5f
 
-                                        DayColumn(
-                                            date = date,
-                                            events = dayEvents,
-                                            hourHeight = hourHeight,
-                                            isToday = date == today,
-                                            showEventEmojis = showEventEmojis,
-                                            timePattern = timePattern,
-                                            startHour = startHour,
-                                            maxVisibleOverlap = maxVisibleOverlap,
-                                            onEventClick = onEventClick,
-                                            onOverflowClick = onOverflowClick,
-                                            onEmptyTap = onEmptyTap,
-                                            onEventDragStart = { event, offset ->
-                                                val localStart = Instant.ofEpochMilli(event.startTs).atZone(ZoneId.systemDefault())
-                                                val eventStartMinutes = localStart.hour * 60 + localStart.minute
-                                                val durationMs = event.endTs - event.startTs
-                                                val durationMinutes = (durationMs / 60000).toInt().coerceAtLeast(15)
-                                                val eventHeightDp = (durationMinutes.toFloat() / 60f * currentHourHeight.value).dp
-                                                dragState = WeekViewUtils.DragState(
-                                                    isDragging = true,
-                                                    draggedEvent = event,
-                                                    originalDate = date,
-                                                    originalStartMinutes = eventStartMinutes,
-                                                    currentOffsetX = dayOffset * columnWidthPx + offset.x,
-                                                    currentOffsetY = offset.y + (eventStartMinutes - startHour * 60) / 60f * currentHourHeightPx,
-                                                    targetDate = date,
-                                                    targetStartMinutes = eventStartMinutes,
-                                                    eventHeight = eventHeightDp,
-                                                    durationMinutes = durationMinutes
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .pointerInput(Unit) {
+                                val pass = PointerEventPass.Initial
+                                awaitEachGesture {
+                                    awaitFirstDown(requireUnconsumed = false, pass = pass)
+                                    var pastSlop = false
+                                    // The scroll offset and hour height this gesture steers
+                                    // toward. The applied height (currentHourHeightPx) and
+                                    // scrollState.value settle a frame apart, so reading them
+                                    // mid-gesture pairs a new height with an old scroll and
+                                    // drifts the center. These locals advance together every
+                                    // frame. Seed from a still-settling recenter so a quick
+                                    // re-pinch doesn't anchor to an offset that hasn't landed.
+                                    var zoomScrollPx = pendingZoomScrollPx ?: scrollState.value.toFloat()
+                                    var zoomHourHeightPx = currentHourHeightPx
+                                    do {
+                                        val event = awaitPointerEvent(pass)
+                                        if (event.changes.count { it.pressed } < 2) continue
+                                        val zoom = event.calculateZoom()
+                                        val pan = event.calculatePan()
+                                        if (!pastSlop) {
+                                            val centroidSize = event.calculateCentroidSize(useCurrent = false)
+                                            val effectiveSize = centroidSize.coerceAtLeast(48f)
+                                            if (abs(1 - zoom) * effectiveSize > touchSlop) {
+                                                pastSlop = true
+                                            } else continue
+                                        }
+                                        event.changes.forEach { it.consume() }
+                                        if (abs(zoom - 1f) > 0.001f) {
+                                            val newHourHeightPx = (zoomHourHeightPx * zoom)
+                                                .coerceIn(
+                                                    WeekViewUtils.MIN_HOUR_HEIGHT_DP * density.density,
+                                                    WeekViewUtils.MAX_HOUR_HEIGHT_DP * density.density
                                                 )
-                                            },
-                                            onEventDrag = { offset ->
-                                                if (dragState.isDragging) {
-                                                    val newX = dragState.currentOffsetX + offset.x
-                                                    val newY = dragState.currentOffsetY + offset.y
-                                                    val (targetDate, targetMinutes) = WeekViewUtils.calculateDragTarget(
-                                                        fingerX = newX,
-                                                        fingerY = newY,
-                                                        columnWidth = columnWidthPx,
-                                                        visibleDates = visibleDates,
-                                                        hourHeightPx = currentHourHeightPx,
-                                                        scrollOffsetPx = 0,
-                                                        startHour = startHour
+                                            if (abs(newHourHeightPx - zoomHourHeightPx) > 0.01f) {
+                                                val recenter = WeekViewUtils.resolveZoomScrollPx(
+                                                    currentScrollPx = zoomScrollPx,
+                                                    viewportHeightPx = localViewportHeight,
+                                                    oldHourHeightPx = zoomHourHeightPx,
+                                                    newHourHeightPx = newHourHeightPx,
+                                                    totalHours = totalHours,
+                                                    panYPx = pan.y
+                                                )
+                                                onHourHeightChange(newHourHeightPx / density.density)
+                                                zoomScrollPx = recenter
+                                                zoomHourHeightPx = newHourHeightPx
+                                                // Move toward the target this frame. The delta is
+                                                // clamped to the not-yet-grown range, so it lands
+                                                // short when zooming in; the recentring effect
+                                                // snaps to the target once the grid re-measures.
+                                                scrollState.dispatchRawDelta(recenter - scrollState.value.toFloat())
+                                                pendingZoomScrollPx = recenter
+                                            }
+                                        } else if (abs(pan.y) > 0.5f) {
+                                            scrollState.dispatchRawDelta(-pan.y)
+                                            // Advance the tracked offset by the pan, not by
+                                            // scrollState.value, which may not have applied yet,
+                                            // and fold it into a settling recenter so the
+                                            // deferred scrollTo keeps the pan.
+                                            zoomScrollPx = (zoomScrollPx - pan.y).coerceAtLeast(0f)
+                                            pendingZoomScrollPx?.let {
+                                                pendingZoomScrollPx = (it - pan.y).coerceAtLeast(0f)
+                                            }
+                                        }
+                                    } while (event.changes.any { it.pressed })
+                                }
+                            }
+                            .verticalScroll(scrollState)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(totalHeight)
+                        ) {
+                            GridLines(
+                                hourHeight = hourHeight,
+                                totalHours = totalHours
+                            )
+
+                            val columnWidthPx = with(density) { columnWidth.toPx() }
+
+                            val handleDragEnd: () -> Unit = {
+                                val ds = dragState
+                                val event = ds.draggedEvent
+                                val target = ds.targetDate
+                                if (ds.isDragging && event != null && target != null) {
+                                    onReschedule(event, target, ds.targetStartMinutes)
+                                }
+                                dragState = WeekViewUtils.DragState.Idle
+                            }
+                            val handleDragCancel: () -> Unit = {
+                                dragState = WeekViewUtils.DragState.Idle
+                            }
+
+                            if (visibleDays == 7) {
+                                // Week mode: one page is a week, a Row of 7 DayColumns.
+                                HorizontalPager(
+                                    state = pagerState,
+                                    modifier = Modifier.fillMaxSize(),
+                                    userScrollEnabled = !isDragging,
+                                    beyondViewportPageCount = 1,
+                                    key = { page -> "week_$page" }
+                                ) { page ->
+                                    val weekStart = WeekViewUtils.weekPageToStartDate(page, firstDayOfWeek)
+
+                                    Row(modifier = Modifier.fillMaxSize()) {
+                                        for (dayOffset in 0 until 7) {
+                                            val date = weekStart.plusDays(dayOffset.toLong())
+                                            val dayEvents = normalEventsByDate[date].orEmpty()
+
+                                            DayColumn(
+                                                date = date,
+                                                events = dayEvents,
+                                                hourHeight = hourHeight,
+                                                isToday = date == today,
+                                                showEventEmojis = showEventEmojis,
+                                                timePattern = timePattern,
+                                                startHour = startHour,
+                                                maxVisibleOverlap = maxVisibleOverlap,
+                                                onEventClick = onEventClick,
+                                                onOverflowClick = onOverflowClick,
+                                                onEmptyTap = onEmptyTap,
+                                                onEventDragStart = { event, offset ->
+                                                    val localStart = Instant.ofEpochMilli(event.startTs).atZone(ZoneId.systemDefault())
+                                                    val eventStartMinutes = localStart.hour * 60 + localStart.minute
+                                                    val durationMs = event.endTs - event.startTs
+                                                    val durationMinutes = (durationMs / 60000).toInt().coerceAtLeast(15)
+                                                    val eventHeightDp = (durationMinutes.toFloat() / 60f * currentHourHeight.value).dp
+                                                    dragState = WeekViewUtils.DragState(
+                                                        isDragging = true,
+                                                        draggedEvent = event,
+                                                        originalDate = date,
+                                                        originalStartMinutes = eventStartMinutes,
+                                                        currentOffsetX = dayOffset * columnWidthPx + offset.x,
+                                                        currentOffsetY = offset.y + (eventStartMinutes - startHour * 60) / 60f * currentHourHeightPx,
+                                                        targetDate = date,
+                                                        targetStartMinutes = eventStartMinutes,
+                                                        eventHeight = eventHeightDp,
+                                                        durationMinutes = durationMinutes
                                                     )
-                                                    val clampedMinutes = WeekViewUtils.clampDragStartMinutes(targetMinutes, dragState.durationMinutes)
-                                                    dragState = dragState.copy(
-                                                        currentOffsetX = newX,
-                                                        currentOffsetY = newY,
-                                                        targetDate = targetDate,
-                                                        targetStartMinutes = clampedMinutes
-                                                    )
-                                                }
-                                            },
-                                            onEventDragEnd = handleDragEnd,
-                                            onEventDragCancel = handleDragCancel,
-                                            isDropTarget = isDragging && dragState.targetDate == date,
-                                            modifier = Modifier.weight(1f)
-                                        )
+                                                },
+                                                onEventDrag = { offset ->
+                                                    if (dragState.isDragging) {
+                                                        val newX = dragState.currentOffsetX + offset.x
+                                                        val newY = dragState.currentOffsetY + offset.y
+                                                        val (targetDate, targetMinutes) = WeekViewUtils.calculateDragTarget(
+                                                            fingerX = newX,
+                                                            fingerY = newY,
+                                                            columnWidth = columnWidthPx,
+                                                            visibleDates = visibleDates,
+                                                            hourHeightPx = currentHourHeightPx,
+                                                            scrollOffsetPx = 0,
+                                                            startHour = startHour
+                                                        )
+                                                        val clampedMinutes = WeekViewUtils.clampDragStartMinutes(targetMinutes, dragState.durationMinutes)
+                                                        dragState = dragState.copy(
+                                                            currentOffsetX = newX,
+                                                            currentOffsetY = newY,
+                                                            targetDate = targetDate,
+                                                            targetStartMinutes = clampedMinutes
+                                                        )
+                                                    }
+                                                },
+                                                onEventDragEnd = handleDragEnd,
+                                                onEventDragCancel = handleDragCancel,
+                                                isDropTarget = isDragging && dragState.targetDate == date,
+                                                modifier = Modifier.weight(1f)
+                                            )
+                                        }
                                     }
                                 }
-                            }
 
-                            // Current time indicator (week mode)
-                            val weekStart = remember {
-                                derivedStateOf {
-                                    WeekViewUtils.weekPageToStartDate(pagerState.currentPage, firstDayOfWeek)
+                                val weekStart = remember {
+                                    derivedStateOf {
+                                        WeekViewUtils.weekPageToStartDate(pagerState.currentPage, firstDayOfWeek)
+                                    }
                                 }
-                            }
-                            CurrentTimeIndicator(
-                                hourHeight = hourHeight,
-                                visibleDays = 7,
-                                startHour = startHour,
-                                todayOffset = {
-                                    val ws = weekStart.value
-                                    val todayPage = WeekViewUtils.dateToPage(today)
-                                    val wsPage = WeekViewUtils.dateToPage(ws)
-                                    todayPage - wsPage
-                                },
-                                columnWidth = columnWidth
-                            )
-                        } else {
-                            // Day-pager mode: 1 page = 1 day, PageSize.Fixed (used by DAY and THREE_DAYS)
-                            HorizontalPager(
-                                state = pagerState,
-                                modifier = Modifier.fillMaxSize(),
-                                userScrollEnabled = !isDragging,
-                                pageSize = PageSize.Fixed(columnWidth),
-                                beyondViewportPageCount = 3,
-                                key = { page -> "grid_$page" }
-                            ) { page ->
-                                val date = WeekViewUtils.pageToDate(page)
-                                val dayEvents = normalEventsByDate[date].orEmpty()
-
-                                DayColumn(
-                                    date = date,
-                                    events = dayEvents,
+                                CurrentTimeIndicator(
                                     hourHeight = hourHeight,
-                                    isToday = date == today,
-                                    showEventEmojis = showEventEmojis,
-                                    timePattern = timePattern,
+                                    visibleDays = 7,
                                     startHour = startHour,
-                                    maxVisibleOverlap = maxVisibleOverlap,
-                                    onEventClick = onEventClick,
-                                    onOverflowClick = onOverflowClick,
-                                    onEmptyTap = onEmptyTap,
-                                    onEventDragStart = { event, offset ->
-                                        val dayOffset = page - pagerState.currentPage
-                                        val localStart = Instant.ofEpochMilli(event.startTs).atZone(ZoneId.systemDefault())
-                                        val eventStartMinutes = localStart.hour * 60 + localStart.minute
-                                        val durationMs = event.endTs - event.startTs
-                                        val durationMinutes = (durationMs / 60000).toInt().coerceAtLeast(15)
-                                        val eventHeightDp = (durationMinutes.toFloat() / 60f * currentHourHeight.value).dp
-                                        dragState = WeekViewUtils.DragState(
-                                            isDragging = true,
-                                            draggedEvent = event,
-                                            originalDate = date,
-                                            originalStartMinutes = eventStartMinutes,
-                                            currentOffsetX = dayOffset * columnWidthPx + offset.x,
-                                            currentOffsetY = offset.y + (eventStartMinutes - startHour * 60) / 60f * currentHourHeightPx,
-                                            targetDate = date,
-                                            targetStartMinutes = eventStartMinutes,
-                                            eventHeight = eventHeightDp,
-                                            durationMinutes = durationMinutes
-                                        )
+                                    todayOffset = {
+                                        val ws = weekStart.value
+                                        val todayPage = WeekViewUtils.dateToPage(today)
+                                        val wsPage = WeekViewUtils.dateToPage(ws)
+                                        todayPage - wsPage
                                     },
-                                    onEventDrag = { offset ->
-                                        if (dragState.isDragging) {
-                                            val newX = dragState.currentOffsetX + offset.x
-                                            val newY = dragState.currentOffsetY + offset.y
-                                            val (targetDate, targetMinutes) = WeekViewUtils.calculateDragTarget(
-                                                fingerX = newX,
-                                                fingerY = newY,
-                                                columnWidth = columnWidthPx,
-                                                visibleDates = visibleDates,
-                                                hourHeightPx = currentHourHeightPx,
-                                                scrollOffsetPx = 0,
-                                                startHour = startHour
+                                    columnWidth = columnWidth
+                                )
+                            } else {
+                                // Day and 3-day mode: one page is one day, one column wide.
+                                HorizontalPager(
+                                    state = pagerState,
+                                    modifier = Modifier.fillMaxSize(),
+                                    userScrollEnabled = !isDragging,
+                                    pageSize = PageSize.Fixed(columnWidth),
+                                    beyondViewportPageCount = 3,
+                                    key = { page -> "grid_$page" }
+                                ) { page ->
+                                    val date = WeekViewUtils.pageToDate(page)
+                                    val dayEvents = normalEventsByDate[date].orEmpty()
+
+                                    DayColumn(
+                                        date = date,
+                                        events = dayEvents,
+                                        hourHeight = hourHeight,
+                                        isToday = date == today,
+                                        showEventEmojis = showEventEmojis,
+                                        timePattern = timePattern,
+                                        startHour = startHour,
+                                        maxVisibleOverlap = maxVisibleOverlap,
+                                        onEventClick = onEventClick,
+                                        onOverflowClick = onOverflowClick,
+                                        onEmptyTap = onEmptyTap,
+                                        onEventDragStart = { event, offset ->
+                                            val dayOffset = page - pagerState.currentPage
+                                            val localStart = Instant.ofEpochMilli(event.startTs).atZone(ZoneId.systemDefault())
+                                            val eventStartMinutes = localStart.hour * 60 + localStart.minute
+                                            val durationMs = event.endTs - event.startTs
+                                            val durationMinutes = (durationMs / 60000).toInt().coerceAtLeast(15)
+                                            val eventHeightDp = (durationMinutes.toFloat() / 60f * currentHourHeight.value).dp
+                                            dragState = WeekViewUtils.DragState(
+                                                isDragging = true,
+                                                draggedEvent = event,
+                                                originalDate = date,
+                                                originalStartMinutes = eventStartMinutes,
+                                                currentOffsetX = dayOffset * columnWidthPx + offset.x,
+                                                currentOffsetY = offset.y + (eventStartMinutes - startHour * 60) / 60f * currentHourHeightPx,
+                                                targetDate = date,
+                                                targetStartMinutes = eventStartMinutes,
+                                                eventHeight = eventHeightDp,
+                                                durationMinutes = durationMinutes
                                             )
-                                            val clampedMinutes = WeekViewUtils.clampDragStartMinutes(targetMinutes, dragState.durationMinutes)
-                                            dragState = dragState.copy(
-                                                currentOffsetX = newX,
-                                                currentOffsetY = newY,
-                                                targetDate = targetDate,
-                                                targetStartMinutes = clampedMinutes
-                                            )
-                                        }
-                                    },
-                                    onEventDragEnd = handleDragEnd,
-                                    onEventDragCancel = handleDragCancel,
-                                    isDropTarget = isDragging && dragState.targetDate == date,
-                                    modifier = Modifier.width(columnWidth)
-                                )
-                            }
-
-                            // Current time indicator (day-pager mode: DAY/THREE_DAYS)
-                            CurrentTimeIndicator(
-                                hourHeight = hourHeight,
-                                visibleDays = visibleDays,
-                                startHour = startHour,
-                                todayOffset = {
-                                    WeekViewUtils.dateToPage(today) - pagerState.currentPage
-                                },
-                                columnWidth = columnWidth
-                            )
-                        }
-
-                        val draggedEvent = dragState.draggedEvent
-                        if (isDragging && draggedEvent != null && dragState.targetDate != null) {
-                            val targetMinutesFromStart = dragState.targetStartMinutes - startHour * 60
-                            val targetYDp = with(density) { (targetMinutesFromStart.toFloat() / 60f * hourHeightPx).toDp() }
-                            val targetColumnIndex = visibleDates.indexOf(dragState.targetDate)
-                            val targetXDp = if (targetColumnIndex >= 0) columnWidth * targetColumnIndex else 0.dp
-                            val eventWidthDp = columnWidth - 2.dp
-
-                            val originalMinutesFromStart = dragState.originalStartMinutes - startHour * 60
-                            val originalYDp = with(density) { (originalMinutesFromStart.toFloat() / 60f * hourHeightPx).toDp() }
-                            val originalColumnIndex = visibleDates.indexOf(dragState.originalDate)
-                            if (originalColumnIndex >= 0) {
-                                val originalXDp = columnWidth * originalColumnIndex
-                                EventBlock(
-                                    displayEvent = draggedEvent,
-                                    height = dragState.eventHeight,
-                                    showEventEmojis = showEventEmojis,
-                                    timePattern = timePattern,
-                                    onClick = {},
-                                    modifier = Modifier
-                                        .offset(x = originalXDp, y = originalYDp)
-                                        .width(eventWidthDp)
-                                        .graphicsLayer { alpha = 0.3f }
-                                )
-                            }
-
-                            if (targetColumnIndex >= 0) {
-                                EventBlock(
-                                    displayEvent = draggedEvent,
-                                    height = dragState.eventHeight,
-                                    showEventEmojis = showEventEmojis,
-                                    timePattern = timePattern,
-                                    onClick = {},
-                                    modifier = Modifier
-                                        .offset(x = targetXDp, y = targetYDp)
-                                        .width(eventWidthDp)
-                                        .graphicsLayer {
-                                            alpha = 0.85f
-                                            shadowElevation = 8f
-                                            scaleX = dragScale
-                                            scaleY = dragScale
-                                        }
-                                )
-
-                                val timeLabel = WeekViewUtils.minutesToTimeLabel(dragState.targetStartMinutes, is24Hour)
-                                Surface(
-                                    shadowElevation = 2.dp,
-                                    shape = RoundedCornerShape(4.dp),
-                                    color = MaterialTheme.colorScheme.inverseSurface,
-                                    modifier = Modifier
-                                        .offset(x = targetXDp, y = targetYDp - 24.dp)
-                                ) {
-                                    Text(
-                                        text = timeLabel,
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.inverseOnSurface,
-                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                        },
+                                        onEventDrag = { offset ->
+                                            if (dragState.isDragging) {
+                                                val newX = dragState.currentOffsetX + offset.x
+                                                val newY = dragState.currentOffsetY + offset.y
+                                                val (targetDate, targetMinutes) = WeekViewUtils.calculateDragTarget(
+                                                    fingerX = newX,
+                                                    fingerY = newY,
+                                                    columnWidth = columnWidthPx,
+                                                    visibleDates = visibleDates,
+                                                    hourHeightPx = currentHourHeightPx,
+                                                    scrollOffsetPx = 0,
+                                                    startHour = startHour
+                                                )
+                                                val clampedMinutes = WeekViewUtils.clampDragStartMinutes(targetMinutes, dragState.durationMinutes)
+                                                dragState = dragState.copy(
+                                                    currentOffsetX = newX,
+                                                    currentOffsetY = newY,
+                                                    targetDate = targetDate,
+                                                    targetStartMinutes = clampedMinutes
+                                                )
+                                            }
+                                        },
+                                        onEventDragEnd = handleDragEnd,
+                                        onEventDragCancel = handleDragCancel,
+                                        isDropTarget = isDragging && dragState.targetDate == date,
+                                        modifier = Modifier.width(columnWidth)
                                     )
+                                }
+
+                                CurrentTimeIndicator(
+                                    hourHeight = hourHeight,
+                                    visibleDays = visibleDays,
+                                    startHour = startHour,
+                                    todayOffset = {
+                                        WeekViewUtils.dateToPage(today) - pagerState.currentPage
+                                    },
+                                    columnWidth = columnWidth
+                                )
+                            }
+
+                            val draggedEvent = dragState.draggedEvent
+                            if (isDragging && draggedEvent != null && dragState.targetDate != null) {
+                                val targetMinutesFromStart = dragState.targetStartMinutes - startHour * 60
+                                val targetYDp = with(density) { (targetMinutesFromStart.toFloat() / 60f * hourHeightPx).toDp() }
+                                val targetColumnIndex = visibleDates.indexOf(dragState.targetDate)
+                                val targetXDp = if (targetColumnIndex >= 0) columnWidth * targetColumnIndex else 0.dp
+                                val eventWidthDp = columnWidth - 2.dp
+
+                                val originalMinutesFromStart = dragState.originalStartMinutes - startHour * 60
+                                val originalYDp = with(density) { (originalMinutesFromStart.toFloat() / 60f * hourHeightPx).toDp() }
+                                val originalColumnIndex = visibleDates.indexOf(dragState.originalDate)
+                                if (originalColumnIndex >= 0) {
+                                    val originalXDp = columnWidth * originalColumnIndex
+                                    EventBlock(
+                                        displayEvent = draggedEvent,
+                                        height = dragState.eventHeight,
+                                        showEventEmojis = showEventEmojis,
+                                        timePattern = timePattern,
+                                        onClick = {},
+                                        modifier = Modifier
+                                            .offset(x = originalXDp, y = originalYDp)
+                                            .width(eventWidthDp)
+                                            .graphicsLayer { alpha = 0.3f }
+                                    )
+                                }
+
+                                if (targetColumnIndex >= 0) {
+                                    EventBlock(
+                                        displayEvent = draggedEvent,
+                                        height = dragState.eventHeight,
+                                        showEventEmojis = showEventEmojis,
+                                        timePattern = timePattern,
+                                        onClick = {},
+                                        modifier = Modifier
+                                            .offset(x = targetXDp, y = targetYDp)
+                                            .width(eventWidthDp)
+                                            .graphicsLayer {
+                                                alpha = 0.85f
+                                                shadowElevation = 8f
+                                                scaleX = dragScale
+                                                scaleY = dragScale
+                                            }
+                                    )
+
+                                    val timeLabel = WeekViewUtils.minutesToTimeLabel(dragState.targetStartMinutes, is24Hour)
+                                    Surface(
+                                        shadowElevation = 2.dp,
+                                        shape = RoundedCornerShape(4.dp),
+                                        color = MaterialTheme.colorScheme.inverseSurface,
+                                        modifier = Modifier
+                                            .offset(x = targetXDp, y = targetYDp - 24.dp)
+                                    ) {
+                                        Text(
+                                            text = timeLabel,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = MaterialTheme.colorScheme.inverseOnSurface,
+                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -760,20 +857,19 @@ private fun UnifiedTimeGrid(
     }
 }
 
-/**
- * Single day header cell (Mon 6, Tue 7, etc.)
- */
+/** Shows one day header: "Mon 6", or in [compact] mode a stacked narrow day name and number. */
 @Composable
 private fun DayHeaderCell(
     date: LocalDate,
     isToday: Boolean,
     isWeekend: Boolean,
     compact: Boolean = false,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val dayName = remember(date, compact) {
         if (compact) {
-            // Single letter: M, T, W, T, F, S, S
+            // Narrow day name, for example M, T, W in English.
             date.format(DateTimeFormatter.ofPattern("EEEEE", Locale.getDefault()))
         } else {
             date.format(DateTimeFormatter.ofPattern("EEE", Locale.getDefault()))
@@ -787,14 +883,22 @@ private fun DayHeaderCell(
     }
 
     if (compact) {
-        // Compact vertical layout for 7-day view: single letter + number stacked
+        // 7-day view: narrow day name above the number.
         Column(
-            modifier = modifier.padding(vertical = 4.dp),
+            modifier = modifier
+                // 48dp minimum tap target (WCAG and Material); the stacked name and number
+                // are shorter.
+                .heightIn(min = 48.dp)
+                .clickable(role = Role.Button, onClick = onClick)
+                .padding(vertical = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = dayName,
-                style = MaterialTheme.typography.labelSmall,
+                // A narrow day name and a 1-2 digit number don't fill even a 7-day column,
+                // so use the 3-day header's bodyMedium for legibility. The 48dp minimum
+                // height means the larger text neither wraps nor grows the row.
+                style = MaterialTheme.typography.bodyMedium,
                 color = textColor,
                 textAlign = TextAlign.Center
             )
@@ -805,16 +909,16 @@ private fun DayHeaderCell(
                             Modifier
                                 .clip(CircleShape)
                                 .background(MaterialTheme.colorScheme.inverseSurface)
-                                .padding(horizontal = 4.dp, vertical = 1.dp)
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
                         } else {
-                            Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                            Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         }
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = dayNumber,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal,
                     color = if (isToday) MaterialTheme.colorScheme.inverseOnSurface else textColor,
                     textAlign = TextAlign.Center
@@ -822,9 +926,13 @@ private fun DayHeaderCell(
             }
         }
     } else {
-        // Standard horizontal layout for 3-day view: "Wed 11"
+        // 3-day view: "Wed 11" on one line.
         Row(
-            modifier = modifier.padding(vertical = 8.dp),
+            modifier = modifier
+                // 48dp minimum tap target (WCAG and Material).
+                .heightIn(min = 48.dp)
+                .clickable(role = Role.Button, onClick = onClick)
+                .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -863,42 +971,58 @@ private fun DayHeaderCell(
 }
 
 /**
- * All-day events row with pager synchronization.
+ * Shows the all-day strip for [visibleDates], or nothing when no visible day has an event.
  *
- * Collapsed (the default) shows one all-day event per day plus a "+N more" badge —
- * the historical behavior. When [allDayRowsExpanded] is true each day fills up to
- * [WeekViewUtils.MAX_ALLDAY_ROWS_EXPANDED] rows adaptively. A chevron on the fixed
- * "All day" label toggles the two states; it is hidden when no visible day has more
- * than one all-day event (nothing to expand).
+ * Collapsed (the default) shows [WeekViewUtils.MAX_ALLDAY_ROWS_COLLAPSED] row; expanded shows
+ * up to [WeekViewUtils.MAX_ALLDAY_ROWS_EXPANDED]. Events that don't fit a day's rows go behind
+ * a "+N" badge overlaid on that column ([computeAllDayStripRender]). Tapping the "All day" label
+ * toggles the two states; its chevron and the toggle show only when some visible day has more
+ * events than the collapsed row holds.
  */
 @Composable
 private fun AllDayEventsPagerRow(
     visibleDates: List<LocalDate>,
-    allDayEventsByDate: Map<LocalDate, List<DisplayEvent>>,
+    allDayEvents: List<DisplayEvent>,
     timeColumnWidth: Dp,
     allDayRowsExpanded: Boolean,
     onAllDayRowsToggle: () -> Unit,
     showEventEmojis: Boolean = true,
+    timePattern: String = "h:mma",
     onEventClick: (DisplayEvent) -> Unit,
     onOverflowClick: (List<DisplayEvent>) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Check if any visible day has all-day events
-    val hasAnyEvents = visibleDates.any { date ->
-        allDayEventsByDate[date]?.isNotEmpty() == true
+    val visibleDayCodes = remember(visibleDates) {
+        visibleDates.map { DayPagerUtils.localDateToDayCode(it) }
     }
 
+    // Per-day event counts, a multi-day event once per day it touches. They decide only whether
+    // the strip renders and whether it can toggle, not how spans are laid out.
+    val perDayCounts = remember(visibleDayCodes, allDayEvents) {
+        visibleDayCodes.map { dayCode ->
+            allDayEvents.count { it.startDay <= dayCode && it.endDay >= dayCode }
+        }
+    }
+
+    val hasAnyEvents = perDayCounts.any { it > 0 }
     if (!hasAnyEvents) return
 
-    // Chevron visibility: is there any day with more than one all-day event to
-    // expand? Delegated to the unit-tested WeekViewUtils helper (single source of
-    // truth) and memoized so the per-day count pass only re-runs when inputs change.
-    val canToggle by remember(visibleDates, allDayEventsByDate) {
-        derivedStateOf {
-            WeekViewUtils.anyAllDayColumnHasOverflowWhenCollapsed(
-                visibleDates.map { allDayEventsByDate[it]?.size ?: 0 }
-            )
-        }
+    // Whether any day has more events than the collapsed row holds (`WeekViewUtilsTest`).
+    val canToggle = remember(perDayCounts) {
+        WeekViewUtils.anyAllDayColumnHasOverflowWhenCollapsed(perDayCounts)
+    }
+
+    val maxRows = if (allDayRowsExpanded) {
+        WeekViewUtils.MAX_ALLDAY_ROWS_EXPANDED
+    } else {
+        WeekViewUtils.MAX_ALLDAY_ROWS_COLLAPSED
+    }
+
+    // Shared across every chip in the strip instead of one TextMeasurer per chip.
+    val textMeasurer = rememberTextMeasurer()
+
+    val render = remember(visibleDayCodes, allDayEvents, maxRows) {
+        computeAllDayStripRender(visibleDayCodes, allDayEvents, maxRows)
     }
 
     // Chevron points up when expanded (tap to collapse), down when collapsed.
@@ -915,23 +1039,21 @@ private fun AllDayEventsPagerRow(
 
     Row(
         modifier = modifier
+            .testTag(TEST_TAG_ALL_DAY_STRIP)
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
-            // Match the chevron's 300ms tween so the strip resize and the arrow
-            // rotation finish together on a toggle.
+            // Same 300ms tween as the chevron, so the resize and the rotation end together.
             .animateContentSize(animationSpec = tween(300))
             .padding(vertical = 4.dp)
     ) {
-        // Label column — the "All day" caption with, when there's something to
-        // expand, a chevron stacked beneath it. The column is only 48dp wide, so
-        // the chevron goes below the caption rather than beside it (which would
-        // overflow the width in English and longer locales).
+        // Label column: the "All day" caption, with the chevron below it when the strip can
+        // toggle. The column is 48dp wide, so a chevron beside the caption would overflow it in
+        // English and longer locales.
         Box(
             modifier = Modifier
                 .width(timeColumnWidth)
-                // When there's something to expand, the whole "All day" label toggles
-                // the strip; guarantee a 48dp tap target (WCAG / Material minimum),
-                // since the caption + chevron alone are shorter than that.
+                // When the strip can toggle, the whole label is the toggle, with a 48dp
+                // minimum tap target (WCAG and Material); the caption and chevron are shorter.
                 .then(
                     if (canToggle) {
                         Modifier
@@ -948,11 +1070,10 @@ private fun AllDayEventsPagerRow(
                     text = stringResource(R.string.label_all_day),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    // The gutter is a fixed 48dp; longer translations ("Toute la
-                    // journée") would wrap to a second line and grow the strip out of
-                    // alignment with the day cells. Keep one line and shrink to fit,
-                    // down to a still-legible floor; only the longest few locales pass
-                    // that floor and ellipsize.
+                    // The gutter is a fixed 48dp; a longer translation ("Toute la journée")
+                    // would wrap and grow the strip out of line with the day cells. Keep one
+                    // line and shrink to fit, down to a still-legible floor; only the longest
+                    // few locales pass that floor and ellipsize.
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     autoSize = TextAutoSize.StepBased(
@@ -974,85 +1095,134 @@ private fun AllDayEventsPagerRow(
             }
         }
 
-        // All-day events - one column per visible day (up to 7 in WEEK mode),
-        // derived from visibleDates. No HorizontalPager here to avoid gesture
-        // conflicts with the main time grid.
-        Row(modifier = Modifier.weight(1f)) {
-            visibleDates.forEach { date ->
-                val dayEvents = allDayEventsByDate[date].orEmpty()
+        // One row per lane, one column per visible day. A bar is one wide chip across the
+        // columns it covers. No HorizontalPager here, so the strip has no gesture conflict with
+        // the time grid. The "+N" badges are an overlay (the second Row below) because a
+        // column's rows can all be bars, and a badge row could be squeezed out and silently
+        // drop events.
+        //
+        // When a column overflows, this box gets the label's 48dp minimum height so the
+        // bottom-anchored overlay, which matchParentSize's this box, reaches the strip's bottom
+        // instead of sitting mid-strip over a bar's end time. It must stay a conditional
+        // minimum, never fillMaxHeight: filling would starve the scrolling time grid, and
+        // without overflow the strip stays tight to its rows.
+        val hasOverflow = render.overflowByColumn.any { it != null }
+        Box(
+            modifier = Modifier.weight(1f)
+                .then(if (hasOverflow) Modifier.heightIn(min = 48.dp) else Modifier)
+        ) {
+            Column {
+                render.slots.forEach { row ->
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        var col = 0
+                        while (col < row.size) {
+                            when (val slot = row[col]) {
+                                is AllDaySlot.BarSegment -> {
+                                    val span = slot.span
+                                    val width = span.endCol - span.startCol + 1
+                                    CompactEventChip(
+                                        displayEvent = span.displayEvent,
+                                        onClick = { onEventClick(span.displayEvent) },
+                                        textMeasurer = textMeasurer,
+                                        showEventEmojis = showEventEmojis,
+                                        // Show the start or end time only when that day is
+                                        // visible: a leftFlush bar starts before the window,
+                                        // a rightFlush bar ends after it.
+                                        showStartTime = !span.displayEvent.isAllDay && !span.leftFlush,
+                                        showEndTime = !span.displayEvent.isAllDay && !span.rightFlush,
+                                        timePattern = timePattern,
+                                        shape = RoundedCornerShape(
+                                            topStart = if (span.leftFlush) 0.dp else 4.dp,
+                                            bottomStart = if (span.leftFlush) 0.dp else 4.dp,
+                                            topEnd = if (span.rightFlush) 0.dp else 4.dp,
+                                            bottomEnd = if (span.rightFlush) 0.dp else 4.dp,
+                                        ),
+                                        modifier = Modifier
+                                            .weight(width.toFloat())
+                                            .padding(horizontal = 2.dp)
+                                    )
+                                    col = span.endCol + 1
+                                }
+                                is AllDaySlot.CellEvent -> {
+                                    CompactEventChip(
+                                        displayEvent = slot.event,
+                                        onClick = { onEventClick(slot.event) },
+                                        textMeasurer = textMeasurer,
+                                        showEventEmojis = showEventEmojis,
+                                        // Start time only on the event's start day: a
+                                        // multi-day event without a lane has a cell on every
+                                        // day it touches.
+                                        showStartTime = !slot.event.isAllDay && slot.event.startDay == visibleDayCodes[col],
+                                        timePattern = timePattern,
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(horizontal = 2.dp)
+                                    )
+                                    col++
+                                }
+                                AllDaySlot.Empty -> {
+                                    Box(modifier = Modifier.weight(1f).padding(horizontal = 2.dp))
+                                    col++
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-                CompactEventCell(
-                    events = dayEvents,
-                    expanded = allDayRowsExpanded,
-                    showEventEmojis = showEventEmojis,
-                    onEventClick = onEventClick,
-                    onOverflowClick = onOverflowClick,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 2.dp)
-                )
+            // Overflow badges, one per column, at the bottom-end corner whatever the column's
+            // rows show.
+            Row(modifier = Modifier.matchParentSize()) {
+                for (col in visibleDayCodes.indices) {
+                    val overflow = render.overflowByColumn.getOrNull(col)
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        if (overflow != null) {
+                            // "+N" without "more" to fit the narrow columns. The minimum
+                            // size makes the tap target larger than the small text.
+                            Box(
+                                modifier = Modifier
+                                    .padding(horizontal = 3.dp, vertical = 1.dp)
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                                    .clickable { onOverflowClick(overflow.events) }
+                                    .defaultMinSize(minWidth = 24.dp, minHeight = 18.dp)
+                                    .padding(horizontal = 3.dp, vertical = 1.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.status_more_events_compact, overflow.count),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Medium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
 
-
 /**
- * Compact event cell for all-day rows: renders the visible event chips, then a
- * "+N more" badge for any remainder (which opens the overflow sheet). Collapsed
- * ([expanded] = false) shows one row — the historical behavior; expanded fills up
- * to [WeekViewUtils.MAX_ALLDAY_ROWS_EXPANDED]. Row counts come from the shared
- * [WeekViewUtils] helpers so the unit-tested logic is the single source of truth.
- */
-@Composable
-private fun CompactEventCell(
-    events: List<DisplayEvent>,
-    expanded: Boolean,
-    showEventEmojis: Boolean = true,
-    onEventClick: (DisplayEvent) -> Unit,
-    onOverflowClick: (List<DisplayEvent>) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    if (events.isEmpty()) {
-        Box(modifier = modifier)
-        return
-    }
-
-    val visibleRows = WeekViewUtils.allDayVisibleRows(events.size, expanded)
-    val overflowCount = WeekViewUtils.allDayOverflowCount(events.size, expanded)
-
-    Column(modifier = modifier) {
-        events.take(visibleRows).forEach { event ->
-            CompactEventChip(
-                displayEvent = event,
-                onClick = { onEventClick(event) },
-                showEventEmojis = showEventEmojis
-            )
-        }
-
-        if (overflowCount > 0) {
-            Text(
-                text = stringResource(R.string.status_more_events, overflowCount),
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .clickable { onOverflowClick(events) }
-                    .padding(horizontal = 4.dp, vertical = 2.dp)
-            )
-        }
-    }
-}
-
-/**
- * Compact event chip for all-day event rows.
+ * Shows one event of the all-day strip as a one-line chip: title, optional start time after it
+ * and optional end time at the right edge.
  */
 @Composable
 private fun CompactEventChip(
     displayEvent: DisplayEvent,
     onClick: () -> Unit,
+    textMeasurer: TextMeasurer,
     showEventEmojis: Boolean = true,
+    showStartTime: Boolean = false,
+    showEndTime: Boolean = false,
+    timePattern: String = "h:mma",
+    shape: RoundedCornerShape = RoundedCornerShape(4.dp),
     modifier: Modifier = Modifier
 ) {
     val color = displayEvent.eventColor ?: displayEvent.calendarColor
@@ -1073,36 +1243,126 @@ private fun CompactEventChip(
     }
 
     val stateLabel = eventStateDescription(isPast = false, isDeclined = displayEvent.isDeclinedByMe, isCancelled = displayEvent.isCancelled)
-    Row(
+    val titleStyle = MaterialTheme.typography.labelSmall
+    val timeText = if (showStartTime) {
+        ", ${WeekViewUtils.formatTime(displayEvent.startTs, timePattern)}"
+    } else {
+        null
+    }
+    // End time at the bar's right edge, pushed there by the Spacer below. Without it,
+    // "Sample event, 6:15am" doesn't say when the event ends.
+    val endTimeText = if (showEndTime) {
+        WeekViewUtils.formatTime(displayEvent.endTs, timePattern)
+    } else {
+        null
+    }
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 1.dp)
             .alpha(declinedCardAlpha(isPast = false, isDeclined = displayEvent.isDeclinedByMe, isCancelled = displayEvent.isCancelled))
             .then(if (stateLabel != null) Modifier.semantics { stateDescription = stateLabel } else Modifier)
-            .clip(RoundedCornerShape(4.dp))
+            .clip(shape)
             .then(
-                if (isFree) Modifier.border(2.dp, calColor, RoundedCornerShape(4.dp))
+                if (isFree) Modifier.border(2.dp, calColor, shape)
                 else Modifier
             )
             .background(backgroundColor)
             .clickable(onClick = onClick)
-            .padding(horizontal = 4.dp, vertical = 2.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 4.dp, vertical = 2.dp)
     ) {
-        Text(
-            text = displayText,
-            style = MaterialTheme.typography.labelSmall,
-            color = textColor,
-            textDecoration = declinedTitleDecoration(displayEvent.isDeclinedByMe, displayEvent.isCancelled),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+        // TextOverflow.Ellipsis can size its box to the full available width while the glyphs
+        // stop short, leaving a gap before the time label. Truncating the title here to the
+        // pixel budget keeps it flush against the label.
+        val timeWidthPx = remember(timeText, titleStyle) {
+            timeText?.let { measureWidthPx(textMeasurer, it, titleStyle) } ?: 0
+        }
+        val endTimeWidthPx = remember(endTimeText, titleStyle) {
+            // Leading gap ("  ") so the right-capped time never touches the title.
+            endTimeText?.let { measureWidthPx(textMeasurer, "  $it", titleStyle) } ?: 0
+        }
+        val availableTitleWidthPx = (constraints.maxWidth - timeWidthPx - endTimeWidthPx).coerceAtLeast(0)
+        val truncatedTitle = remember(displayText, availableTitleWidthPx, titleStyle) {
+            truncateWithEllipsis(textMeasurer, displayText, titleStyle, availableTitleWidthPx)
+        }
+        // When the chip has no room for the title, truncatedTitle is empty; drop the leading
+        // ", " so no comma dangles before the time.
+        val displayTimeText = if (truncatedTitle.isEmpty()) timeText?.removePrefix(", ") else timeText
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = truncatedTitle,
+                style = titleStyle,
+                color = textColor,
+                textDecoration = declinedTitleDecoration(displayEvent.isDeclinedByMe, displayEvent.isCancelled),
+                maxLines = 1,
+                overflow = TextOverflow.Clip
+            )
+            if (displayTimeText != null) {
+                Text(
+                    text = displayTimeText,
+                    style = titleStyle,
+                    color = textColor,
+                    textDecoration = declinedTitleDecoration(displayEvent.isDeclinedByMe, displayEvent.isCancelled),
+                    maxLines = 1,
+                    overflow = TextOverflow.Clip
+                )
+            }
+            if (endTimeText != null) {
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = endTimeText,
+                    style = titleStyle,
+                    color = textColor,
+                    textDecoration = declinedTitleDecoration(displayEvent.isDeclinedByMe, displayEvent.isCancelled),
+                    maxLines = 1,
+                    overflow = TextOverflow.Clip
+                )
+            }
+        }
     }
 }
 
+private fun measureWidthPx(measurer: TextMeasurer, text: String, style: TextStyle): Int =
+    measurer.measure(text = text, style = style, maxLines = 1).size.width
+
 /**
- * Time label for the time grid.
+ * Truncates [text] to fit [maxWidthPx], with an ellipsis when it doesn't fit whole.
+ *
+ * Measures with [measurer] and [style] instead of Text's overflow handling, so the returned
+ * string's width is its rendered width. Returns "" when [maxWidthPx] is 0 or less and the
+ * ellipsis alone when nothing else fits; never splits a surrogate pair.
  */
+private fun truncateWithEllipsis(
+    measurer: TextMeasurer,
+    text: String,
+    style: TextStyle,
+    maxWidthPx: Int
+): String {
+    if (maxWidthPx <= 0) return ""
+    if (measureWidthPx(measurer, text, style) <= maxWidthPx) return text
+
+    val ellipsis = "…"
+    val budget = maxWidthPx - measureWidthPx(measurer, ellipsis, style)
+    if (budget <= 0) return ellipsis
+
+    var lo = 0
+    var hi = text.length
+    while (lo < hi) {
+        val mid = (lo + hi + 1) / 2
+        val candidate = safeSubstring(text, mid)
+        if (measureWidthPx(measurer, candidate, style) <= budget) lo = mid else hi = mid - 1
+    }
+    return safeSubstring(text, lo) + ellipsis
+}
+
+private fun safeSubstring(text: String, length: Int): String = when {
+    length >= text.length -> text
+    length <= 0 -> ""
+    Character.isHighSurrogate(text[length - 1]) -> text.substring(0, length - 1)
+    else -> text.substring(0, length)
+}
+
+/** Shows one hour label of the time grid, aligned to the top of its hour. */
 @Composable
 private fun TimeLabel(
     hour: Int,
@@ -1125,9 +1385,7 @@ private fun TimeLabel(
     }
 }
 
-/**
- * Grid lines for the time grid.
- */
+/** Draws a line at the top of each hour of the time grid. */
 @Composable
 private fun GridLines(
     hourHeight: Dp,
@@ -1154,13 +1412,13 @@ private fun GridLines(
 }
 
 /**
- * Current time indicator positioned on today's column.
+ * Draws the current-time line and dot across today's column, updated each minute.
  *
- * @param hourHeight Height of one hour in the grid
- * @param visibleDays Number of visible day columns (3 or 7)
- * @param startHour First hour of the grid (6 for 3-day, 0 for week)
- * @param todayOffset Lambda returning today's column offset (0-based) from current page
- * @param columnWidth Width of one day column
+ * Draws nothing when today isn't visible or the time is outside the grid's hours.
+ *
+ * @param visibleDays number of visible day columns: 1, 3 or 7
+ * @param startHour first hour of the grid
+ * @param todayOffset returns today's 0-based column index from the current page
  */
 @Composable
 private fun CurrentTimeIndicator(
@@ -1173,7 +1431,7 @@ private fun CurrentTimeIndicator(
 ) {
     val endHour = WeekViewUtils.END_HOUR
 
-    // Update current time every minute
+    // Update at the start of each minute.
     var currentMinutes by remember { mutableStateOf(LocalTime.now().let { it.hour * 60 + it.minute }) }
 
     LaunchedEffect(Unit) {
@@ -1186,15 +1444,12 @@ private fun CurrentTimeIndicator(
         }
     }
 
-    // Only show if current time is in visible grid range
     val startMinutes = startHour * 60
     val endMinutes = endHour * 60
     if (currentMinutes < startMinutes || currentMinutes >= endMinutes) return
 
-    // Calculate today's visible position
     val todayVisibleOffset = todayOffset()
 
-    // Only show if today is in visible range
     if (todayVisibleOffset !in 0 until visibleDays) return
 
     val minutesFromStart = currentMinutes - startMinutes
@@ -1203,23 +1458,30 @@ private fun CurrentTimeIndicator(
     val xOffset = columnWidth * todayVisibleOffset
     val indicatorColor = MaterialTheme.colorScheme.error
 
+    // The marker box is as tall as the dot and offset up by half its height so the line
+    // lands on the current minute.
+    val lineThickness = 2.dp
+    val dotRadius = 4.dp
+    val markerHeight = dotRadius * 2
+
     Box(
         modifier = modifier
-            .offset(x = xOffset, y = yOffset)
+            .offset(x = xOffset, y = yOffset - markerHeight / 2)
             .width(columnWidth)
-            .height(2.dp)
+            .height(markerHeight)
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
+            val centerY = size.height / 2
             drawLine(
                 color = indicatorColor,
-                start = Offset(0f, size.height / 2),
-                end = Offset(size.width, size.height / 2),
-                strokeWidth = 2f
+                start = Offset(0f, centerY),
+                end = Offset(size.width, centerY),
+                strokeWidth = lineThickness.toPx()
             )
             drawCircle(
                 color = indicatorColor,
-                radius = 4f,
-                center = Offset(4f, size.height / 2)
+                radius = dotRadius.toPx(),
+                center = Offset(dotRadius.toPx(), centerY)
             )
         }
     }
@@ -1228,11 +1490,11 @@ private fun CurrentTimeIndicator(
 // ==================== Helper Functions ====================
 
 /**
- * Group events by LocalDate.
+ * Groups events by date, listing a multi-day event under every day from its startDay to its
+ * endDay.
  *
- * Uses pre-calculated startDay/endDay from DisplayEvent which are already
- * UTC-aware for all-day events.
- * Expands multi-day events to appear on all days they span.
+ * Uses DisplayEvent's precomputed startDay and endDay, which already handle all-day events'
+ * UTC dates.
  */
 private fun groupEventsByDate(
     events: List<DisplayEvent>
@@ -1240,7 +1502,6 @@ private fun groupEventsByDate(
     val result = mutableMapOf<LocalDate, MutableList<DisplayEvent>>()
 
     for (displayEvent in events) {
-        // Expand multi-day events to all days they span
         var currentDay = displayEvent.startDay
         while (currentDay <= displayEvent.endDay) {
             val date = DayPagerUtils.dayCodeToLocalDate(currentDay)
@@ -1253,9 +1514,7 @@ private fun groupEventsByDate(
 }
 
 
-/**
- * Preview/placeholder version of week view for empty state.
- */
+/** Shows the no-events-this-week message. */
 @Composable
 fun EmptyWeekView(
     modifier: Modifier = Modifier

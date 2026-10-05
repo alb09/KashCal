@@ -13,14 +13,14 @@ dependencies {
         exclude(group = "com.fasterxml.jackson.core")
     }
 
-    // Kotlin coroutines (aligned with KashCal's version catalog)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    // Kotlin coroutines, kept at the version catalog's `coroutines` version
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
-    // Testing (JUnit 5)
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+    // Testing (JUnit Jupiter 6)
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
     testImplementation(kotlin("test"))
-    testImplementation("io.mockk:mockk:1.14.3")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    testImplementation("io.mockk:mockk:1.14.11")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.11.0")
 }
 
 java {

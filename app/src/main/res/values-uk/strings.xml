@@ -85,6 +85,7 @@
     <string name="action_delete">Видалити</string>
     <string name="action_confirm">Підтвердити</string>
     <string name="action_discard">Відхилити</string>
+    <string name="action_discard_confirm">Відхилити?</string>
     <string name="action_dismiss">Закрити</string>
     <string name="action_show_all">Показати все</string>
     <string name="action_connect">Підключити</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Перейти до дати</string>
     <string name="label_week">Т</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Налаштування</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Підключіть iCloud, щоб бачити свої події тут</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Що нового</string>
-    <string name="whats_new_dismiss">Зрозуміло</string>
+    <string name="whats_new_later">Пізніше</string>
     <string name="whats_new_v598_title">Допоможи зберегти Android відкритим</string>
     <string name="whats_new_v598_body">Google змінює спосіб встановлення застосунків на пристрій. Нам потрібна твоя допомога.</string>
     <string name="whats_new_v598_action_label">Перейти на keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Постійна подяка</string>
+    <string name="whats_new_v732_body">Цей випуск присвячено тим, хто підтримує KashCal. Невеликий внесок із великою регулярною віддачею.</string>
+    <string name="whats_new_v732_caption">Ще не підтримуєш нас?</string>
+    <string name="whats_new_v732_action_label">Додай нас до своїх планів</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Підключити iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Календарі на цьому сервері не знайдено.</string>
     <string name="caldav_error_unexpected">Неочікувана помилка. Повторіть спробу.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nЯкщо це сервер у локальній мережі, дозволь доступ до локальної мережі для підключення.</string>
+    <string name="caldav_error_connection_refused_insecure">Сервер перенаправив з’єднання туди, куди KashCal не переходить (на незашифровану адресу або в цикл перенаправлень), тому KashCal зупинився, не надіславши твій пароль. Перевір адресу сервера.</string>
     <string name="local_network_banner_title">Потрібен доступ до локальної мережі</string>
     <string name="local_network_banner_body">Схоже, цей сервер у твоїй локальній мережі. Дозволь доступ до локальної мережі, щоб KashCal міг до нього підключитися.</string>
     <string name="local_network_banner_allow">Дозволити доступ</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Календар</string>
     <string name="account_detail_sync_calendar_subtitle">Синхронізувати календарі цього облікового запису</string>
     <string name="account_detail_sync_contacts">Контакти</string>
-    <string name="account_detail_sync_contacts_subtitle">Синхронізувати контакти цього облікового запису з телефоном</string>
+    <string name="account_detail_sync_contacts_subtitle">Синхронізувати контакти цього облікового запису</string>
     <string name="account_detail_contacts_permission_needed">Доступ до контактів вимкнено. Надайте доступ, щоб контакти й далі синхронізувалися.</string>
     <string name="account_detail_contacts_grant">Надати доступ</string>
     <string name="contact_sync_enabled_for">Синхронізація контактів для %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Пропонувати назви подій</string>
     <string name="settings_suggest_titles_info">Коли ви вводите назву нової події, пропонувати назви, які ви вже використовували, щоб повторювані події створювалися одним дотиком. Ранжуються за частотою та давністю використання.</string>
     <string name="settings_week_numbers">Номери тижнів</string>
+    <string name="settings_multiday_in_allday_strip">Багатоденні події в смузі на весь день</string>
+    <string name="settings_multiday_in_allday_strip_info">Показувати події з часом, що тривають більше одного дня, у смузі на весь день у верхній частині тижневого перегляду замість сітки часу. Вимкніть, щоб залишити їх у сітці часу щодня.</string>
     <string name="settings_show_declined">Показувати відхилені події</string>
     <string name="settings_widget_event_limit">Ліміт подій у віджеті</string>
     <string name="settings_widget_event_limit_hint">Максимум подій на день у віджетах</string>
@@ -883,6 +889,8 @@
     <string name="dialog_edit_recurring_title">Зберегти зміни в</string>
     <string name="dialog_delete_recurring_title">Видалити</string>
     <string name="dialog_move_recurring_title">Перемістити</string>
+    <string name="snackbar_event_rescheduled">Подію перенесено</string>
+    <string name="snackbar_reschedule_failed">Не вдалося перенести подію</string>
     <string name="recurring_this_event">Ця подія</string>
     <string name="recurring_all_events">Усі події</string>
 
@@ -1203,6 +1211,7 @@
     <string name="ics_sync_every_n_hours">Кожні %1$d год.</string>
     <string name="ics_sync_daily">Щоденно</string>
     <string name="ics_sync_weekly">Щотижня</string>
+    <string name="default_calendar_name">Календар</string>
     <string name="ics_url_required">Потрібен URL</string>
     <string name="ics_url_invalid_scheme">URL має починатися з http://, https:// або webcal://</string>
     <string name="ics_fetch_error_http">Сервер повернув помилку (%1$d). Перевірте URL.</string>

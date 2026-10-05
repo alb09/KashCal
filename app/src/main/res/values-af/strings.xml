@@ -85,6 +85,7 @@
     <string name="action_delete">Verwyder</string>
     <string name="action_confirm">Bevestig</string>
     <string name="action_discard">Gooi Weg</string>
+    <string name="action_discard_confirm">Gooi weg?</string>
     <string name="action_dismiss">Maak Toe</string>
     <string name="action_show_all">Wys Alles</string>
     <string name="action_connect">Koppel</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Gaan na datum</string>
     <string name="label_week">W</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Instellings</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Koppel iCloud om jou gebeurtenisse hier te sien</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Wat\'s nuut</string>
-    <string name="whats_new_dismiss">Verstaan</string>
+    <string name="whats_new_later">Later</string>
     <string name="whats_new_v598_title">Help om Android oop te hou</string>
     <string name="whats_new_v598_body">Google verander die manier waarop jy programme op jou toestel installeer. Ons het jou hulp nodig.</string>
     <string name="whats_new_v598_action_label">Besoek keepandroidopen.org</string>
+    <string name="whats_new_v732_title">\'n Blywende dankie</string>
+    <string name="whats_new_v732_body">Hierdie weergawe is opgedra aan KashCal se ondersteuners. \'n Klein bydrae met \'n groot blywende voordeel.</string>
+    <string name="whats_new_v732_caption">Nog nie \'n ondersteuner nie?</string>
+    <string name="whats_new_v732_action_label">Voeg ons by jou planne</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Koppel iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Geen kalenders op hierdie bediener gevind nie.</string>
     <string name="caldav_error_unexpected">Onverwagte fout. Probeer asseblief weer.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nAs dit \'n bediener op jou plaaslike netwerk is, laat plaaslike netwerktoegang toe om te verbind.</string>
+    <string name="caldav_error_connection_refused_insecure">Die bediener het die verbinding na ’n plek herlei waarheen KashCal nie volg nie (’n onversleutelde adres of ’n herleidingslus), dus het KashCal gestop voordat jou wagwoord gestuur is. Gaan die bedieneradres na.</string>
     <string name="local_network_banner_title">Plaaslike netwerktoegang benodig</string>
     <string name="local_network_banner_body">Hierdie bediener lyk of dit op jou plaaslike netwerk is. Laat plaaslike netwerktoegang toe sodat KashCal daaraan kan verbind.</string>
     <string name="local_network_banner_allow">Laat toegang toe</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Kalender</string>
     <string name="account_detail_sync_calendar_subtitle">Sinkroniseer hierdie rekening se kalenders</string>
     <string name="account_detail_sync_contacts">Kontakte</string>
-    <string name="account_detail_sync_contacts_subtitle">Sinkroniseer hierdie rekening se kontakte na jou foon</string>
+    <string name="account_detail_sync_contacts_subtitle">Sinkroniseer hierdie rekening se kontakte</string>
     <string name="account_detail_contacts_permission_needed">Kontaktoestemming is af. Verleen toegang om kontakte te bly sinkroniseer.</string>
     <string name="account_detail_contacts_grant">Verleen toegang</string>
     <string name="contact_sync_enabled_for">Sinchroniseer kontakte vir %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Stel gebeurtenistitels voor</string>
     <string name="settings_suggest_titles_info">Terwyl jy \'n nuwe gebeurtenis benoem, stel titels voor wat jy voorheen gebruik het, sodat herhalende gebeurtenisse een tik is. Gerangskik volgens hoe gereeld en hoe onlangs jy hulle gebruik het.</string>
     <string name="settings_week_numbers">Weeknommers</string>
+    <string name="settings_multiday_in_allday_strip">Veeldaagse afsprake in heeldag-strook</string>
+    <string name="settings_multiday_in_allday_strip_info">Wys afsprake met tye wat oor meer as een dag strek in die heeldag-strook bo-aan die weekaansig, in plaas van in die tydrooster. Skakel af om hulle in die tydrooster op elke dag te hou.</string>
     <string name="settings_show_declined">Wys afgewysde gebeurtenisse</string>
     <string name="settings_widget_event_limit">Widget-gebeurtenislimiet</string>
     <string name="settings_widget_event_limit_hint">Meeste gebeurtenisse per dag in legstukke gewys</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">Stoor veranderinge na</string>
     <string name="dialog_delete_recurring_title">Vee uit</string>
     <string name="dialog_move_recurring_title">Skuif</string>
+    <string name="snackbar_event_rescheduled">Gebeurtenis is herskeduleer</string>
+    <string name="snackbar_reschedule_failed">Kon nie gebeurtenis herskeduleer nie</string>
     <string name="recurring_this_event">Hierdie gebeurtenis</string>
     <string name="recurring_all_events">Alle gebeurtenisse</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">Elke %1$d ure</string>
     <string name="ics_sync_daily">Daagliks</string>
     <string name="ics_sync_weekly">Weekliks</string>
+    <string name="default_calendar_name">Kalender</string>
     <string name="ics_url_required">URL is verpligtend</string>
     <string name="ics_url_invalid_scheme">URL moet begin met http://, https://, of webcal://</string>
     <string name="ics_fetch_error_http">Bediener het \'n fout teruggestuur (%1$d). Gaan asseblief die URL na.</string>

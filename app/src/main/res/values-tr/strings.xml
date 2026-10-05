@@ -85,6 +85,7 @@
     <string name="action_delete">Sil</string>
     <string name="action_confirm">Onayla</string>
     <string name="action_discard">At</string>
+    <string name="action_discard_confirm">Atılsın mı?</string>
     <string name="action_dismiss">Kapat</string>
     <string name="action_show_all">Tümünü Göster</string>
     <string name="action_connect">Bağlan</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Tarihe git</string>
     <string name="label_week">H</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Ayarlar</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Etkinliklerini burada görmek için iCloud\'a bağlan</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Yenilikler</string>
-    <string name="whats_new_dismiss">Anladım</string>
+    <string name="whats_new_later">Belki sonra</string>
     <string name="whats_new_v598_title">Android\'ın açık kalmasına yardım et</string>
     <string name="whats_new_v598_body">Google, cihazınıza uygulama yükleme şeklinizi değiştiriyor. Yardımınıza ihtiyacımız var.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org adresini ziyaret et</string>
+    <string name="whats_new_v732_title">Kalıcı bir teşekkür</string>
+    <string name="whats_new_v732_body">Bu sürüm KashCal\'in destekçilerine adanmıştır. Küçük bir katkı, büyük ve sürekli bir getiri.</string>
+    <string name="whats_new_v732_caption">Henüz destekçi değil misin?</string>
+    <string name="whats_new_v732_action_label">Bizi planlarına ekle</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud\'a Bağlan</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Bu sunucuda takvim bulunamadı.</string>
     <string name="caldav_error_unexpected">Beklenmeyen hata. Lütfen tekrar deneyin.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nBu, yerel ağındaki bir sunucuysa, bağlanmak için yerel ağ erişimine izin ver.</string>
+    <string name="caldav_error_connection_refused_insecure">Sunucu bağlantıyı KashCal\'ın izlemediği bir yere yönlendirdi (şifrelenmemiş bir adres ya da yönlendirme döngüsü), bu yüzden KashCal şifreni göndermeden önce durdu. Sunucu adresini kontrol et.</string>
     <string name="local_network_banner_title">Yerel ağ erişimi gerekli</string>
     <string name="local_network_banner_body">Bu sunucu, yerel ağında gibi görünüyor. KashCal\'ın ona bağlanabilmesi için yerel ağ erişimine izin ver.</string>
     <string name="local_network_banner_allow">Erişime izin ver</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Takvim</string>
     <string name="account_detail_sync_calendar_subtitle">Bu hesabın takvimlerini eşitle</string>
     <string name="account_detail_sync_contacts">Kişiler</string>
-    <string name="account_detail_sync_contacts_subtitle">Bu hesabın kişilerini telefonuna eşitle</string>
+    <string name="account_detail_sync_contacts_subtitle">Bu hesabın kişilerini eşitle</string>
     <string name="account_detail_contacts_permission_needed">Kişiler izni kapalı. Kişilerin eşitlenmesini sürdürmek için erişime izin ver.</string>
     <string name="account_detail_contacts_grant">Erişime izin ver</string>
     <string name="contact_sync_enabled_for">%1$s için kişiler senkronize ediliyor</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Etkinlik başlıklarını öner</string>
     <string name="settings_suggest_titles_info">Yeni bir etkinliğe ad verirken daha önce kullandığın başlıkları öner, böylece tekrarlanan etkinlikler tek dokunuş olur. Ne sıklıkta ve ne kadar yakın zamanda kullandığına göre sıralanır.</string>
     <string name="settings_week_numbers">Hafta Numaraları</string>
+    <string name="settings_multiday_in_allday_strip">Tüm gün şeridinde çok günlü etkinlikler</string>
+    <string name="settings_multiday_in_allday_strip_info">Bir günden fazla süren saatli etkinlikleri zaman ızgarası yerine hafta görünümünün üst kısmındaki tüm gün şeridinde göster. Bunları her gün zaman ızgarasında tutmak için kapatın.</string>
     <string name="settings_show_declined">Reddedilen etkinlikleri göster</string>
     <string name="settings_widget_event_limit">Widget Etkinlik Sınırı</string>
     <string name="settings_widget_event_limit_hint">Widget\'larda günde gösterilen en fazla etkinlik</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">Değişiklikleri kaydet</string>
     <string name="dialog_delete_recurring_title">Sil</string>
     <string name="dialog_move_recurring_title">Taşı</string>
+    <string name="snackbar_event_rescheduled">Etkinlik yeniden planlandı</string>
+    <string name="snackbar_reschedule_failed">Etkinlik yeniden planlanamadı</string>
     <string name="recurring_this_event">Bu etkinlik</string>
     <string name="recurring_all_events">Tüm etkinlikler</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">Her %1$d saatte bir</string>
     <string name="ics_sync_daily">Günlük</string>
     <string name="ics_sync_weekly">Haftalık</string>
+    <string name="default_calendar_name">Takvim</string>
     <string name="ics_url_required">URL gerekli</string>
     <string name="ics_url_invalid_scheme">URL http://, https:// veya webcal:// ile başlamalı</string>
     <string name="ics_fetch_error_http">Sunucu bir hata döndürdü (%1$d). Lütfen URL\'yi kontrol et.</string>

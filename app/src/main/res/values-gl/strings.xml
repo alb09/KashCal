@@ -85,6 +85,7 @@
     <string name="action_delete">Eliminar</string>
     <string name="action_confirm">Confirmar</string>
     <string name="action_discard">Descartar</string>
+    <string name="action_discard_confirm">Descartar os cambios?</string>
     <string name="action_dismiss">Desbotar</string>
     <string name="action_show_all">Mostrar todo</string>
     <string name="action_connect">Conectar</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Ir á data</string>
     <string name="label_week">S</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Configuración</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Conecta iCloud para ver os teus eventos aquí</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Novidades</string>
-    <string name="whats_new_dismiss">Entendido</string>
+    <string name="whats_new_later">Máis tarde</string>
     <string name="whats_new_v598_title">Axuda a manter Android aberto</string>
     <string name="whats_new_v598_body">Google está cambiando o xeito en que instalas aplicacións no teu dispositivo. Necesitamos a túa axuda.</string>
     <string name="whats_new_v598_action_label">Visitar keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Un agradecemento permanente</string>
+    <string name="whats_new_v732_body">Esta versión está dedicada a quen apoia KashCal. Unha pequena achega cun gran beneficio recorrente.</string>
+    <string name="whats_new_v732_caption">Aínda non nos apoias?</string>
+    <string name="whats_new_v732_action_label">Engádenos aos teus plans</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Conectar iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Non se atoparon calendarios neste servidor.</string>
     <string name="caldav_error_unexpected">Erro inesperado. Ténteo de novo.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nSe este é un servidor da túa rede local, permite o acceso á rede local para conectar.</string>
+    <string name="caldav_error_connection_refused_insecure">O servidor redirixiu a conexión a un sitio ao que KashCal non vai (un enderezo sen cifrar ou un bucle de redireccións), así que KashCal detívose antes de enviar o teu contrasinal. Revisa o enderezo do servidor.</string>
     <string name="local_network_banner_title">Precísase acceso á rede local</string>
     <string name="local_network_banner_body">Semella que este servidor está na túa rede local. Permite o acceso á rede local para que KashCal poida conectarse a el.</string>
     <string name="local_network_banner_allow">Permitir o acceso</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Calendario</string>
     <string name="account_detail_sync_calendar_subtitle">Sincroniza os calendarios desta conta</string>
     <string name="account_detail_sync_contacts">Contactos</string>
-    <string name="account_detail_sync_contacts_subtitle">Sincroniza os contactos desta conta no teu teléfono</string>
+    <string name="account_detail_sync_contacts_subtitle">Sincroniza os contactos desta conta</string>
     <string name="account_detail_contacts_permission_needed">O permiso de contactos está desactivado. Concede acceso para seguir sincronizando os contactos.</string>
     <string name="account_detail_contacts_grant">Conceder acceso</string>
     <string name="contact_sync_enabled_for">Sincronizando os contactos de %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Suxerir títulos de eventos</string>
     <string name="settings_suggest_titles_info">Ao poñer nome a un novo evento, suxire títulos que xa usaches, de xeito que os eventos repetidos sexan a un só toque. Ordenados segundo a frecuencia e a recencia coa que os usaches.</string>
     <string name="settings_week_numbers">Números de semana</string>
+    <string name="settings_multiday_in_allday_strip">Eventos de varios días na franxa de todo o día</string>
+    <string name="settings_multiday_in_allday_strip_info">Mostra os eventos con hora que abranguen máis dun día na franxa de todo o día na parte superior da vista semanal, no canto da grella horaria. Desactívao para mantelos na grella horaria cada día.</string>
     <string name="settings_show_declined">Amosar eventos rexeitados</string>
     <string name="settings_widget_event_limit">Límite de eventos do widget</string>
     <string name="settings_widget_event_limit_hint">Máximo de eventos mostrados por día nos widgets</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">Gardar cambios en</string>
     <string name="dialog_delete_recurring_title">Eliminar</string>
     <string name="dialog_move_recurring_title">Mover</string>
+    <string name="snackbar_event_rescheduled">Evento reprogramado</string>
+    <string name="snackbar_reschedule_failed">Non se puido reprogramar o evento</string>
     <string name="recurring_this_event">Este evento</string>
     <string name="recurring_all_events">Todos os eventos</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">Cada %1$d horas</string>
     <string name="ics_sync_daily">Diariamente</string>
     <string name="ics_sync_weekly">Semanalmente</string>
+    <string name="default_calendar_name">Calendario</string>
     <string name="ics_url_required">Reqúrese unha URL</string>
     <string name="ics_url_invalid_scheme">A URL debe comezar con http://, https://, ou webcal://</string>
     <string name="ics_fetch_error_http">O servidor devolveu un erro (%1$d). Comproba a URL.</string>

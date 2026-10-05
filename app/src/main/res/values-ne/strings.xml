@@ -85,6 +85,7 @@
     <string name="action_delete">मेट्नुहोस्</string>
     <string name="action_confirm">पुष्टि गर्नुहोस्</string>
     <string name="action_discard">खारेज गर्नुहोस्</string>
+    <string name="action_discard_confirm">खारेज गर्ने?</string>
     <string name="action_dismiss">हटाउनुहोस्</string>
     <string name="action_show_all">सबै देखाउनुहोस्</string>
     <string name="action_connect">जोड्नुहोस्</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">मितिमा जानुहोस्</string>
     <string name="label_week">ह</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">सेटिङ</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">तपाईंका कार्यक्रमहरू यहाँ हेर्न iCloud जोड्नुहोस्</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">नयाँ के छ</string>
-    <string name="whats_new_dismiss">बुझेँ</string>
+    <string name="whats_new_later">पछि</string>
     <string name="whats_new_v598_title">Android खुला राख्न मद्दत गर्नुहोस्</string>
     <string name="whats_new_v598_body">Google तपाईंको यन्त्रमा एपहरू स्थापना गर्ने तरिका बदल्दैछ। हामीलाई तपाईंको सहयोग चाहिन्छ।</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org मा जानुहोस्</string>
+    <string name="whats_new_v732_title">एक स्थायी धन्यवाद</string>
+    <string name="whats_new_v732_body">यो रिलिज KashCal का समर्थकहरूलाई समर्पित छ। सानो योगदान, तर ठूलो र निरन्तर प्रतिफल।</string>
+    <string name="whats_new_v732_caption">अझै समर्थक बन्नुभएको छैन?</string>
+    <string name="whats_new_v732_action_label">हामीलाई तपाईंको योजनामा थप्नुहोस्</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud जोड्नुहोस्</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">यो सर्भरमा कुनै क्यालेन्डर फेला परेन।</string>
     <string name="caldav_error_unexpected">अप्रत्याशित त्रुटि। फेरि प्रयास गर्नुहोस्।</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nयदि यो तपाईंको स्थानीय नेटवर्कको सर्भर हो भने, जडान गर्न स्थानीय नेटवर्क पहुँचलाई अनुमति दिनुहोस्।</string>
+    <string name="caldav_error_connection_refused_insecure">सर्भरले जडानलाई KashCal नजाने ठाउँमा पठायो (इन्क्रिप्ट नगरिएको ठेगाना, वा रिडाइरेक्ट लुप), त्यसैले तपाईंको पासवर्ड पठाउनुअघि नै KashCal रोकियो। सर्भरको ठेगाना जाँच गर्नुहोस्।</string>
     <string name="local_network_banner_title">स्थानीय नेटवर्क पहुँच आवश्यक छ</string>
     <string name="local_network_banner_body">यो सर्भर तपाईंको स्थानीय नेटवर्कमा भएको जस्तो देखिन्छ। KashCal ले यसमा जडान गर्न सकोस् भन्नाका लागि स्थानीय नेटवर्क पहुँचलाई अनुमति दिनुहोस्।</string>
     <string name="local_network_banner_allow">पहुँच अनुमति दिनुहोस्</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">पात्रो</string>
     <string name="account_detail_sync_calendar_subtitle">यो खाताका पात्रोहरू सिंक गर्नुहोस्</string>
     <string name="account_detail_sync_contacts">सम्पर्कहरू</string>
-    <string name="account_detail_sync_contacts_subtitle">यो खाताका सम्पर्कहरू तपाईंको फोनमा सिंक गर्नुहोस्</string>
+    <string name="account_detail_sync_contacts_subtitle">यो खाताका सम्पर्कहरू सिंक गर्नुहोस्</string>
     <string name="account_detail_contacts_permission_needed">सम्पर्क अनुमति बन्द छ। सम्पर्कहरू सिंक भइरहन पहुँच दिनुहोस्।</string>
     <string name="account_detail_contacts_grant">पहुँच दिनुहोस्</string>
     <string name="contact_sync_enabled_for">%1$s का लागि सम्पर्कहरू सिंक गर्दै</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">कार्यक्रम शीर्षकहरू सुझाव</string>
     <string name="settings_suggest_titles_info">तपाईंले नयाँ घटनालाई नाम दिँदा, तपाईंले पहिले प्रयोग गरेका शीर्षकहरू सुझाव दिन्छ, ताकि दोहोरिने घटनाहरू एक ट्यापमै हुन्छन्। तपाईंले कति पटक र कति भर्खरै प्रयोग गर्नुभयो भन्ने आधारमा क्रमबद्ध गरिएको।</string>
     <string name="settings_week_numbers">हप्ता नम्बरहरू</string>
+    <string name="settings_multiday_in_allday_strip">पूरे दिनको स्ट्रिपमा बहु-दिन घटनाहरू</string>
+    <string name="settings_multiday_in_allday_strip_info">एक दिनभन्दा बढी अवधिका समय-निर्धारित घटनाहरूलाई समय ग्रिडको सट्टा साप्ताहिक दृश्यको माथिल्लो भागमा रहेको पूरे दिनको स्ट्रिपमा देखाउनुहोस्। हरेक दिन तिनीहरूलाई समय ग्रिडमा राख्न बन्द गर्नुहोस्।</string>
     <string name="settings_show_declined">अस्वीकार गरिएका कार्यक्रमहरू देखाउनुहोस्</string>
     <string name="settings_widget_event_limit">विजेट कार्यक्रम सीमा</string>
     <string name="settings_widget_event_limit_hint">विजेटमा प्रति दिन देखाइने अधिकतम घटनाहरू</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">परिवर्तनहरू सुरक्षित गर्नुहोस्</string>
     <string name="dialog_delete_recurring_title">मेटाउनुहोस्</string>
     <string name="dialog_move_recurring_title">सार्नुहोस्</string>
+    <string name="snackbar_event_rescheduled">कार्यक्रमको समय परिवर्तन गरियो</string>
+    <string name="snackbar_reschedule_failed">कार्यक्रमको समय परिवर्तन गर्न सकिएन</string>
     <string name="recurring_this_event">यो कार्यक्रम</string>
     <string name="recurring_all_events">सबै कार्यक्रम</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">प्रत्येक %1$d घण्टा</string>
     <string name="ics_sync_daily">दैनिक</string>
     <string name="ics_sync_weekly">साप्ताहिक</string>
+    <string name="default_calendar_name">पात्रो</string>
     <string name="ics_url_required">URL आवश्यक छ</string>
     <string name="ics_url_invalid_scheme">URL http://, https://, वा webcal:// बाट सुरु हुनुपर्छ</string>
     <string name="ics_fetch_error_http">सर्भरले त्रुटि फर्कायो (%1$d)। कृपया URL जाँच गर्नुहोस्।</string>

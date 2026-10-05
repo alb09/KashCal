@@ -15,10 +15,9 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 /**
- * Behavior tests for the CardDAV quirks seam: sync-token invalidation, address
- * book skip rules, URL building, provider identity, and that extraction
- * delegates through to [CardDavXmlParser]. Both the generic default and the
- * iCloud specialization are exercised.
+ * Tests the CardDAV quirks: provider identity, DNS host discovery, sync-token invalidation,
+ * address book skip rules, URL building, and extraction through [CardDavXmlParser]. Covers the
+ * generic default and the iCloud and Zoho subclasses.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [34])
@@ -63,10 +62,9 @@ class CardDavQuirksTest {
 
     @Test
     fun `zoho pins the contacts host and requires an app-specific password`() {
-        // Zoho serves contacts from contacts.zoho.com — a different host than its
-        // calendar.zoho.com CalDAV endpoint and unrelated to the login email domain
-        // (which can be a custom or Gmail-backed address). The host is therefore
-        // pinned as a bootstrap constant, mirroring the iCloud precedent.
+        // Zoho serves contacts from contacts.zoho.com, a different host from its
+        // calendar.zoho.com CalDAV endpoint and unrelated to the login email domain (which can
+        // be a custom or Gmail-backed address), so the host is pinned as for iCloud.
         assertEquals("zoho", zoho.providerId)
         assertEquals("Zoho", zoho.displayName)
         assertEquals("https://contacts.zoho.com", zoho.baseUrl)
@@ -77,16 +75,16 @@ class CardDavQuirksTest {
 
     @Test
     fun `generic quirks discover the host via dns`() {
-        // A generic CardDAV account's contacts host is unknown a priori, so RFC 6764
-        // SRV/TXT discovery from the account's email domain is the right entry point.
+        // A generic CardDAV account's contacts host isn't known up front, so it starts with
+        // RFC 6764 SRV and TXT discovery from the account's email domain.
         assertTrue(default.discoverHostViaDns)
     }
 
     @Test
     fun `pinned-host quirks never discover via dns`() {
-        // iCloud and Zoho have a known contacts host unrelated to the login email
-        // domain; running SRV on that domain could only misdirect them (a
-        // same-registrable-domain _carddavs record would silently redirect sync).
+        // iCloud and Zoho have a known contacts host unrelated to the login email domain; SRV
+        // on that domain could only misdirect them (a same-registrable-domain _carddavs record
+        // would silently redirect sync).
         assertFalse(icloud.discoverHostViaDns)
         assertFalse(zoho.discoverHostViaDns)
     }
@@ -115,7 +113,7 @@ class CardDavQuirksTest {
     // ---- shouldSkipAddressBook ----
 
     @Test
-    fun `skips notification and inbox collections`() {
+    fun `skips notification and inbox collections by path segment`() {
         assertTrue(default.shouldSkipAddressBook("/addressbooks/alice/notifications/", null))
         assertTrue(default.shouldSkipAddressBook("/addressbooks/alice/inbox/", "Inbox"))
     }
@@ -123,6 +121,27 @@ class CardDavQuirksTest {
     @Test
     fun `keeps a normal address book`() {
         assertFalse(default.shouldSkipAddressBook("/addressbooks/alice/default/", "Personal"))
+    }
+
+    @Test
+    fun `keeps a real address book regardless of its display name`() {
+        // The display name never drives the skip
+        // ([DefaultCardDavQuirks.shouldSkipAddressBook]), so a user's book named "Inbox" or
+        // "Notifications" must survive.
+        assertFalse(default.shouldSkipAddressBook("/addressbooks/alice/personal/", "Inbox"))
+        assertFalse(default.shouldSkipAddressBook("/addressbooks/alice/family/", "Notifications"))
+    }
+
+    @Test
+    fun `keeps a user book whose path merely contains a reserved word as a substring`() {
+        // A reserved word (inbox, outbox, notification) matches only as a whole path segment,
+        // so a book or username that contains one must not be skipped. On Radicale a
+        // substring match would silently hide real contacts
+        // ([DefaultCardDavQuirks.shouldSkipAddressBook]).
+        assertFalse(default.shouldSkipAddressBook("/testuser1/notifications-contacts/", "Notifications Contacts"))
+        assertFalse(default.shouldSkipAddressBook("/testuser1/my-inbox-friends/", "Inbox Friends"))
+        assertFalse(default.shouldSkipAddressBook("/inbox-user/contacts/", "Personal"))
+        assertFalse(default.shouldSkipAddressBook("/u/outbox-archive/", "Outbox Archive"))
     }
 
     // ---- URL building ----

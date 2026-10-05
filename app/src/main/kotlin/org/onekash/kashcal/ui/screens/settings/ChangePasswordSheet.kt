@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -30,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -37,10 +40,9 @@ import org.onekash.kashcal.R
 import org.onekash.kashcal.domain.model.AccountProvider
 
 /**
- * Bottom sheet for changing an account's password.
- *
- * Shows provider-appropriate label (App-Specific Password for iCloud, Password for CalDAV).
- * Displays validation errors and loading state during credential check.
+ * Shows the sheet for changing an account's password, labeled "App-Specific Password" for
+ * iCloud and "Password" for other providers, with [error] under the field. While
+ * [isValidating] the controls are disabled and a dismiss request is ignored.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,6 +88,12 @@ fun ChangePasswordSheet(
                 singleLine = true,
                 label = { Text(passwordLabel) },
                 enabled = !isValidating,
+                // Password IME (no suggestions/autocorrect); this also lets Compose
+                // advertise the field as a password to the user's autofill provider.
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
                 visualTransformation = if (passwordVisible) {
                     VisualTransformation.None
                 } else {

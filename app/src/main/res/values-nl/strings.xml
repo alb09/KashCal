@@ -85,6 +85,7 @@
     <string name="action_delete">Verwijderen</string>
     <string name="action_confirm">Bevestigen</string>
     <string name="action_discard">Verwerpen</string>
+    <string name="action_discard_confirm">Verwerpen?</string>
     <string name="action_dismiss">Sluiten</string>
     <string name="action_show_all">Alles tonen</string>
     <string name="action_connect">Verbinden</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Ga naar datum</string>
     <string name="label_week">W</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Instellingen</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Koppel iCloud om je afspraken hier te zien</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Wat is nieuw</string>
-    <string name="whats_new_dismiss">Begrepen</string>
+    <string name="whats_new_later">Later</string>
     <string name="whats_new_v598_title">Help Android open te houden</string>
     <string name="whats_new_v598_body">Google verandert de manier waarop je apps op je apparaat installeert. We hebben je hulp nodig.</string>
     <string name="whats_new_v598_action_label">Bezoek keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Een blijvend dankjewel</string>
+    <string name="whats_new_v732_body">Deze versie is opgedragen aan de supporters van KashCal. Een kleine bijdrage met een groot, terugkerend effect.</string>
+    <string name="whats_new_v732_caption">Nog geen supporter?</string>
+    <string name="whats_new_v732_action_label">Voeg ons toe aan je plannen</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud verbinden</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Geen agenda\'s gevonden op deze server.</string>
     <string name="caldav_error_unexpected">Onverwachte fout. Probeer het opnieuw.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nAls dit een server op je lokale netwerk is, sta dan toegang tot het lokale netwerk toe om verbinding te maken.</string>
+    <string name="caldav_error_connection_refused_insecure">De server stuurde de verbinding door naar een plek waar KashCal niet naartoe gaat (een onversleuteld adres of een doorstuurlus), dus KashCal is gestopt voordat je wachtwoord werd verzonden. Controleer het serveradres.</string>
     <string name="local_network_banner_title">Toegang tot lokaal netwerk nodig</string>
     <string name="local_network_banner_body">Deze server lijkt op je lokale netwerk te staan. Sta toegang tot het lokale netwerk toe zodat KashCal er verbinding mee kan maken.</string>
     <string name="local_network_banner_allow">Toegang toestaan</string>
@@ -530,7 +534,7 @@
     <string name="account_detail_sync_calendar">Agenda</string>
     <string name="account_detail_sync_calendar_subtitle">Agenda\'s van dit account synchroniseren</string>
     <string name="account_detail_sync_contacts">Contacten</string>
-    <string name="account_detail_sync_contacts_subtitle">Contacten van dit account met je telefoon synchroniseren</string>
+    <string name="account_detail_sync_contacts_subtitle">Contacten van dit account synchroniseren</string>
     <string name="account_detail_contacts_permission_needed">Toestemming voor contacten staat uit. Geef toegang om contacten te blijven synchroniseren.</string>
     <string name="account_detail_contacts_grant">Toegang geven</string>
     <string name="contact_sync_enabled_for">Contacten synchroniseren voor %1$s</string>
@@ -570,6 +574,8 @@
     <string name="settings_suggest_titles">Titels van afspraken voorstellen</string>
     <string name="settings_suggest_titles_info">Terwijl je een nieuwe afspraak een naam geeft, stelt de app titels voor die je eerder hebt gebruikt, zodat terugkerende afspraken één tik zijn. Gerangschikt op hoe vaak en hoe recent je ze hebt gebruikt.</string>
     <string name="settings_week_numbers">Weeknummers</string>
+    <string name="settings_multiday_in_allday_strip">Meerdaagse afspraken in de hele-dag-balk</string>
+    <string name="settings_multiday_in_allday_strip_info">Toon afspraken met een tijd die langer dan één dag duren in de hele-dag-balk boven aan de weekweergave, in plaats van in het tijdrooster. Zet uit om ze elke dag in het tijdrooster te houden.</string>
     <string name="settings_show_declined">Geweigerde afspraken tonen</string>
     <string name="settings_widget_event_limit">Widget-afspraklimiet</string>
     <string name="settings_widget_event_limit_hint">Maximaal aantal afspraken per dag in widgets</string>
@@ -818,6 +824,8 @@
     <string name="dialog_edit_recurring_title">Wijzigingen opslaan in</string>
     <string name="dialog_delete_recurring_title">Verwijderen</string>
     <string name="dialog_move_recurring_title">Verplaatsen</string>
+    <string name="snackbar_event_rescheduled">Afspraak verplaatst</string>
+    <string name="snackbar_reschedule_failed">Kan afspraak niet verplaatsen</string>
     <string name="recurring_this_event">Deze afspraak</string>
     <string name="recurring_all_events">Alle afspraken</string>
 
@@ -1106,6 +1114,7 @@
     <string name="ics_sync_every_n_hours">Elke %1$d uur</string>
     <string name="ics_sync_daily">Dagelijks</string>
     <string name="ics_sync_weekly">Wekelijks</string>
+    <string name="default_calendar_name">Agenda</string>
     <string name="ics_url_required">URL is vereist</string>
     <string name="ics_url_invalid_scheme">URL moet beginnen met http://, https:// of webcal://</string>
     <string name="ics_fetch_error_http">De server gaf een foutmelding (%1$d). Controleer de URL.</string>

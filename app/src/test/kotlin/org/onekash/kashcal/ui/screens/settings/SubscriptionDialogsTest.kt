@@ -7,11 +7,9 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * Unit tests for SubscriptionDialogs.
- *
- * Note: Composable UI interaction tests require AndroidX Compose testing
- * which runs as instrumented tests. These unit tests verify the supporting
- * logic and data used by the dialogs.
+ * Tests models and constants beside the subscription dialogs: [FetchCalendarState],
+ * [AccentColors], [SubscriptionColors], and the [IcsSubscriptionUiModel] fields
+ * [EditSubscriptionDialog] seeds its form from. No test renders a dialog.
  */
 class SubscriptionDialogsTest {
 
@@ -70,29 +68,12 @@ class SubscriptionDialogsTest {
 
     @Test
     fun `AccentColors success shades exist`() {
-        // Success green stays fixed-hue; only the shade adapts to the surface
+        // Success green keeps its hue; only the shade adapts to the surface.
         assertNotNull(AccentColors.SuccessLight)
         assertNotNull(AccentColors.SuccessDark)
     }
 
-    // ==================== SyncInterval Integration Tests ====================
-
-    @Test
-    fun `getSyncIntervalLabel works for all standard intervals`() {
-        assertEquals("Every hour", getSyncIntervalLabel(1))
-        assertEquals("Every 6 hours", getSyncIntervalLabel(6))
-        assertEquals("Every 12 hours", getSyncIntervalLabel(12))
-        assertEquals("Daily", getSyncIntervalLabel(24))
-        assertEquals("Weekly", getSyncIntervalLabel(168))
-    }
-
-    @Test
-    fun `getSyncIntervalLabel returns fallback for non-standard interval`() {
-        val result = getSyncIntervalLabel(3)
-        assertTrue(result.contains("3"))
-    }
-
-    // ==================== SubscriptionColors Usage Tests ====================
+    // ==================== SubscriptionColors ====================
 
     @Test
     fun `SubscriptionColors default is in all colors list`() {
@@ -101,13 +82,12 @@ class SubscriptionDialogsTest {
 
     @Test
     fun `SubscriptionColors all has 5 colors for single-row picker`() {
-        // Dialog uses 5 colors in single row
+        // The palette promises five colors that fit in one row.
         assertEquals(5, SubscriptionColors.all.size)
     }
 
     @Test
     fun `SubscriptionColors all fit in single row`() {
-        // Verify all 5 colors for single-row display
         assertEquals(5, SubscriptionColors.all.size)
         assertTrue(SubscriptionColors.all.contains(SubscriptionColors.Blue))
         assertTrue(SubscriptionColors.all.contains(SubscriptionColors.Green))
@@ -116,27 +96,7 @@ class SubscriptionDialogsTest {
         assertTrue(SubscriptionColors.all.contains(SubscriptionColors.Purple))
     }
 
-    // ==================== URL Validation for Dialogs ====================
-
-    @Test
-    fun `AddSubscriptionDialog accepts https URLs`() {
-        val error = validateSubscriptionUrl("https://calendar.example.com/feed.ics")
-        assertEquals(null, error)
-    }
-
-    @Test
-    fun `AddSubscriptionDialog accepts webcal URLs`() {
-        val error = validateSubscriptionUrl("webcal://calendar.example.com/feed.ics")
-        assertEquals(null, error)
-    }
-
-    @Test
-    fun `AddSubscriptionDialog rejects empty URL`() {
-        val error = validateSubscriptionUrl("")
-        assertNotNull(error)
-    }
-
-    // ==================== IcsSubscriptionUiModel for EditDialog ====================
+    // ==================== IcsSubscriptionUiModel for EditSubscriptionDialog ====================
 
     @Test
     fun `EditSubscriptionDialog uses subscription name`() {

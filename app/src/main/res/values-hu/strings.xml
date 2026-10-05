@@ -85,6 +85,7 @@
     <string name="action_delete">Törlés</string>
     <string name="action_confirm">Megerősítés</string>
     <string name="action_discard">Elvetés</string>
+    <string name="action_discard_confirm">Elveted?</string>
     <string name="action_dismiss">Elrejtés</string>
     <string name="action_show_all">Összes mutatása</string>
     <string name="action_connect">Csatlakozás</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Ugrás dátumra</string>
     <string name="label_week">H</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Beállítások</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Csatlakozz az iCloud-hoz, hogy itt lásd az eseményeidet</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Újdonságok</string>
-    <string name="whats_new_dismiss">Értem</string>
+    <string name="whats_new_later">Talán később</string>
     <string name="whats_new_v598_title">Segíts nyitva tartani az Androidot</string>
     <string name="whats_new_v598_body">A Google megváltoztatja, ahogyan alkalmazásokat telepítesz a készülékedre. Szükségünk van a segítségedre.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org megnyitása</string>
+    <string name="whats_new_v732_title">Egy tartós köszönet</string>
+    <string name="whats_new_v732_body">Ez a kiadás a KashCal támogatóinak szól. Kis hozzájárulás, nagy és visszatérő haszonnal.</string>
+    <string name="whats_new_v732_caption">Még nem vagy támogató?</string>
+    <string name="whats_new_v732_action_label">Vegyél fel minket a terveidbe</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud csatlakoztatása</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Ezen a kiszolgálón nem található naptár.</string>
     <string name="caldav_error_unexpected">Váratlan hiba. Próbáld újra.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nHa ez egy szerver a helyi hálózatodon, engedélyezd a helyi hálózati hozzáférést a csatlakozáshoz.</string>
+    <string name="caldav_error_connection_refused_insecure">A szerver olyan helyre irányította át a kapcsolatot, ahová a KashCal nem követi (titkosítatlan címre vagy átirányítási hurokba), ezért a KashCal leállt, mielőtt elküldte volna a jelszavadat. Ellenőrizd a szerver címét.</string>
     <string name="local_network_banner_title">Helyi hálózati hozzáférés szükséges</string>
     <string name="local_network_banner_body">Úgy tűnik, ez a szerver a helyi hálózatodon van. Engedélyezd a helyi hálózati hozzáférést, hogy a KashCal csatlakozhasson hozzá.</string>
     <string name="local_network_banner_allow">Hozzáférés engedélyezése</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Naptár</string>
     <string name="account_detail_sync_calendar_subtitle">A fiók naptárainak szinkronizálása</string>
     <string name="account_detail_sync_contacts">Névjegyek</string>
-    <string name="account_detail_sync_contacts_subtitle">A fiók névjegyeinek szinkronizálása a telefonodra</string>
+    <string name="account_detail_sync_contacts_subtitle">A fiók névjegyeinek szinkronizálása</string>
     <string name="account_detail_contacts_permission_needed">A Névjegyek engedély ki van kapcsolva. Add meg a hozzáférést, hogy a névjegyek szinkronizálása folytatódjon.</string>
     <string name="account_detail_contacts_grant">Hozzáférés megadása</string>
     <string name="contact_sync_enabled_for">Névjegyek szinkronizálása ehhez: %1$s</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Eseménycímek javaslata</string>
     <string name="settings_suggest_titles_info">Ahogy elnevezel egy új eseményt, felkínálja a korábban használt címeket, így az ismétlődő események egyetlen koppintással létrehozhatók. A gyakoriság és a legutóbbi használat szerint rangsorolva.</string>
     <string name="settings_week_numbers">Hétszámok</string>
+    <string name="settings_multiday_in_allday_strip">Több napos események az egész napos sávban</string>
+    <string name="settings_multiday_in_allday_strip_info">Az egynél több napig tartó, időponthoz kötött eseményeket az egész napos sávban jelenítse meg a heti nézet tetején, az időrács helyett. Kapcsolja ki, hogy minden nap az időrácsban maradjanak.</string>
     <string name="settings_show_declined">Visszautasított események megjelenítése</string>
     <string name="settings_widget_event_limit">Widget eseménykorlát</string>
     <string name="settings_widget_event_limit_hint">Naponta megjelenő események maximális száma a modulokban</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">Módosítások mentése</string>
     <string name="dialog_delete_recurring_title">Törlés</string>
     <string name="dialog_move_recurring_title">Áthelyezés</string>
+    <string name="snackbar_event_rescheduled">Esemény átütemezve</string>
+    <string name="snackbar_reschedule_failed">Nem sikerült átütemezni az eseményt</string>
     <string name="recurring_this_event">Ez az esemény</string>
     <string name="recurring_all_events">Összes esemény</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">%1$d óránként</string>
     <string name="ics_sync_daily">Naponta</string>
     <string name="ics_sync_weekly">Hetente</string>
+    <string name="default_calendar_name">Naptár</string>
     <string name="ics_url_required">URL szükséges</string>
     <string name="ics_url_invalid_scheme">Az URL-nek http://, https:// vagy webcal:// előtaggal kell kezdődnie</string>
     <string name="ics_fetch_error_http">A kiszolgáló hibát adott vissza (%1$d). Ellenőrizd az URL-t.</string>

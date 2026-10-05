@@ -85,6 +85,7 @@
     <string name="action_delete">Slett</string>
     <string name="action_confirm">Stadfest</string>
     <string name="action_discard">Forkast</string>
+    <string name="action_discard_confirm">Forkast?</string>
     <string name="action_dismiss">Avvis</string>
     <string name="action_show_all">Vis alle</string>
     <string name="action_connect">Kopla til</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Gå til dato</string>
     <string name="label_week">U</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Innstillingar</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Kopla til iCloud for å sjå hendingane dine her</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Nytt</string>
-    <string name="whats_new_dismiss">Forstått</string>
+    <string name="whats_new_later">Seinare</string>
     <string name="whats_new_v598_title">Hjelp til å halde Android open</string>
     <string name="whats_new_v598_body">Google endrar måten du installerer appar på eininga. Vi treng hjelpa di.</string>
     <string name="whats_new_v598_action_label">Besøk keepandroidopen.org</string>
+    <string name="whats_new_v732_title">Ein varig takk</string>
+    <string name="whats_new_v732_body">Denne versjonen er tileigna dei som støttar KashCal. Eit lite bidrag med stor, gjentakande gevinst.</string>
+    <string name="whats_new_v732_caption">Ikkje støttespelar enno?</string>
+    <string name="whats_new_v732_action_label">Ta oss med i planane dine</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Kopla til iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Ingen kalendrar funne på denne tenaren.</string>
     <string name="caldav_error_unexpected">Uventa feil. Prøv igjen.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nDersom dette er ein tenar på det lokale nettverket ditt, må du tillate tilgang til lokalt nettverk for å kople til.</string>
+    <string name="caldav_error_connection_refused_insecure">Tenaren sende tilkoplinga vidare til ein stad KashCal ikkje følgjer (ei ukryptert adresse eller ei omdirigeringssløyfe), så KashCal stoppa før passordet ditt vart sendt. Sjekk tenaradressa.</string>
     <string name="local_network_banner_title">Tilgang til lokalt nettverk krevst</string>
     <string name="local_network_banner_body">Denne tenaren ser ut til å vere på det lokale nettverket ditt. Tillat tilgang til lokalt nettverk så KashCal kan kople til han.</string>
     <string name="local_network_banner_allow">Tillat tilgang</string>
@@ -530,7 +534,7 @@
     <string name="account_detail_sync_calendar">Kalender</string>
     <string name="account_detail_sync_calendar_subtitle">Synkroniser kalendrane til denne kontoen</string>
     <string name="account_detail_sync_contacts">Kontakter</string>
-    <string name="account_detail_sync_contacts_subtitle">Synkroniser kontaktane til denne kontoen til telefonen din</string>
+    <string name="account_detail_sync_contacts_subtitle">Synkroniser kontaktane til denne kontoen</string>
     <string name="account_detail_contacts_permission_needed">Løyve for kontakter er av. Gi tilgang for å halde fram med å synkronisere kontakter.</string>
     <string name="account_detail_contacts_grant">Gi tilgang</string>
     <string name="contact_sync_enabled_for">Synkroniserer kontakter for %1$s</string>
@@ -570,6 +574,8 @@
     <string name="settings_suggest_titles">Foreslå hendingstitlar</string>
     <string name="settings_suggest_titles_info">Medan du gjev ei ny hending namn, blir titlar du har brukt før foreslått, slik at attkomande hendingar er eitt trykk unna. Rangert etter kor ofte og kor nyleg du har brukt dei.</string>
     <string name="settings_week_numbers">Vekenummer</string>
+    <string name="settings_multiday_in_allday_strip">Fleirdagshendingar i heildagsfeltet</string>
+    <string name="settings_multiday_in_allday_strip_info">Vis hendingar med klokkeslett som strekker seg over meir enn éin dag i heildagsfeltet øvst i vekevisinga, i staden for i tidsrutenettet. Slå av for å halde dei i tidsrutenettet kvar dag.</string>
     <string name="settings_show_declined">Vis avslåtte hendingar</string>
     <string name="settings_widget_event_limit">Widget-hendingsgrense</string>
     <string name="settings_widget_event_limit_hint">Flest hendingar vist per dag i modular</string>
@@ -818,6 +824,8 @@
     <string name="dialog_edit_recurring_title">Lagra endringar i</string>
     <string name="dialog_delete_recurring_title">Slett</string>
     <string name="dialog_move_recurring_title">Flytt</string>
+    <string name="snackbar_event_rescheduled">Hendinga er flytta</string>
+    <string name="snackbar_reschedule_failed">Kunne ikkje flytta hendinga</string>
     <string name="recurring_this_event">Denne hendinga</string>
     <string name="recurring_all_events">Alle hendingar</string>
 
@@ -1106,6 +1114,7 @@
     <string name="ics_sync_every_n_hours">Kvar %1$d. time</string>
     <string name="ics_sync_daily">Dagleg</string>
     <string name="ics_sync_weekly">Vekevis</string>
+    <string name="default_calendar_name">Kalender</string>
     <string name="ics_url_required">URL er påkrevd</string>
     <string name="ics_url_invalid_scheme">URL må starta med http://, https:// eller webcal://</string>
     <string name="ics_fetch_error_http">Tenaren returnerte ein feil (%1$d). Sjekk URL-en.</string>

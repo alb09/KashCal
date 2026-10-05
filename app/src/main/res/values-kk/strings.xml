@@ -85,6 +85,7 @@
     <string name="action_delete">Жою</string>
     <string name="action_confirm">Растау</string>
     <string name="action_discard">Қабылдамау</string>
+    <string name="action_discard_confirm">Қабылдамай ма?</string>
     <string name="action_dismiss">Жабу</string>
     <string name="action_show_all">Барлығын көрсету</string>
     <string name="action_connect">Қосылу</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Күнге өту</string>
     <string name="label_week">А</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Параметрлер</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Оқиғаларыңызды мұнда көру үшін iCloud-қа қосылыңыз</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Не жаңалық</string>
-    <string name="whats_new_dismiss">Түсіндім</string>
+    <string name="whats_new_later">Кейінірек</string>
     <string name="whats_new_v598_title">Android ашық қалуына көмектесіңіз</string>
     <string name="whats_new_v598_body">Google құрылғыңызға қолданбаларды орнату тәсілін өзгертуде. Сіздің көмегіңіз қажет.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org сайтына кіру</string>
+    <string name="whats_new_v732_title">Тұрақты алғыс</string>
+    <string name="whats_new_v732_body">Бұл шығарылым KashCal қолдаушыларына арналған. Үлкен әрі қайталанатын пайдасы бар шағын үлес.</string>
+    <string name="whats_new_v732_caption">Әлі қолдаушы емессіз бе?</string>
+    <string name="whats_new_v732_action_label">Бізді жоспарыңызға қосыңыз</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud қосу</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Бұл серверде күнтізбелер табылмады.</string>
     <string name="caldav_error_unexpected">Күтпеген қате. Қайталап көріңіз.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nЕгер бұл жергілікті желідегі сервер болса, қосылу үшін жергілікті желіге кіруге рұқсат етіңіз.</string>
+    <string name="caldav_error_connection_refused_insecure">Сервер қосылымды KashCal бармайтын жерге бағыттады (шифрланбаған мекенжайға немесе қайта бағыттау циклына), сондықтан KashCal құпия сөзіңізді жібермей тұрып тоқтады. Сервер мекенжайын тексеріңіз.</string>
     <string name="local_network_banner_title">Жергілікті желіге кіру қажет</string>
     <string name="local_network_banner_body">Бұл сервер жергілікті желіде тұрған сияқты. KashCal оған қосыла алуы үшін жергілікті желіге кіруге рұқсат етіңіз.</string>
     <string name="local_network_banner_allow">Кіруге рұқсат ету</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">Күнтізбе</string>
     <string name="account_detail_sync_calendar_subtitle">Осы есептік жазбаның күнтізбелерін синхрондау</string>
     <string name="account_detail_sync_contacts">Контактілер</string>
-    <string name="account_detail_sync_contacts_subtitle">Осы есептік жазбаның контактілерін телефоныңызға синхрондау</string>
+    <string name="account_detail_sync_contacts_subtitle">Осы есептік жазбаның контактілерін синхрондау</string>
     <string name="account_detail_contacts_permission_needed">Контактілерге рұқсат өшірулі. Контактілер синхрондалуын жалғастыру үшін рұқсат беріңіз.</string>
     <string name="account_detail_contacts_grant">Рұқсат беру</string>
     <string name="contact_sync_enabled_for">%1$s үшін контактілер синхрондалуда</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">Оқиға атауларын ұсыну</string>
     <string name="settings_suggest_titles_info">Жаңа оқиғаны атаған кезде, бұрын пайдаланған тақырыптарды ұсынады, сонда қайталанатын оқиғалар бір түртумен жасалады. Оларды қаншалықты жиі және қаншалықты жақында пайдаланғаныңызға қарай сұрыпталады.</string>
     <string name="settings_week_numbers">Апта нөмірлері</string>
+    <string name="settings_multiday_in_allday_strip">Күні бойы жолағындағы көп күндік оқиғалар</string>
+    <string name="settings_multiday_in_allday_strip_info">Бір күннен астам созылатын уақыты белгіленген оқиғаларды уақыт торының орнына апталық көріністің жоғарғы жағындағы күні бойы жолағында көрсету. Оларды әр күні уақыт торында сақтау үшін өшіріңіз.</string>
     <string name="settings_show_declined">Қабылданбаған оқиғаларды көрсету</string>
     <string name="settings_widget_event_limit">Виджет оқиға шектеуі</string>
     <string name="settings_widget_event_limit_hint">Виджеттерде күніне көрсетілетін оқиғалардың ең көбі</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">Өзгерістерді сақтау</string>
     <string name="dialog_delete_recurring_title">Жою</string>
     <string name="dialog_move_recurring_title">Жылжыту</string>
+    <string name="snackbar_event_rescheduled">Оқиға уақыты өзгертілді</string>
+    <string name="snackbar_reschedule_failed">Оқиға уақытын өзгерту мүмкін болмады</string>
     <string name="recurring_this_event">Бұл оқиға</string>
     <string name="recurring_all_events">Барлық оқиғалар</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">%1$d сағат сайын</string>
     <string name="ics_sync_daily">Күн сайын</string>
     <string name="ics_sync_weekly">Апта сайын</string>
+    <string name="default_calendar_name">Күнтізбе</string>
     <string name="ics_url_required">URL қажет</string>
     <string name="ics_url_invalid_scheme">URL http://, https://, немесе webcal:// арқылы басталуы тиіс</string>
     <string name="ics_fetch_error_http">Сервер қате қайтарды (%1$d). URL мекенжайын тексеріңіз.</string>

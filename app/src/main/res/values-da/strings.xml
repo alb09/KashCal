@@ -85,6 +85,7 @@
     <string name="action_delete">Slet</string>
     <string name="action_confirm">Bekræft</string>
     <string name="action_discard">Kassér</string>
+    <string name="action_discard_confirm">Kassér?</string>
     <string name="action_dismiss">Afvis</string>
     <string name="action_show_all">Vis alle</string>
     <string name="action_connect">Forbind</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">Gå til dato</string>
     <string name="label_week">U</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">Indstillinger</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">Forbind iCloud for at se dine begivenheder her</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">Nyheder</string>
-    <string name="whats_new_dismiss">Forstået</string>
+    <string name="whats_new_later">Senere</string>
     <string name="whats_new_v598_title">Hjælp med at holde Android åbent</string>
     <string name="whats_new_v598_body">Google ændrer den måde, du installerer apps på din enhed. Vi har brug for din hjælp.</string>
     <string name="whats_new_v598_action_label">Besøg keepandroidopen.org</string>
+    <string name="whats_new_v732_title">En vedvarende tak</string>
+    <string name="whats_new_v732_body">Denne udgivelse er dedikeret til dem, der støtter KashCal. Et lille bidrag med et stort, tilbagevendende udbytte.</string>
+    <string name="whats_new_v732_caption">Ikke støtte endnu?</string>
+    <string name="whats_new_v732_action_label">Tag os med i dine planer</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Forbind iCloud</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">Ingen kalendere fundet på denne server.</string>
     <string name="caldav_error_unexpected">Uventet fejl. Prøv igen.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nHvis dette er en server på dit lokale netværk, skal du tillade adgang til det lokale netværk for at oprette forbindelse.</string>
+    <string name="caldav_error_connection_refused_insecure">Serveren omdirigerede forbindelsen et sted hen, KashCal ikke følger (en ukrypteret adresse eller en omdirigeringsløkke), så KashCal stoppede, før din adgangskode blev sendt. Tjek serveradressen.</string>
     <string name="local_network_banner_title">Adgang til lokalt netværk kræves</string>
     <string name="local_network_banner_body">Denne server ser ud til at være på dit lokale netværk. Tillad adgang til det lokale netværk, så KashCal kan oprette forbindelse til den.</string>
     <string name="local_network_banner_allow">Tillad adgang</string>
@@ -530,7 +534,7 @@
     <string name="account_detail_sync_calendar">Kalender</string>
     <string name="account_detail_sync_calendar_subtitle">Synkroniser denne kontos kalendere</string>
     <string name="account_detail_sync_contacts">Kontakter</string>
-    <string name="account_detail_sync_contacts_subtitle">Synkroniser denne kontos kontakter til din telefon</string>
+    <string name="account_detail_sync_contacts_subtitle">Synkroniser denne kontos kontakter</string>
     <string name="account_detail_contacts_permission_needed">Tilladelse til kontakter er slået fra. Giv adgang for at fortsætte med at synkronisere kontakter.</string>
     <string name="account_detail_contacts_grant">Giv adgang</string>
     <string name="contact_sync_enabled_for">Synkroniserer kontakter for %1$s</string>
@@ -570,6 +574,8 @@
     <string name="settings_suggest_titles">Foreslå begivenhedstitler</string>
     <string name="settings_suggest_titles_info">Når du navngiver en ny begivenhed, foreslås titler, du har brugt før, så tilbagevendende begivenheder kun er ét tryk væk. Rangeret efter hvor ofte og hvor nyligt du har brugt dem.</string>
     <string name="settings_week_numbers">Ugenumre</string>
+    <string name="settings_multiday_in_allday_strip">Flerdages begivenheder i heldagsstrimlen</string>
+    <string name="settings_multiday_in_allday_strip_info">Vis tidsindstillede begivenheder, der spænder over mere end én dag, i heldagsstrimlen øverst i ugevisningen i stedet for i tidsgitteret. Slå fra for at beholde dem i tidsgitteret hver dag.</string>
     <string name="settings_show_declined">Vis afslåede begivenheder</string>
     <string name="settings_widget_event_limit">Widget-begivenhedsgrænse</string>
     <string name="settings_widget_event_limit_hint">Flest begivenheder vist pr. dag i widgets</string>
@@ -818,6 +824,8 @@
     <string name="dialog_edit_recurring_title">Gem ændringer i</string>
     <string name="dialog_delete_recurring_title">Slet</string>
     <string name="dialog_move_recurring_title">Flyt</string>
+    <string name="snackbar_event_rescheduled">Begivenheden er flyttet</string>
+    <string name="snackbar_reschedule_failed">Kunne ikke flytte begivenheden</string>
     <string name="recurring_this_event">Denne begivenhed</string>
     <string name="recurring_all_events">Alle begivenheder</string>
 
@@ -1106,6 +1114,7 @@
     <string name="ics_sync_every_n_hours">Hver %1$d. time</string>
     <string name="ics_sync_daily">Dagligt</string>
     <string name="ics_sync_weekly">Ugentligt</string>
+    <string name="default_calendar_name">Kalender</string>
     <string name="ics_url_required">URL er påkrævet</string>
     <string name="ics_url_invalid_scheme">URL skal starte med http://, https:// eller webcal://</string>
     <string name="ics_fetch_error_http">Serveren returnerede en fejl (%1$d). Tjek venligst URL\'en.</string>

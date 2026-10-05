@@ -85,6 +85,7 @@
     <string name="action_delete">ಅಳಿಸಿ</string>
     <string name="action_confirm">ದೃಢೀಕರಿಸಿ</string>
     <string name="action_discard">ತ್ಯಜಿಸಿ</string>
+    <string name="action_discard_confirm">ಬದಲಾವಣೆಗಳನ್ನು ತ್ಯಜಿಸಬೇಕೆ?</string>
     <string name="action_dismiss">ವಜಾಮಾಡಿ</string>
     <string name="action_show_all">ಎಲ್ಲಾ ತೋರಿಸಿ</string>
     <string name="action_connect">ಸಂಪರ್ಕಿಸಿ</string>
@@ -151,7 +152,6 @@
     <string name="agenda_header_relative_with_date">%1$s · %2$s</string>
     <string name="label_go_to_date">ದಿನಾಂಕಕ್ಕೆ ಹೋಗಿ</string>
     <string name="label_week">ವ</string>
-    <string name="calendar_header_week_suffix">⁨%1$s⁩ · ⁨%2$s⁩</string>
 
     <!-- ==================== Settings ==================== -->
     <string name="settings_title">ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
@@ -236,11 +236,14 @@
     <string name="onboarding_connect_prompt">ನಿಮ್ಮ ಈವೆಂಟ್‌ಗಳನ್ನು ಇಲ್ಲಿ ನೋಡಲು iCloud ಸಂಪರ್ಕಿಸಿ</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_title">ಹೊಸತು ಏನು</string>
-    <string name="whats_new_dismiss">ಅರ್ಥವಾಯಿತು</string>
+    <string name="whats_new_later">ನಂತರ</string>
     <string name="whats_new_v598_title">Android ತೆರೆದಿರಲು ಸಹಾಯ ಮಾಡಿ</string>
     <string name="whats_new_v598_body">Google ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳನ್ನು ಸ್ಥಾಪಿಸುವ ವಿಧಾನವನ್ನು ಬದಲಾಯಿಸುತ್ತಿದೆ. ನಮಗೆ ನಿಮ್ಮ ಸಹಾಯ ಬೇಕು.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org ಭೇಟಿ ನೀಡಿ</string>
+    <string name="whats_new_v732_title">ಒಂದು ಶಾಶ್ವತ ಧನ್ಯವಾದ</string>
+    <string name="whats_new_v732_body">ಈ ಬಿಡುಗಡೆಯನ್ನು KashCal ಬೆಂಬಲಿಗರಿಗೆ ಅರ್ಪಿಸಲಾಗಿದೆ. ಒಂದು ಚಿಕ್ಕ ಕೊಡುಗೆ, ಮತ್ತೆ ಮತ್ತೆ ಸಿಗುವ ದೊಡ್ಡ ಪ್ರತಿಫಲ.</string>
+    <string name="whats_new_v732_caption">ಇನ್ನೂ ಬೆಂಬಲಿಗರಾಗಿಲ್ಲವೇ?</string>
+    <string name="whats_new_v732_action_label">ನಿಮ್ಮ ಯೋಜನೆಗಳಿಗೆ ನಮ್ಮನ್ನು ಸೇರಿಸಿ</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud ಸಂಪರ್ಕಿಸಿ</string>
@@ -312,6 +315,7 @@
     <string name="caldav_error_no_calendars">ಈ ಸರ್ವರ್‌ನಲ್ಲಿ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ಕಂಡುಬಂದಿಲ್ಲ.</string>
     <string name="caldav_error_unexpected">ಅನಿರೀಕ್ಷಿತ ದೋಷ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\nಇದು ನಿಮ್ಮ ಲೋಕಲ್ ನೆಟ್‌ವರ್ಕ್‌ನಲ್ಲಿರುವ ಸರ್ವರ್ ಆಗಿದ್ದರೆ, ಸಂಪರ್ಕಿಸಲು ಲೋಕಲ್ ನೆಟ್‌ವರ್ಕ್ ಪ್ರವೇಶವನ್ನು ಅನುಮತಿಸಿ.</string>
+    <string name="caldav_error_connection_refused_insecure">ಸರ್ವರ್ ಸಂಪರ್ಕವನ್ನು KashCal ಅನುಸರಿಸದ ಸ್ಥಳಕ್ಕೆ ಮರುನಿರ್ದೇಶಿಸಿದೆ (ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡದ ವಿಳಾಸ, ಅಥವಾ ಮರುನಿರ್ದೇಶನ ಲೂಪ್), ಆದ್ದರಿಂದ ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ಕಳುಹಿಸುವ ಮೊದಲೇ KashCal ನಿಲ್ಲಿಸಿತು. ಸರ್ವರ್ ವಿಳಾಸವನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
     <string name="local_network_banner_title">ಲೋಕಲ್ ನೆಟ್‌ವರ್ಕ್ ಪ್ರವೇಶ ಅಗತ್ಯವಿದೆ</string>
     <string name="local_network_banner_body">ಈ ಸರ್ವರ್ ನಿಮ್ಮ ಲೋಕಲ್ ನೆಟ್‌ವರ್ಕ್‌ನಲ್ಲಿ ಇರುವಂತೆ ಕಾಣುತ್ತದೆ. KashCal ಇದಕ್ಕೆ ಸಂಪರ್ಕಿಸಲು ಲೋಕಲ್ ನೆಟ್‌ವರ್ಕ್ ಪ್ರವೇಶವನ್ನು ಅನುಮತಿಸಿ.</string>
     <string name="local_network_banner_allow">ಪ್ರವೇಶವನ್ನು ಅನುಮತಿಸಿ</string>
@@ -531,7 +535,7 @@
     <string name="account_detail_sync_calendar">ಕ್ಯಾಲೆಂಡರ್</string>
     <string name="account_detail_sync_calendar_subtitle">ಈ ಖಾತೆಯ ಕ್ಯಾಲೆಂಡರ್‌ಗಳನ್ನು ಸಿಂಕ್ ಮಾಡಿ</string>
     <string name="account_detail_sync_contacts">ಸಂಪರ್ಕಗಳು</string>
-    <string name="account_detail_sync_contacts_subtitle">ಈ ಖಾತೆಯ ಸಂಪರ್ಕಗಳನ್ನು ನಿಮ್ಮ ಫೋನ್‌ಗೆ ಸಿಂಕ್ ಮಾಡಿ</string>
+    <string name="account_detail_sync_contacts_subtitle">ಈ ಖಾತೆಯ ಸಂಪರ್ಕಗಳನ್ನು ಸಿಂಕ್ ಮಾಡಿ</string>
     <string name="account_detail_contacts_permission_needed">ಸಂಪರ್ಕ ಅನುಮತಿ ಆಫ್ ಆಗಿದೆ. ಸಂಪರ್ಕ ಸಿಂಕ್ ಮುಂದುವರಿಸಲು ಪ್ರವೇಶ ನೀಡಿ.</string>
     <string name="account_detail_contacts_grant">ಪ್ರವೇಶ ನೀಡಿ</string>
     <string name="contact_sync_enabled_for">%1$s ಗಾಗಿ ಸಂಪರ್ಕಗಳನ್ನು ಸಿಂಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ</string>
@@ -571,6 +575,8 @@
     <string name="settings_suggest_titles">ಈವೆಂಟ್ ಶೀರ್ಷಿಕೆಗಳನ್ನು ಸೂಚಿಸಿ</string>
     <string name="settings_suggest_titles_info">ನೀವು ಹೊಸ ಈವೆಂಟ್‌ಗೆ ಹೆಸರಿಡುವಾಗ, ನೀವು ಈ ಹಿಂದೆ ಬಳಸಿದ ಶೀರ್ಷಿಕೆಗಳನ್ನು ಸೂಚಿಸುತ್ತದೆ, ಇದರಿಂದ ಪುನರಾವರ್ತಿತ ಈವೆಂಟ್‌ಗಳು ಒಂದೇ ಟ್ಯಾಪ್‌ನಲ್ಲಿ ಸಿದ್ಧವಾಗುತ್ತವೆ. ನೀವು ಅವುಗಳನ್ನು ಎಷ್ಟು ಬಾರಿ ಮತ್ತು ಎಷ್ಟು ಇತ್ತೀಚೆಗೆ ಬಳಸಿದ್ದೀರಿ ಎಂಬುದರ ಆಧಾರದ ಮೇಲೆ ಕ್ರಮಗೊಳಿಸಲಾಗುತ್ತದೆ.</string>
     <string name="settings_week_numbers">ವಾರ ಸಂಖ್ಯೆಗಳು</string>
+    <string name="settings_multiday_in_allday_strip">ಪೂರ್ಣ ದಿನದ ಪಟ್ಟಿಯಲ್ಲಿ ಬಹು-ದಿನದ ಈವೆಂಟ್\'ಗಳು</string>
+    <string name="settings_multiday_in_allday_strip_info">ಒಂದು ದಿನಕ್ಕಿಂತ ಹೆಚ್ಚು ಕಾಲ ಇರುವ ಸಮಯ-ನಿಗದಿತ ಈವೆಂಟ್\'ಗಳನ್ನು ಸಮಯ ಗ್ರಿಡ್\'ನ ಬದಲು ವಾರದ ವೀಕ್ಷಣೆಯ ಮೇಲ್ಭಾಗದಲ್ಲಿರುವ ಪೂರ್ಣ ದಿನದ ಪಟ್ಟಿಯಲ್ಲಿ ತೋರಿಸಿ. ಪ್ರತಿ ದಿನ ಅವುಗಳನ್ನು ಸಮಯ ಗ್ರಿಡ್\'ನಲ್ಲಿ ಇರಿಸಲು ಆಫ್ ಮಾಡಿ.</string>
     <string name="settings_show_declined">ತಿರಸ್ಕರಿಸಿದ ಈವೆಂಟ್‌ಗಳನ್ನು ತೋರಿಸಿ</string>
     <string name="settings_widget_event_limit">ವಿಜೆಟ್ ಈವೆಂಟ್ ಮಿತಿ</string>
     <string name="settings_widget_event_limit_hint">ವಿಜೆಟ್‌ಗಳಲ್ಲಿ ದಿನಕ್ಕೆ ತೋರಿಸುವ ಗರಿಷ್ಠ ಈವೆಂಟ್‌ಗಳು</string>
@@ -819,6 +825,8 @@
     <string name="dialog_edit_recurring_title">ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ</string>
     <string name="dialog_delete_recurring_title">ಅಳಿಸಿ</string>
     <string name="dialog_move_recurring_title">ಸರಿಸಿ</string>
+    <string name="snackbar_event_rescheduled">ಈವೆಂಟ್ ಸಮಯ ಬದಲಾಯಿಸಲಾಗಿದೆ</string>
+    <string name="snackbar_reschedule_failed">ಈವೆಂಟ್ ಸಮಯ ಬದಲಾಯಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
     <string name="recurring_this_event">ಈ ಈವೆಂಟ್</string>
     <string name="recurring_all_events">ಎಲ್ಲಾ ಈವೆಂಟ್‌ಗಳು</string>
 
@@ -1107,6 +1115,7 @@
     <string name="ics_sync_every_n_hours">ಪ್ರತಿ %1$d ಗಂಟೆಗಳಿಗೊಮ್ಮೆ</string>
     <string name="ics_sync_daily">ದೈನಿಕ</string>
     <string name="ics_sync_weekly">ಸಾಪ್ತಾಹಿಕ</string>
+    <string name="default_calendar_name">ಕ್ಯಾಲೆಂಡರ್</string>
     <string name="ics_url_required">URL ಅಗತ್ಯ</string>
     <string name="ics_url_invalid_scheme">URL http://, https://, ಅಥವಾ webcal:// ನಿಂದ ಆರಂಭವಾಗಬೇಕು</string>
     <string name="ics_fetch_error_http">ಸರ್ವರ್ ಒಂದು ದೋಷವನ್ನು ಹಿಂತಿರುಗಿಸಿದೆ (%1$d). ದಯವಿಟ್ಟು URL ಪರಿಶೀಲಿಸಿ.</string>

@@ -6,14 +6,12 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * Invariants for the shared widget type scale.
+ * Pins [WidgetTypography], the type scale shared by the five widgets.
  *
- * These guard the readability contract behind issue #279 ("widget text is
- * tiny"): no user-facing role drops below the label floor, body content
- * is clearly larger than supporting text, and the roles stay internally ordered
- * so the five widgets render one consistent scale.
- *
- * Sizes are asserted in sp so they keep honoring the system font-scale setting.
+ * These guard the readability contract of #279 ("widget text is tiny"): no role drops below the
+ * 11sp label floor, supporting text is at least 12sp and body content at least 14sp, and the roles
+ * stay ordered so the widgets render one consistent scale. Every role is in sp, so text follows
+ * the system font scale.
  */
 class WidgetTypographyTest {
 
@@ -33,9 +31,8 @@ class WidgetTypographyTest {
 
     @Test
     fun `label is the floor - no role renders smaller`() {
-        // Material's labelSmall (11sp) is the smallest defensible supporting
-        // size; assert label is genuinely the minimum so a future role added
-        // below it (or a regression lowering another role) fails here.
+        // Material's labelSmall (11sp) is the smallest defensible supporting size. Label must be
+        // the minimum, so a role added below it, or another role lowered under it, fails here.
         val allRoles = listOf(
             WidgetTypography.headerTitle,
             WidgetTypography.contentTitle,
@@ -62,13 +59,12 @@ class WidgetTypographyTest {
     }
 
     @Test
-    fun `month day number sits between body content and the header title`() {
-        // Month-grid numbers get extra presence over event-title body text, but
-        // must not out-rank the header title — the header stays the most
-        // prominent text in the widget. Keeping the number at or below the
-        // header also bounds its size so that, at the normal system font scale,
-        // the number plus its event-dot row fits the fixed 40dp day cell.
-        assertTrue(WidgetTypography.monthDayNumber.value > WidgetTypography.contentTitle.value)
+    fun `month day number matches body content and stays at or below the header title`() {
+        // The month-grid number shares the body-content size, so the number and the event-title
+        // row below it read as one scale. It must not out-rank the header title, which stays the
+        // most prominent text in the widget. Keeping the number no larger than body content also
+        // leaves room in the day cell for a title row.
+        assertTrue(WidgetTypography.monthDayNumber.value >= WidgetTypography.contentTitle.value)
         assertTrue(WidgetTypography.monthDayNumber.value <= WidgetTypography.headerTitle.value)
     }
 
