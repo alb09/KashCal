@@ -91,6 +91,8 @@ for tag in "${ordered_tags_arr[@]}"; do
     name=$(jq -r '.name // .tagName' /tmp/release_data.json)
     body=$(jq -r '.body // ""' /tmp/release_data.json)
     is_prerelease=$(jq -r '.isPrerelease' /tmp/release_data.json)
+    # Upstream-Commit des Tags: sonst legt Codeberg den Tag auf HEAD des Default-Branches an
+    tag_sha=$(gh api "repos/$SOURCE_REPO/commits/$tag" -q .sha)
     # JSON-Escape für Body und Name
     name_escaped=$(echo "$name" | jq -Rs .)
     body_escaped=$(echo "$body" | jq -Rs .)
@@ -101,6 +103,7 @@ for tag in "${ordered_tags_arr[@]}"; do
       -H "Content-Type: application/json" \
       -d '{
         "tag_name": "'"$tag"'",
+        "target_commitish": "'"$tag_sha"'",
         "name": '"$name_escaped"',
         "body": '"$body_escaped"',
         "prerelease": '"$is_prerelease"'

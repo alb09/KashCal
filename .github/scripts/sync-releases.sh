@@ -51,8 +51,12 @@ while IFS= read -r tag; do
 
   echo "$body" > /tmp/notes.md
 
+  # Upstream-Commit des Tags: ohne --target legt gh den Tag auf HEAD des Fork-Defaultbranches an
+  tag_sha=$(gh api "repos/$SOURCE_REPO/commits/$tag" -q .sha)
+
   if gh release create "$tag" \
       --repo "$TARGET_REPO" \
+      --target "$tag_sha" \
       --title "$name" \
       --notes-file /tmp/notes.md \
       $flags; then
