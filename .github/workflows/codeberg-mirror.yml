@@ -1,8 +1,5 @@
 name: Mirror to Codeberg
 on:
-#  push:
-#    branches: ['main']
-#  delete:
   workflow_dispatch:
 
 jobs:
@@ -10,17 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-        with:
-          ref: main
-          fetch-depth: 0
 
-      - name: Push mirror
+      - name: Push mirror (main + tags, 1:1 from upstream)
         env:
           SSH_KEY: ${{ secrets.CODEBERG_SSH_PRIVATE_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan codeberg.org >> ~/.ssh/known_hosts
-          git remote add codeberg git@codeberg.org:alexb936/KashCal.git
-          git push codeberg --force --prune HEAD:main refs/tags/*:refs/tags/*
+        run: ./.github/scripts/mirror-git-codeberg.sh

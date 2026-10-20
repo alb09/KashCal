@@ -1,8 +1,13 @@
 name: Cleanup Codeberg Releases
 on:
   workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type DELETE to remove ALL Codeberg releases and tags'
+        required: true
 jobs:
   cleanup:
+    if: github.event.inputs.confirm == 'DELETE'
     runs-on: ubuntu-latest
     steps:
       - name: Delete all Codeberg releases and tags

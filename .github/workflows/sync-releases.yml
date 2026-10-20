@@ -55,6 +55,11 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v5
+      # Tags must exist on Codeberg (at the upstream commit) before releases are created for them
+      - name: Mirror main + tags to Codeberg
+        env:
+          SSH_KEY: ${{ secrets.CODEBERG_SSH_PRIVATE_KEY }}
+        run: ./.github/scripts/mirror-git-codeberg.sh
       - run: |
           chmod +x ./.github/scripts/sync-releases-codeberg.sh
           ./.github/scripts/sync-releases-codeberg.sh 5 \
