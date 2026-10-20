@@ -18,9 +18,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import org.onekash.kashcal.sync.model.SyncChange
+import org.onekash.kashcal.domain.changes.RecentChangeEntry
 import org.onekash.kashcal.sync.session.SyncTrigger
 import org.onekash.kashcal.sync.contacts.ContactSyncWorker
+import org.onekash.kashcal.sync.notification.ChangeNotificationChannels
 import org.onekash.kashcal.sync.util.SyncNetworkConstraints
 import org.onekash.kashcal.sync.worker.CalDavSyncWorker
 import java.util.concurrent.TimeUnit
@@ -29,7 +30,8 @@ import javax.inject.Singleton
 
 /**
  * Schedules calendar and contact sync on WorkManager, and holds the sync UI state shared
- * across ViewModels (banner flag, last sync changes).
+ * across ViewModels (banner flag, last sync changes). It also clears the change notification
+ * once the app shows its changes.
  *
  * Provides periodic background sync (configurable, at least 15 minutes), one-shot sync for
  * user-initiated refresh, expedited sync after a local change, per-calendar and per-account
@@ -38,7 +40,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class SyncScheduler @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val changeNotificationChannels: ChangeNotificationChannels
 ) {
     private val workManager = WorkManager.getInstance(context)
 
@@ -63,22 +66,29 @@ class SyncScheduler @Inject constructor(
     }
 
     /**
-     * Changes from the most recent sync. `CalDavSyncWorker` sets them when a sync with changes
-     * completes; HomeViewModel observes them to show the snackbar.
+     * The Recent changes entries the most recent sync recorded, unless a change notification
+     * announced them (`CalDavSyncWorker` decides). HomeViewModel shows the snackbar for them and
+     * then clears them, so a later subscriber doesn't show the same snackbar again. The log
+     * itself lives in Room.
      */
-    private val _lastSyncChanges = MutableStateFlow<List<SyncChange>>(emptyList())
-    val lastSyncChanges: StateFlow<List<SyncChange>> = _lastSyncChanges.asStateFlow()
+    private val _lastSyncChanges = MutableStateFlow<List<RecentChangeEntry>>(emptyList())
+    val lastSyncChanges: StateFlow<List<RecentChangeEntry>> = _lastSyncChanges.asStateFlow()
 
-    /** Sets the changes of a completed sync; called by `CalDavSyncWorker`. */
-    fun setSyncChanges(changes: List<SyncChange>) {
+    /** Publishes the entries a completed sync recorded; called by `CalDavSyncWorker`. */
+    fun setSyncChanges(changes: List<RecentChangeEntry>) {
         Log.d(TAG, "setSyncChanges: ${changes.size} changes")
         _lastSyncChanges.value = changes
     }
 
-    /** Clears the sync changes once the UI has shown them (snackbar or bottom sheet dismissed). */
+    /** Clears the published entries once the snackbar has shown them. */
     fun clearSyncChanges() {
         Log.d(TAG, "clearSyncChanges: clearing")
         _lastSyncChanges.value = emptyList()
+    }
+
+    /** Removes the change notification, once the user has seen its changes in the app. */
+    fun cancelChangeNotification() {
+        changeNotificationChannels.cancel()
     }
 
     companion object {

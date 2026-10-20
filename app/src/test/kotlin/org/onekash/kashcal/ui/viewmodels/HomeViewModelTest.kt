@@ -265,6 +265,7 @@ class HomeViewModelTest {
         // to MIN_HOUR_HEIGHT_DP and shift the seeded default. Mirrors the scroll-minutes stubs.
         every { dataStore.weekViewHourHeight } returns flowOf(60f)
         coEvery { dataStore.getWeekViewHourHeight() } returns 60f
+        coEvery { dataStore.getPlannerZoom() } returns 1f
         coEvery { dataStore.setWeekViewHourHeight(any()) } returns Unit
 
         // Device-calendar prefs: the flows for observeCalendars and the drawer state, the
@@ -272,6 +273,8 @@ class HomeViewModelTest {
         every { dataStore.deviceCalendarsEnabled } returns flowOf(false)
         every { dataStore.enabledDeviceCalendarIds } returns flowOf(emptySet())
         every { dataStore.hiddenDeviceCalendarIds } returns flowOf(emptySet())
+        every { dataStore.mutedDeviceCalendarIds } returns flowOf(emptySet())
+        every { dataStore.deviceCalendarRemindersEnabled } returns flowOf(true)
         coEvery { dataStore.getDeviceCalendarsEnabled() } returns false
         coEvery { dataStore.getEnabledDeviceCalendarIds() } returns emptySet()
     }
@@ -284,7 +287,8 @@ class HomeViewModelTest {
     private fun createViewModel(
         dayCodeSequence: MutableList<Int>? = null,
         calendarProviderRepository: org.onekash.kashcal.data.calendar_provider.CalendarProviderRepository =
-            org.onekash.kashcal.data.calendar_provider.FakeCalendarProviderRepository()
+            org.onekash.kashcal.data.calendar_provider.FakeCalendarProviderRepository(),
+        context: android.content.Context = io.mockk.mockk(relaxed = true)
     ): HomeViewModel {
         val provider: () -> Int = if (dayCodeSequence != null) {
             { dayCodeSequence.removeAt(0) }
@@ -303,10 +307,90 @@ class HomeViewModelTest {
             deviceEventWriter = calendarProviderRepository.deviceEventWriter(dataStore),
             attendeeBackfill = io.mockk.mockk(relaxed = true),
             contactEmailReader = io.mockk.mockk(relaxed = true),
-            context = io.mockk.mockk(relaxed = true),
+            context = context,
             ioDispatcher = testDispatcher,
             currentDayCodeProvider = provider
         )
+    }
+
+    // ==================== Sync changes snackbar ====================
+
+    private fun recordedEntry(
+        type: org.onekash.kashcal.sync.model.ChangeType,
+        title: String,
+        uid: String = title,
+    ) = org.onekash.kashcal.domain.changes.RecentChangeEntry(
+        calendarId = 1L, eventUid = uid, instanceTs = 0, eventId = 1L, type = type, title = title,
+        startTs = 0, endTs = 0, isAllDay = false, isRecurring = false, changedFields = emptySet(),
+        previousStartTs = null, previousIsAllDay = null
+    )
+
+    /** Stubs the scheduler's published entries the way SyncScheduler behaves: clear empties it. */
+    private fun publish(entries: List<org.onekash.kashcal.domain.changes.RecentChangeEntry>):
+        MutableStateFlow<List<org.onekash.kashcal.domain.changes.RecentChangeEntry>> {
+        val flow = MutableStateFlow(entries)
+        every { syncScheduler.lastSyncChanges } returns flow
+        every { syncScheduler.clearSyncChanges() } answers { flow.value = emptyList() }
+        return flow
+    }
+
+    @Test
+    @org.robolectric.annotation.Config(qualifiers = "de")
+    fun `recorded sync changes show a snackbar in the user's language`() = runTest {
+        publish(listOf(recordedEntry(org.onekash.kashcal.sync.model.ChangeType.NEW, "Zahnarzt")))
+
+        val viewModel = createViewModel(context = androidx.test.core.app.ApplicationProvider.getApplicationContext())
+        advanceUntilIdle()
+
+        assertEquals("Neuer Termin: Zahnarzt", viewModel.uiState.value.pendingSnackbarMessage)
+    }
+
+    @Test
+    @org.robolectric.annotation.Config(qualifiers = "de")
+    fun `several updates use the localized plural`() = runTest {
+        publish(listOf(
+            recordedEntry(org.onekash.kashcal.sync.model.ChangeType.MODIFIED, "A"),
+            recordedEntry(org.onekash.kashcal.sync.model.ChangeType.MODIFIED, "B"),
+        ))
+
+        val viewModel = createViewModel(context = androidx.test.core.app.ApplicationProvider.getApplicationContext())
+        advanceUntilIdle()
+
+        assertEquals("2 Termine aktualisiert", viewModel.uiState.value.pendingSnackbarMessage)
+    }
+
+    @Test
+    fun `nothing recorded shows no snackbar`() = runTest {
+        publish(emptyList())
+
+        val viewModel = createViewModel(context = androidx.test.core.app.ApplicationProvider.getApplicationContext())
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.pendingSnackbarMessage)
+    }
+
+    @Test
+    fun `the snackbar's View action opens the recent changes sheet`() = runTest {
+        publish(listOf(recordedEntry(org.onekash.kashcal.sync.model.ChangeType.NEW, "Dentist")))
+
+        val viewModel = createViewModel(context = androidx.test.core.app.ApplicationProvider.getApplicationContext())
+        advanceUntilIdle()
+        viewModel.uiState.value.pendingSnackbarAction!!.invoke()
+
+        assertTrue(viewModel.uiState.value.isRecentChangesOpen)
+    }
+
+    @Test
+    fun `a view model created after the snackbar showed doesn't show it again`() = runTest {
+        publish(listOf(recordedEntry(org.onekash.kashcal.sync.model.ChangeType.NEW, "Dentist")))
+        val context: android.content.Context = androidx.test.core.app.ApplicationProvider.getApplicationContext()
+        createViewModel(context = context)
+        advanceUntilIdle()
+
+        val later = createViewModel(context = context)
+        advanceUntilIdle()
+
+        assertNull(later.uiState.value.pendingSnackbarMessage)
     }
 
     // ==================== Initial State Tests ====================
@@ -4721,6 +4805,86 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun `a sideways pinch to 3-day saves it as the startup view and opens on the anchor date`() = runTest {
+        every { dataStore.defaultCalendarView } returns flowOf(KashCalDataStore.VIEW_WEEK)
+        coEvery { dataStore.getDefaultCalendarView() } returns KashCalDataStore.VIEW_WEEK
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        val anchor = LocalDate.now().plusDays(2)
+
+        viewModel.onWeekViewPinchSwitch(visibleDays = 3, date = anchor)
+        advanceUntilIdle()
+
+        assertEquals(ViewMode.THREE_DAYS, viewModel.uiState.value.viewMode)
+        coVerify(exactly = 1) { dataStore.setDefaultCalendarView("three_days") }
+        assertEquals(WeekViewUtils.dateToPage(anchor), viewModel.uiState.value.pendingWeekViewPagerPosition)
+    }
+
+    @Test
+    fun `a sideways pinch to Day opens the anchor date`() = runTest {
+        every { dataStore.defaultCalendarView } returns flowOf(KashCalDataStore.VIEW_THREE_DAYS)
+        coEvery { dataStore.getDefaultCalendarView() } returns KashCalDataStore.VIEW_THREE_DAYS
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        val anchor = LocalDate.now().plusDays(1)
+
+        viewModel.onWeekViewPinchSwitch(visibleDays = 1, date = anchor)
+        advanceUntilIdle()
+
+        assertEquals(ViewMode.DAY, viewModel.uiState.value.viewMode)
+        coVerify(exactly = 1) { dataStore.setDefaultCalendarView("day") }
+        assertEquals(WeekViewUtils.dateToPage(anchor), viewModel.uiState.value.pendingWeekViewPagerPosition)
+    }
+
+    @Test
+    fun `a sideways pinch to Week opens the week holding the anchor date`() = runTest {
+        every { dataStore.defaultCalendarView } returns flowOf(KashCalDataStore.VIEW_THREE_DAYS)
+        coEvery { dataStore.getDefaultCalendarView() } returns KashCalDataStore.VIEW_THREE_DAYS
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        val anchor = LocalDate.now().plusDays(9)
+
+        viewModel.onWeekViewPinchSwitch(visibleDays = 7, date = anchor)
+        advanceUntilIdle()
+
+        assertEquals(ViewMode.WEEK, viewModel.uiState.value.viewMode)
+        coVerify(exactly = 1) { dataStore.setDefaultCalendarView("week") }
+        assertEquals(
+            WeekViewUtils.dateToWeekPage(anchor, viewModel.uiState.value.firstDayOfWeek),
+            viewModel.uiState.value.pendingWeekViewPagerPosition,
+        )
+    }
+
+    @Test
+    fun `a pinch to the view already shown does nothing`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        viewModel.setViewMode(ViewMode.THREE_DAYS)
+        advanceUntilIdle()
+        val pendingBefore = viewModel.uiState.value.pendingWeekViewPagerPosition
+
+        viewModel.onWeekViewPinchSwitch(visibleDays = 3, date = LocalDate.now().plusDays(20))
+        advanceUntilIdle()
+
+        assertEquals(pendingBefore, viewModel.uiState.value.pendingWeekViewPagerPosition)
+    }
+
+    @Test
+    fun `a pinch to a day count with no view does nothing`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        val modeBefore = viewModel.uiState.value.viewMode
+        val pendingBefore = viewModel.uiState.value.pendingWeekViewPagerPosition
+
+        viewModel.onWeekViewPinchSwitch(visibleDays = 5, date = LocalDate.now().plusDays(20))
+        advanceUntilIdle()
+
+        assertEquals(modeBefore, viewModel.uiState.value.viewMode)
+        assertEquals(pendingBefore, viewModel.uiState.value.pendingWeekViewPagerPosition)
+        coVerify(exactly = 0) { dataStore.setDefaultCalendarView(any()) }
+    }
+
+    @Test
     fun `init loads default view from DataStore`() = runTest {
         // The default view is AGENDA, stubbed before createViewModel.
         coEvery { dataStore.getDefaultCalendarView() } returns KashCalDataStore.VIEW_AGENDA
@@ -4995,5 +5159,33 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         assertEquals("", saved.captured)
+    }
+
+    @Test
+    fun `the muted device calendar ids reach the drawer state`() = runTest {
+        val mutedFlow = MutableStateFlow<Set<Long>>(emptySet())
+        every { dataStore.mutedDeviceCalendarIds } returns mutedFlow
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        assertTrue(viewModel.uiState.value.mutedDeviceCalendarIds.isEmpty())
+
+        mutedFlow.value = setOf(10L)
+        advanceUntilIdle()
+
+        assertEquals(setOf(10L), viewModel.uiState.value.mutedDeviceCalendarIds)
+    }
+
+    @Test
+    fun `the device reminders setting reaches the drawer state`() = runTest {
+        val enabledFlow = MutableStateFlow(true)
+        every { dataStore.deviceCalendarRemindersEnabled } returns enabledFlow
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        assertTrue(viewModel.uiState.value.deviceRemindersEnabled)
+
+        enabledFlow.value = false
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.deviceRemindersEnabled)
     }
 }

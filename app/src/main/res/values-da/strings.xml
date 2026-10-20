@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">Notifikationer om synkronisering fuldført og fejl</string>
     <string name="channel_event_invitations">Begivenhedsinvitationer</string>
     <string name="channel_event_invitations_desc">Notifikationer når du modtager en ny kalenderinvitation</string>
+    <string name="channel_calendar_updates">Kalenderændringer</string>
     <string name="invite_notification_body">Fra %1$s · Tryk for at svare</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">Svaret gælder for hele serien.</string>
+    <string name="rsvp_receipt_pending">Svar afventer</string>
+    <string name="rsvp_receipt_sent">Svar sendt</string>
+    <string name="rsvp_receipt_not_delivered">Svar ikke leveret</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">Denne og alle fremtidige</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">Standard</string>
     <string name="app_icon_supporter">Supporter</string>
     <string name="app_icon_supporter_calendar">Supporter, kaldet Kalender</string>
+    <string name="app_icon_todays_date">Dagens dato</string>
     <string name="app_icon_label_calendar">Kalender</string>
     <string name="app_icon_support_cta">Støt KashCal</string>
     <string name="app_icon_switch_note">Ændring af ikonet kan genstarte appen. Notifikationer bruger altid standardikonet og -navnet.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">Forbind iCloud for at se dine begivenheder her</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">Senere</string>
+    <string name="whats_new_skip">Spring over</string>
+    <string name="whats_new_next">Næste</string>
+    <string name="whats_new_page_of">Side %1$d af %2$d</string>
+    <string name="whats_new_find_it_in">Find det under</string>
     <string name="whats_new_v598_title">Hjælp med at holde Android åbent</string>
     <string name="whats_new_v598_body">Google ændrer den måde, du installerer apps på din enhed. Vi har brug for din hjælp.</string>
     <string name="whats_new_v598_action_label">Besøg keepandroidopen.org</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">Denne udgivelse er dedikeret til dem, der støtter KashCal. Et lille bidrag med et stort, tilbagevendende udbytte.</string>
     <string name="whats_new_v732_caption">Ikke støtte endnu?</string>
     <string name="whats_new_v732_action_label">Tag os med i dine planer</string>
+    <string name="whats_new_v772_icon_title">Dit ikon kender datoen</string>
+    <string name="whats_new_v772_icon_body">Vælg ikonet Dagens dato, så viser KashCal dagen i måneden på din startskærm. Det skifter af sig selv hver nat.</string>
+    <string name="whats_new_v772_changes_title">Se, hvad der er ændret</string>
+    <string name="whats_new_v772_changes_body">Nye, redigerede og fjernede begivenheder fra dine iCloud- og CalDAV-kalendere samles i Seneste ændringer i 7 dage. Tryk på en for at åbne den.</string>
+    <string name="whats_new_v772_notifications_body">Få en notifikation, når en baggrundssynkronisering finder ændringer i dine iCloud- eller CalDAV-begivenheder. Funktionen er slået fra, indtil du slår den til.</string>
+    <string name="whats_new_hero_sample_lunch">Teamfrokost</string>
+    <string name="whats_new_hero_sample_review">Designgennemgang</string>
+    <string name="whats_new_hero_sample_book_club">Bogklub</string>
+    <string name="whats_new_hero_sample_calendar">Arbejde</string>
+    <string name="whats_new_hero_now">nu</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Forbind iCloud</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">Ingen synk-sessioner endnu.\n\nTræk ned på kalendervisningen for at starte en synkronisering.</string>
     <string name="status_no_writable_calendars">Ingen skrivbare kalendere tilgængelige</string>
     <string name="status_events_count">%1$d begivenheder</string>
-    <string name="status_sync_changes">Synk-ændringer</string>
     <string name="status_sync_history">Synkroniseringshistorik</string>
     <string name="status_parse_failures">Parsingfejl</string>
     <string name="status_error">Fejl</string>
@@ -583,6 +600,26 @@
     <string name="settings_detailed_widget_rows_info">Kompakt på én linje, eller detaljeret på to linjer med sluttidspunkt.</string>
     <string name="settings_sync_lookback">Synk-tilbageblik</string>
     <string name="settings_sync_lookback_hint">Hvor langt tilbage begivenheder synkroniseres</string>
+    <string name="settings_change_notifications">Notifikationer om ændringer</string>
+    <string name="settings_change_notifications_info">Sender en notifikation, når en baggrundssynkronisering finder ændringer i dine begivenheder. Virker med iCloud- og CalDAV-kalendere.</string>
+    <string name="settings_calendar_notifications">Kalendernotifikationer</string>
+    <string name="settings_calendar_notifications_all">Alle kalendere</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">%d lydløs</item>
+        <item quantity="other">%d lydløse</item>
+    </plurals>
+    <string name="calendar_notifications_intro">Vælg, hvilke kalendere der må give dig besked.</string>
+    <string name="calendar_notifications_info">Lydløse kalendere vises og synkroniseres stadig, men giver dig ikke besked.</string>
+    <string name="cd_calendar_notifications_info">Om lydløse kalendere</string>
+    <string name="cd_state_expanded">foldet ud</string>
+    <string name="cd_state_collapsed">foldet sammen</string>
+    <string name="calendar_notifications_device_info">Slå fra for at gøre alle enhedskalendere lydløse, også dem, du tilføjer senere.</string>
+    <string name="cd_calendar_notifications_device_info">Om notifikationer fra enhedskalendere</string>
+    <string name="cd_device_calendar_notifications">Notifikationer fra enhedskalendere</string>
+    <string name="calendar_notifications_hidden">Skjult</string>
+    <string name="calendar_notifications_app_off">Notifikationer for KashCal er slået fra i systemindstillingerne, så ingen kalender kan give dig besked.</string>
+    <string name="calendar_notifications_reminders_off">Begivenhedspåmindelser er slået fra i systemindstillingerne, så der kan ikke vises påmindelser.</string>
+    <string name="cd_notifications_off">notifikationer fra</string>
     <string name="settings_not_set">Ikke angivet</string>
     <string name="settings_on">Til</string>
     <string name="settings_off">Fra</string>
@@ -626,7 +663,6 @@
     <string name="label_device_calendars">Enhedskalendere</string>
     <string name="label_default_calendar_hint">Nye begivenheder oprettes i denne kalender</string>
     <string name="label_visible_count">%1$d / %2$d synlige</string>
-    <string name="label_enabled_count">%1$d / %2$d aktiveret</string>
     <string name="label_reminders_truncated">%1$d ikke vist (%2$d i alt, maks %3$d redigerbare)</string>
     <string name="label_found_events">Fundet: %1$d begivenheder</string>
     <string name="label_open_debug_menu">Åbn debug-menu</string>
@@ -648,8 +684,6 @@
     <string name="device_calendars_grant">Giv adgang</string>
     <string name="device_calendars_none_found">Ingen enhedskalendere fundet.</string>
     <string name="device_calendars_local">Lokal</string>
-    <string name="device_calendars_reminders">Påmindelser</string>
-    <string name="device_calendars_reminders_desc">Få notifikationer for enhedskalenderbegivenheder</string>
     <string name="device_calendars_read_only_no_write">Skrivebeskyttet (ingen skrivetilladelse)</string>
     <string name="device_calendars_read_only_calendar">Skrivebeskyttet (kalenderen er skrivebeskyttet)</string>
     <string name="settings_developer_options">Udviklermuligheder</string>
@@ -759,6 +793,59 @@
         <item quantity="one">%1$d begivenhed importeret</item>
         <item quantity="other">%1$d begivenheder importeret</item>
     </plurals>
+    <string name="ics_import_preview_loading">Tjekker denne kalender…</string>
+    <string name="ics_import_preview_failed">Kunne ikke tjekke denne kalender for disse begivenheder. Du kan stadig importere.</string>
+    <string name="ics_import_will_cancel">Dette aflyser %1$s, arrangeret af %2$s</string>
+    <string name="ics_import_will_cancel_no_organizer">Dette aflyser %1$s</string>
+    <string name="ics_import_will_update">Dette opdaterer %1$s</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d begivenhed er allerede opdateret</item>
+        <item quantity="other">%1$d begivenheder er allerede opdateret</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">%1$d sprunget over: %2$s</item>
+        <item quantity="other">%1$d sprunget over: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">det er et svar på en invitation, som ikke tilføjer noget til din kalender</string>
+    <string name="ics_import_reason_unsupported">denne type invitationsbesked understøttes ikke</string>
+    <string name="ics_import_reason_organizer_mismatch">det kommer fra en anden end mødets arrangør</string>
+    <string name="ics_import_reason_cancel_no_match">det aflyste møde er ikke i denne kalender</string>
+    <string name="ics_import_reason_cancel_not_for_you">aflysningen gælder for andre gæster</string>
+    <string name="ics_import_reason_deletion_pending">begivenheden er ved at blive slettet</string>
+    <string name="ics_import_reason_cancelled_in_file">begivenheden er allerede aflyst i filen</string>
+    <string name="ics_import_reason_this_and_future">ændringer af denne og senere forekomster understøttes ikke</string>
+    <string name="ics_import_reason_own_cancel">du er arrangør af dette møde, så aflys det fra begivenheden</string>
+    <string name="ics_import_reason_on_another_calendar">begivenheden er allerede i en anden kalender på denne konto</string>
+    <string name="ics_import_notice_unverified">Afsenderen af en invitationsfil kan ikke bekræftes. Tjek, at den kom fra arrangøren.</string>
+    <string name="ics_import_notice_answer_notifies">Hvis du svarer på denne invitation, får arrangøren muligvis besked.</string>
+    <string name="ics_import_notice_guests_again">Du er arrangør, så gæsterne modtager muligvis denne invitation igen.</string>
+    <string name="cd_dismiss_notice">Luk meddelelse</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d tilføjet</item>
+        <item quantity="other">%1$d tilføjet</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d opdateret</item>
+        <item quantity="other">%1$d opdateret</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d aflyst</item>
+        <item quantity="other">%1$d aflyst</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d allerede opdateret</item>
+        <item quantity="other">%1$d allerede opdateret</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d sprunget over</item>
+        <item quantity="other">%1$d sprunget over</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d mislykkedes</item>
+        <item quantity="other">%1$d mislykkedes</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">Intet at importere</string>
     <plurals name="exported_events">
         <item quantity="one">%1$d begivenhed eksporteret</item>
         <item quantity="other">%1$d begivenheder eksporteret</item>
@@ -912,6 +999,14 @@
     <string name="cd_active_view">Aktiv visning</string>
     <string name="view_agenda">Dagsorden</string>
     <string name="view_month_full">Måned (Fuld)</string>
+    <string name="view_planner">Ugeplan</string>
+    <string name="planner_free_day">Fri dag</string>
+    <string name="cd_planner_show_day_events">Vis begivenheder for denne dag</string>
+    <string name="planner_different_this_week">Anderledes denne uge</string>
+    <string name="planner_usual_week">Den sædvanlige uge.</string>
+    <string name="planner_moved_was">før %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">Dag</string>
     <string name="view_three_days">3 dage</string>
     <string name="view_year">År</string>
@@ -968,11 +1063,6 @@
     <string name="cd_increase_interval">Forøg interval</string>
     <string name="rrule_starting">%1$s fra %2$s%3$s</string>
     <string name="rrule_since">%1$s · siden %2$s</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d nye</string>
-    <string name="sync_summary_updated">%1$d opdateret</string>
-    <string name="sync_summary_removed">%1$d fjernet</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">Cirkulær rulning aktiveret</string>
@@ -1075,10 +1165,31 @@
         <item quantity="one">%1$d begivenhed fjernet</item>
         <item quantity="other">%1$d begivenheder fjernet</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d forekomst aflyst</item>
+        <item quantity="other">%1$d forekomster aflyst</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d kalenderopdatering</item>
         <item quantity="other">%1$d kalenderopdateringer</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">Seneste ændringer</string>
+    <string name="recent_changes_empty">Ingen seneste ændringer</string>
+    <string name="recent_changes_clear_all">Ryd alle</string>
+    <string name="recent_changes_cleared">Seneste ændringer ryddet</string>
+    <string name="recent_changes_dismiss">Afvis</string>
+    <string name="recent_changes_moved_from">Flyttet fra %1$s</string>
+    <string name="recent_changes_time_changed">Tidspunkt ændret</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">Placering ændret</string>
+    <string name="recent_changes_title_changed">Titel ændret</string>
+    <string name="recent_changes_repeat_changed">Gentagelse ændret</string>
+    <string name="recent_changes_cancelled">Aflyst</string>
+    <string name="cd_recent_change_new">Ny begivenhed</string>
+    <string name="cd_recent_change_updated">Opdateret</string>
+    <string name="cd_recent_change_removed">Fjernet</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">Dag %1$d af %2$d</string>

@@ -1,5 +1,8 @@
 package org.onekash.kashcal.ui.screens
 
+import org.onekash.kashcal.data.ics.IcsImportFile
+import org.onekash.kashcal.domain.ics.GroupPlan
+import org.onekash.kashcal.domain.ics.IcsImportResult
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
@@ -36,9 +39,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import org.onekash.kashcal.ui.permission.ChangeNotificationsStep
+import org.onekash.kashcal.reminder.notification.ReminderNotificationChannels
+import org.onekash.kashcal.sync.notification.ChangeNotificationChannels
 import org.onekash.kashcal.BuildConfig
 import org.onekash.kashcal.R
-import org.onekash.kashcal.data.db.entity.Event
 import org.onekash.kashcal.data.ics.IcsParserService
 import org.onekash.kashcal.data.preferences.DefaultCalendar
 import org.onekash.kashcal.domain.backup.BackupFilename
@@ -46,6 +51,7 @@ import org.onekash.kashcal.sync.session.SyncSessionStore
 import org.onekash.kashcal.ui.components.CalDavSignInSheet
 import org.onekash.kashcal.ui.components.ICloudSignInSheet
 import org.onekash.kashcal.ui.components.IcsImportSheet
+import org.onekash.kashcal.ui.components.importSummary
 import org.onekash.kashcal.ui.components.SyncHistorySheet
 import org.onekash.kashcal.ui.permission.LocalNetworkPermissionState
 import org.onekash.kashcal.ui.permission.classifyLocalNetworkAfterRequest
@@ -106,16 +112,22 @@ fun SettingsRoute(
     openTagsInitially: Boolean = false,
     onFinish: () -> Unit = {},
     onExportCalendar: (Long) -> Unit = {},
-    // The four I/O lambdas below have no defaults: a no-op default would silently write an
+    // The five I/O lambdas below have no defaults: a no-op default would silently write an
     // empty backup or import zero events while showing a success message. A caller that
     // forgets one must fail to compile, not ship silent data loss. The other lambdas stay
     // defaulted; omitting one gives an inert control, never lost data.
     readIcsContent: suspend (Uri) -> Result<String>,
-    importIcsToRoom: suspend (events: List<Event>, calendarId: Long) -> Int,
+    importIcsToRoom: suspend (file: IcsImportFile, calendarId: Long) -> IcsImportResult,
+    previewIcsInRoom: suspend (file: IcsImportFile, calendarId: Long) -> List<GroupPlan>,
     writeBackup: suspend (uri: Uri, json: String) -> Unit,
     readBackup: suspend (uri: Uri) -> String,
     resolveLanPermissionState: () -> LocalNetworkPermissionState = { LocalNetworkPermissionState.NotRequired },
     shouldShowLanRationale: () -> Boolean = { false },
+    // Change and calendar notifications: whether POST_NOTIFICATIONS can no longer be asked for
+    // (needs the activity), and opening the system notification settings (a channel's page for
+    // a channel id, the app's for null).
+    isNotificationPermissionPermanentlyDenied: suspend () -> Boolean = { false },
+    openNotificationSettings: (channelId: String?) -> Unit = {},
 ) {
     val themeMode by viewModel.themeMode.collectAsStateWithLifecycle(initialValue = initialThemeMode)
     val colorSource by viewModel.colorSource.collectAsStateWithLifecycle(initialValue = initialColorSource)
@@ -136,6 +148,7 @@ fun SettingsRoute(
         val showEventEmojis by viewModel.showEventEmojis.collectAsStateWithLifecycle()
         val quickAddEnabled by viewModel.quickAddEnabled.collectAsStateWithLifecycle()
         val titleSuggestionsEnabled by viewModel.titleSuggestionsEnabled.collectAsStateWithLifecycle()
+        val changeNotificationsOn by viewModel.changeNotificationsOn.collectAsStateWithLifecycle()
         val timeFormat by viewModel.timeFormat.collectAsStateWithLifecycle()
         val firstDayOfWeek by viewModel.firstDayOfWeek.collectAsStateWithLifecycle()
         val showWeekNumbers by viewModel.showWeekNumbers.collectAsStateWithLifecycle()
@@ -167,6 +180,9 @@ fun SettingsRoute(
         val enabledDeviceCalendarIds by viewModel.enabledDeviceCalendarIds.collectAsStateWithLifecycle()
         val showDeclinedEvents by viewModel.showDeclinedEvents.collectAsStateWithLifecycle()
         val deviceCalendarRemindersEnabled by viewModel.deviceCalendarRemindersEnabled.collectAsStateWithLifecycle()
+        val hiddenDeviceCalendarIds by viewModel.hiddenDeviceCalendarIds.collectAsStateWithLifecycle()
+        val mutedDeviceCalendarIds by viewModel.mutedDeviceCalendarIds.collectAsStateWithLifecycle()
+        val calendarNotificationsBlockedBy by viewModel.calendarNotificationsBlockedBy.collectAsStateWithLifecycle()
 
         // iCloud account for AccountsScreen, derived from uiState (the single source of truth)
         val iCloudAccount = remember(uiState.iCloudState) {
@@ -296,6 +312,61 @@ fun SettingsRoute(
         val coroutineScope = rememberCoroutineScope()
         val snackbarHostState = remember { SnackbarHostState() }
 
+        // Change notifications switch and Calendar notifications banner. The ViewModel picks the
+        // step; the host asks for the permission or opens system settings (the app's page, or
+        // the channel's: Calendar updates for the switch, event reminders for the banner), and
+        // the next resume re-reads the state. Each has its own permission launcher, so a grant
+        // from the banner never turns Change notifications on.
+        val openSettingsFor: (ChangeNotificationsStep?, String) -> Unit = { step, channelId ->
+            when (step) {
+                ChangeNotificationsStep.OpenAppSettings -> openNotificationSettings(null)
+                ChangeNotificationsStep.OpenChannelSettings -> openNotificationSettings(channelId)
+                ChangeNotificationsStep.TurnOn, ChangeNotificationsStep.TurnOff,
+                ChangeNotificationsStep.RequestPermission, null -> Unit
+            }
+        }
+        val runNotificationStep: (ChangeNotificationsStep, () -> Unit, String) -> Unit =
+            { step, launchPermission, channelId ->
+                if (step == ChangeNotificationsStep.RequestPermission) {
+                    coroutineScope.launch {
+                        if (isNotificationPermissionPermanentlyDenied()) {
+                            openNotificationSettings(null)
+                        } else {
+                            launchPermission()
+                        }
+                    }
+                } else {
+                    openSettingsFor(step, channelId)
+                }
+            }
+        val changeNotificationsPermissionLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            openSettingsFor(viewModel.onChangeNotificationsPermissionResult(granted), ChangeNotificationChannels.CHANNEL_ID)
+        }
+        val onChangeNotificationsChange: (Boolean) -> Unit = { enable ->
+            runNotificationStep(
+                viewModel.onChangeNotificationsToggle(enable),
+                { changeNotificationsPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS) },
+                ChangeNotificationChannels.CHANNEL_ID,
+            )
+        }
+        val calendarNotificationsPermissionLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            openSettingsFor(
+                viewModel.onCalendarNotificationsPermissionResult(granted),
+                ReminderNotificationChannels.CHANNEL_REMINDERS,
+            )
+        }
+        val onFixCalendarNotifications: () -> Unit = {
+            runNotificationStep(
+                viewModel.calendarNotificationsStep(),
+                { calendarNotificationsPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS) },
+                ReminderNotificationChannels.CHANNEL_REMINDERS,
+            )
+        }
+
         // Resolved at composable scope for the launcher/callback coroutines below.
         val calendarPermissionDeniedMessage =
             stringResource(R.string.error_device_calendar_permission_denied)
@@ -328,8 +399,7 @@ fun SettingsRoute(
         var showDeviceCalendarsScreen by rememberSaveable { mutableStateOf(false) }
 
         // ICS import state
-        var showIcsImportSheet by remember { mutableStateOf(false) }
-        var icsImportEvents by remember { mutableStateOf<List<Event>>(emptyList()) }
+        var icsImportFile by remember { mutableStateOf<IcsImportFile?>(null) }
 
         // Subscription snackbar strings (issue #133), hoisted so the root and Subscriptions
         // screens pass the same strings and the ViewModel stays Context-free.
@@ -394,17 +464,11 @@ fun SettingsRoute(
                 coroutineScope.launch {
                     readIcsContent(selectedUri)
                         .onSuccess { content ->
-                            try {
-                                val events = IcsParserService.parseIcsContent(content, 0, 0)
-                                if (events.isNotEmpty()) {
-                                    icsImportEvents = events
-                                    showIcsImportSheet = true
-                                } else {
-                                    viewModel.showSnackbar(icsImportNoEventsMessage)
-                                }
-                            } catch (e: Exception) {
-                                Log.e(TAG, "Failed to parse ICS file", e)
-                                viewModel.showSnackbar(icsImportInvalidMessage)
+                            val file = runCatching { IcsParserService.parseForImport(content) }.getOrNull()
+                            when {
+                                file == null -> viewModel.showSnackbar(icsImportInvalidMessage)
+                                file.events.isEmpty() -> viewModel.showSnackbar(icsImportNoEventsMessage)
+                                else -> icsImportFile = file
                             }
                         }
                         .onFailure { e ->
@@ -613,7 +677,6 @@ fun SettingsRoute(
                             hasWritePermission = hasWriteCalendarPermission,
                             deviceCalendars = deviceCalendars,
                             enabledCalendarIds = enabledDeviceCalendarIds,
-                            deviceCalendarRemindersEnabled = deviceCalendarRemindersEnabled,
                             onNavigateBack = { showDeviceCalendarsScreen = false },
                             onToggle = { enabled ->
                                 if (enabled && !hasReadCalendarPermission) {
@@ -626,7 +689,6 @@ fun SettingsRoute(
                                 }
                             },
                             onToggleCalendar = viewModel::onToggleDeviceCalendar,
-                            onToggleDeviceCalendarReminders = viewModel::onToggleDeviceCalendarReminders,
                             onRequestWritePermission = {
                                 writeCalendarPermissionLauncher.launch(android.Manifest.permission.WRITE_CALENDAR)
                             },
@@ -755,11 +817,20 @@ fun SettingsRoute(
                             deviceCalendarRemindersEnabled = deviceCalendarRemindersEnabled,
                             onToggleDeviceCalendarReminders = viewModel::onToggleDeviceCalendarReminders,
                             onRefreshDeviceCalendars = viewModel::refreshDeviceCalendars,
+                            // Calendar notifications
+                            hiddenDeviceCalendarIds = hiddenDeviceCalendarIds,
+                            mutedDeviceCalendarIds = mutedDeviceCalendarIds,
+                            calendarNotificationsBlockedBy = calendarNotificationsBlockedBy,
+                            onToggleCalendarMuted = viewModel::onToggleCalendarMuted,
+                            onToggleDeviceCalendarMuted = viewModel::onToggleDeviceCalendarMuted,
+                            onFixCalendarNotifications = onFixCalendarNotifications,
                             // Display settings
                             showEventEmojis = showEventEmojis,
                             onShowEventEmojisChange = viewModel::setShowEventEmojis,
                             quickAddEnabled = quickAddEnabled,
                             onQuickAddEnabledChange = viewModel::setQuickAddEnabled,
+                            changeNotificationsOn = changeNotificationsOn,
+                            onChangeNotificationsChange = onChangeNotificationsChange,
                             titleSuggestionsEnabled = titleSuggestionsEnabled,
                             onTitleSuggestionsEnabledChange = viewModel::setTitleSuggestionsEnabled,
                             timeFormat = timeFormat,
@@ -799,36 +870,37 @@ fun SettingsRoute(
             )
 
             // ICS Import Sheet
-            if (showIcsImportSheet && icsImportEvents.isNotEmpty()) {
+            icsImportFile?.let { file ->
                 val defaultRoomCalendarId = (defaultCalendar as? DefaultCalendar.Room)?.calendarId
                 val defaultDeviceCalendarId = (defaultCalendar as? DefaultCalendar.Device)?.calendarId
                 IcsImportSheet(
-                    events = icsImportEvents,
+                    file = file,
                     calendars = calendars,
                     defaultCalendarId = defaultRoomCalendarId,
                     deviceCalendarGroups = writableDeviceCalendarGroups,
                     defaultDeviceCalendarId = defaultDeviceCalendarId,
-                    onDismiss = {
-                        showIcsImportSheet = false
-                        icsImportEvents = emptyList()
+                    loadPreview = { calendarId, isDeviceCalendar ->
+                        if (isDeviceCalendar) {
+                            viewModel.previewIcsImportOnDevice(file, calendarId)
+                        } else {
+                            previewIcsInRoom(file, calendarId)
+                        }
                     },
-                    onImport = { calendarId, events, isDeviceCalendar ->
+                    onDismiss = { icsImportFile = null },
+                    onImport = { calendarId, isDeviceCalendar ->
                         coroutineScope.launch {
                             try {
-                                val count = if (isDeviceCalendar) {
-                                    viewModel.importIcsToDeviceCalendar(events, calendarId)
+                                val result = if (isDeviceCalendar) {
+                                    viewModel.importIcsToDeviceCalendar(file, calendarId)
                                 } else {
-                                    importIcsToRoom(events, calendarId)
+                                    importIcsToRoom(file, calendarId)
                                 }
-                                viewModel.showSnackbar(
-                                    context.resources.getQuantityString(R.plurals.imported_events, count, count)
-                                )
+                                viewModel.showSnackbar(importSummary(result, context.resources))
                             } catch (e: Exception) {
                                 Log.e(TAG, "Failed to import events", e)
                                 viewModel.showSnackbar(icsImportFailedMessage)
                             }
-                            showIcsImportSheet = false
-                            icsImportEvents = emptyList()
+                            icsImportFile = null
                         }
                     }
                 )

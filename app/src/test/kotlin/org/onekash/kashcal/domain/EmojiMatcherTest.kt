@@ -232,6 +232,15 @@ class EmojiMatcherTest {
     // ==================== formatWithEmoji Tests ====================
 
     @Test
+    fun `formatWithEmoji joins with the given separator`() {
+        val emoji = EmojiMatcher.getEmoji("Coffee with Sarah")
+        assertEquals("$emoji\u00A0Coffee with Sarah", EmojiMatcher.formatWithEmoji("Coffee with Sarah", true, separator = "\u00A0"))
+        assertEquals("$emoji Coffee with Sarah", EmojiMatcher.formatWithEmoji("Coffee with Sarah", true))
+        assertEquals("Coffee with Sarah", EmojiMatcher.formatWithEmoji("Coffee with Sarah", false, separator = "\u00A0"))
+    }
+
+
+    @Test
     fun `formatWithEmoji prepends emoji when enabled and match found`() {
         val result = EmojiMatcher.formatWithEmoji("Coffee with Sarah", showEmoji = true)
         assertEquals("\u2615 Coffee with Sarah", result)
@@ -324,6 +333,7 @@ class EmojiMatcherTest {
             "Divorce mediation",
             "Custody hearing",
             "Layoff meeting",
+            "Anniversary of Death", // "anniversary" would match without suppression (#389)
         )
         for (title in suppressed) {
             assertNull("\"$title\" must not be decorated", EmojiMatcher.getEmoji(title))

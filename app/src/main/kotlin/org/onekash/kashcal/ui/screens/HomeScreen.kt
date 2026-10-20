@@ -17,9 +17,6 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -158,6 +155,7 @@ import org.onekash.kashcal.ui.components.AgendaDisplayItem
 import org.onekash.kashcal.ui.components.AgendaListModel
 import org.onekash.kashcal.ui.components.AgendaTitleMonth
 import org.onekash.kashcal.ui.components.AgendaWeekBar
+import org.onekash.kashcal.ui.components.DayViewWeekStrip
 import org.onekash.kashcal.ui.components.AgendaWeekBarLogic
 import org.onekash.kashcal.ui.components.buildAgendaListModel
 import org.onekash.kashcal.ui.components.resolveScrollTargetIndex
@@ -177,7 +175,11 @@ import org.onekash.kashcal.ui.components.weekview.WeekViewUtils
 import org.onekash.kashcal.ui.permission.AppPermissionKind
 import org.onekash.kashcal.ui.permission.AppPermissionsScreen
 import org.onekash.kashcal.ui.model.MonthGrid
+import org.onekash.kashcal.domain.planner.PlannerWeekState
 import org.onekash.kashcal.ui.screens.insights.InsightsScreen
+import org.onekash.kashcal.ui.screens.planner.PlannerView
+import org.onekash.kashcal.ui.screens.planner.dayDetailEvents
+import org.onekash.kashcal.ui.util.plannerShownWeekStart
 import org.onekash.kashcal.ui.screens.insights.InsightsViewModel
 import org.onekash.kashcal.ui.util.DayPagerUtils
 import org.onekash.kashcal.ui.util.MonthPagerUtils
@@ -210,6 +212,7 @@ fun HomeScreen(
     weekEvents: WeekEventsUiState = WeekEventsUiState.EMPTY,
     agendaEvents: AgendaUiState = AgendaUiState.EMPTY,
     monthEvents: ImmutableMap<Int, ImmutableList<DisplayEvent>> = persistentMapOf(),
+    plannerState: PlannerWeekState? = null,
     isOnline: Boolean = true,
     // Navigation callbacks
     onDateSelected: (Long) -> Unit,
@@ -250,6 +253,8 @@ fun HomeScreen(
     pendingInvitesCount: Int = 0,
     pendingInvitations: List<org.onekash.kashcal.domain.reader.PendingInvitation> = emptyList(),
     onOpenInvitationInbox: () -> Unit = {},
+    // Recent changes: the sheet itself is hosted by MainActivity
+    onOpenRecentChanges: () -> Unit = {},
     onDismissInvitationInbox: () -> Unit = {},
     onRsvpFromInbox: (Long, org.onekash.kashcal.ui.components.attendees.AttendeeStatus) -> Unit = { _, _ -> },
     // Drawer
@@ -274,6 +279,7 @@ fun HomeScreen(
     onDayPagerPageChanged: (Int) -> Unit = {},
     onWeekDatePickerRequest: () -> Unit = {},
     onWeekDayHeaderClick: (LocalDate) -> Unit = {},
+    onWeekPinchViewSwitch: (visibleDays: Int, date: LocalDate) -> Unit = { _, _ -> },
     onWeekDatePickerDismiss: () -> Unit = {},
     onWeekDateSelected: (Long) -> Unit = {},
     onWeekScrollPositionChange: (Int) -> Unit = {},
@@ -282,6 +288,11 @@ fun HomeScreen(
     // All-day strip collapse/expand toggle for the time-grid views (persisted)
     onAllDayRowsToggle: () -> Unit = {},
     onClearPendingWeekPagerPosition: () -> Unit = {},
+    // Planner callbacks
+    onPlannerPageChanged: (Int) -> Unit = {},
+    onClearPendingPlannerPagerPosition: () -> Unit = {},
+    onPlannerZoomChange: (Float) -> Unit = {},
+    onMonthFullZoomChange: (Float) -> Unit = {},
     onReschedule: (DisplayEvent, LocalDate, Int) -> Unit = { _, _, _ -> },
     onConfirmReschedule: (EditScope) -> Unit = {},
     onCancelPendingReschedule: () -> Unit = {},
@@ -345,12 +356,22 @@ fun HomeScreen(
     val todayYear = todayCal.get(JavaCalendar.YEAR)
     val todayMonth = todayCal.get(JavaCalendar.MONTH)
 
-    // Wall-clock snapshot for past-event dimming in the day-events pager. Re-read on resume so
-    // an event that ended while the app was in the background dims when the user returns,
-    // without a sync write or a swipe.
+    // Wall-clock snapshot for past-event dimming in the day-events pager, the Planner and the
+    // full-height month view. Re-read on resume so an event that ended while the app was in the
+    // background dims when the user returns, without a sync write or a swipe.
     val (nowMs, todayDayCode) = remember(refreshKey) {
         val now = System.currentTimeMillis()
         now to DateTimeUtils.eventTsToDayCode(now, isAllDay = false)
+    }
+
+    // The week the Planner shows, as epoch ms, null in other views. The Planner never writes
+    // selectedDate, so its day-header and Jump to date snapshots, and the date picker, use this.
+    val plannerWeekStartMs = if (uiState.viewMode == ViewMode.PLANNER) {
+        WeekViewUtils.dateToEpochMs(
+            plannerShownWeekStart(uiState.plannerAnchorDayCode, uiState.plannerWeekPagerPosition, uiState.firstDayOfWeek)
+        )
+    } else {
+        null
     }
 
     // Agenda list scroll state is hoisted above the top bar so its title can show the month of
@@ -528,6 +549,8 @@ fun HomeScreen(
                 deviceCalendarsEnabled = uiState.deviceCalendarsEnabled,
                 enabledDeviceCalendars = uiState.enabledDeviceCalendars,
                 hiddenDeviceCalendarIds = uiState.hiddenDeviceCalendarIds,
+                mutedDeviceCalendarIds = uiState.mutedDeviceCalendarIds,
+                deviceRemindersEnabled = uiState.deviceRemindersEnabled,
                 onViewSelect = { mode ->
                     drawerScope.launch { drawerState?.close() }
                     onViewSelect(mode)
@@ -752,6 +775,9 @@ fun HomeScreen(
                                         }
                                     }
                                     ViewMode.DAY, ViewMode.THREE_DAYS, ViewMode.WEEK -> {
+                                        // One value for both, so the Day strip's inset is
+                                        // measured like the Week view's hour column.
+                                        val weekLabelPrefix = stringResource(R.string.label_week)
                                         // Day view has a pinned week strip above the grid, toggled
                                         // by the title chevron (persisted). Tapping a date moves
                                         // the day pager to it. The strip reads the same
@@ -763,32 +789,22 @@ fun HomeScreen(
                                             uiState.dayWeekBarExpanded &&
                                             WeekViewUtils.isSettledDayPage(uiState.weekViewPagerPosition)
                                         ) {
-                                            // Keyed on its inputs so the date arithmetic and 7-day
-                                            // list aren't rebuilt on unrelated recompositions
-                                            // (event loads, scroll). A plain remember: unlike the
-                                            // agenda bar's anchor, it doesn't depend on layout.
+                                            // Keyed on the page so the date arithmetic isn't
+                                            // redone on unrelated recompositions (event loads,
+                                            // scroll). A plain remember: unlike the agenda bar's
+                                            // anchor, it doesn't depend on layout.
                                             val shownDate = remember(uiState.weekViewPagerPosition) {
                                                 WeekViewUtils.pageToDate(uiState.weekViewPagerPosition)
                                             }
-                                            val shownDayCode = remember(shownDate) {
-                                                DayPagerUtils.localDateToDayCode(shownDate)
-                                            }
-                                            val dayWeekDates = remember(shownDate, uiState.firstDayOfWeek) {
-                                                AgendaWeekBarLogic.weekDates(shownDate, uiState.firstDayOfWeek)
-                                            }
-                                            AgendaWeekBar(
-                                                weekDates = dayWeekDates,
-                                                selectedDayCode = shownDayCode,
+                                            DayViewWeekStrip(
+                                                shownDate = shownDate,
+                                                firstDayOfWeek = uiState.firstDayOfWeek,
                                                 todayDayCode = todayDayCode,
+                                                timePattern = timePattern,
+                                                weekLabelPrefix = weekLabelPrefix,
                                                 onDayClick = { tappedDayCode ->
                                                     onWeekDateSelected(DayPagerUtils.dayCodeToMs(tappedDayCode))
                                                 },
-                                                // Inset past the grid's time-axis gutter so the
-                                                // strip lines up with the day column below, like
-                                                // the multi-day views' headers.
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(start = WeekViewUtils.TIME_COLUMN_WIDTH)
                                             )
                                         }
                                         WeekViewContent(
@@ -804,7 +820,7 @@ fun HomeScreen(
                                             timePattern = timePattern,
                                             visibleDays = uiState.viewMode.visibleDays ?: 3,
                                             firstDayOfWeek = uiState.firstDayOfWeek,
-                                            weekLabelPrefix = stringResource(R.string.label_week),
+                                            weekLabelPrefix = weekLabelPrefix,
                                             allDayRowsExpanded = uiState.allDayRowsExpanded,
                                             onAllDayRowsToggle = onAllDayRowsToggle,
                                             onDatePickerRequest = onWeekDatePickerRequest,
@@ -827,6 +843,7 @@ fun HomeScreen(
                                             pendingNavigateToPage = uiState.pendingWeekViewPagerPosition,
                                             onNavigationConsumed = onClearPendingWeekPagerPosition,
                                             onReschedule = onReschedule,
+                                            onPinchViewSwitch = onWeekPinchViewSwitch,
                                             onDayHeaderClick = { date ->
                                                 // Snapshot the view and date before drilling
                                                 // into DAY, the same way Jump to date does, so
@@ -856,9 +873,38 @@ fun HomeScreen(
                                             modifier = Modifier.fillMaxSize()
                                         )
                                     }
-                                    else -> {} // MONTH and MONTH_FULL handled below
+                                    else -> {} // MONTH, MONTH_FULL and PLANNER handled below
                                 }
                             }
+                        }
+                        uiState.viewMode == ViewMode.PLANNER -> {
+                            PlannerView(
+                                plannerState = plannerState,
+                                anchorDayCode = uiState.plannerAnchorDayCode,
+                                pagerPosition = uiState.plannerWeekPagerPosition,
+                                pendingNavigateToPage = uiState.pendingPlannerPagerPosition,
+                                firstDayOfWeek = uiState.firstDayOfWeek,
+                                todayDayCode = todayDayCode,
+                                nowMs = nowMs,
+                                timePattern = timePattern,
+                                showEventEmojis = uiState.showEventEmojis,
+                                zoom = uiState.plannerZoom,
+                                widthDp = configuration.screenWidthDp,
+                                isCompactHeight = isCompactHeight,
+                                onPageChanged = onPlannerPageChanged,
+                                onNavigationConsumed = onClearPendingPlannerPagerPosition,
+                                onEmptyDayTap = onCreateEventWithDateTime,
+                                onDayClick = onShowDayDetail,
+                                onDayHeaderClick = { date ->
+                                    // Back from the Day view returns to the week the Planner
+                                    // showed.
+                                    preJumpViewMode = ViewMode.PLANNER
+                                    preJumpDate = plannerWeekStartMs ?: 0L
+                                    onWeekDayHeaderClick(date)
+                                },
+                                onZoomChange = onPlannerZoomChange,
+                                modifier = Modifier.fillMaxSize(),
+                            )
                         }
                         uiState.viewMode == ViewMode.MONTH_FULL -> {
                             HorizontalPager(
@@ -875,43 +921,23 @@ fun HomeScreen(
                                 val pageYear = pageCal.get(JavaCalendar.YEAR)
                                 val pageMonth = pageCal.get(JavaCalendar.MONTH)
 
-                                // The grid fits the screen (weighted rows), so nothing in it
-                                // scrolls vertically. Material3 pull-to-refresh is driven by
-                                // nested scroll and sees no drag unless a descendant passes
-                                // vertical deltas up. This scrollable consumes nothing, so it
-                                // hands the vertical gesture to pull-to-refresh without moving
-                                // the grid; the HorizontalPager takes only the horizontal axis.
-                                val monthFullScrollDonor = rememberScrollableState { 0f }
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .scrollable(
-                                            orientation = Orientation.Vertical,
-                                            state = monthFullScrollDonor
-                                        ),
-                                    verticalArrangement = Arrangement.Top
-                                ) {
-                                    DayOfWeekHeaders(
-                                        firstDayOfWeek = uiState.firstDayOfWeek,
-                                        showWeekNumbers = uiState.showWeekNumbers,
-                                    )
-
-                                    FullHeightMonthGrid(
-                                        year = pageYear,
-                                        month = pageMonth,
-                                        selectedDate = uiState.selectedDate,
-                                        monthEventsMap = monthEvents,
-                                        onDateSelected = { dateMs ->
-                                            onDateSelected(dateMs)
-                                            onShowDayDetail(dateMs)
-                                        },
-                                        firstDayOfWeekPref = uiState.firstDayOfWeek,
-                                        showWeekNumbers = uiState.showWeekNumbers,
-                                        showEventEmojis = uiState.showEventEmojis,
-                                        refreshKey = refreshKey,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                }
+                                MonthFullPage(
+                                    year = pageYear,
+                                    month = pageMonth,
+                                    selectedDate = uiState.selectedDate,
+                                    monthEventsMap = monthEvents,
+                                    onDateSelected = { dateMs ->
+                                        onDateSelected(dateMs)
+                                        onShowDayDetail(dateMs)
+                                    },
+                                    firstDayOfWeek = uiState.firstDayOfWeek,
+                                    showWeekNumbers = uiState.showWeekNumbers,
+                                    showEventEmojis = uiState.showEventEmojis,
+                                    nowMs = nowMs,
+                                    todayDayCode = todayDayCode,
+                                    zoom = uiState.monthFullZoom,
+                                    onZoomChange = onMonthFullZoomChange,
+                                )
                             }
                         }
                         else -> {
@@ -1103,10 +1129,11 @@ fun HomeScreen(
         )
     }
 
-    // Date picker for the 3-day and week views
+    // Date picker for the 3-day and week views and the Planner, opening on the Planner's week
+    // there and on today in the time grids.
     if (uiState.showWeekViewDatePicker) {
         WeekViewDatePickerSheet(
-            currentWeekStartMs = System.currentTimeMillis(),
+            currentWeekStartMs = plannerWeekStartMs ?: System.currentTimeMillis(),
             onDateSelected = onWeekDateSelected,
             onDismiss = onWeekDatePickerDismiss,
             firstDayOfWeek = uiState.firstDayOfWeek
@@ -1117,10 +1144,11 @@ fun HomeScreen(
     // before navigating so the pager page is computed for day pages, not week pages.
     if (showJumpToDatePicker) {
         WeekViewDatePickerSheet(
-            currentWeekStartMs = uiState.selectedDate.takeIf { it != 0L } ?: System.currentTimeMillis(),
+            currentWeekStartMs = plannerWeekStartMs
+                ?: uiState.selectedDate.takeIf { it != 0L } ?: System.currentTimeMillis(),
             onDateSelected = { dateMs ->
                 preJumpViewMode = uiState.viewMode
-                preJumpDate = uiState.selectedDate
+                preJumpDate = plannerWeekStartMs ?: uiState.selectedDate
                 onViewSelect(ViewMode.DAY)
                 onWeekDateSelected(dateMs)
                 showJumpToDatePicker = false
@@ -1170,6 +1198,7 @@ fun HomeScreen(
                 // and dismissing the destination returns to the hub. Only Jump to date
                 // changes the calendar; the hub closes when a date is picked (above).
                 onInvitesClick = onOpenInvitationInbox,
+                onRecentChangesClick = onOpenRecentChanges,
                 onJumpToDateClick = { showJumpToDatePicker = true },
                 onShareAvailabilityClick = onShareAvailabilityClick,
                 onTagsClick = onTagsClick,
@@ -1211,10 +1240,10 @@ fun HomeScreen(
         )
     }
 
-    // Day events sheet for the full-height month view
+    // Day events sheet for the full-height month view and the Planner
     if (uiState.showDayDetailSheet) {
         val dayCode = DayPagerUtils.msToDayCode(uiState.dayDetailDate)
-        val dayEvents = monthEvents[dayCode] ?: persistentListOf()
+        val dayEvents = dayDetailEvents(uiState.viewMode, monthEvents, plannerState, dayCode)
         DayEventsSheet(
             dateMs = uiState.dayDetailDate,
             events = dayEvents,
@@ -1431,6 +1460,11 @@ private fun HomeTopAppBar(
                 firstDayOfWeek = uiState.firstDayOfWeek,
                 yearLabel = yearLabel,
                 today = today,
+                plannerWeekStart = if (uiState.viewMode == ViewMode.PLANNER) {
+                    plannerShownWeekStart(uiState.plannerAnchorDayCode, uiState.plannerWeekPagerPosition, uiState.firstDayOfWeek, today)
+                } else {
+                    null
+                },
             )
             // AGENDA and DAY show a collapsible week bar, toggled by the title chevron. The other
             // views use a plain title (see the else branch).
@@ -1477,7 +1511,7 @@ private fun HomeTopAppBar(
                         }
                     } else {
                         // YEAR has no title action; MONTH and MONTH_FULL open the year overlay,
-                        // THREE_DAYS and WEEK the date picker.
+                        // THREE_DAYS, WEEK and PLANNER the date picker.
                         val titleModifier = if (uiState.viewMode != ViewMode.YEAR) {
                             Modifier.clickable(onClick = onTitleClick)
                         } else {
@@ -1582,7 +1616,7 @@ private fun AvatarTrigger(
 }
 
 @Composable
-private fun DayOfWeekHeaders(firstDayOfWeek: Int, showWeekNumbers: Boolean = false) {
+internal fun DayOfWeekHeaders(firstDayOfWeek: Int, showWeekNumbers: Boolean = false) {
     Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
         if (showWeekNumbers) {
             Spacer(modifier = Modifier.width(24.dp))

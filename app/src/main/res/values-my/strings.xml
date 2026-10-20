@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">ချိန်ကိုက်ခြင်းပြီးစီးမှုနှင့် အမှားများအကြောင်း အကြောင်းကြားချက်များ</string>
     <string name="channel_event_invitations">ပွဲဖိတ်စာများ</string>
     <string name="channel_event_invitations_desc">ပြက္ခဒိန် ဖိတ်စာအသစ် လက်ခံရရှိသည့်အခါ အကြောင်းကြားချက်များ</string>
+    <string name="channel_calendar_updates">ပြက္ခဒိန် ပြောင်းလဲမှုများ</string>
     <string name="invite_notification_body">%1$s ထံမှ · တုံ့ပြန်ရန် တို့ပါ</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">ဤတုံ့ပြန်ချက်သည် အစီအစဉ်တစ်ခုလုံးအတွက် သက်ဆိုင်သည်။</string>
+    <string name="rsvp_receipt_pending">တုံ့ပြန်ချက် စောင့်ဆိုင်းဆဲ</string>
+    <string name="rsvp_receipt_sent">တုံ့ပြန်ချက် ပို့ပြီး</string>
+    <string name="rsvp_receipt_not_delivered">တုံ့ပြန်ချက် မပို့ဆောင်နိုင်ပါ</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">ဒါနှင့် အနာဂတ် အားလုံး</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">မူရင်း</string>
     <string name="app_icon_supporter">ပံ့ပိုးသူ</string>
     <string name="app_icon_supporter_calendar">ပံ့ပိုးသူ၊ ပြက္ခဒိန်ဟု အမည်တပ်ထားသည်</string>
+    <string name="app_icon_todays_date">ယနေ့ ရက်စွဲ</string>
     <string name="app_icon_label_calendar">ပြက္ခဒိန်</string>
     <string name="app_icon_support_cta">KashCal ကို ပံ့ပိုးပါ</string>
     <string name="app_icon_switch_note">အိုင်ကွန်ပြောင်းလဲခြင်းသည် အက်ပ်ကို ပြန်စတင်စေနိုင်သည်။ အကြောင်းကြားချက်များသည် မူရင်း အိုင်ကွန်နှင့် အမည်ကို အမြဲ အသုံးပြုသည်။</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">သင့်ပွဲများကို ဤနေရာတွင် ကြည့်ရန် iCloud ချိတ်ဆက်ပါ</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">နောက်မှ</string>
+    <string name="whats_new_skip">ကျော်</string>
+    <string name="whats_new_next">ရှေ့သို့</string>
+    <string name="whats_new_page_of">စာမျက်နှာ %2$d ခုအနက် %1$d</string>
+    <string name="whats_new_find_it_in">ဤနေရာတွင် ရှာပါ</string>
     <string name="whats_new_v598_title">Android ဖွင့်ထားရန် ကူညီပါ</string>
     <string name="whats_new_v598_body">Google သည် သင့်စက်ပစ္စည်းတွင် အက်ပ်များ တပ်ဆင်ပုံကို ပြောင်းလဲနေသည်။ သင့်အကူအညီ လိုအပ်သည်။</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org သို့ သွားပါ</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">ဤဗားရှင်းကို KashCal ကို ထောက်ပံ့သူများအတွက် ရည်စူးပါသည်။ သေးငယ်သော ပံ့ပိုးမှုတစ်ခုက ကြီးမားပြီး အဆက်မပြတ် အကျိုးပြုပါသည်။</string>
     <string name="whats_new_v732_caption">ထောက်ပံ့သူ မဖြစ်သေးဘူးလား?</string>
     <string name="whats_new_v732_action_label">သင့်အစီအစဉ်တွင် ကျွန်ုပ်တို့ကို ထည့်ပါ</string>
+    <string name="whats_new_v772_icon_title">သင့်အိုင်ကွန်က ရက်စွဲကို သိသည်</string>
+    <string name="whats_new_v772_icon_body">ယနေ့ ရက်စွဲ အိုင်ကွန်ကို ရွေးလိုက်ပါက KashCal သည် သင့်ပင်မစခရင်ပေါ်တွင် လ၏ ရက်ကို ပြသပေးသည်။ ညတိုင်း အလိုအလျောက် ပြောင်းသွားသည်။</string>
+    <string name="whats_new_v772_changes_title">ပြောင်းလဲသည်များကို ကြည့်ပါ</string>
+    <string name="whats_new_v772_changes_body">သင့် iCloud နှင့် CalDAV ပြက္ခဒိန်များမှ အသစ်၊ တည်းဖြတ်ထားသည့်နှင့် ဖယ်ရှားထားသည့် ပွဲများကို မကြာသေးမီ ပြောင်းလဲမှုများ တွင် ၇ ရက်ကြာ စုထားပေးသည်။ ဖွင့်ရန် တစ်ခုကို တို့ပါ။</string>
+    <string name="whats_new_v772_notifications_body">နောက်ခံ ချိန်ကိုက်မှုက သင့် iCloud သို့မဟုတ် CalDAV ပွဲများတွင် ပြောင်းလဲမှုများကို တွေ့ရှိသည့်အခါ အကြောင်းကြားချက် ရယူပါ။ သင် ဖွင့်သည်အထိ ပိတ်ထားပါမည်။</string>
+    <string name="whats_new_hero_sample_lunch">အဖွဲ့ နေ့လယ်စာ</string>
+    <string name="whats_new_hero_sample_review">ဒီဇိုင်း သုံးသပ်ခြင်း</string>
+    <string name="whats_new_hero_sample_book_club">စာအုပ်ကလပ်</string>
+    <string name="whats_new_hero_sample_calendar">အလုပ်</string>
+    <string name="whats_new_hero_now">ယခု</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud ချိတ်ဆက်</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">ချိန်ကိုက်စက်ရှင် မရှိသေးပါ။\n\nပြက္ခဒိန်အမြင်တွင် အောက်သို့ ဆွဲချ၍ ချိန်ကိုက်ပါ။</string>
     <string name="status_no_writable_calendars">ရေးသားနိုင်သော ပြက္ခဒိန် မရှိပါ</string>
     <string name="status_events_count">ပွဲ %1$d ခု</string>
-    <string name="status_sync_changes">ချိန်ကိုက် ပြောင်းလဲမှုများ</string>
     <string name="status_sync_history">ချိန်ကိုက် မှတ်တမ်း</string>
     <string name="status_parse_failures">ခွဲခြမ်းစိတ်ဖြာ ကျရှုံးမှုများ</string>
     <string name="status_error">အမှား</string>
@@ -584,6 +601,25 @@
     <string name="settings_detailed_widget_rows_info">တစ်ကြောင်းတည်း ကျစ်လစ်စွာ၊ သို့မဟုတ် ပြီးဆုံးချိန်ဖြင့် နှစ်ကြောင်း အသေးစိတ်။</string>
     <string name="settings_sync_lookback">ချိန်ကိုက် ပြန်ကြည့်ရာကာလ</string>
     <string name="settings_sync_lookback_hint">ဖြစ်ရပ်များကို မည်မျှ နောက်ပြန်ချိန်ကိုက်မည်</string>
+    <string name="settings_change_notifications">ပြောင်းလဲမှု အကြောင်းကြားချက်များ</string>
+    <string name="settings_change_notifications_info">နောက်ခံ ချိန်ကိုက်မှုက သင့်ပွဲများတွင် ပြောင်းလဲမှုများကို တွေ့ရှိသည့်အခါ အကြောင်းကြားချက် ပို့ပေးသည်။ iCloud နှင့် CalDAV ပြက္ခဒိန်များအတွက် အလုပ်လုပ်သည်။</string>
+    <string name="settings_calendar_notifications">ပြက္ခဒိန် အကြောင်းကြားချက်များ</string>
+    <string name="settings_calendar_notifications_all">ပြက္ခဒိန်အားလုံး</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="other">%d ခု ပိတ်ထားသည်</item>
+    </plurals>
+    <string name="calendar_notifications_intro">သင့်ကို အကြောင်းကြားနိုင်မည့် ပြက္ခဒိန်များကို ရွေးပါ။</string>
+    <string name="calendar_notifications_info">ပိတ်ထားသော ပြက္ခဒိန်များကို ဆက်ပြသပြီး ချိန်ကိုက်နေဆဲဖြစ်သော်လည်း သင့်ကို အကြောင်းမကြားပါ။</string>
+    <string name="cd_calendar_notifications_info">ပိတ်ထားသော ပြက္ခဒိန်များအကြောင်း</string>
+    <string name="cd_state_expanded">ချဲ့ထားသည်</string>
+    <string name="cd_state_collapsed">ခေါက်ထားသည်</string>
+    <string name="calendar_notifications_device_info">စက် ပြက္ခဒိန်အားလုံး၏ အကြောင်းကြားချက်များကို ပိတ်ရန် ဤခလုတ်ကို ပိတ်ပါ၊ နောက်မှ ထည့်မည့် ပြက္ခဒိန်များလည်း ပါဝင်သည်။</string>
+    <string name="cd_calendar_notifications_device_info">စက် ပြက္ခဒိန် အကြောင်းကြားချက်များအကြောင်း</string>
+    <string name="cd_device_calendar_notifications">စက် ပြက္ခဒိန် အကြောင်းကြားချက်များ</string>
+    <string name="calendar_notifications_hidden">ဖျောက်ထားသည်</string>
+    <string name="calendar_notifications_app_off">စနစ်ဆက်တင်များတွင် KashCal အတွက် အကြောင်းကြားချက်များ ပိတ်ထားသဖြင့် မည်သည့် ပြက္ခဒိန်ကမျှ သင့်ကို အကြောင်းကြားနိုင်မည် မဟုတ်ပါ။</string>
+    <string name="calendar_notifications_reminders_off">စနစ်ဆက်တင်များတွင် ပွဲသတိပေးချက်များ ပိတ်ထားသဖြင့် မည်သည့် သတိပေးချက်မျှ ပြသနိုင်မည် မဟုတ်ပါ။</string>
+    <string name="cd_notifications_off">အကြောင်းကြားချက် ပိတ်ထား</string>
     <string name="settings_not_set">မသတ်မှတ်ရ</string>
     <string name="settings_on">ဖွင့်</string>
     <string name="settings_off">ပိတ်</string>
@@ -627,7 +663,6 @@
     <string name="label_device_calendars">စက် ပြက္ခဒိန်များ</string>
     <string name="label_default_calendar_hint">ပွဲအသစ်များကို ဤပြက္ခဒိန်တွင် ဖန်တီးပါမည်</string>
     <string name="label_visible_count">%1$d / %2$d မြင်နိုင်</string>
-    <string name="label_enabled_count">%1$d / %2$d ဖွင့်ထား</string>
     <string name="label_reminders_truncated">%1$d ခု မပြထား (%2$d ခု စုစုပေါင်း, အများဆုံး %3$d ခု ပြင်ဆင်နိုင်)</string>
     <string name="label_found_events">တွေ့ရှိ: ပွဲ %1$d ခု</string>
     <string name="label_open_debug_menu">ဒီဘတ်မီနူး ဖွင့်</string>
@@ -649,8 +684,6 @@
     <string name="device_calendars_grant">ခွင့်ပြု</string>
     <string name="device_calendars_none_found">စက် ပြက္ခဒိန်များ မတွေ့ရှိပါ။</string>
     <string name="device_calendars_local">ဒေသဆိုင်ရာ</string>
-    <string name="device_calendars_reminders">သတိပေးချက်များ</string>
-    <string name="device_calendars_reminders_desc">စက်ပြက္ခဒိန်ပွဲများအတွက် အကြောင်းကြားချက် ရယူ</string>
     <string name="device_calendars_read_only_no_write">ဖတ်ရုံ (ရေးသားခွင့် မရှိ)</string>
     <string name="device_calendars_read_only_calendar">ဖတ်ရုံ (ပြက္ခဒိန်သည် ဖတ်ရုံသာ)</string>
     <string name="settings_developer_options">ဆော့ဖ်ဝဲရေးသားသူ ရွေးစရာများ</string>
@@ -743,6 +776,51 @@
     <plurals name="imported_events">
         <item quantity="other">ပွဲ %1$d ခု တင်သွင်းပြီး</item>
     </plurals>
+    <string name="ics_import_preview_loading">ဤပြက္ခဒိန်ကို စစ်ဆေးနေသည်…</string>
+    <string name="ics_import_preview_failed">ဤပွဲများအတွက် ဤပြက္ခဒိန်ကို စစ်ဆေး၍ မရပါ။ တင်သွင်းနိုင်ပါသေးသည်။</string>
+    <string name="ics_import_will_cancel">ဤသည် %1$s ကို ပယ်ဖျက်ပါမည်၊ စီစဉ်သူ %2$s</string>
+    <string name="ics_import_will_cancel_no_organizer">ဤသည် %1$s ကို ပယ်ဖျက်ပါမည်</string>
+    <string name="ics_import_will_update">ဤသည် %1$s ကို အပ်ဒိတ်လုပ်ပါမည်</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="other">ပွဲ %1$d ခု နောက်ဆုံးအခြေအနေ ရှိပြီးသားဖြစ်သည်</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="other">%1$d ခု ကျော်ခဲ့သည်: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">၎င်းသည် ဖိတ်စာအတွက် တုံ့ပြန်ချက်ဖြစ်ပြီး သင့်ပြက္ခဒိန်သို့ ဘာမျှ မထည့်ပါ</string>
+    <string name="ics_import_reason_unsupported">ဤဖိတ်စာ မက်ဆေ့ချ်အမျိုးအစားကို မပံ့ပိုးပါ</string>
+    <string name="ics_import_reason_organizer_mismatch">၎င်းသည် အစည်းအဝေး စီစဉ်သူမဟုတ်သူထံမှ လာသည်</string>
+    <string name="ics_import_reason_cancel_no_match">ပယ်ဖျက်ထားသော အစည်းအဝေးသည် ဤပြက္ခဒိန်တွင် မရှိပါ</string>
+    <string name="ics_import_reason_cancel_not_for_you">ပယ်ဖျက်ချက်သည် အခြားတက်ရောက်သူများအတွက် ဖြစ်သည်</string>
+    <string name="ics_import_reason_deletion_pending">ပွဲကို ဖျက်နေဆဲဖြစ်သည်</string>
+    <string name="ics_import_reason_cancelled_in_file">ဖိုင်တွင် ပယ်ဖျက်ပြီးသားဖြစ်သည်</string>
+    <string name="ics_import_reason_this_and_future">ဤအကြိမ်နှင့် နောက်အကြိမ်များသို့ ပြောင်းလဲမှုများကို မပံ့ပိုးပါ</string>
+    <string name="ics_import_reason_own_cancel">ဤအစည်းအဝေးကို သင်စီစဉ်သဖြင့် ပွဲထဲမှ ပယ်ဖျက်ပါ</string>
+    <string name="ics_import_reason_on_another_calendar">ဤအကောင့်၏ အခြားပြက္ခဒိန်တွင် ရှိပြီးသားဖြစ်သည်</string>
+    <string name="ics_import_notice_unverified">ဖိတ်စာဖိုင် ပေးပို့သူကို အတည်ပြု၍ မရပါ။ စီစဉ်သူထံမှ လာကြောင်း စစ်ဆေးပါ။</string>
+    <string name="ics_import_notice_answer_notifies">ဤဖိတ်စာကို ဖြေကြားပါက စီစဉ်သူထံ အကြောင်းကြားနိုင်သည်။</string>
+    <string name="ics_import_notice_guests_again">သင်သည် စီစဉ်သူဖြစ်သဖြင့် တက်ရောက်သူများ ဤဖိတ်စာကို ထပ်မံ ရရှိနိုင်သည်။</string>
+    <string name="cd_dismiss_notice">အသိပေးချက်ကို ပယ်ရန်</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="other">%1$d ခု ထည့်ပြီး</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="other">%1$d ခု အပ်ဒိတ်ပြီး</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="other">%1$d ခု ပယ်ဖျက်ပြီး</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="other">%1$d ခု နောက်ဆုံးအခြေအနေ ရှိပြီးသား</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="other">%1$d ခု ကျော်ခဲ့</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="other">%1$d ခု မအောင်မြင်</item>
+    </plurals>
+    <string name="ics_import_summary_separator">"၊ "</string>
+    <string name="ics_import_summary_nothing">တင်သွင်းစရာ မရှိပါ</string>
     <plurals name="exported_events">
         <item quantity="other">ပွဲ %1$d ခု ထုတ်ယူပြီး</item>
     </plurals>
@@ -875,6 +953,14 @@
     <string name="cd_active_view">လက်ရှိ အမြင်</string>
     <string name="view_agenda">အစီအစဉ်</string>
     <string name="view_month_full">လ (အပြည့်)</string>
+    <string name="view_planner">အစီအစဉ်</string>
+    <string name="planner_free_day">အားလပ်ရက်</string>
+    <string name="cd_planner_show_day_events">ဤနေ့၏ ပွဲများကို ပြပါ</string>
+    <string name="planner_different_this_week">ဤအပတ် ကွဲပြားချက်များ</string>
+    <string name="planner_usual_week">ပုံမှန်အပတ်ဖြစ်သည်။</string>
+    <string name="planner_moved_was">ယခင် %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">နေ့</string>
     <string name="view_three_days">၃ ရက်</string>
     <string name="view_year">နှစ်</string>
@@ -930,11 +1016,6 @@
     <string name="cd_increase_interval">အကြားအချိန် တိုးရန်</string>
     <string name="rrule_starting">%1$s %2$s စတင်သည်%3$s</string>
     <string name="rrule_since">%1$s · %2$s ကတည်းက</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d အသစ်</string>
-    <string name="sync_summary_updated">%1$d အပ်ဒိတ်ပြီး</string>
-    <string name="sync_summary_removed">%1$d ဖယ်ရှားပြီး</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">စက်ဝိုင်း လှိမ့်ခြင်း ဖွင့်ထား</string>
@@ -1030,9 +1111,29 @@
     <plurals name="sync_snackbar_events_removed">
         <item quantity="other">ပွဲ %1$d ခုဖယ်ရှားပြီး</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="other">ထပ်တလဲလဲ ဖြစ်ရပ် %1$d ခု ပယ်ဖျက်ပြီး</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="other">ပြက္ခဒိန်အပ်ဒိတ် %1$d ခု</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">မကြာသေးမီ ပြောင်းလဲမှုများ</string>
+    <string name="recent_changes_empty">မကြာသေးမီ ပြောင်းလဲမှု မရှိပါ</string>
+    <string name="recent_changes_clear_all">အားလုံး ရှင်း</string>
+    <string name="recent_changes_cleared">မကြာသေးမီ ပြောင်းလဲမှုများ ရှင်းပြီး</string>
+    <string name="recent_changes_dismiss">ပယ်</string>
+    <string name="recent_changes_moved_from">%1$s မှ ရွှေ့ထားသည်</string>
+    <string name="recent_changes_time_changed">အချိန် ပြောင်းထားသည်</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">တည်နေရာ ပြောင်းထားသည်</string>
+    <string name="recent_changes_title_changed">ခေါင်းစဉ် ပြောင်းထားသည်</string>
+    <string name="recent_changes_repeat_changed">ထပ်ခါတလဲလဲ ပြောင်းထားသည်</string>
+    <string name="recent_changes_cancelled">ပယ်ဖျက်လိုက်သည်</string>
+    <string name="cd_recent_change_new">ပွဲအသစ်</string>
+    <string name="cd_recent_change_updated">အပ်ဒိတ်ပြီး</string>
+    <string name="cd_recent_change_removed">ဖယ်ရှားပြီး</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">ရက် %1$d / %2$d</string>

@@ -65,6 +65,8 @@ object TestDataStoreFactory {
         every { quickAddEnabled } returns MutableStateFlow(false)
         every { onboardingDismissed } returns MutableStateFlow(true)
         every { hiddenDeviceCalendarIds } returns MutableStateFlow(emptySet())
+        every { mutedDeviceCalendarIds } returns MutableStateFlow(emptySet())
+        every { deviceCalendarRemindersEnabled } returns MutableStateFlow(true)
         every { defaultEventDuration } returns MutableStateFlow(KashCalDataStore.DEFAULT_EVENT_DURATION_MINUTES)
         every { defaultCalendar } returns MutableStateFlow(null)
         every { defaultCalendarId } returns MutableStateFlow(null)
@@ -76,6 +78,12 @@ object TestDataStoreFactory {
         every { accentSeed } returns MutableStateFlow(KashCalDataStore.ACCENT_SEED_DEFAULT)
         coEvery { getWeekViewScrollMinutes() } returns KashCalDataStore.WEEK_VIEW_SCROLL_NOT_SAVED
         coEvery { getWeekViewHourHeight() } returns KashCalDataStore.DEFAULT_HOUR_HEIGHT_DP
+        every { plannerZoom } returns MutableStateFlow(1f)
+        coEvery { getPlannerZoom() } returns 1f
+        coJustRun { setPlannerZoom(any()) }
+        every { monthFullZoom } returns MutableStateFlow(1f)
+        coEvery { getMonthFullZoom() } returns 1f
+        coJustRun { setMonthFullZoom(any()) }
         coEvery { getTitleSuggestionsEnabled() } returns true
         coEvery { getLastWhatsNewVersionShown() } returns Int.MAX_VALUE
         coEvery { getEnabledDeviceCalendarIds() } returns enabledDeviceCalendarIds

@@ -116,6 +116,12 @@ object PreferencesKeys {
     /** Vibrates on notifications. */
     val NOTIFICATION_VIBRATE = booleanPreferencesKey("notification_vibrate")
 
+    /**
+     * Posts a notification for the Recent changes a background sync records (default false);
+     * otherwise only the in-app snackbar announces them.
+     */
+    val CHANGE_NOTIFICATIONS_ENABLED = booleanPreferencesKey("change_notifications_enabled")
+
     /** Quick Add on or off (shows the FAB). */
     val QUICK_ADD_ENABLED = booleanPreferencesKey("quick_add_enabled")
 
@@ -176,6 +182,18 @@ object PreferencesKeys {
      * `MAX_HOUR_HEIGHT_DP` on restore. Absent means the default zoom.
      */
     val WEEK_VIEW_HOUR_HEIGHT = floatPreferencesKey("week_view_hour_height")
+
+    /**
+     * Pinch-to-zoom scale of the Planner's box contents, restored on cold launch and clamped by
+     * `clampPlannerZoom` on restore. Absent means no zoom.
+     */
+    val PLANNER_ZOOM = floatPreferencesKey("planner_zoom")
+
+    /**
+     * Pinch-to-zoom scale of the full-height month view's day cells, restored on cold launch and
+     * clamped by `clampMonthFullZoom` on restore. Absent means no zoom.
+     */
+    val MONTH_FULL_ZOOM = floatPreferencesKey("month_full_zoom")
 
     // ========== Migration Flags ==========
 
@@ -255,6 +273,12 @@ object PreferencesKeys {
 
     /** Device calendar ids that are enabled but hidden from view, stored as strings. */
     val HIDDEN_DEVICE_CALENDAR_IDS = stringSetPreferencesKey("hidden_device_calendar_ids")
+
+    /**
+     * Device calendar ids whose notifications are muted, stored as strings. The rule is the one
+     * [org.onekash.kashcal.data.db.entity.Calendar.isNotificationMuted] states for Room calendars.
+     */
+    val MUTED_DEVICE_CALENDAR_IDS = stringSetPreferencesKey("muted_device_calendar_ids")
 
     /** KashCal fires reminders for device calendar events. */
     val DEVICE_CALENDAR_REMINDERS_ENABLED = booleanPreferencesKey("device_calendar_reminders_enabled")

@@ -11,11 +11,12 @@ import kotlinx.collections.immutable.persistentSetOf
 import org.onekash.kashcal.data.calendar_provider.DeviceCalendar
 import org.onekash.kashcal.data.db.entity.Calendar
 import org.onekash.kashcal.data.preferences.DefaultCalendar
+import org.onekash.kashcal.domain.changes.RecentChangeItem
 import org.onekash.kashcal.domain.model.DisplayEvent
 import org.onekash.kashcal.domain.model.SearchResult
 import org.onekash.kashcal.error.ErrorPresentation
-import org.onekash.kashcal.sync.model.SyncChange
 import org.onekash.kashcal.ui.components.SyncBannerState
+import org.onekash.kashcal.ui.components.weekview.WeekViewUtils
 import org.onekash.kashcal.ui.model.CalendarGroup
 import org.onekash.kashcal.util.CalendarIntentData
 import java.time.LocalDate
@@ -83,6 +84,13 @@ data class HomeUiState(
     val enabledDeviceCalendars: ImmutableList<DeviceCalendar> = persistentListOf(),
     /** Device calendar ids that are enabled but hidden from view. */
     val hiddenDeviceCalendarIds: PersistentSet<Long> = persistentSetOf(),
+    /** Device calendar ids whose notifications are muted one by one. */
+    val mutedDeviceCalendarIds: PersistentSet<Long> = persistentSetOf(),
+    /**
+     * Whether KashCal reminds for device calendars at all: the Device calendars switch in
+     * Calendar notifications.
+     */
+    val deviceRemindersEnabled: Boolean = true,
 
     // === SYNC STATE ===
     /** Whether sync work is live; only the duplicate-sync guard reads it, not the UI. */
@@ -143,6 +151,25 @@ data class HomeUiState(
     /** Whether the time-grid date picker dialog shows. */
     val showWeekViewDatePicker: Boolean = false,
 
+    // === PLANNER STATE ===
+    /**
+     * Day code of the first day of the week that held today when the Planner was first shown,
+     * Today was tapped or the first day of the week changed. Planner pages count weeks from it.
+     * Null until the Planner is first shown.
+     */
+    val plannerAnchorDayCode: Int? = null,
+    /** The Planner pager's settled page; [WeekViewUtils.CENTER_WEEK_PAGE] is the anchor week. */
+    val plannerWeekPagerPosition: Int = WeekViewUtils.CENTER_WEEK_PAGE,
+    /** Planner page to scroll to, or null when no navigation is pending. */
+    val pendingPlannerPagerPosition: Int? = null,
+    /** Pinch-to-zoom scale of the Planner's box contents, clamped by `clampPlannerZoom`. */
+    val plannerZoom: Float = 1f,
+    /**
+     * Pinch-to-zoom scale of the full-height month view's day cells, clamped by
+     * `clampMonthFullZoom`.
+     */
+    val monthFullZoom: Float = 1f,
+
     // === DAY DETAIL SHEET (full-height month view) ===
     /** Whether the day events sheet shows. */
     val showDayDetailSheet: Boolean = false,
@@ -160,10 +187,12 @@ data class HomeUiState(
     val showShareAvailabilitySheet: Boolean = false,
     /** Whether the invitation inbox sheet shows. */
     val isInvitationInboxOpen: Boolean = false,
-    /** Whether the sync changes sheet shows. */
-    val showSyncChangesSheet: Boolean = false,
-    /** Changes from the latest sync that reported any, for the sync changes sheet. */
-    val syncChanges: ImmutableList<SyncChange> = persistentListOf(),
+    /** Whether the Recent changes sheet shows. */
+    val isRecentChangesOpen: Boolean = false,
+    /** The Recent changes rows, read only while the sheet shows. */
+    val recentChanges: ImmutableList<RecentChangeItem> = persistentListOf(),
+    /** The rows the last Clear all hid, while its undo is on offer; empty otherwise. */
+    val recentChangesClearedIds: ImmutableList<Long> = persistentListOf(),
     /** Current calendar view. */
     val viewMode: ViewMode = ViewMode.MONTH,
     /**
@@ -398,6 +427,14 @@ sealed class PendingAction {
         val location: String?,
         val referenceMs: Long
     ) : PendingAction()
+
+    /**
+     * Opens what a change notification's tap shows ([HomeViewModel.openChangeNotification]).
+     *
+     * @param recentChangeId the Recent changes row a one-change notification names; null opens
+     *   the sheet.
+     */
+    data class OpenChangeNotification(val recentChangeId: Long?) : PendingAction()
 }
 
 /** Calendar view; [key] is the persisted value. */
@@ -412,6 +449,8 @@ enum class ViewMode(val key: String) {
     THREE_DAYS("three_days"),
     /** 7-day scrollable time grid. */
     WEEK("week"),
+    /** One week as day boxes plus a box listing what differs from the usual week. */
+    PLANNER("planner"),
     /** Full-height month grid with event snippets. */
     MONTH_FULL("month_full"),
     /** 12-month year overview grid. */
@@ -419,15 +458,24 @@ enum class ViewMode(val key: String) {
     /** Insights analytics screen; opened from the drawer only, never persisted as the default. */
     INSIGHTS("insights");
 
-    /** True for views that render a scrollable time grid (DAY, THREE_DAYS, WEEK). */
+    /**
+     * True for views that render a scrollable time grid (DAY, THREE_DAYS, WEEK). PLANNER pages by
+     * week too but has no time grid, so it is false.
+     */
     val isTimeGrid: Boolean get() = this == DAY || this == THREE_DAYS || this == WEEK
+
+    /**
+     * True for views that don't track selectedDate as they page (the time grids and PLANNER), so
+     * a new event from the FAB or Quick Add starts from today rather than a stale selected day.
+     */
+    val seedsNewEventsFromToday: Boolean get() = isTimeGrid || this == PLANNER
 
     /** Number of day columns rendered side-by-side. Null for non-time-grid views. */
     val visibleDays: Int? get() = when (this) {
         DAY -> 1
         THREE_DAYS -> 3
         WEEK -> 7
-        MONTH, AGENDA, MONTH_FULL, YEAR, INSIGHTS -> null
+        MONTH, AGENDA, MONTH_FULL, YEAR, INSIGHTS, PLANNER -> null
     }
 
     /**
@@ -438,7 +486,7 @@ enum class ViewMode(val key: String) {
         DAY -> 1
         THREE_DAYS -> 3
         WEEK -> 1
-        MONTH, AGENDA, MONTH_FULL, YEAR, INSIGHTS -> null
+        MONTH, AGENDA, MONTH_FULL, YEAR, INSIGHTS, PLANNER -> null
     }
 
     companion object {
@@ -530,3 +578,10 @@ sealed interface PendingDelete {
         override val isAllDay: Boolean,
     ) : PendingDelete
 }
+
+/** Where a Recent changes row opens: the event, at [occurrenceTs] when set. */
+data class RecentChangeTarget(
+    val event: org.onekash.kashcal.data.db.entity.Event,
+    /** The occurrence to show; null opens the event at its own start. */
+    val occurrenceTs: Long?
+)

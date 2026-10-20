@@ -78,8 +78,9 @@ interface CalendarProviderRepository {
     ): List<org.onekash.kashcal.data.db.dao.TitleSuggestion>
 
     /**
-     * Removes enabled device-calendar ids in [dataStore] that [getDeviceCalendars] no longer
-     * returns: an uninstalled sync adapter, a removed account or a deleted calendar.
+     * Removes enabled and muted device-calendar ids in [dataStore] that [getDeviceCalendars] no
+     * longer returns: an uninstalled sync adapter, a removed account or a deleted calendar.
+     * Provider calendar ids can be reused, so a stale mute would silence a new calendar.
      */
     suspend fun pruneStaleCalendarIds(dataStore: org.onekash.kashcal.data.preferences.KashCalDataStore)
 
@@ -120,6 +121,7 @@ interface CalendarProviderRepository {
      *   owner address is a valid organizer; guests without an email are skipped.
      * @param categories tag names, stored as one extended-property row; null or a list with no
      *   usable name writes no row. A failed tag write leaves the event saved without tags.
+     * @param uid the iCalendar UID to store in `UID_2445`, or null to leave it to the sync adapter
      */
     suspend fun createEvent(
         calendarId: Long,
@@ -136,8 +138,46 @@ interface CalendarProviderRepository {
         availability: Int = 0,
         eventColor: Int? = null,
         attendees: List<DeviceAttendee>? = null,
-        categories: List<String>? = null
+        categories: List<String>? = null,
+        uid: String? = null
     ): Result<Long>
+
+    /**
+     * Creates an imported invitation and returns its id: the event with `UID_2445` = [uid],
+     * `ORGANIZER` = [organizer], `STATUS` = [status] and `HAS_ATTENDEE_DATA` = 1, its reminders,
+     * and [attendees] written as given (relationship and status included), all in one batch.
+     * No organizer row is added for the calendar's owner, so the user stays a guest; a guest
+     * without an email is skipped. Other parameters are as in [createEvent].
+     */
+    suspend fun createInvitation(
+        calendarId: Long,
+        title: String,
+        description: String?,
+        location: String?,
+        startTs: Long,
+        endTs: Long?,
+        isAllDay: Boolean,
+        rrule: String?,
+        duration: String?,
+        timezone: String,
+        reminders: List<Int>,
+        uid: String,
+        organizer: String,
+        status: Int,
+        attendees: List<DeviceAttendee>
+    ): Result<Long>
+
+    /**
+     * Returns the live rows (`DELETED = 0`) of [calendarIds] whose `UID_2445` is [uid], a master
+     * and its exceptions alike; an empty [calendarIds] matches nothing.
+     */
+    suspend fun findEventsByUid(uid: String, calendarIds: Collection<Long>): Result<List<DeviceUidRow>>
+
+    /**
+     * Sets a whole event row's `STATUS`. The provider drops a cancelled row's instances, so a
+     * `STATUS_CANCELED` event shows no occurrence and fires no reminder.
+     */
+    suspend fun setEventStatus(eventId: Long, status: Int): Result<Unit>
 
     /**
      * Updates an event row, then its reminders, guests and tags as given; these steps aren't one
@@ -389,14 +429,30 @@ interface CalendarProviderRepository {
     // ==================== Reminders ====================
 
     /**
-     * Returns the reminder with the earliest trigger time after [afterMs] among occurrences of
-     * [enabledCalendarIds] with alarms in the next 30 days, or null if there is none.
-     * Occurrences the user declined are skipped. See [UpcomingDeviceReminder] for its key.
+     * Returns the first reminder in [DeviceReminderCursor] order whose trigger time is after
+     * [afterMs], among occurrences of [enabledCalendarIds] with alarms in the 30 days from
+     * [afterMs], or null if there is none. Occurrences the user declined are skipped.
      */
     suspend fun getNextUpcomingReminder(
         enabledCalendarIds: Set<Long>,
         afterMs: Long = System.currentTimeMillis()
     ): UpcomingDeviceReminder?
+
+    /**
+     * Returns, from one read of the occurrences of [enabledCalendarIds] with alarms in the window
+     * from the earlier of [after]'s trigger and [nowMs] to 30 days after [nowMs] (declined ones
+     * skipped, as in [getNextUpcomingReminder]):
+     * - `due`: the reminders after [after] in [DeviceReminderCursor] order whose trigger time is
+     *   at or before [nowMs], in order, at most [limit], with `overflowed` set when more were due;
+     * - `next`: the first due reminder left out when `overflowed`, else the first reminder whose
+     *   trigger time is after [nowMs]. It is not limited by [after].
+     */
+    suspend fun getDueAndNextReminders(
+        enabledCalendarIds: Set<Long>,
+        after: DeviceReminderCursor,
+        nowMs: Long,
+        limit: Int,
+    ): DeviceReminderBatch
 
     /**
      * Returns true if the Events row exists with `DELETED = 0`; false when it's missing, the

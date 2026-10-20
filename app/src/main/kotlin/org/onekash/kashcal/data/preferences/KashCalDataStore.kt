@@ -343,6 +343,13 @@ class KashCalDataStore(
         setPreference(PreferencesKeys.NOTIFICATION_VIBRATE, enabled)
     }
 
+    val changeNotificationsEnabled: Flow<Boolean>
+        get() = getPreference(PreferencesKeys.CHANGE_NOTIFICATIONS_ENABLED, false)
+
+    suspend fun setChangeNotificationsEnabled(enabled: Boolean) {
+        setPreference(PreferencesKeys.CHANGE_NOTIFICATIONS_ENABLED, enabled)
+    }
+
     val quickAddEnabled: Flow<Boolean>
         get() = getPreference(PreferencesKeys.QUICK_ADD_ENABLED, false)
 
@@ -455,6 +462,32 @@ class KashCalDataStore(
 
     suspend fun setWeekViewHourHeight(hourHeightDp: Float) {
         setPreference(PreferencesKeys.WEEK_VIEW_HOUR_HEIGHT, hourHeightDp)
+    }
+
+    /**
+     * Pinch-to-zoom scale of the Planner's box contents, or 1 when never saved. Not clamped here:
+     * the ViewModel clamps on restore with `clampPlannerZoom`.
+     */
+    val plannerZoom: Flow<Float>
+        get() = getPreference(PreferencesKeys.PLANNER_ZOOM, 1f)
+
+    suspend fun getPlannerZoom(): Float = plannerZoom.first()
+
+    suspend fun setPlannerZoom(zoom: Float) {
+        setPreference(PreferencesKeys.PLANNER_ZOOM, zoom)
+    }
+
+    /**
+     * Pinch-to-zoom scale of the full-height month view's day cells, or 1 when never saved. Not
+     * clamped here: the ViewModel clamps on restore with `clampMonthFullZoom`.
+     */
+    val monthFullZoom: Flow<Float>
+        get() = getPreference(PreferencesKeys.MONTH_FULL_ZOOM, 1f)
+
+    suspend fun getMonthFullZoom(): Float = monthFullZoom.first()
+
+    suspend fun setMonthFullZoom(zoom: Float) {
+        setPreference(PreferencesKeys.MONTH_FULL_ZOOM, zoom)
     }
 
     /**
@@ -702,6 +735,32 @@ class KashCalDataStore(
         val current = getHiddenDeviceCalendarIds().toMutableSet()
         if (calendarId in current) current.remove(calendarId) else current.add(calendarId)
         setHiddenDeviceCalendarIds(current)
+    }
+
+    /**
+     * Device calendar ids whose notifications are muted
+     * ([PreferencesKeys.MUTED_DEVICE_CALENDAR_IDS]). Stored as strings like
+     * [enabledDeviceCalendarIds].
+     */
+    val mutedDeviceCalendarIds: Flow<Set<Long>>
+        get() = getPreference(PreferencesKeys.MUTED_DEVICE_CALENDAR_IDS, emptySet<String>())
+            .map { strings -> strings.mapNotNull { it.toLongOrNull() }.toSet() }
+
+    suspend fun getMutedDeviceCalendarIds(): Set<Long> = mutedDeviceCalendarIds.first()
+
+    /** Mutes or unmutes [calendarId] in one DataStore edit. */
+    suspend fun setDeviceCalendarMuted(calendarId: Long, muted: Boolean) {
+        updatePreference(PreferencesKeys.MUTED_DEVICE_CALENDAR_IDS) { current ->
+            val ids = current.orEmpty()
+            if (muted) ids + calendarId.toString() else ids - calendarId.toString()
+        }
+    }
+
+    /** Drops muted ids that aren't in [existingIds], so a reused provider id starts unmuted. */
+    suspend fun pruneMutedDeviceCalendarIds(existingIds: Set<Long>) {
+        updatePreference(PreferencesKeys.MUTED_DEVICE_CALENDAR_IDS) { current ->
+            current.orEmpty().filterTo(mutableSetOf()) { it.toLongOrNull() in existingIds }
+        }
     }
 
     /**
@@ -995,8 +1054,11 @@ class KashCalDataStore(
         const val VIEW_MONTH_FULL = "month_full"
         const val VIEW_WEEK = "week"
         const val VIEW_YEAR = "year"
+        const val VIEW_PLANNER = "planner"
 
-        private val VALID_VIEWS = setOf(VIEW_MONTH, VIEW_AGENDA, VIEW_DAY, VIEW_THREE_DAYS, VIEW_WEEK, VIEW_MONTH_FULL, VIEW_YEAR)
+        private val VALID_VIEWS = setOf(
+            VIEW_MONTH, VIEW_AGENDA, VIEW_DAY, VIEW_THREE_DAYS, VIEW_WEEK, VIEW_PLANNER, VIEW_MONTH_FULL, VIEW_YEAR,
+        )
 
         const val TIME_FORMAT_SYSTEM = "system"
         const val TIME_FORMAT_12H = "12h"

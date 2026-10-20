@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">Thông báo về hoàn thành đồng bộ và lỗi</string>
     <string name="channel_event_invitations">Lời mời sự kiện</string>
     <string name="channel_event_invitations_desc">Thông báo khi bạn nhận được lời mời lịch mới</string>
+    <string name="channel_calendar_updates">Cập nhật lịch</string>
     <string name="invite_notification_body">Từ %1$s · Nhấn để phản hồi</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">Phản hồi của bạn áp dụng cho toàn bộ chuỗi sự kiện.</string>
+    <string name="rsvp_receipt_pending">Phản hồi đang chờ gửi</string>
+    <string name="rsvp_receipt_sent">Đã gửi phản hồi</string>
+    <string name="rsvp_receipt_not_delivered">Không gửi được phản hồi</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">Lần này và tất cả sau đó</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">Mặc định</string>
     <string name="app_icon_supporter">Người ủng hộ</string>
     <string name="app_icon_supporter_calendar">Người ủng hộ (nhãn là Lịch)</string>
+    <string name="app_icon_todays_date">Ngày hôm nay</string>
     <string name="app_icon_label_calendar">Lịch</string>
     <string name="app_icon_support_cta">Ủng hộ KashCal</string>
     <string name="app_icon_switch_note">Việc thay đổi biểu tượng có thể khiến ứng dụng khởi động lại. Thông báo luôn dùng biểu tượng và tên mặc định.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">Kết nối iCloud để xem sự kiện tại đây</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">Để sau</string>
+    <string name="whats_new_skip">Bỏ qua</string>
+    <string name="whats_new_next">Tiếp</string>
+    <string name="whats_new_page_of">Trang %1$d trên %2$d</string>
+    <string name="whats_new_find_it_in">Tìm ở</string>
     <string name="whats_new_v598_title">Hãy giúp giữ Android luôn mở</string>
     <string name="whats_new_v598_body">Google đang thay đổi cách bạn cài đặt ứng dụng trên thiết bị của mình. Chúng tôi cần sự giúp đỡ của bạn.</string>
     <string name="whats_new_v598_action_label">Truy cập keepandroidopen.org</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">Bản cập nhật này xin dành tặng những người ủng hộ KashCal. Một đóng góp nhỏ mang lại lợi ích lớn lâu dài.</string>
     <string name="whats_new_v732_caption">Bạn chưa phải là người ủng hộ?</string>
     <string name="whats_new_v732_action_label">Thêm chúng tôi vào kế hoạch</string>
+    <string name="whats_new_v772_icon_title">Biểu tượng biết hôm nay ngày mấy</string>
+    <string name="whats_new_v772_icon_body">Chọn biểu tượng Ngày hôm nay và KashCal sẽ hiển thị ngày trong tháng trên màn hình chính. Biểu tượng tự đổi sang ngày mới mỗi đêm.</string>
+    <string name="whats_new_v772_changes_title">Xem những gì đã thay đổi</string>
+    <string name="whats_new_v772_changes_body">Các sự kiện mới, đã sửa và đã xóa từ lịch iCloud và CalDAV của bạn được gom vào Thay đổi gần đây trong 7 ngày. Nhấn vào một mục để mở.</string>
+    <string name="whats_new_v772_notifications_body">Nhận thông báo khi đồng bộ chạy nền phát hiện thay đổi trong sự kiện iCloud hoặc CalDAV của bạn. Tính năng này tắt cho đến khi bạn bật lên.</string>
+    <string name="whats_new_hero_sample_lunch">Ăn trưa cùng nhóm</string>
+    <string name="whats_new_hero_sample_review">Họp duyệt thiết kế</string>
+    <string name="whats_new_hero_sample_book_club">Câu lạc bộ sách</string>
+    <string name="whats_new_hero_sample_calendar">Công việc</string>
+    <string name="whats_new_hero_now">bây giờ</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Kết nối iCloud</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">Chưa có phiên đồng bộ nào.\n\nKéo xuống để làm mới trên màn hình lịch để bắt đầu đồng bộ.</string>
     <string name="status_no_writable_calendars">Không có lịch nào cho phép ghi</string>
     <string name="status_events_count">%1$d sự kiện</string>
-    <string name="status_sync_changes">Thay đổi từ đồng bộ</string>
     <string name="status_sync_history">Lịch sử đồng bộ</string>
     <string name="status_parse_failures">Lỗi phân tích</string>
     <string name="status_error">Lỗi</string>
@@ -584,6 +601,25 @@
     <string name="settings_detailed_widget_rows_info">Một dòng gọn, hoặc hai dòng chi tiết kèm giờ kết thúc.</string>
     <string name="settings_sync_lookback">Khoảng đồng bộ ngược</string>
     <string name="settings_sync_lookback_hint">Đồng bộ sự kiện từ bao lâu trước</string>
+    <string name="settings_change_notifications">Thông báo thay đổi</string>
+    <string name="settings_change_notifications_info">Gửi thông báo khi đồng bộ chạy nền phát hiện thay đổi trong sự kiện của bạn. Hoạt động với lịch iCloud và CalDAV.</string>
+    <string name="settings_calendar_notifications">Thông báo lịch</string>
+    <string name="settings_calendar_notifications_all">Tất cả lịch</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="other">Đã tắt tiếng %d</item>
+    </plurals>
+    <string name="calendar_notifications_intro">Chọn lịch nào có thể thông báo cho bạn.</string>
+    <string name="calendar_notifications_info">Lịch đã tắt tiếng vẫn hiển thị và đồng bộ, nhưng không thông báo cho bạn.</string>
+    <string name="cd_calendar_notifications_info">Giới thiệu về lịch đã tắt tiếng</string>
+    <string name="cd_state_expanded">đã mở rộng</string>
+    <string name="cd_state_collapsed">đã thu gọn</string>
+    <string name="calendar_notifications_device_info">Tắt để tắt tiếng mọi lịch thiết bị, kể cả lịch bạn thêm sau này.</string>
+    <string name="cd_calendar_notifications_device_info">Giới thiệu về thông báo lịch thiết bị</string>
+    <string name="cd_device_calendar_notifications">Thông báo lịch thiết bị</string>
+    <string name="calendar_notifications_hidden">Đã ẩn</string>
+    <string name="calendar_notifications_app_off">Thông báo của KashCal đang tắt trong cài đặt hệ thống, nên không lịch nào có thể thông báo cho bạn.</string>
+    <string name="calendar_notifications_reminders_off">Nhắc nhở sự kiện đang tắt trong cài đặt hệ thống, nên không thể hiển thị nhắc nhở nào.</string>
+    <string name="cd_notifications_off">đã tắt thông báo</string>
     <string name="settings_not_set">Chưa đặt</string>
     <string name="settings_on">Bật</string>
     <string name="settings_off">Tắt</string>
@@ -627,7 +663,6 @@
     <string name="label_device_calendars">Lịch thiết bị</string>
     <string name="label_default_calendar_hint">Sự kiện mới sẽ được tạo trong lịch này</string>
     <string name="label_visible_count">%1$d / %2$d hiển thị</string>
-    <string name="label_enabled_count">%1$d / %2$d đã bật</string>
     <string name="label_reminders_truncated">%1$d bị ẩn (tổng %2$d, tối đa chỉnh sửa %3$d)</string>
     <string name="label_found_events">Tìm thấy: %1$d sự kiện</string>
     <string name="label_open_debug_menu">Mở menu gỡ lỗi</string>
@@ -649,8 +684,6 @@
     <string name="device_calendars_grant">Cấp quyền</string>
     <string name="device_calendars_none_found">Không tìm thấy lịch thiết bị.</string>
     <string name="device_calendars_local">Nội bộ</string>
-    <string name="device_calendars_reminders">Nhắc nhở</string>
-    <string name="device_calendars_reminders_desc">Nhận thông báo cho sự kiện lịch thiết bị</string>
     <string name="device_calendars_read_only_no_write">Chỉ đọc (không có quyền ghi)</string>
     <string name="device_calendars_read_only_calendar">Chỉ đọc (lịch chỉ đọc)</string>
     <string name="settings_developer_options">Tùy chọn nhà phát triển</string>
@@ -743,6 +776,51 @@
     <plurals name="imported_events">
         <item quantity="other">Đã nhập %1$d sự kiện</item>
     </plurals>
+    <string name="ics_import_preview_loading">Đang kiểm tra lịch này…</string>
+    <string name="ics_import_preview_failed">Không thể kiểm tra các sự kiện này trong lịch này. Bạn vẫn có thể nhập.</string>
+    <string name="ics_import_will_cancel">Thao tác này hủy %1$s, do %2$s tổ chức</string>
+    <string name="ics_import_will_cancel_no_organizer">Thao tác này hủy %1$s</string>
+    <string name="ics_import_will_update">Thao tác này cập nhật %1$s</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="other">%1$d sự kiện đã là mới nhất</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="other">Đã bỏ qua %1$d: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">đây là phản hồi cho lời mời, không thêm gì vào lịch của bạn</string>
+    <string name="ics_import_reason_unsupported">loại tin nhắn lời mời này không được hỗ trợ</string>
+    <string name="ics_import_reason_organizer_mismatch">được gửi từ người khác, không phải người tổ chức cuộc họp</string>
+    <string name="ics_import_reason_cancel_no_match">cuộc họp đã hủy không có trong lịch này</string>
+    <string name="ics_import_reason_cancel_not_for_you">thông báo hủy dành cho khách khác</string>
+    <string name="ics_import_reason_deletion_pending">sự kiện đang bị xóa</string>
+    <string name="ics_import_reason_cancelled_in_file">đã bị hủy trong tệp</string>
+    <string name="ics_import_reason_this_and_future">không hỗ trợ thay đổi cho lần này và các lần sau</string>
+    <string name="ics_import_reason_own_cancel">bạn là người tổ chức cuộc họp này, hãy hủy từ sự kiện</string>
+    <string name="ics_import_reason_on_another_calendar">đã có trong một lịch khác của tài khoản này</string>
+    <string name="ics_import_notice_unverified">Không thể xác minh người gửi tệp lời mời. Hãy kiểm tra xem tệp có đến từ người tổ chức không.</string>
+    <string name="ics_import_notice_answer_notifies">Trả lời lời mời này có thể thông báo cho người tổ chức.</string>
+    <string name="ics_import_notice_guests_again">Bạn là người tổ chức, vì vậy khách có thể nhận lại lời mời này.</string>
+    <string name="cd_dismiss_notice">Đóng thông báo</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="other">Đã thêm %1$d</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="other">Đã cập nhật %1$d</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="other">Đã hủy %1$d</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="other">%1$d đã là mới nhất</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="other">Đã bỏ qua %1$d</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="other">%1$d thất bại</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">Không có gì để nhập</string>
     <plurals name="exported_events">
         <item quantity="other">Đã xuất %1$d sự kiện</item>
     </plurals>
@@ -875,6 +953,14 @@
     <string name="cd_active_view">Chế độ xem đang dùng</string>
     <string name="view_agenda">Lịch trình</string>
     <string name="view_month_full">Tháng (đầy đủ)</string>
+    <string name="view_planner">Kế hoạch</string>
+    <string name="planner_free_day">Ngày trống</string>
+    <string name="cd_planner_show_day_events">Hiện sự kiện của ngày này</string>
+    <string name="planner_different_this_week">Khác biệt tuần này</string>
+    <string name="planner_usual_week">Một tuần như thường lệ.</string>
+    <string name="planner_moved_was">trước đó %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">Ngày</string>
     <string name="view_three_days">3 ngày</string>
     <string name="view_year">Năm</string>
@@ -930,11 +1016,6 @@
     <string name="cd_increase_interval">Tăng khoảng</string>
     <string name="rrule_starting">%1$s bắt đầu %2$s%3$s</string>
     <string name="rrule_since">%1$s · kể từ %2$s</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d mới</string>
-    <string name="sync_summary_updated">%1$d đã cập nhật</string>
-    <string name="sync_summary_removed">%1$d đã xóa</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">Đã bật cuộn vòng</string>
@@ -1029,9 +1110,29 @@
     <plurals name="sync_snackbar_events_removed">
         <item quantity="other">%1$d sự kiện đã xóa</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="other">Đã hủy %1$d lần lặp lại</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="other">%1$d cập nhật lịch</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">Thay đổi gần đây</string>
+    <string name="recent_changes_empty">Không có thay đổi gần đây</string>
+    <string name="recent_changes_clear_all">Xóa tất cả</string>
+    <string name="recent_changes_cleared">Đã xóa thay đổi gần đây</string>
+    <string name="recent_changes_dismiss">Bỏ qua</string>
+    <string name="recent_changes_moved_from">Đã dời từ %1$s</string>
+    <string name="recent_changes_time_changed">Đã đổi thời gian</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">Đã đổi địa điểm</string>
+    <string name="recent_changes_title_changed">Đã đổi tên</string>
+    <string name="recent_changes_repeat_changed">Đã đổi lặp lại</string>
+    <string name="recent_changes_cancelled">Đã hủy</string>
+    <string name="cd_recent_change_new">Sự kiện mới</string>
+    <string name="cd_recent_change_updated">Đã cập nhật</string>
+    <string name="cd_recent_change_removed">Đã xóa</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">Ngày %1$d/%2$d</string>

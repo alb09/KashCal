@@ -12,8 +12,8 @@ import org.onekash.kashcal.data.preferences.PreferencesKeys
 class ExportablePreferencesTest {
 
     @Test
-    fun `allow list contains exactly 42 keys`() {
-        assertEquals(42, ExportablePreferences.KEYS.size)
+    fun `allow list contains exactly 43 keys`() {
+        assertEquals(43, ExportablePreferences.KEYS.size)
     }
 
     @Test
@@ -41,8 +41,32 @@ class ExportablePreferencesTest {
     }
 
     @Test
-    fun `exclude list contains exactly 25 key names`() {
-        assertEquals(25, ExportablePreferences.EXCLUDED_KEY_NAMES.size)
+    fun `exclude list contains exactly 28 key names`() {
+        assertEquals(28, ExportablePreferences.EXCLUDED_KEY_NAMES.size)
+    }
+
+    @Test
+    fun `MONTH_FULL_ZOOM is excluded because it is per-device zoom state`() {
+        assertTrue(
+            "MONTH_FULL_ZOOM must be in EXCLUDED_KEY_NAMES",
+            ExportablePreferences.EXCLUDED_KEY_NAMES.contains(PreferencesKeys.MONTH_FULL_ZOOM.name),
+        )
+        assertFalse(
+            "MONTH_FULL_ZOOM must not be in the allow-list",
+            ExportablePreferences.KEYS.any { it.name == PreferencesKeys.MONTH_FULL_ZOOM.name },
+        )
+    }
+
+    @Test
+    fun `PLANNER_ZOOM is excluded because it is per-device zoom state`() {
+        assertTrue(
+            "PLANNER_ZOOM must be in EXCLUDED_KEY_NAMES",
+            ExportablePreferences.EXCLUDED_KEY_NAMES.contains(PreferencesKeys.PLANNER_ZOOM.name),
+        )
+        assertFalse(
+            "PLANNER_ZOOM must not be in the allow-list",
+            ExportablePreferences.KEYS.any { it.name == PreferencesKeys.PLANNER_ZOOM.name },
+        )
     }
 
     @Test

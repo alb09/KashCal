@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">Сповіщення про завершення синхронізації та помилки</string>
     <string name="channel_event_invitations">Запрошення на події</string>
     <string name="channel_event_invitations_desc">Сповіщення про нові запрошення до календаря</string>
+    <string name="channel_calendar_updates">Зміни в календарі</string>
     <string name="invite_notification_body">Від %1$s · Натисніть, щоб відповісти</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">Відповідь поширюється на всю серію.</string>
+    <string name="rsvp_receipt_pending">Відповідь очікує надсилання</string>
+    <string name="rsvp_receipt_sent">Відповідь надіслано</string>
+    <string name="rsvp_receipt_not_delivered">Відповідь не доставлено</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">Це та всі наступні</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">За замовчуванням</string>
     <string name="app_icon_supporter">Прихильник</string>
     <string name="app_icon_supporter_calendar">Прихильник, з назвою Календар</string>
+    <string name="app_icon_todays_date">Сьогоднішня дата</string>
     <string name="app_icon_label_calendar">Календар</string>
     <string name="app_icon_support_cta">Підтримати KashCal</string>
     <string name="app_icon_switch_note">Зміна значка може перезапустити додаток. Сповіщення завжди використовують значок і назву за замовчуванням.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">Підключіть iCloud, щоб бачити свої події тут</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">Пізніше</string>
+    <string name="whats_new_skip">Пропустити</string>
+    <string name="whats_new_next">Далі</string>
+    <string name="whats_new_page_of">Сторінка %1$d з %2$d</string>
+    <string name="whats_new_find_it_in">Де знайти</string>
     <string name="whats_new_v598_title">Допоможи зберегти Android відкритим</string>
     <string name="whats_new_v598_body">Google змінює спосіб встановлення застосунків на пристрій. Нам потрібна твоя допомога.</string>
     <string name="whats_new_v598_action_label">Перейти на keepandroidopen.org</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">Цей випуск присвячено тим, хто підтримує KashCal. Невеликий внесок із великою регулярною віддачею.</string>
     <string name="whats_new_v732_caption">Ще не підтримуєш нас?</string>
     <string name="whats_new_v732_action_label">Додай нас до своїх планів</string>
+    <string name="whats_new_v772_icon_title">Твій значок знає дату</string>
+    <string name="whats_new_v772_icon_body">Обери значок «Сьогоднішня дата», і KashCal показуватиме число місяця на головному екрані. Щоночі воно змінюється само.</string>
+    <string name="whats_new_v772_changes_title">Дізнайся, що змінилося</string>
+    <string name="whats_new_v772_changes_body">Нові, змінені та видалені події з твоїх календарів iCloud і CalDAV 7 днів зберігаються в розділі «Останні зміни». Натисни на подію, щоб відкрити її.</string>
+    <string name="whats_new_v772_notifications_body">Отримуй сповіщення, коли фонова синхронізація знаходить зміни у твоїх подіях iCloud або CalDAV. Функція вимкнена, доки ти її не ввімкнеш.</string>
+    <string name="whats_new_hero_sample_lunch">Обід з командою</string>
+    <string name="whats_new_hero_sample_review">Огляд дизайну</string>
+    <string name="whats_new_hero_sample_book_club">Книжковий клуб</string>
+    <string name="whats_new_hero_sample_calendar">Робота</string>
+    <string name="whats_new_hero_now">зараз</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Підключити iCloud</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">Немає сеансів синхронізації.\n\nПотягніть вниз на екрані календаря, щоб запустити синхронізацію.</string>
     <string name="status_no_writable_calendars">Немає доступних для запису календарів</string>
     <string name="status_events_count">Подій: %1$d</string>
-    <string name="status_sync_changes">Зміни синхронізації</string>
     <string name="status_sync_history">Історія синхронізації</string>
     <string name="status_parse_failures">Помилки розбору</string>
     <string name="status_error">Помилка</string>
@@ -584,6 +601,28 @@
     <string name="settings_detailed_widget_rows_info">Компактний один рядок або докладні два рядки з часом завершення.</string>
     <string name="settings_sync_lookback">Глибина синхронізації</string>
     <string name="settings_sync_lookback_hint">Наскільки давні події синхронізувати</string>
+    <string name="settings_change_notifications">Сповіщення про зміни</string>
+    <string name="settings_change_notifications_info">Надсилає сповіщення, коли фонова синхронізація знаходить зміни у твоїх подіях. Працює з календарями iCloud і CalDAV.</string>
+    <string name="settings_calendar_notifications">Сповіщення календарів</string>
+    <string name="settings_calendar_notifications_all">Усі календарі</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">Без сповіщень: %d</item>
+        <item quantity="few">Без сповіщень: %d</item>
+        <item quantity="many">Без сповіщень: %d</item>
+        <item quantity="other">Без сповіщень: %d</item>
+    </plurals>
+    <string name="calendar_notifications_intro">Вибери, які календарі можуть надсилати тобі сповіщення.</string>
+    <string name="calendar_notifications_info">Календарі без сповіщень і далі відображаються та синхронізуються, але не надсилають сповіщень.</string>
+    <string name="cd_calendar_notifications_info">Про календарі без сповіщень</string>
+    <string name="cd_state_expanded">розгорнуто</string>
+    <string name="cd_state_collapsed">згорнуто</string>
+    <string name="calendar_notifications_device_info">Вимкни, і всі календарі пристрою, зокрема додані пізніше, будуть без сповіщень.</string>
+    <string name="cd_calendar_notifications_device_info">Про сповіщення календарів пристрою</string>
+    <string name="cd_device_calendar_notifications">Сповіщення календарів пристрою</string>
+    <string name="calendar_notifications_hidden">Приховано</string>
+    <string name="calendar_notifications_app_off">Сповіщення KashCal вимкнено в системних налаштуваннях, тому жоден календар не може надсилати сповіщення.</string>
+    <string name="calendar_notifications_reminders_off">Нагадування про події вимкнено в системних налаштуваннях, тому нагадування не відображатимуться.</string>
+    <string name="cd_notifications_off">сповіщення вимкнено</string>
     <string name="settings_not_set">Не задано</string>
     <string name="settings_on">Увімк.</string>
     <string name="settings_off">Вимк.</string>
@@ -627,7 +666,6 @@
     <string name="label_device_calendars">Календарі пристрою</string>
     <string name="label_default_calendar_hint">Нові події створюватимуться в цьому календарі</string>
     <string name="label_visible_count">%1$d / %2$d видимих</string>
-    <string name="label_enabled_count">%1$d / %2$d увімкнено</string>
     <string name="label_reminders_truncated">%1$d не показано (%2$d всього, макс. %3$d для редагування)</string>
     <string name="label_found_events">Знайдено: %1$d подій</string>
     <string name="label_open_debug_menu">Відкрити меню налагодження</string>
@@ -649,8 +687,6 @@
     <string name="device_calendars_grant">Надати</string>
     <string name="device_calendars_none_found">Календарі пристрою не знайдено.</string>
     <string name="device_calendars_local">Локальний</string>
-    <string name="device_calendars_reminders">Нагадування</string>
-    <string name="device_calendars_reminders_desc">Отримувати сповіщення про події з календаря пристрою</string>
     <string name="device_calendars_read_only_no_write">Лише читання (немає дозволу на запис)</string>
     <string name="device_calendars_read_only_calendar">Лише читання (календар лише для читання)</string>
     <string name="settings_developer_options">Для розробників</string>
@@ -794,6 +830,75 @@
         <item quantity="many">Імпортовано %1$d подій</item>
         <item quantity="other">Імпортовано %1$d подій</item>
     </plurals>
+    <string name="ics_import_preview_loading">Перевірка цього календаря…</string>
+    <string name="ics_import_preview_failed">Не вдалося перевірити цей календар на наявність цих подій. Імпортувати все одно можна.</string>
+    <string name="ics_import_will_cancel">Це скасує %1$s (організатор: %2$s)</string>
+    <string name="ics_import_will_cancel_no_organizer">Це скасує %1$s</string>
+    <string name="ics_import_will_update">Це оновить %1$s</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d подія вже актуальна</item>
+        <item quantity="few">%1$d події вже актуальні</item>
+        <item quantity="many">%1$d подій вже актуальні</item>
+        <item quantity="other">%1$d події вже актуальні</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">%1$d пропущено: %2$s</item>
+        <item quantity="few">%1$d пропущено: %2$s</item>
+        <item quantity="many">%1$d пропущено: %2$s</item>
+        <item quantity="other">%1$d пропущено: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">це відповідь на запрошення, вона нічого не додає до календаря</string>
+    <string name="ics_import_reason_unsupported">такий тип запрошення не підтримується</string>
+    <string name="ics_import_reason_organizer_mismatch">його надіслав не організатор зустрічі</string>
+    <string name="ics_import_reason_cancel_no_match">скасованої зустрічі немає в цьому календарі</string>
+    <string name="ics_import_reason_cancel_not_for_you">скасування адресоване іншим учасникам</string>
+    <string name="ics_import_reason_deletion_pending">подія видаляється</string>
+    <string name="ics_import_reason_cancelled_in_file">її вже скасовано у файлі</string>
+    <string name="ics_import_reason_this_and_future">зміни цього й наступних повторень не підтримуються</string>
+    <string name="ics_import_reason_own_cancel">ти організатор цієї зустрічі, тож скасуй її в самій події</string>
+    <string name="ics_import_reason_on_another_calendar">вона вже є в іншому календарі цього облікового запису</string>
+    <string name="ics_import_notice_unverified">Відправника файлу запрошення неможливо перевірити. Переконайся, що файл надійшов від організатора.</string>
+    <string name="ics_import_notice_answer_notifies">Відповідь на це запрошення може сповістити організатора.</string>
+    <string name="ics_import_notice_guests_again">Ти організатор, тож учасники можуть знову отримати це запрошення.</string>
+    <string name="cd_dismiss_notice">Закрити сповіщення</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d додано</item>
+        <item quantity="few">%1$d додано</item>
+        <item quantity="many">%1$d додано</item>
+        <item quantity="other">%1$d додано</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d оновлено</item>
+        <item quantity="few">%1$d оновлено</item>
+        <item quantity="many">%1$d оновлено</item>
+        <item quantity="other">%1$d оновлено</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d скасовано</item>
+        <item quantity="few">%1$d скасовано</item>
+        <item quantity="many">%1$d скасовано</item>
+        <item quantity="other">%1$d скасовано</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d вже актуально</item>
+        <item quantity="few">%1$d вже актуально</item>
+        <item quantity="many">%1$d вже актуально</item>
+        <item quantity="other">%1$d вже актуально</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d пропущено</item>
+        <item quantity="few">%1$d пропущено</item>
+        <item quantity="many">%1$d пропущено</item>
+        <item quantity="other">%1$d пропущено</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d з помилкою</item>
+        <item quantity="few">%1$d з помилкою</item>
+        <item quantity="many">%1$d з помилкою</item>
+        <item quantity="other">%1$d з помилкою</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">Нічого імпортувати</string>
     <plurals name="exported_events">
         <item quantity="one">Експортовано %1$d подію</item>
         <item quantity="few">Експортовано %1$d події</item>
@@ -989,6 +1094,14 @@
     <string name="cd_active_view">Активний вигляд</string>
     <string name="view_agenda">Порядок денний</string>
     <string name="view_month_full">Місяць (повний)</string>
+    <string name="view_planner">Планер</string>
+    <string name="planner_free_day">Вільний день</string>
+    <string name="cd_planner_show_day_events">Показати події цього дня</string>
+    <string name="planner_different_this_week">Відмінності цього тижня</string>
+    <string name="planner_usual_week">Звичайний тиждень.</string>
+    <string name="planner_moved_was">раніше %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">День</string>
     <string name="view_three_days">3 дні</string>
     <string name="view_year">Рік</string>
@@ -1047,11 +1160,6 @@
     <string name="cd_increase_interval">Збільшити інтервал</string>
     <string name="rrule_starting">%1$s починаючи з %2$s%3$s</string>
     <string name="rrule_since">%1$s · з %2$s</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d нових</string>
-    <string name="sync_summary_updated">%1$d оновлено</string>
-    <string name="sync_summary_removed">%1$d видалено</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">Циклічне прокручування увімкнено</string>
@@ -1170,12 +1278,35 @@
         <item quantity="many">%1$d подій видалено</item>
         <item quantity="other">%1$d подій видалено</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d повторення скасовано</item>
+        <item quantity="few">%1$d повторення скасовано</item>
+        <item quantity="many">%1$d повторень скасовано</item>
+        <item quantity="other">%1$d повторень скасовано</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d оновлення календаря</item>
         <item quantity="few">%1$d оновлення календаря</item>
         <item quantity="many">%1$d оновлень календаря</item>
         <item quantity="other">%1$d оновлень календаря</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">Останні зміни</string>
+    <string name="recent_changes_empty">Немає останніх змін</string>
+    <string name="recent_changes_clear_all">Очистити все</string>
+    <string name="recent_changes_cleared">Останні зміни очищено</string>
+    <string name="recent_changes_dismiss">Приховати</string>
+    <string name="recent_changes_moved_from">Перенесено з %1$s</string>
+    <string name="recent_changes_time_changed">Час змінено</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">Місце змінено</string>
+    <string name="recent_changes_title_changed">Назву змінено</string>
+    <string name="recent_changes_repeat_changed">Повторення змінено</string>
+    <string name="recent_changes_cancelled">Скасовано</string>
+    <string name="cd_recent_change_new">Нова подія</string>
+    <string name="cd_recent_change_updated">Оновлено</string>
+    <string name="cd_recent_change_removed">Видалено</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">День %1$d з %2$d</string>

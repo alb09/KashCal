@@ -3,6 +3,7 @@ package org.onekash.kashcal
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import org.onekash.kashcal.data.preferences.UserPreferencesRepository
 import org.onekash.kashcal.domain.coordinator.EventCoordinator
 import org.onekash.kashcal.sync.session.SyncSessionStore
 import org.onekash.kashcal.ui.permission.LocalNetworkPermissionManager
+import org.onekash.kashcal.ui.permission.NotificationPermissionManager
 import org.onekash.kashcal.ui.screens.SettingsRoute
 import org.onekash.kashcal.ui.theme.ColorSource
 import org.onekash.kashcal.ui.theme.ThemeMode
@@ -36,9 +38,9 @@ private const val TAG = "SettingsActivity"
  *
  * The activity keeps only work that needs an injected collaborator, the content resolver or the
  * activity itself. It passes narrow lambdas down for the ICS export share intent, ICS file reads
- * and imports, the backup stream I/O and the local-network permission reads, and does the
- * cold-start theme seed reads, the `onResume` permission refresh and the intent-extra bootstrap
- * itself.
+ * and imports, the backup stream I/O, the local-network and notification permission reads and
+ * the notification settings screens, and does the cold-start theme seed reads, the `onResume`
+ * permission refresh and the intent-extra bootstrap itself.
  */
 @AndroidEntryPoint
 class SettingsActivity : FragmentActivity() {
@@ -53,6 +55,10 @@ class SettingsActivity : FragmentActivity() {
 
     private val localNetworkPermissionManager by lazy {
         LocalNetworkPermissionManager(applicationContext)
+    }
+
+    private val notificationPermissionManager by lazy {
+        NotificationPermissionManager(applicationContext, userPreferencesRepository)
     }
 
     @Inject
@@ -101,9 +107,8 @@ class SettingsActivity : FragmentActivity() {
                 onFinish = { finish() },
                 onExportCalendar = ::exportCalendar,
                 readIcsContent = { uri -> icsFileReader.readIcsContent(uri) },
-                importIcsToRoom = { events, calendarId ->
-                    eventCoordinator.importIcsEvents(events, calendarId)
-                },
+                importIcsToRoom = { file, calendarId -> eventCoordinator.importIcsFile(file, calendarId) },
+                previewIcsInRoom = { file, calendarId -> eventCoordinator.previewIcsImport(file, calendarId) },
                 writeBackup = ::writeBackup,
                 readBackup = ::readBackup,
                 resolveLanPermissionState = {
@@ -112,6 +117,11 @@ class SettingsActivity : FragmentActivity() {
                 shouldShowLanRationale = {
                     localNetworkPermissionManager.shouldShowRationale(this@SettingsActivity)
                 },
+                isNotificationPermissionPermanentlyDenied = {
+                    notificationPermissionManager.checkPermissionState(this@SettingsActivity) ==
+                        NotificationPermissionManager.PermissionState.PermanentlyDenied
+                },
+                openNotificationSettings = ::openNotificationSettings,
             )
         }
 
@@ -138,6 +148,24 @@ class SettingsActivity : FragmentActivity() {
         viewModel.reconcileLocalNetworkPermissionOnResume(
             localNetworkPermissionManager.resolveState(this)
         )
+        viewModel.refreshChangeNotifications()
+    }
+
+    /** Opens the system notification settings for [channelId]'s channel, or the app's when null. */
+    private fun openNotificationSettings(channelId: String?) {
+        val intent = if (channelId != null) {
+            Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                .putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
+        } else {
+            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+        }
+        try {
+            startActivity(intent)
+        } catch (e: android.content.ActivityNotFoundException) {
+            Log.e(TAG, "No notification settings screen", e)
+        }
     }
 
     /** Exports a calendar to ICS and hands it to the system share sheet. */

@@ -111,6 +111,7 @@ import org.onekash.kashcal.data.db.entity.Event
 import org.onekash.kashcal.domain.identity.matchesAttendee
 import org.onekash.kashcal.data.preferences.DefaultCalendar
 import org.onekash.kashcal.domain.mapper.toFormState
+import org.onekash.kashcal.domain.model.toEventForDuplicate
 import org.onekash.kashcal.ui.components.pickers.ActiveDateTimeSheet
 import org.onekash.kashcal.ui.components.pickers.CalendarPickerRow
 import org.onekash.kashcal.ui.components.pickers.DateTimeDisplayRow
@@ -177,14 +178,18 @@ internal fun isUserDrivenScroll(source: NestedScrollSource): Boolean =
 
 /**
  * Whether a scroll dismisses the keyboard: only a user-driven scroll with a finger
- * pressed. When a field gains focus, the animating IME inset fires a scroll that is
- * also dispatched as [NestedScrollSource.UserInput]; it has no finger down (the tap
- * has released), so the finger check keeps the keyboard the user just raised.
+ * pressed, in a gesture that didn't start inside a text field. When a field gains focus,
+ * the animating IME inset fires a scroll that is also dispatched as
+ * [NestedScrollSource.UserInput]; it has no finger down (the tap has released), so the
+ * finger check keeps the keyboard the user just raised. A drag that starts in a field is
+ * the user selecting or editing text, and a slip past touch slop there scrolls the form
+ * (#384), so it never dismisses; [textFieldGestureMarker] marks those fields.
  */
 internal fun shouldDismissKeyboardOnScroll(
     source: NestedScrollSource,
     isFingerDown: Boolean,
-): Boolean = isUserDrivenScroll(source) && isFingerDown
+    startedInTextField: Boolean,
+): Boolean = isUserDrivenScroll(source) && isFingerDown && !startedInTextField
 
 /**
  * Space above and below the section dividers, so it doesn't depend on which row
@@ -344,9 +349,10 @@ data class EventFormState(
     // daylight saving change from sliding to the first. Not user-editable.
     val startOffsetHintTs: Long? = null,
     val endOffsetHintTs: Long? = null,
-    // A device event's timezone ID that the app can't resolve (the form then
-    // uses the device zone). Kept so a save that doesn't pick a zone writes the
-    // original ID back instead of replacing it. Cleared by the timezone picker.
+    // A timed source event's timezone ID that the app can't resolve (the form then
+    // uses the device zone), from a device event's edit or a duplicate. Kept so a
+    // device save that doesn't pick a zone writes the original ID instead of the
+    // device zone. Cleared by the timezone picker.
     val sourceTimezoneId: String? = null,
     // The repeat rule before an all-day toggle re-expressed its end date, and the
     // rule that toggle produced. Toggling back with the rule untouched restores the
@@ -536,6 +542,34 @@ internal fun org.onekash.kashcal.data.db.entity.Event.toFormDateFields(occurrenc
     } else {
         timedFormDateFields(actualStartTs, actualEndTs, timezone)
     }
+}
+
+/**
+ * Fills this form from [source], the copy [toEventForDuplicate] built for the duplicate form:
+ * its dates and clock times in its own timezone, its rule, and its other event fields. The
+ * calendar fields are left to the caller, which resolves them against the writable calendars.
+ *
+ * A timezone ID the app can't resolve shows as the device zone and is kept as
+ * [EventFormState.sourceTimezoneId] for a timed event, as a device event's edit keeps it.
+ */
+internal fun EventFormState.withDuplicateOf(source: Event): EventFormState {
+    val zone = source.timezone
+    val recognisedZone = zone?.takeIf { TimezoneUtils.resolveZoneOrNull(it) != null }
+    // A duplicate keeps no truncation notice.
+    val (reminders, _) = parseRemindersFromEvent(source.reminders, source.alarmCount)
+    return withDateFields(source.toFormDateFields(null)).copy(
+        title = source.title,
+        location = source.location.orEmpty(),
+        description = source.description.orEmpty(),
+        isAllDay = source.isAllDay,
+        timezone = recognisedZone.takeUnless { source.isAllDay },
+        sourceTimezoneId = zone.takeIf { !source.isAllDay && !it.isNullOrBlank() && recognisedZone == null },
+        reminders = reminders,
+        rrule = source.rrule.takeUnless { source.isException },
+        transp = source.transp,
+        eventColor = source.color,
+        categories = source.categories.orEmpty(),
+    )
 }
 
 /**
@@ -1183,8 +1217,11 @@ fun EventFormContent(
     val titleFocusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    // Whether a finger is pressed on the form; see [shouldDismissKeyboardOnScroll].
+    // Whether a finger is pressed on the form, and whether the current gesture's first
+    // press landed in a text field; see [shouldDismissKeyboardOnScroll].
     val isFingerDown = remember { mutableStateOf(false) }
+    val gestureStartedInTextField = remember { mutableStateOf(false) }
+    val fieldGestureMarker = remember { textFieldGestureMarker(gestureStartedInTextField) }
 
     // Focus the title and raise the keyboard once, when a new blank event opens.
     // Skipped for edits, for events that open with a title (duplicate, share, Quick
@@ -1204,11 +1241,16 @@ fun EventFormContent(
 
     // A user swipe clears focus and lowers the keyboard so the fields below aren't
     // hidden behind it; [shouldDismissKeyboardOnScroll] tells a swipe from the scroll
-    // the IME inset fires when a field gains focus.
+    // the IME inset fires when a field gains focus and from a drag inside a field.
     val dismissKeyboardOnUserScroll = remember(focusManager, keyboardController) {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                if (shouldDismissKeyboardOnScroll(source, isFingerDown.value)) {
+                if (shouldDismissKeyboardOnScroll(
+                        source,
+                        isFingerDown.value,
+                        gestureStartedInTextField.value,
+                    )
+                ) {
                     focusManager.clearFocus()
                     keyboardController?.hide()
                 }
@@ -1441,24 +1483,6 @@ fun EventFormContent(
             }
 
             if (duplicateFrom != null) {
-                // All-day events store UTC midnights; the form holds device-local dates.
-                val displayStartTs = if (duplicateFrom.isAllDay) {
-                    DateTimeUtils.utcMidnightToLocalDate(duplicateFrom.startTs)
-                } else {
-                    duplicateFrom.startTs
-                }
-                val displayEndTs = if (duplicateFrom.isAllDay) {
-                    DateTimeUtils.utcMidnightToLocalDate(duplicateFrom.endTs)
-                } else {
-                    duplicateFrom.endTs
-                }
-
-                val startCal = JavaCalendar.getInstance().apply { timeInMillis = displayStartTs }
-                val endCal = JavaCalendar.getInstance().apply { timeInMillis = displayEndTs }
-
-                // A duplicate keeps no truncation notice.
-                val (dupReminders, _) = parseRemindersFromEvent(duplicateFrom.reminders, duplicateFrom.alarmCount)
-
                 // Keep the source calendar (Room or device); fall back to the
                 // resolved default only if it's gone or not writable.
                 val sourceCal = resolveDuplicateSourceCalendar(
@@ -1468,30 +1492,11 @@ fun EventFormContent(
                     deviceCalendarGroups = deviceCalendarGroups,
                     resolvedDefault = resolvedCal
                 )
-                val sourceCalId = sourceCal.id
-                val sourceCalName = sourceCal.localizedName(writableCalendars, context.resources)
-                val sourceCalColor = sourceCal.color
-
-                newState = newState.copy(
-                    title = duplicateFrom.title,
-                    location = duplicateFrom.location.orEmpty(),
-                    description = duplicateFrom.description.orEmpty(),
-                    isAllDay = duplicateFrom.isAllDay,
-                    dateMillis = displayStartTs,
-                    endDateMillis = displayEndTs,
-                    startHour = startCal.get(JavaCalendar.HOUR_OF_DAY),
-                    startMinute = startCal.get(JavaCalendar.MINUTE),
-                    endHour = endCal.get(JavaCalendar.HOUR_OF_DAY),
-                    endMinute = endCal.get(JavaCalendar.MINUTE),
-                    selectedCalendarId = sourceCalId,
-                    selectedCalendarName = sourceCalName,
-                    selectedCalendarColor = sourceCalColor,
+                newState = newState.withDuplicateOf(duplicateFrom).copy(
+                    selectedCalendarId = sourceCal.id,
+                    selectedCalendarName = sourceCal.localizedName(writableCalendars, context.resources),
+                    selectedCalendarColor = sourceCal.color,
                     isDeviceCalendar = sourceCal.isDevice,
-                    reminders = dupReminders,
-                    rrule = null,  // A duplicate is a one-off event.
-                    transp = duplicateFrom.transp,
-                    eventColor = duplicateFrom.color,
-                    categories = duplicateFrom.categories.orEmpty()
                 )
             }
 
@@ -1822,17 +1827,23 @@ fun EventFormContent(
                 CircularProgressIndicator()
             }
         } else {
+            CompositionLocalProvider(LocalTextFieldGestureMarker provides fieldGestureMarker) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
                     // Observes pointer presses without consuming them, for the
-                    // dismiss-on-scroll check.
+                    // dismiss-on-scroll check. A gesture's first press clears the
+                    // text-field flag before a marked descendant field sets it.
                     .pointerInput(Unit) {
                         awaitPointerEventScope {
                             while (true) {
                                 val event = awaitPointerEvent(PointerEventPass.Initial)
-                                isFingerDown.value = event.changes.any { it.pressed }
+                                val pressed = event.changes.any { it.pressed }
+                                if (pressed && !isFingerDown.value) {
+                                    gestureStartedInTextField.value = false
+                                }
+                                isFingerDown.value = pressed
                             }
                         }
                     }
@@ -1910,7 +1921,7 @@ fun EventFormContent(
                             }
                         },
                         placeholder = { Text(stringResource(R.string.label_event_title), style = MaterialTheme.typography.headlineSmall) },
-                        modifier = Modifier
+                        modifier = fieldGestureMarker
                             .fillMaxWidth()
                             .testTag(TAG_TITLE_FIELD)
                             .focusRequester(titleFocusRequester)
@@ -1919,9 +1930,11 @@ fun EventFormContent(
                             // padding, and more would make the title row
                             // taller than location.
                             .padding(horizontal = 16.dp),
-                        // Wraps a long title to a second line, like the
-                        // quick-view title. There is no title length cap.
-                        maxLines = 2,
+                        // Grows to four lines for a long title, then scrolls
+                        // inside the field so a pasted title can't push the
+                        // rest of the form off screen. There is no title
+                        // length cap.
+                        maxLines = 4,
                         enabled = !isReadOnly,
                         textStyle = MaterialTheme.typography.headlineSmall,
                         keyboardOptions = KeyboardOptions(
@@ -2039,7 +2052,7 @@ fun EventFormContent(
                                 }
                             },
                             placeholder = { Text(stringResource(R.string.label_location_hint)) },
-                            modifier = Modifier
+                            modifier = fieldGestureMarker
                                 .fillMaxWidth()
                                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
                             // Wraps a long address to a second line.
@@ -2364,7 +2377,7 @@ fun EventFormContent(
                         value = state.description,
                         onValueChange = { state = state.copy(description = it) },
                         placeholder = { Text(stringResource(R.string.label_notes)) },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = fieldGestureMarker.fillMaxWidth(),
                         minLines = 2,
                         maxLines = 4,
                         enabled = !isReadOnly,
@@ -2754,6 +2767,7 @@ fun EventFormContent(
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
+            }
             }
 
             // Sticky bottom Save. Its own top divider ends the scroll content, so

@@ -75,6 +75,10 @@ interface EventsDao {
     @Query("SELECT * FROM events WHERE id IN (:ids)")
     suspend fun getByIds(ids: List<Long>): List<Event>
 
+    /** Returns which of [ids] still exist. */
+    @Query("SELECT id FROM events WHERE id IN (:ids)")
+    suspend fun existingIds(ids: List<Long>): List<Long>
+
     @Query("SELECT * FROM events WHERE id = :id")
     fun getByIdFlow(id: Long): Flow<Event?>
 
@@ -827,8 +831,10 @@ interface EventsDao {
 
     /**
      * Returns an [EventWithOccurrenceAndColor] for each non-cancelled occurrence starting in
-     * [fromTime]..[toTime] in a visible calendar whose event has reminders. ReminderScheduler
-     * scans it for reminders not yet scheduled.
+     * [fromTime]..[toTime] in a calendar that notifies
+     * ([org.onekash.kashcal.data.db.entity.Calendar.isNotificationMuted] false)
+     * whose event has reminders; hidden calendars are included. ReminderScheduler scans it for
+     * reminders not yet scheduled.
      *
      * An occurrence with an exception loads the exception (COALESCE(exception_event_id,
      * event_id)), so the notification shows the exception's title and location. The UNION
@@ -837,6 +843,9 @@ interface EventsDao {
      *    SELECT);
      * 2. an exception without reminders whose master has some, returned as the master's row
      *    with the exception as target (second SELECT).
+     *
+     * A row an ICS import created or cancelled ([Event.importSource], or its master's) that is
+     * CANCELLED is left out, so an imported CANCEL keeps its reminders off.
      */
     @Query("""
         SELECT e.*, o.start_ts as occurrence_start_ts, o.end_ts as occurrence_end_ts,
@@ -850,7 +859,9 @@ interface EventsDao {
           AND o.start_ts >= :fromTime
           AND o.start_ts <= :toTime
           AND o.is_cancelled = 0
-          AND c.is_visible = 1
+          AND c.is_notification_muted = 0
+          AND NOT (e.status = 'CANCELLED' AND (e.import_source IS NOT NULL OR EXISTS (
+              SELECT 1 FROM events m WHERE m.id = e.original_event_id AND m.import_source IS NOT NULL)))
         UNION
         SELECT master.*, o.start_ts as occurrence_start_ts, o.end_ts as occurrence_end_ts,
                c.color as calendar_color,
@@ -866,7 +877,9 @@ interface EventsDao {
           AND o.start_ts >= :fromTime
           AND o.start_ts <= :toTime
           AND o.is_cancelled = 0
-          AND c.is_visible = 1
+          AND c.is_notification_muted = 0
+          AND NOT (exc.status = 'CANCELLED' AND (exc.import_source IS NOT NULL OR master.import_source IS NOT NULL))
+          AND NOT (master.status = 'CANCELLED' AND master.import_source IS NOT NULL)
         ORDER BY occurrence_start_ts ASC
     """)
     suspend fun getEventsWithRemindersInRange(

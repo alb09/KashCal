@@ -4,13 +4,16 @@ import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.onekash.kashcal.data.db.dao.AttendeesDao
+import org.onekash.kashcal.data.db.dao.CalendarsDao
 import org.onekash.kashcal.data.db.entity.Account
 import org.onekash.kashcal.data.db.entity.Attendee
 import org.onekash.kashcal.data.db.entity.Calendar
@@ -23,6 +26,7 @@ class InviteNotifierTest {
 
     private lateinit var attendeesDao: AttendeesDao
     private lateinit var notificationManager: InviteNotificationManager
+    private lateinit var calendarsDao: CalendarsDao
     private lateinit var notifier: InviteNotifier
 
     private val account = Account(
@@ -55,9 +59,12 @@ class InviteNotifierTest {
     fun setup() {
         attendeesDao = mockk(relaxed = true)
         notificationManager = mockk(relaxed = true)
+        calendarsDao = mockk()
+        coEvery { calendarsDao.getById(calendar.id) } returns calendar
         notifier = InviteNotifier(
             attendeesDao = attendeesDao,
-            notificationManager = notificationManager
+            notificationManager = notificationManager,
+            calendarsDao = calendarsDao
         )
     }
 
@@ -169,5 +176,67 @@ class InviteNotifierTest {
         notifier.notifyNew(anonEvent, account)
 
         coVerify(exactly = 0) { notificationManager.showInvite(any(), any(), any()) }
+    }
+
+    @Test
+    fun `eventsNotifiedSince keeps the given events that had an invite notification`() = runTest {
+        every { notificationManager.areNotificationsEnabled() } returns true
+        coEvery { attendeesDao.getEventIdsNotifiedSince(1_000L) } returns listOf(100L, 300L)
+
+        assertEquals(setOf(100L), notifier.eventsNotifiedSince(listOf(100L, 200L), since = 1_000L))
+    }
+
+    @Test
+    fun `eventsNotifiedSince is empty without reading when invite notifications are off`() = runTest {
+        // notifyNew still sets notified_at when the invite channel is off, so the column alone
+        // doesn't prove a notification was shown.
+        every { notificationManager.areNotificationsEnabled() } returns false
+
+        assertEquals(emptySet<Long>(), notifier.eventsNotifiedSince(listOf(100L), since = 1_000L))
+        coVerify(exactly = 0) { attendeesDao.getEventIdsNotifiedSince(any()) }
+    }
+
+    // ==================== Muted calendar ====================
+
+    @Test
+    fun `a muted calendar's invite shows nothing but is still marked notified`() = runTest {
+        coEvery { calendarsDao.getById(calendar.id) } returns calendar.copy(isNotificationMuted = true)
+        coEvery { attendeesDao.getForEventOnce(event.id) } returns listOf(selfRow(), aliceRow())
+        coEvery { attendeesDao.markNotified(50L, any()) } just Runs
+
+        notifier.notifyNew(event, account)
+
+        coVerify(exactly = 0) { notificationManager.showInvite(any(), any(), any()) }
+        coVerify(exactly = 1) { attendeesDao.markNotified(50L, any()) }
+    }
+
+    @Test
+    fun `an invite marked while muted is not shown after unmuting`() = runTest {
+        // Unmuted again: the row already carries notified_at from the muted pull.
+        coEvery { attendeesDao.getForEventOnce(event.id) } returns listOf(selfRow(notifiedAt = 1_500_000L))
+
+        notifier.notifyNew(event, account)
+
+        coVerify(exactly = 0) { notificationManager.showInvite(any(), any(), any()) }
+    }
+
+    @Test
+    fun `the calendar is read only when a row would notify`() = runTest {
+        coEvery { attendeesDao.getForEventOnce(event.id) } returns listOf(aliceRow(), selfRow(partstat = "ACCEPTED"))
+
+        notifier.notifyNew(event, account)
+
+        coVerify(exactly = 0) { calendarsDao.getById(any()) }
+    }
+
+    @Test
+    fun `a missing calendar row counts as notifying`() = runTest {
+        coEvery { calendarsDao.getById(calendar.id) } returns null
+        coEvery { attendeesDao.getForEventOnce(event.id) } returns listOf(selfRow())
+        coEvery { attendeesDao.markNotified(50L, any()) } just Runs
+
+        notifier.notifyNew(event, account)
+
+        coVerify(exactly = 1) { notificationManager.showInvite(event = event, attendeeRowId = 50L, organizerLabel = "Boss") }
     }
 }

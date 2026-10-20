@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">ಸಿಂಕ್ ಪೂರ್ಣಗೊಂಡಿರುವುದು ಮತ್ತು ದೋಷಗಳ ಬಗ್ಗೆ ಅಧಿಸೂಚನೆಗಳು</string>
     <string name="channel_event_invitations">ಈವೆಂಟ್ ಆಹ್ವಾನಗಳು</string>
     <string name="channel_event_invitations_desc">ನೀವು ಹೊಸ ಕ್ಯಾಲೆಂಡರ್ ಆಹ್ವಾನವನ್ನು ಸ್ವೀಕರಿಸಿದಾಗ ಅಧಿಸೂಚನೆಗಳು</string>
+    <string name="channel_calendar_updates">ಕ್ಯಾಲೆಂಡರ್ ಬದಲಾವಣೆಗಳು</string>
     <string name="invite_notification_body">%1$s ಇಂದ · ಪ್ರತಿಕ್ರಿಯಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆ ಸಂಪೂರ್ಣ ಸರಣಿಗೆ ಅನ್ವಯಿಸುತ್ತದೆ.</string>
+    <string name="rsvp_receipt_pending">ಪ್ರತಿಕ್ರಿಯೆ ಕಳುಹಿಸಲು ಬಾಕಿ ಇದೆ</string>
+    <string name="rsvp_receipt_sent">ಪ್ರತಿಕ್ರಿಯೆ ಕಳುಹಿಸಲಾಗಿದೆ</string>
+    <string name="rsvp_receipt_not_delivered">ಪ್ರತಿಕ್ರಿಯೆ ತಲುಪಿಲ್ಲ</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">ಇದು ಮತ್ತು ಎಲ್ಲಾ ಭವಿಷ್ಯದವು</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">ಡೀಫಾಲ್ಟ್</string>
     <string name="app_icon_supporter">ಬೆಂಬಲಿಗ</string>
     <string name="app_icon_supporter_calendar">ಬೆಂಬಲಿಗ, ಹೆಸರು ಕ್ಯಾಲೆಂಡರ್</string>
+    <string name="app_icon_todays_date">ಇಂದಿನ ದಿನಾಂಕ</string>
     <string name="app_icon_label_calendar">ಕ್ಯಾಲೆಂಡರ್</string>
     <string name="app_icon_support_cta">KashCal ಅನ್ನು ಬೆಂಬಲಿಸಿ</string>
     <string name="app_icon_switch_note">ಐಕಾನ್ ಬದಲಾಯಿಸಿದಾಗ ಆ್ಯಪ್ ಮರುಪ್ರಾರಂಭವಾಗಬಹುದು. ಅಧಿಸೂಚನೆಗಳು ಯಾವಾಗಲೂ ಡೀಫಾಲ್ಟ್ ಐಕಾನ್ ಮತ್ತು ಹೆಸರನ್ನು ಬಳಸುತ್ತವೆ.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">ನಿಮ್ಮ ಈವೆಂಟ್‌ಗಳನ್ನು ಇಲ್ಲಿ ನೋಡಲು iCloud ಸಂಪರ್ಕಿಸಿ</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">ನಂತರ</string>
+    <string name="whats_new_skip">ಬಿಟ್ಟುಬಿಡಿ</string>
+    <string name="whats_new_next">ಮುಂದೆ</string>
+    <string name="whats_new_page_of">%2$d ರಲ್ಲಿ ಪುಟ %1$d</string>
+    <string name="whats_new_find_it_in">ಇಲ್ಲಿ ಹುಡುಕಿ</string>
     <string name="whats_new_v598_title">Android ತೆರೆದಿರಲು ಸಹಾಯ ಮಾಡಿ</string>
     <string name="whats_new_v598_body">Google ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಅಪ್ಲಿಕೇಶನ್‌ಗಳನ್ನು ಸ್ಥಾಪಿಸುವ ವಿಧಾನವನ್ನು ಬದಲಾಯಿಸುತ್ತಿದೆ. ನಮಗೆ ನಿಮ್ಮ ಸಹಾಯ ಬೇಕು.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org ಭೇಟಿ ನೀಡಿ</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">ಈ ಬಿಡುಗಡೆಯನ್ನು KashCal ಬೆಂಬಲಿಗರಿಗೆ ಅರ್ಪಿಸಲಾಗಿದೆ. ಒಂದು ಚಿಕ್ಕ ಕೊಡುಗೆ, ಮತ್ತೆ ಮತ್ತೆ ಸಿಗುವ ದೊಡ್ಡ ಪ್ರತಿಫಲ.</string>
     <string name="whats_new_v732_caption">ಇನ್ನೂ ಬೆಂಬಲಿಗರಾಗಿಲ್ಲವೇ?</string>
     <string name="whats_new_v732_action_label">ನಿಮ್ಮ ಯೋಜನೆಗಳಿಗೆ ನಮ್ಮನ್ನು ಸೇರಿಸಿ</string>
+    <string name="whats_new_v772_icon_title">ನಿಮ್ಮ ಐಕಾನ್‌ಗೆ ದಿನಾಂಕ ಗೊತ್ತು</string>
+    <string name="whats_new_v772_icon_body">ಇಂದಿನ ದಿನಾಂಕ ಐಕಾನ್ ಆಯ್ಕೆಮಾಡಿ, KashCal ನಿಮ್ಮ ಹೋಮ್ ಸ್ಕ್ರೀನ್‌ನಲ್ಲಿ ತಿಂಗಳ ದಿನಾಂಕವನ್ನು ತೋರಿಸುತ್ತದೆ. ಪ್ರತಿ ರಾತ್ರಿ ಅದು ತಾನಾಗಿಯೇ ಬದಲಾಗುತ್ತದೆ.</string>
+    <string name="whats_new_v772_changes_title">ಏನು ಬದಲಾಗಿದೆ ನೋಡಿ</string>
+    <string name="whats_new_v772_changes_body">ನಿಮ್ಮ iCloud ಮತ್ತು CalDAV ಕ್ಯಾಲೆಂಡರ್‌ಗಳ ಹೊಸ, ಸಂಪಾದಿಸಿದ ಮತ್ತು ತೆಗೆದುಹಾಕಿದ ಈವೆಂಟ್‌ಗಳು 7 ದಿನಗಳವರೆಗೆ ಇತ್ತೀಚಿನ ಬದಲಾವಣೆಗಳು ಪಟ್ಟಿಯಲ್ಲಿ ಸಂಗ್ರಹವಾಗುತ್ತವೆ. ಒಂದನ್ನು ತೆರೆಯಲು ಅದರ ಮೇಲೆ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
+    <string name="whats_new_v772_notifications_body">ಹಿನ್ನೆಲೆ ಸಿಂಕ್ ನಿಮ್ಮ iCloud ಅಥವಾ CalDAV ಈವೆಂಟ್‌ಗಳಲ್ಲಿ ಬದಲಾವಣೆಗಳನ್ನು ಕಂಡುಕೊಂಡಾಗ ಅಧಿಸೂಚನೆ ಪಡೆಯಿರಿ. ನೀವು ಆನ್ ಮಾಡುವವರೆಗೆ ಇದು ಆಫ್ ಆಗಿರುತ್ತದೆ.</string>
+    <string name="whats_new_hero_sample_lunch">ತಂಡದ ಊಟ</string>
+    <string name="whats_new_hero_sample_review">ವಿನ್ಯಾಸ ಪರಿಶೀಲನೆ</string>
+    <string name="whats_new_hero_sample_book_club">ಪುಸ್ತಕ ಕ್ಲಬ್</string>
+    <string name="whats_new_hero_sample_calendar">ಕೆಲಸ</string>
+    <string name="whats_new_hero_now">ಈಗ</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud ಸಂಪರ್ಕಿಸಿ</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">ಇನ್ನೂ ಸಿಂಕ್ ಸೆಷನ್‌ಗಳಿಲ್ಲ.\n\nಕ್ಯಾಲೆಂಡರ್ ವೀಕ್ಷಣೆಯಲ್ಲಿ ಕೆಳಕ್ಕೆ ಎಳೆದು ರಿಫ್ರೆಶ್ ಮಾಡಿ.</string>
     <string name="status_no_writable_calendars">ಬರೆಯಬಹುದಾದ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ಲಭ್ಯವಿಲ್ಲ</string>
     <string name="status_events_count">%1$d ಈವೆಂಟ್‌ಗಳು</string>
-    <string name="status_sync_changes">ಸಿಂಕ್ ಬದಲಾವಣೆಗಳು</string>
     <string name="status_sync_history">ಸಿಂಕ್ ಇತಿಹಾಸ</string>
     <string name="status_parse_failures">ಪಾರ್ಸ್ ವಿಫಲತೆಗಳು</string>
     <string name="status_error">ದೋಷ</string>
@@ -584,6 +601,26 @@
     <string name="settings_detailed_widget_rows_info">ಸಂಕ್ಷಿಪ್ತ ಒಂದೇ ಸಾಲು, ಅಥವಾ ಅಂತ್ಯ ಸಮಯದೊಂದಿಗೆ ವಿವರವಾದ ಎರಡು ಸಾಲುಗಳು.</string>
     <string name="settings_sync_lookback">ಸಿಂಕ್ ಲುಕ್‌ಬ್ಯಾಕ್</string>
     <string name="settings_sync_lookback_hint">ಎಷ್ಟು ಹಿಂದಿನವರೆಗೆ ಈವೆಂಟ್‌ಗಳನ್ನು ಸಿಂಕ್ ಮಾಡಬೇಕು</string>
+    <string name="settings_change_notifications">ಬದಲಾವಣೆ ಅಧಿಸೂಚನೆಗಳು</string>
+    <string name="settings_change_notifications_info">ಹಿನ್ನೆಲೆ ಸಿಂಕ್ ನಿಮ್ಮ ಈವೆಂಟ್‌ಗಳಲ್ಲಿ ಬದಲಾವಣೆಗಳನ್ನು ಕಂಡುಕೊಂಡಾಗ ಅಧಿಸೂಚನೆಯನ್ನು ಕಳುಹಿಸುತ್ತದೆ. iCloud ಮತ್ತು CalDAV ಕ್ಯಾಲೆಂಡರ್‌ಗಳಿಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ.</string>
+    <string name="settings_calendar_notifications">ಕ್ಯಾಲೆಂಡರ್ ಅಧಿಸೂಚನೆಗಳು</string>
+    <string name="settings_calendar_notifications_all">ಎಲ್ಲಾ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">%d ಮ್ಯೂಟ್ ಮಾಡಲಾಗಿದೆ</item>
+        <item quantity="other">%d ಮ್ಯೂಟ್ ಮಾಡಲಾಗಿದೆ</item>
+    </plurals>
+    <string name="calendar_notifications_intro">ಯಾವ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ನಿಮಗೆ ಸೂಚಿಸಬಹುದು ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="calendar_notifications_info">ಮ್ಯೂಟ್ ಮಾಡಿದ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ಈಗಲೂ ಕಾಣಿಸುತ್ತವೆ ಮತ್ತು ಸಿಂಕ್ ಆಗುತ್ತವೆ, ಆದರೆ ನಿಮಗೆ ಸೂಚಿಸುವುದಿಲ್ಲ.</string>
+    <string name="cd_calendar_notifications_info">ಮ್ಯೂಟ್ ಮಾಡಿದ ಕ್ಯಾಲೆಂಡರ್‌ಗಳ ಕುರಿತು</string>
+    <string name="cd_state_expanded">ವಿಸ್ತರಿಸಲಾಗಿದೆ</string>
+    <string name="cd_state_collapsed">ಕುಗ್ಗಿಸಲಾಗಿದೆ</string>
+    <string name="calendar_notifications_device_info">ನಂತರ ಸೇರಿಸುವವು ಸೇರಿದಂತೆ ಎಲ್ಲಾ ಸಾಧನ ಕ್ಯಾಲೆಂಡರ್‌ಗಳನ್ನು ಮ್ಯೂಟ್ ಮಾಡಲು ಇದನ್ನು ಆಫ್ ಮಾಡಿ.</string>
+    <string name="cd_calendar_notifications_device_info">ಸಾಧನ ಕ್ಯಾಲೆಂಡರ್ ಅಧಿಸೂಚನೆಗಳ ಕುರಿತು</string>
+    <string name="cd_device_calendar_notifications">ಸಾಧನ ಕ್ಯಾಲೆಂಡರ್ ಅಧಿಸೂಚನೆಗಳು</string>
+    <string name="calendar_notifications_hidden">ಮರೆಮಾಡಲಾಗಿದೆ</string>
+    <string name="calendar_notifications_app_off">ಸಿಸ್ಟಂ ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ KashCal ಅಧಿಸೂಚನೆಗಳು ಆಫ್ ಆಗಿವೆ, ಆದ್ದರಿಂದ ಯಾವುದೇ ಕ್ಯಾಲೆಂಡರ್ ನಿಮಗೆ ಸೂಚಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="calendar_notifications_reminders_off">ಸಿಸ್ಟಂ ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಈವೆಂಟ್ ರಿಮೈಂಡರ್‌ಗಳು ಆಫ್ ಆಗಿವೆ, ಆದ್ದರಿಂದ ಯಾವುದೇ ರಿಮೈಂಡರ್ ಕಾಣಿಸುವುದಿಲ್ಲ.</string>
+    <string name="cd_notifications_off">ಅಧಿಸೂಚನೆಗಳು ಆಫ್</string>
     <string name="settings_not_set">ಸೆಟ್ ಆಗಿಲ್ಲ</string>
     <string name="settings_on">ಆನ್</string>
     <string name="settings_off">ಆಫ್</string>
@@ -627,7 +664,6 @@
     <string name="label_device_calendars">ಸಾಧನ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು</string>
     <string name="label_default_calendar_hint">ಹೊಸ ಈವೆಂಟ್‌ಗಳನ್ನು ಈ ಕ್ಯಾಲೆಂಡರ್‌ನಲ್ಲಿ ರಚಿಸಲಾಗುತ್ತದೆ</string>
     <string name="label_visible_count">%1$d / %2$d ಕಾಣಿಸುತ್ತಿದೆ</string>
-    <string name="label_enabled_count">%1$d / %2$d ಆನ್</string>
     <string name="label_reminders_truncated">%1$d ತೋರಿಸಿಲ್ಲ (%2$d ಒಟ್ಟು, ಗರಿಷ್ಠ %3$d ಬದಲಾಯಿಸಬಹುದು)</string>
     <string name="label_found_events">ಕಂಡುಬಂದವು: %1$d ಈವೆಂಟ್‌ಗಳು</string>
     <string name="label_open_debug_menu">ಡೀಬಗ್ ಮೆನು ತೆರೆಯಿರಿ</string>
@@ -649,8 +685,6 @@
     <string name="device_calendars_grant">ಅನುಮತಿಸಿ</string>
     <string name="device_calendars_none_found">ಸಾಧನ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ಕಂಡುಬಂದಿಲ್ಲ.</string>
     <string name="device_calendars_local">ಸ್ಥಳೀಯ</string>
-    <string name="device_calendars_reminders">ರಿಮೈಂಡರ್‌ಗಳು</string>
-    <string name="device_calendars_reminders_desc">ಸಾಧನ ಕ್ಯಾಲೆಂಡರ್ ಈವೆಂಟ್‌ಗಳಿಗಾಗಿ ಅಧಿಸೂಚನೆ ಪಡೆಯಿರಿ</string>
     <string name="device_calendars_read_only_no_write">ಓದಲು ಮಾತ್ರ (ಬರೆಯುವ ಅನುಮತಿ ಇಲ್ಲ)</string>
     <string name="device_calendars_read_only_calendar">ಓದಲು ಮಾತ್ರ (ಕ್ಯಾಲೆಂಡರ್ ಓದಲು-ಮಾತ್ರ)</string>
     <string name="settings_developer_options">ಡೆವಲಪರ್ ಆಯ್ಕೆಗಳು</string>
@@ -760,6 +794,59 @@
         <item quantity="one">%1$d ಈವೆಂಟ್ ಆಮದು ಮಾಡಲಾಗಿದೆ</item>
         <item quantity="other">%1$d ಈವೆಂಟ್‌ಗಳನ್ನು ಆಮದು ಮಾಡಲಾಗಿದೆ</item>
     </plurals>
+    <string name="ics_import_preview_loading">ಈ ಕ್ಯಾಲೆಂಡರ್ ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ…</string>
+    <string name="ics_import_preview_failed">ಈ ಈವೆಂಟ್‌ಗಳಿಗಾಗಿ ಈ ಕ್ಯಾಲೆಂಡರ್ ಪರಿಶೀಲಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಆದರೂ ನೀವು ಆಮದು ಮಾಡಬಹುದು.</string>
+    <string name="ics_import_will_cancel">ಇದು %1$s ಅನ್ನು ರದ್ದುಗೊಳಿಸುತ್ತದೆ, ಆಯೋಜಕರು: %2$s</string>
+    <string name="ics_import_will_cancel_no_organizer">ಇದು %1$s ಅನ್ನು ರದ್ದುಗೊಳಿಸುತ್ತದೆ</string>
+    <string name="ics_import_will_update">ಇದು %1$s ಅನ್ನು ಅಪ್‌ಡೇಟ್ ಮಾಡುತ್ತದೆ</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d ಈವೆಂಟ್ ಈಗಾಗಲೇ ಅಪ್‌ಡೇಟ್ ಆಗಿದೆ</item>
+        <item quantity="other">%1$d ಈವೆಂಟ್‌ಗಳು ಈಗಾಗಲೇ ಅಪ್‌ಡೇಟ್ ಆಗಿವೆ</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">%1$d ಬಿಟ್ಟುಹಾಕಲಾಗಿದೆ: %2$s</item>
+        <item quantity="other">%1$d ಬಿಟ್ಟುಹಾಕಲಾಗಿದೆ: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">ಇದು ಆಹ್ವಾನವೊಂದಕ್ಕೆ ಪ್ರತಿಕ್ರಿಯೆ, ಇದು ನಿಮ್ಮ ಕ್ಯಾಲೆಂಡರ್‌ಗೆ ಏನನ್ನೂ ಸೇರಿಸುವುದಿಲ್ಲ</string>
+    <string name="ics_import_reason_unsupported">ಈ ರೀತಿಯ ಆಹ್ವಾನ ಸಂದೇಶಕ್ಕೆ ಬೆಂಬಲವಿಲ್ಲ</string>
+    <string name="ics_import_reason_organizer_mismatch">ಇದು ಮೀಟಿಂಗ್‌ನ ಆಯೋಜಕರಲ್ಲದ ಬೇರೊಬ್ಬರಿಂದ ಬಂದಿದೆ</string>
+    <string name="ics_import_reason_cancel_no_match">ರದ್ದಾದ ಮೀಟಿಂಗ್ ಈ ಕ್ಯಾಲೆಂಡರ್‌ನಲ್ಲಿ ಇಲ್ಲ</string>
+    <string name="ics_import_reason_cancel_not_for_you">ಈ ರದ್ದತಿ ಇತರ ಅತಿಥಿಗಳಿಗಾಗಿ</string>
+    <string name="ics_import_reason_deletion_pending">ಈವೆಂಟ್ ಅಳಿಸಲಾಗುತ್ತಿದೆ</string>
+    <string name="ics_import_reason_cancelled_in_file">ಇದು ಫೈಲ್‌ನಲ್ಲಿ ಈಗಾಗಲೇ ರದ್ದಾಗಿದೆ</string>
+    <string name="ics_import_reason_this_and_future">ಇದಕ್ಕೆ ಮತ್ತು ಮುಂದಿನ ಪುನರಾವರ್ತನೆಗಳಿಗೆ ಮಾಡಿದ ಬದಲಾವಣೆಗಳಿಗೆ ಬೆಂಬಲವಿಲ್ಲ</string>
+    <string name="ics_import_reason_own_cancel">ಈ ಮೀಟಿಂಗ್ ಅನ್ನು ನೀವೇ ಆಯೋಜಿಸುತ್ತೀರಿ, ಆದ್ದರಿಂದ ಈವೆಂಟ್‌ನಿಂದಲೇ ಇದನ್ನು ರದ್ದುಗೊಳಿಸಿ</string>
+    <string name="ics_import_reason_on_another_calendar">ಇದು ಈಗಾಗಲೇ ಈ ಖಾತೆಯ ಮತ್ತೊಂದು ಕ್ಯಾಲೆಂಡರ್‌ನಲ್ಲಿದೆ</string>
+    <string name="ics_import_notice_unverified">ಆಹ್ವಾನ ಫೈಲ್ ಕಳುಹಿಸಿದವರನ್ನು ಪರಿಶೀಲಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ಇದು ಆಯೋಜಕರಿಂದ ಬಂದಿದೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಿ.</string>
+    <string name="ics_import_notice_answer_notifies">ಈ ಆಹ್ವಾನಕ್ಕೆ ಉತ್ತರಿಸಿದರೆ ಆಯೋಜಕರಿಗೆ ತಿಳಿಸಬಹುದು.</string>
+    <string name="ics_import_notice_guests_again">ನೀವು ಆಯೋಜಕರು, ಆದ್ದರಿಂದ ಅತಿಥಿಗಳು ಈ ಆಹ್ವಾನವನ್ನು ಮತ್ತೆ ಸ್ವೀಕರಿಸಬಹುದು.</string>
+    <string name="cd_dismiss_notice">ಸೂಚನೆಯನ್ನು ವಜಾಮಾಡಿ</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d ಸೇರಿಸಲಾಗಿದೆ</item>
+        <item quantity="other">%1$d ಸೇರಿಸಲಾಗಿದೆ</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d ಅಪ್‌ಡೇಟ್ ಮಾಡಲಾಗಿದೆ</item>
+        <item quantity="other">%1$d ಅಪ್‌ಡೇಟ್ ಮಾಡಲಾಗಿದೆ</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ</item>
+        <item quantity="other">%1$d ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d ಈಗಾಗಲೇ ಅಪ್‌ಡೇಟ್ ಆಗಿದೆ</item>
+        <item quantity="other">%1$d ಈಗಾಗಲೇ ಅಪ್‌ಡೇಟ್ ಆಗಿವೆ</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d ಬಿಟ್ಟುಹಾಕಲಾಗಿದೆ</item>
+        <item quantity="other">%1$d ಬಿಟ್ಟುಹಾಕಲಾಗಿದೆ</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d ವಿಫಲವಾಗಿದೆ</item>
+        <item quantity="other">%1$d ವಿಫಲವಾಗಿವೆ</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">ಆಮದು ಮಾಡಲು ಏನೂ ಇಲ್ಲ</string>
     <plurals name="exported_events">
         <item quantity="one">%1$d ಈವೆಂಟ್ ರಫ್ತು ಮಾಡಲಾಗಿದೆ</item>
         <item quantity="other">%1$d ಈವೆಂಟ್‌ಗಳನ್ನು ರಫ್ತು ಮಾಡಲಾಗಿದೆ</item>
@@ -913,6 +1000,14 @@
     <string name="cd_active_view">ಸಕ್ರಿಯ ವೀಕ್ಷಣೆ</string>
     <string name="view_agenda">ಕಾರ್ಯಸೂಚಿ</string>
     <string name="view_month_full">ತಿಂಗಳು (ಪೂರ್ಣ)</string>
+    <string name="view_planner">ಪ್ಲಾನರ್</string>
+    <string name="planner_free_day">ಬಿಡುವಿನ ದಿನ</string>
+    <string name="cd_planner_show_day_events">ಈ ದಿನದ ಈವೆಂಟ್‌ಗಳನ್ನು ತೋರಿಸಿ</string>
+    <string name="planner_different_this_week">ಈ ವಾರ ಭಿನ್ನ</string>
+    <string name="planner_usual_week">ಸಾಮಾನ್ಯ ವಾರ.</string>
+    <string name="planner_moved_was">ಹಿಂದೆ %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">ದಿನ</string>
     <string name="view_three_days">3 ದಿನಗಳು</string>
     <string name="view_year">ವರ್ಷ</string>
@@ -969,11 +1064,6 @@
     <string name="cd_increase_interval">ಮಧ್ಯಂತರ ಹೆಚ್ಚಿಸಿ</string>
     <string name="rrule_starting">%1$s %2$s ರಿಂದ ಪ್ರಾರಂಭ%3$s</string>
     <string name="rrule_since">%1$s · %2$s ರಿಂದ</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d ಹೊಸ</string>
-    <string name="sync_summary_updated">%1$d ನವೀಕರಿಸಲಾಗಿದೆ</string>
-    <string name="sync_summary_removed">%1$d ತೆಗೆದುಹಾಕಲಾಗಿದೆ</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">ವೃತ್ತಾಕಾರ ಸ್ಕ್ರೋಲಿಂಗ್ ಆನ್ ಆಗಿದೆ</string>
@@ -1076,10 +1166,31 @@
         <item quantity="one">%1$d ಈವೆಂಟ್ ತೆಗೆದುಹಾಕಲಾಯಿತು</item>
         <item quantity="other">%1$d ಈವೆಂಟ್‌ಗಳನ್ನು ತೆಗೆದುಹಾಕಲಾಯಿತು</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d ಪುನರಾವರ್ತನೆ ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ</item>
+        <item quantity="other">%1$d ಪುನರಾವರ್ತನೆಗಳನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d ಕ್ಯಾಲೆಂಡರ್ ಅಪ್‌ಡೇಟ್</item>
         <item quantity="other">%1$d ಕ್ಯಾಲೆಂಡರ್ ಅಪ್‌ಡೇಟ್‌ಗಳು</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">ಇತ್ತೀಚಿನ ಬದಲಾವಣೆಗಳು</string>
+    <string name="recent_changes_empty">ಇತ್ತೀಚಿನ ಬದಲಾವಣೆಗಳಿಲ್ಲ</string>
+    <string name="recent_changes_clear_all">ಎಲ್ಲವನ್ನೂ ತೆರವುಮಾಡಿ</string>
+    <string name="recent_changes_cleared">ಇತ್ತೀಚಿನ ಬದಲಾವಣೆಗಳನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="recent_changes_dismiss">ವಜಾಮಾಡಿ</string>
+    <string name="recent_changes_moved_from">%1$s ರಿಂದ ಸರಿಸಲಾಗಿದೆ</string>
+    <string name="recent_changes_time_changed">ಸಮಯ ಬದಲಾಗಿದೆ</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">ಸ್ಥಳ ಬದಲಾಗಿದೆ</string>
+    <string name="recent_changes_title_changed">ಶೀರ್ಷಿಕೆ ಬದಲಾಗಿದೆ</string>
+    <string name="recent_changes_repeat_changed">ಪುನರಾವರ್ತನೆ ಬದಲಾಗಿದೆ</string>
+    <string name="recent_changes_cancelled">ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="cd_recent_change_new">ಹೊಸ ಈವೆಂಟ್</string>
+    <string name="cd_recent_change_updated">ಅಪ್‌ಡೇಟ್ ಆಗಿದೆ</string>
+    <string name="cd_recent_change_removed">ತೆಗೆದುಹಾಕಲಾಗಿದೆ</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">ದಿನ %1$d / %2$d</string>

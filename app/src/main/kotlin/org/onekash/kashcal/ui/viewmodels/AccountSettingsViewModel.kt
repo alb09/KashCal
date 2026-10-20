@@ -1,5 +1,8 @@
 package org.onekash.kashcal.ui.viewmodels
 
+import org.onekash.kashcal.data.ics.IcsImportFile
+import org.onekash.kashcal.domain.ics.GroupPlan
+import org.onekash.kashcal.domain.ics.IcsImportResult
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -23,6 +26,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.onekash.kashcal.R
@@ -32,7 +37,6 @@ import org.onekash.kashcal.data.calendar_provider.DeviceCalendar
 import org.onekash.kashcal.data.contacts.ContactEventManager
 import org.onekash.kashcal.data.db.entity.Account
 import org.onekash.kashcal.data.db.entity.Calendar
-import org.onekash.kashcal.data.db.entity.Event
 import org.onekash.kashcal.data.db.entity.SyncLog
 import org.onekash.kashcal.data.ics.IcsSubscriptionRepository
 import org.onekash.kashcal.data.preferences.DefaultCalendar
@@ -56,12 +60,16 @@ import org.onekash.kashcal.sync.discovery.DiscoveredCalendar
 import org.onekash.kashcal.sync.discovery.DiscoveryErrorReason
 import org.onekash.kashcal.sync.discovery.DiscoveryResult
 import org.onekash.kashcal.sync.provider.caldav.CalDavAccountDiscoveryService
+import org.onekash.kashcal.reminder.notification.ReminderNotificationChannels
+import org.onekash.kashcal.sync.notification.ChangeNotificationChannels
 import org.onekash.kashcal.sync.scheduler.SyncScheduler
 import org.onekash.kashcal.sync.scheduler.SyncStatus
 import org.onekash.kashcal.ui.model.CalendarGroup
 import org.onekash.kashcal.ui.model.localizedDisplayName
+import org.onekash.kashcal.ui.permission.ChangeNotificationsStep
 import org.onekash.kashcal.ui.permission.LocalNetworkPermissionState
 import org.onekash.kashcal.ui.permission.PermissionChecker
+import org.onekash.kashcal.ui.permission.changeNotificationsToggleStep
 import org.onekash.kashcal.ui.permission.contactSyncPermissionGranted
 import org.onekash.kashcal.ui.permission.reconcileOnResume
 import org.onekash.kashcal.ui.permission.failureIndicatesBlockedLan
@@ -144,6 +152,8 @@ class AccountSettingsViewModel @Inject constructor(
     private val backupExporter: SettingsBackupExporter,
     private val backupImporter: SettingsBackupImporter,
     private val permissionChecker: PermissionChecker,
+    private val changeNotificationChannels: ChangeNotificationChannels,
+    private val reminderNotificationChannels: ReminderNotificationChannels,
     @ApplicationContext private val context: Context,
     @ApplicationScope private val applicationScope: CoroutineScope,
 ) : ViewModel() {
@@ -330,6 +340,27 @@ class AccountSettingsViewModel @Inject constructor(
     private val _deviceCalendarRemindersEnabled = MutableStateFlow(true)
     val deviceCalendarRemindersEnabled: StateFlow<Boolean> = _deviceCalendarRemindersEnabled.asStateFlow()
 
+    // Calendar notifications
+    private val _mutedDeviceCalendarIds = MutableStateFlow<Set<Long>>(emptySet())
+    val mutedDeviceCalendarIds: StateFlow<Set<Long>> = _mutedDeviceCalendarIds.asStateFlow()
+
+    private val _hiddenDeviceCalendarIds = MutableStateFlow<Set<Long>>(emptySet())
+    val hiddenDeviceCalendarIds: StateFlow<Set<Long>> = _hiddenDeviceCalendarIds.asStateFlow()
+
+    private val _calendarNotificationsBlockedBy = MutableStateFlow(readCalendarNotificationsBlockedBy())
+
+    /**
+     * What keeps calendar reminders from showing, null when nothing does: the notification
+     * permission ([ChangeNotificationsStep.RequestPermission]), the app's notifications
+     * ([ChangeNotificationsStep.OpenAppSettings]) or the reminders channel
+     * ([ChangeNotificationsStep.OpenChannelSettings]). Drives the sheet's banner and its wording.
+     */
+    val calendarNotificationsBlockedBy: StateFlow<ChangeNotificationsStep?> =
+        _calendarNotificationsBlockedBy.asStateFlow()
+
+    /** Serializes a device calendar's mute write with the re-pick that follows it. */
+    private val deviceMuteMutex = Mutex()
+
     // Display settings
     private val _showEventEmojis = MutableStateFlow(true)
     val showEventEmojis: StateFlow<Boolean> = _showEventEmojis.asStateFlow()
@@ -370,6 +401,23 @@ class AccountSettingsViewModel @Inject constructor(
 
     private val _titleSuggestionsEnabled = MutableStateFlow(true)
     val titleSuggestionsEnabled: StateFlow<Boolean> = _titleSuggestionsEnabled.asStateFlow()
+
+    private val changeNotificationsCanPost = MutableStateFlow(changeNotificationChannels.canPost())
+
+    /** Whether the Change notifications switch shows on: set, and a notification would show. */
+    val changeNotificationsOn: StateFlow<Boolean> =
+        combine(dataStore.changeNotificationsEnabled, changeNotificationsCanPost) { enabled, canPost ->
+            enabled && canPost
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+    /**
+     * Set while a tap to turn the switch on waits on a permission result or a trip to system
+     * settings. Cleared by the next switch tap, a denied permission, or turning the switch on
+     * (from a grant or a resume that can post). A resume that can't post leaves it: a permission
+     * result arrives before the resume that ends the dialog, when the channel may still be
+     * blocked.
+     */
+    private var changeNotificationsPendingEnable = false
 
     private val _widgetMaxEventsPerDay = MutableStateFlow(5)
     val widgetMaxEventsPerDay: StateFlow<Int> = _widgetMaxEventsPerDay.asStateFlow()
@@ -625,6 +673,16 @@ class AccountSettingsViewModel @Inject constructor(
                 _deviceCalendarRemindersEnabled.value = enabled
             }
         }
+        viewModelScope.launch {
+            dataStore.mutedDeviceCalendarIds.collect { ids ->
+                _mutedDeviceCalendarIds.value = ids
+            }
+        }
+        viewModelScope.launch {
+            dataStore.hiddenDeviceCalendarIds.collect { ids ->
+                _hiddenDeviceCalendarIds.value = ids
+            }
+        }
     }
 
     private suspend fun loadDeviceCalendars() {
@@ -757,6 +815,140 @@ class AccountSettingsViewModel @Inject constructor(
     fun setQuickAddEnabled(enabled: Boolean) {
         viewModelScope.launch {
             dataStore.setQuickAddEnabled(enabled)
+        }
+    }
+
+    /**
+     * Handles a tap that sets the Change notifications switch to [enable] and returns the step the
+     * host carries out ([changeNotificationsToggleStep]). Turning it off also removes a change
+     * notification already shown.
+     */
+    fun onChangeNotificationsToggle(enable: Boolean): ChangeNotificationsStep {
+        changeNotificationsPendingEnable = false
+        val step = changeNotificationsToggleStep(
+            enable = enable,
+            appNotificationsEnabled = changeNotificationChannels.areAppNotificationsEnabled(),
+            channelEnabled = changeNotificationChannels.isChannelEnabled(),
+            permissionGranted = permissionChecker.hasNotificationPermission(),
+        )
+        when (step) {
+            ChangeNotificationsStep.TurnOn -> saveChangeNotifications(true)
+            ChangeNotificationsStep.TurnOff -> {
+                saveChangeNotifications(false)
+                changeNotificationChannels.cancel()
+            }
+            ChangeNotificationsStep.RequestPermission,
+            ChangeNotificationsStep.OpenAppSettings,
+            ChangeNotificationsStep.OpenChannelSettings -> changeNotificationsPendingEnable = true
+        }
+        changeNotificationsCanPost.value = changeNotificationChannels.canPost()
+        return step
+    }
+
+    /**
+     * Takes the result of the permission request a [ChangeNotificationsStep.RequestPermission]
+     * step launched and records it for the denial count. A grant turns the switch on, or returns
+     * the settings step still needed when notifications are blocked there; otherwise returns null.
+     */
+    fun onChangeNotificationsPermissionResult(granted: Boolean): ChangeNotificationsStep? {
+        recordNotificationPermissionResult(granted)
+        changeNotificationsCanPost.value = changeNotificationChannels.canPost()
+        if (!granted) {
+            changeNotificationsPendingEnable = false
+            return null
+        }
+        val step = changeNotificationsToggleStep(
+            enable = true,
+            appNotificationsEnabled = changeNotificationChannels.areAppNotificationsEnabled(),
+            channelEnabled = changeNotificationChannels.isChannelEnabled(),
+            permissionGranted = true,
+        )
+        if (step != ChangeNotificationsStep.TurnOn) return step
+        changeNotificationsPendingEnable = false
+        saveChangeNotifications(true)
+        return null
+    }
+
+    /**
+     * Re-reads whether a change notification would show and whether calendar notifications are
+     * blocked; called on resume. Completes a pending change-notifications enable once it can.
+     */
+    fun refreshChangeNotifications() {
+        _calendarNotificationsBlockedBy.value = readCalendarNotificationsBlockedBy()
+        val canPost = changeNotificationChannels.canPost()
+        changeNotificationsCanPost.value = canPost
+        if (changeNotificationsPendingEnable && canPost) {
+            changeNotificationsPendingEnable = false
+            saveChangeNotifications(true)
+        }
+    }
+
+    /** Records a POST_NOTIFICATIONS result in the denial count the permanent-denial check reads. */
+    private fun recordNotificationPermissionResult(granted: Boolean) {
+        viewModelScope.launch {
+            if (granted) {
+                userPreferences.resetNotificationPermissionDeniedCount()
+            } else {
+                userPreferences.incrementNotificationPermissionDeniedCount()
+            }
+        }
+    }
+
+    private fun readCalendarNotificationsBlockedBy(): ChangeNotificationsStep? =
+        calendarNotificationsStep().takeIf { it != ChangeNotificationsStep.TurnOn }
+
+    /**
+     * Returns what the calendar notifications banner's action needs: the permission, the app's
+     * notification settings or the reminders channel's, in that order; TurnOn when nothing is
+     * blocked.
+     */
+    fun calendarNotificationsStep(): ChangeNotificationsStep = changeNotificationsToggleStep(
+        enable = true,
+        appNotificationsEnabled = reminderNotificationChannels.areNotificationsEnabled(),
+        channelEnabled = reminderNotificationChannels.isChannelEnabled(),
+        permissionGranted = permissionChecker.hasNotificationPermission(),
+    )
+
+    /**
+     * Takes the result of the permission request the calendar notifications banner launched and
+     * records it for the denial count, which the permanently-denied check reads. Leaves change
+     * notifications alone. Returns the settings step still needed after a grant, else null.
+     */
+    fun onCalendarNotificationsPermissionResult(granted: Boolean): ChangeNotificationsStep? {
+        recordNotificationPermissionResult(granted)
+        _calendarNotificationsBlockedBy.value = readCalendarNotificationsBlockedBy()
+        if (!granted) return null
+        return calendarNotificationsStep().takeIf {
+            it == ChangeNotificationsStep.OpenAppSettings || it == ChangeNotificationsStep.OpenChannelSettings
+        }
+    }
+
+    /**
+     * Mutes or unmutes a Room calendar's notifications. Runs on the application scope, so leaving
+     * Settings right after the tap can't cancel the alarm work.
+     */
+    fun onToggleCalendarMuted(calendarId: Long, muted: Boolean) {
+        applicationScope.launch {
+            eventCoordinator.setCalendarMuted(calendarId, muted)
+        }
+    }
+
+    /**
+     * Mutes or unmutes a device calendar's notifications, then re-picks the next device reminder,
+     * which replaces the single armed alarm. Runs on the application scope, one toggle at a time.
+     */
+    fun onToggleDeviceCalendarMuted(calendarId: Long, muted: Boolean) {
+        applicationScope.launch {
+            deviceMuteMutex.withLock {
+                dataStore.setDeviceCalendarMuted(calendarId, muted)
+                deviceCalendarReminderScheduler.scheduleNextReminder()
+            }
+        }
+    }
+
+    private fun saveChangeNotifications(enabled: Boolean) {
+        viewModelScope.launch {
+            dataStore.setChangeNotificationsEnabled(enabled)
         }
     }
 
@@ -1815,7 +2007,10 @@ class AccountSettingsViewModel @Inject constructor(
 
     /**
      * Ticks or unticks one device calendar. Ticking makes it visible in the provider; unticking
-     * also drops it from the hidden set so it doesn't linger there.
+     * also drops it from the hidden and muted sets, so it comes back visible and notifying if
+     * ticked again, and re-picks the device reminder, whose one alarm may belong to this
+     * calendar. If leaving Settings cancels the re-pick, that alarm is dropped when it fires
+     * ([DeviceCalendarReminderScheduler.shouldFireReminder]) and the next one is armed.
      */
     fun onToggleDeviceCalendar(calendarId: Long, enabled: Boolean) {
         viewModelScope.launch {
@@ -1826,9 +2021,11 @@ class AccountSettingsViewModel @Inject constructor(
                 deviceEventWriter.ensureCalendarVisible(calendarId)
             } else {
                 dataStore.removeFromHiddenDeviceCalendarIds(calendarId)
+                dataStore.setDeviceCalendarMuted(calendarId, false)
             }
             // Re-query device events so the calendar views refresh
             calendarProviderManager.onDeviceCalendarSettingsChanged()
+            if (!enabled) deviceCalendarReminderScheduler.scheduleNextReminder()
         }
     }
 
@@ -2049,14 +2246,17 @@ class AccountSettingsViewModel @Inject constructor(
     // ==================== ICS Device Import ====================
 
     /**
-     * Imports events parsed from an ICS file into device calendar [calendarId] and returns how
-     * many were created.
+     * Imports a parsed ICS file into device calendar [calendarId] and returns what it did.
      *
      * Uses the same writer method as the home screen's import, which signals the device change
      * so the calendar views show the new events at once.
      */
-    suspend fun importIcsToDeviceCalendar(events: List<Event>, calendarId: Long): Int =
-        deviceEventWriter.importIcsEvents(events, calendarId)
+    suspend fun importIcsToDeviceCalendar(file: IcsImportFile, calendarId: Long): IcsImportResult =
+        deviceEventWriter.importIcsFile(file, calendarId)
+
+    /** Returns what [importIcsToDeviceCalendar] would do in device calendar [calendarId]. */
+    suspend fun previewIcsImportOnDevice(file: IcsImportFile, calendarId: Long): List<GroupPlan> =
+        deviceEventReader.previewIcsImport(file, calendarId)
 
     // ==================== Snackbar ====================
 

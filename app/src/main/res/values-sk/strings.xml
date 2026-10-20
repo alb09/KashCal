@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">Upozornenia na dokončenie synchronizácie a chyby</string>
     <string name="channel_event_invitations">Pozvánky na udalosti</string>
     <string name="channel_event_invitations_desc">Upozornenia pri prijatí novej pozvánky do kalendára</string>
+    <string name="channel_calendar_updates">Zmeny v kalendári</string>
     <string name="invite_notification_body">Od %1$s · Ťuknite pre odpoveď</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">Odpoveď platí pre celú sériu.</string>
+    <string name="rsvp_receipt_pending">Odpoveď čaká na odoslanie</string>
+    <string name="rsvp_receipt_sent">Odpoveď odoslaná</string>
+    <string name="rsvp_receipt_not_delivered">Odpoveď nebola doručená</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">Túto a všetky budúce</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">Predvolené</string>
     <string name="app_icon_supporter">Podporovateľ</string>
     <string name="app_icon_supporter_calendar">Podporovateľ, s názvom Kalendár</string>
+    <string name="app_icon_todays_date">Dnešný dátum</string>
     <string name="app_icon_label_calendar">Kalendár</string>
     <string name="app_icon_support_cta">Podporiť KashCal</string>
     <string name="app_icon_switch_note">Zmena ikony môže reštartovať aplikáciu. Upozornenia vždy používajú predvolenú ikonu a názov.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">Pripojte iCloud a uvidíte svoje udalosti</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">Neskôr</string>
+    <string name="whats_new_skip">Preskočiť</string>
+    <string name="whats_new_next">Ďalej</string>
+    <string name="whats_new_page_of">Strana %1$d z %2$d</string>
+    <string name="whats_new_find_it_in">Nájdete to v</string>
     <string name="whats_new_v598_title">Pomôžte zachovať otvorenosť Androidu</string>
     <string name="whats_new_v598_body">Google mení spôsob, akým inštalujete aplikácie na svoje zariadenie. Potrebujeme vašu pomoc.</string>
     <string name="whats_new_v598_action_label">Navštíviť keepandroidopen.org</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">Túto verziu venujeme tým, ktorí podporujú KashCal. Malý príspevok, ktorý sa stále vypláca.</string>
     <string name="whats_new_v732_caption">Ešte nepodporujete?</string>
     <string name="whats_new_v732_action_label">Pridajte nás do svojich plánov</string>
+    <string name="whats_new_v772_icon_title">Vaša ikona pozná dátum</string>
+    <string name="whats_new_v772_icon_body">Vyberte ikonu \"Dnešný dátum\" a KashCal bude na domovskej obrazovke zobrazovať deň v mesiaci. Každú noc sa sama zmení.</string>
+    <string name="whats_new_v772_changes_title">Pozrite sa, čo sa zmenilo</string>
+    <string name="whats_new_v772_changes_body">Nové, upravené a odstránené udalosti z vašich kalendárov iCloud a CalDAV sa počas 7 dní zhromažďujú v zozname \"Nedávne zmeny\". Ťuknutím na udalosť ju otvoríte.</string>
+    <string name="whats_new_v772_notifications_body">Dostávajte oznámenie, keď synchronizácia na pozadí nájde zmeny vo vašich udalostiach iCloud alebo CalDAV. Funkcia zostane vypnutá, kým ju nezapnete.</string>
+    <string name="whats_new_hero_sample_lunch">Tímový obed</string>
+    <string name="whats_new_hero_sample_review">Kontrola návrhu</string>
+    <string name="whats_new_hero_sample_book_club">Čitateľský klub</string>
+    <string name="whats_new_hero_sample_calendar">Práca</string>
+    <string name="whats_new_hero_now">teraz</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Pripojiť iCloud</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">Zatiaľ žiadne relácie synchronizácie.\n\nSpustite synchronizáciu potiahnutím nadol v zobrazení kalendára.</string>
     <string name="status_no_writable_calendars">Žiadne zapisovateľné kalendáre</string>
     <string name="status_events_count">%1$d udalostí</string>
-    <string name="status_sync_changes">Zmeny synchronizácie</string>
     <string name="status_sync_history">História synchronizácie</string>
     <string name="status_parse_failures">Chyby spracovania</string>
     <string name="status_error">Chyba</string>
@@ -584,6 +601,28 @@
     <string name="settings_detailed_widget_rows_info">Kompaktný jeden riadok alebo podrobné dva riadky s časom konca.</string>
     <string name="settings_sync_lookback">Rozsah synchronizácie späť</string>
     <string name="settings_sync_lookback_hint">Ako ďaleko späť synchronizovať udalosti</string>
+    <string name="settings_change_notifications">Oznámenia o zmenách</string>
+    <string name="settings_change_notifications_info">Pošle oznámenie, keď synchronizácia na pozadí nájde zmeny vo vašich udalostiach. Funguje pre kalendáre iCloud a CalDAV.</string>
+    <string name="settings_calendar_notifications">Oznámenia kalendárov</string>
+    <string name="settings_calendar_notifications_all">Všetky kalendáre</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">%d stlmený</item>
+        <item quantity="few">%d stlmené</item>
+        <item quantity="many">%d stlmených</item>
+        <item quantity="other">%d stlmených</item>
+    </plurals>
+    <string name="calendar_notifications_intro">Vyberte, ktoré kalendáre vás môžu upozorňovať.</string>
+    <string name="calendar_notifications_info">Stlmené kalendáre sa naďalej zobrazujú a synchronizujú, ale neupozorňujú vás.</string>
+    <string name="cd_calendar_notifications_info">O stlmených kalendároch</string>
+    <string name="cd_state_expanded">rozbalené</string>
+    <string name="cd_state_collapsed">zbalené</string>
+    <string name="calendar_notifications_device_info">Vypnutím stlmíte všetky kalendáre zariadenia vrátane tých, ktoré pridáte neskôr.</string>
+    <string name="cd_calendar_notifications_device_info">O oznámeniach kalendárov zariadenia</string>
+    <string name="cd_device_calendar_notifications">Oznámenia kalendárov zariadenia</string>
+    <string name="calendar_notifications_hidden">Skrytý</string>
+    <string name="calendar_notifications_app_off">Oznámenia pre KashCal sú v systémových nastaveniach vypnuté, takže vás žiadny kalendár nemôže upozorniť.</string>
+    <string name="calendar_notifications_reminders_off">Pripomienky udalostí sú v systémových nastaveniach vypnuté, takže sa nemôžu zobraziť žiadne pripomienky.</string>
+    <string name="cd_notifications_off">oznámenia vypnuté</string>
     <string name="settings_not_set">Nenastavené</string>
     <string name="settings_on">Zap.</string>
     <string name="settings_off">Vyp.</string>
@@ -627,7 +666,6 @@
     <string name="label_device_calendars">Kalendáre zariadenia</string>
     <string name="label_default_calendar_hint">Nové udalosti budú vytvorené v tomto kalendári</string>
     <string name="label_visible_count">%1$d / %2$d viditeľných</string>
-    <string name="label_enabled_count">%1$d / %2$d povolených</string>
     <string name="label_reminders_truncated">%1$d nezobrazených (%2$d celkovo, max %3$d editovateľných)</string>
     <string name="label_found_events">Nájdených: %1$d udalostí</string>
     <string name="label_open_debug_menu">Otvoriť ladiacu ponuku</string>
@@ -649,8 +687,6 @@
     <string name="device_calendars_grant">Udeliť</string>
     <string name="device_calendars_none_found">Žiadne kalendáre zariadenia nenájdené.</string>
     <string name="device_calendars_local">Miestne</string>
-    <string name="device_calendars_reminders">Pripomienky</string>
-    <string name="device_calendars_reminders_desc">Dostávať oznámenia o udalostiach kalendára zariadenia</string>
     <string name="device_calendars_read_only_no_write">Len na čítanie (bez oprávnenia na zápis)</string>
     <string name="device_calendars_read_only_calendar">Len na čítanie (kalendár je len na čítanie)</string>
     <string name="settings_developer_options">Vývojárske možnosti</string>
@@ -794,6 +830,75 @@
         <item quantity="many">Importovaných %1$d udalostí</item>
         <item quantity="other">Importovaných %1$d udalostí</item>
     </plurals>
+    <string name="ics_import_preview_loading">Kontrola tohto kalendára…</string>
+    <string name="ics_import_preview_failed">Tieto udalosti sa v tomto kalendári nepodarilo skontrolovať. Importovať môžeš aj tak.</string>
+    <string name="ics_import_will_cancel">Týmto sa zruší %1$s, organizátor: %2$s</string>
+    <string name="ics_import_will_cancel_no_organizer">Týmto sa zruší %1$s</string>
+    <string name="ics_import_will_update">Týmto sa aktualizuje %1$s</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d udalosť je už aktuálna</item>
+        <item quantity="few">%1$d udalosti sú už aktuálne</item>
+        <item quantity="many">%1$d udalostí je už aktuálnych</item>
+        <item quantity="other">%1$d udalostí je už aktuálnych</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">Preskočené (%1$d): %2$s</item>
+        <item quantity="few">Preskočené (%1$d): %2$s</item>
+        <item quantity="many">Preskočené (%1$d): %2$s</item>
+        <item quantity="other">Preskočené (%1$d): %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">je to odpoveď na pozvánku, ktorá do kalendára nič nepridáva</string>
+    <string name="ics_import_reason_unsupported">tento typ správy s pozvánkou nie je podporovaný</string>
+    <string name="ics_import_reason_organizer_mismatch">pochádza od niekoho iného ako od organizátora stretnutia</string>
+    <string name="ics_import_reason_cancel_no_match">zrušené stretnutie nie je v tomto kalendári</string>
+    <string name="ics_import_reason_cancel_not_for_you">zrušenie sa týka iných hostí</string>
+    <string name="ics_import_reason_deletion_pending">udalosť sa práve odstraňuje</string>
+    <string name="ics_import_reason_cancelled_in_file">v súbore je už zrušená</string>
+    <string name="ics_import_reason_this_and_future">zmeny tohto a ďalších výskytov nie sú podporované</string>
+    <string name="ics_import_reason_own_cancel">toto stretnutie organizuješ ty, takže ho zruš priamo v udalosti</string>
+    <string name="ics_import_reason_on_another_calendar">už je v inom kalendári tohto účtu</string>
+    <string name="ics_import_notice_unverified">Odosielateľa súboru s pozvánkou nemožno overiť. Skontroluj, či pochádza od organizátora.</string>
+    <string name="ics_import_notice_answer_notifies">Odpoveď na túto pozvánku môže upozorniť organizátora.</string>
+    <string name="ics_import_notice_guests_again">Si organizátor, takže hostia môžu túto pozvánku dostať znova.</string>
+    <string name="cd_dismiss_notice">Zavrieť upozornenie</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d pridaná</item>
+        <item quantity="few">%1$d pridané</item>
+        <item quantity="many">%1$d pridaných</item>
+        <item quantity="other">%1$d pridaných</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d aktualizovaná</item>
+        <item quantity="few">%1$d aktualizované</item>
+        <item quantity="many">%1$d aktualizovaných</item>
+        <item quantity="other">%1$d aktualizovaných</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d zrušená</item>
+        <item quantity="few">%1$d zrušené</item>
+        <item quantity="many">%1$d zrušených</item>
+        <item quantity="other">%1$d zrušených</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d už aktuálna</item>
+        <item quantity="few">%1$d už aktuálne</item>
+        <item quantity="many">%1$d už aktuálnych</item>
+        <item quantity="other">%1$d už aktuálnych</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d preskočená</item>
+        <item quantity="few">%1$d preskočené</item>
+        <item quantity="many">%1$d preskočených</item>
+        <item quantity="other">%1$d preskočených</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d zlyhala</item>
+        <item quantity="few">%1$d zlyhali</item>
+        <item quantity="many">%1$d zlyhalo</item>
+        <item quantity="other">%1$d zlyhalo</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">Nie je čo importovať</string>
     <plurals name="exported_events">
         <item quantity="one">Exportovaná %1$d udalosť</item>
         <item quantity="few">Exportované %1$d udalosti</item>
@@ -989,6 +1094,14 @@
     <string name="cd_active_view">Aktívny pohľad</string>
     <string name="view_agenda">Agenda</string>
     <string name="view_month_full">Mesiac (celý)</string>
+    <string name="view_planner">Plánovač</string>
+    <string name="planner_free_day">Voľný deň</string>
+    <string name="cd_planner_show_day_events">Zobraziť udalosti tohto dňa</string>
+    <string name="planner_different_this_week">Tento týždeň inak</string>
+    <string name="planner_usual_week">Bežný týždeň.</string>
+    <string name="planner_moved_was">predtým %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">Deň</string>
     <string name="view_three_days">3 dni</string>
     <string name="view_year">Rok</string>
@@ -1047,11 +1160,6 @@
     <string name="cd_increase_interval">Zvýšiť interval</string>
     <string name="rrule_starting">%1$s počnúc %2$s%3$s</string>
     <string name="rrule_since">%1$s · od %2$s</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d nových</string>
-    <string name="sync_summary_updated">%1$d aktualizovaných</string>
-    <string name="sync_summary_removed">%1$d odstránených</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">Cyklické posúvanie povolené</string>
@@ -1170,12 +1278,35 @@
         <item quantity="many">%1$d udalostí odstránených</item>
         <item quantity="other">%1$d udalostí odstránených</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d výskyt zrušený</item>
+        <item quantity="few">%1$d výskyty zrušené</item>
+        <item quantity="many">%1$d výskytov zrušených</item>
+        <item quantity="other">%1$d výskytov zrušených</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d aktualizácia kalendára</item>
         <item quantity="few">%1$d aktualizácie kalendára</item>
         <item quantity="many">%1$d aktualizácií kalendára</item>
         <item quantity="other">%1$d aktualizácií kalendára</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">Nedávne zmeny</string>
+    <string name="recent_changes_empty">Žiadne nedávne zmeny</string>
+    <string name="recent_changes_clear_all">Vymazať všetko</string>
+    <string name="recent_changes_cleared">Nedávne zmeny vymazané</string>
+    <string name="recent_changes_dismiss">Zavrieť</string>
+    <string name="recent_changes_moved_from">Presunuté z %1$s</string>
+    <string name="recent_changes_time_changed">Zmenený čas</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">Zmenené miesto</string>
+    <string name="recent_changes_title_changed">Zmenený názov</string>
+    <string name="recent_changes_repeat_changed">Zmenené opakovanie</string>
+    <string name="recent_changes_cancelled">Zrušené</string>
+    <string name="cd_recent_change_new">Nová udalosť</string>
+    <string name="cd_recent_change_updated">Aktualizované</string>
+    <string name="cd_recent_change_removed">Odstránené</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">Deň %1$d z %2$d</string>

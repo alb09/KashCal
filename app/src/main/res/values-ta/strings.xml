@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">ஒத்திசைவு நிறைவு மற்றும் பிழைகள் பற்றிய அறிவிப்புகள்</string>
     <string name="channel_event_invitations">நிகழ்வு அழைப்புகள்</string>
     <string name="channel_event_invitations_desc">புதிய நாட்காட்டி அழைப்பைப் பெறும்போது அறிவிப்புகள்</string>
+    <string name="channel_calendar_updates">நாட்காட்டி மாற்றங்கள்</string>
     <string name="invite_notification_body">%1$s இலிருந்து · பதிலளிக்க தட்டவும்</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">உங்கள் பதில் முழுத் தொடருக்கும் பொருந்தும்.</string>
+    <string name="rsvp_receipt_pending">பதில் அனுப்பக் காத்திருக்கிறது</string>
+    <string name="rsvp_receipt_sent">பதில் அனுப்பப்பட்டது</string>
+    <string name="rsvp_receipt_not_delivered">பதில் சென்றடையவில்லை</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">இதும் எதிர்கால அனைத்தும்</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">இயல்புநிலை</string>
     <string name="app_icon_supporter">ஆதரவாளர்</string>
     <string name="app_icon_supporter_calendar">ஆதரவாளர், பெயர் நாட்காட்டி</string>
+    <string name="app_icon_todays_date">இன்றைய தேதி</string>
     <string name="app_icon_label_calendar">நாட்காட்டி</string>
     <string name="app_icon_support_cta">KashCal-ஐ ஆதரிக்கவும்</string>
     <string name="app_icon_switch_note">ஐகானை மாற்றும்போது ஆப்ப் மறுதொடக்கம் ஆகலாம். அறிவிப்புகள் எப்போதும் இயல்புநிலை ஐகான் மற்றும் பெயரைப் பயன்படுத்தும்.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">உங்கள் நிகழ்வுகளை இங்கே காண iCloud இணைக்கவும்</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">பிறகு</string>
+    <string name="whats_new_skip">தவிர்</string>
+    <string name="whats_new_next">அடுத்து</string>
+    <string name="whats_new_page_of">%2$d இல் பக்கம் %1$d</string>
+    <string name="whats_new_find_it_in">இங்கே காணலாம்</string>
     <string name="whats_new_v598_title">Android-ஐ திறந்திருக்க உதவுங்கள்</string>
     <string name="whats_new_v598_body">Google உங்கள் சாதனத்தில் பயன்பாடுகளை நிறுவும் முறையை மாற்றுகிறது. எங்களுக்கு உங்கள் உதவி தேவை.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org-க்குச் செல்லுங்கள்</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">இந்த வெளியீடு KashCal-இன் ஆதரவாளர்களுக்கு அர்ப்பணிக்கப்படுகிறது. ஒரு சிறிய பங்களிப்பு, மீண்டும் மீண்டும் கிடைக்கும் பெரிய பலன்.</string>
     <string name="whats_new_v732_caption">இன்னும் ஆதரவாளராகவில்லையா?</string>
     <string name="whats_new_v732_action_label">உங்கள் திட்டங்களில் எங்களைச் சேருங்கள்</string>
+    <string name="whats_new_v772_icon_title">உங்கள் ஐகானுக்குத் தேதி தெரியும்</string>
+    <string name="whats_new_v772_icon_body">இன்றைய தேதி ஐகானைத் தேர்ந்தெடுங்கள், KashCal உங்கள் முகப்புத் திரையில் மாதத்தின் தேதியைக் காட்டும். ஒவ்வொரு இரவும் அது தானாகவே மாறும்.</string>
+    <string name="whats_new_v772_changes_title">என்ன மாறியது எனப் பாருங்கள்</string>
+    <string name="whats_new_v772_changes_body">உங்கள் iCloud மற்றும் CalDAV நாட்காட்டிகளின் புதிய, திருத்தப்பட்ட மற்றும் நீக்கப்பட்ட நிகழ்வுகள் 7 நாட்களுக்கு சமீபத்திய மாற்றங்கள் பட்டியலில் சேரும். ஒன்றைத் திறக்க அதைத் தட்டவும்.</string>
+    <string name="whats_new_v772_notifications_body">பின்னணி ஒத்திசைவு உங்கள் iCloud அல்லது CalDAV நிகழ்வுகளில் மாற்றங்களைக் கண்டறியும்போது அறிவிப்பைப் பெறுங்கள். நீங்கள் இயக்கும் வரை இது முடக்கத்திலேயே இருக்கும்.</string>
+    <string name="whats_new_hero_sample_lunch">குழு மதிய உணவு</string>
+    <string name="whats_new_hero_sample_review">வடிவமைப்பு மதிப்பாய்வு</string>
+    <string name="whats_new_hero_sample_book_club">புத்தகக் கழகம்</string>
+    <string name="whats_new_hero_sample_calendar">வேலை</string>
+    <string name="whats_new_hero_now">இப்போது</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud இணை</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">இன்னும் ஒத்திசைவு அமர்வுகள் இல்லை.\n\nநாட்காட்டிக் காட்சியில் கீழே இழுத்து புதுப்பிக்கவும்.</string>
     <string name="status_no_writable_calendars">எழுதக்கூடிய நாட்காட்டிகள் இல்லை</string>
     <string name="status_events_count">%1$d நிகழ்வுகள்</string>
-    <string name="status_sync_changes">ஒத்திசைவு மாற்றங்கள்</string>
     <string name="status_sync_history">ஒத்திசைவு வரலாறு</string>
     <string name="status_parse_failures">பாகுபடுத்தல் தோல்விகள்</string>
     <string name="status_error">பிழை</string>
@@ -584,6 +601,26 @@
     <string name="settings_detailed_widget_rows_info">சுருக்கமான ஒற்றை வரி, அல்லது முடிவு நேரத்துடன் விரிவான இரண்டு வரிகள்.</string>
     <string name="settings_sync_lookback">ஒத்திசைவு திரும்பப்பார்வை</string>
     <string name="settings_sync_lookback_hint">எவ்வளவு பின்னோக்கி நிகழ்வுகளை ஒத்திசைக்க வேண்டும்</string>
+    <string name="settings_change_notifications">மாற்ற அறிவிப்புகள்</string>
+    <string name="settings_change_notifications_info">பின்னணி ஒத்திசைவு உங்கள் நிகழ்வுகளில் மாற்றங்களைக் கண்டறியும்போது ஓர் அறிவிப்பை அனுப்பும். iCloud மற்றும் CalDAV நாட்காட்டிகளுக்கு வேலை செய்யும்.</string>
+    <string name="settings_calendar_notifications">நாட்காட்டி அறிவிப்புகள்</string>
+    <string name="settings_calendar_notifications_all">அனைத்து நாட்காட்டிகளும்</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">%d ஒலியடக்கப்பட்டது</item>
+        <item quantity="other">%d ஒலியடக்கப்பட்டன</item>
+    </plurals>
+    <string name="calendar_notifications_intro">எந்த நாட்காட்டிகள் உங்களுக்கு அறிவிக்கலாம் என்பதைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="calendar_notifications_info">ஒலியடக்கப்பட்ட நாட்காட்டிகள் தொடர்ந்து காட்டப்பட்டு ஒத்திசைக்கப்படும், ஆனால் உங்களுக்கு அறிவிக்காது.</string>
+    <string name="cd_calendar_notifications_info">ஒலியடக்கப்பட்ட நாட்காட்டிகள் பற்றி</string>
+    <string name="cd_state_expanded">விரிவாக்கப்பட்டது</string>
+    <string name="cd_state_collapsed">சுருக்கப்பட்டது</string>
+    <string name="calendar_notifications_device_info">பின்னர் சேர்க்கும் நாட்காட்டிகள் உட்பட எல்லா சாதன நாட்காட்டிகளையும் ஒலியடக்க இதை ஆஃப் செய்யவும்.</string>
+    <string name="cd_calendar_notifications_device_info">சாதன நாட்காட்டி அறிவிப்புகள் பற்றி</string>
+    <string name="cd_device_calendar_notifications">சாதன நாட்காட்டி அறிவிப்புகள்</string>
+    <string name="calendar_notifications_hidden">மறைக்கப்பட்டது</string>
+    <string name="calendar_notifications_app_off">கணினி அமைப்புகளில் KashCal-க்கான அறிவிப்புகள் ஆஃபில் உள்ளன, எனவே எந்த நாட்காட்டியும் உங்களுக்கு அறிவிக்க முடியாது.</string>
+    <string name="calendar_notifications_reminders_off">கணினி அமைப்புகளில் நிகழ்வு நினைவூட்டல்கள் ஆஃபில் உள்ளன, எனவே எந்த நினைவூட்டலும் காட்டப்படாது.</string>
+    <string name="cd_notifications_off">அறிவிப்புகள் ஆஃப்</string>
     <string name="settings_not_set">அமைக்கப்படவில்லை</string>
     <string name="settings_on">ஆன்</string>
     <string name="settings_off">ஆஃப்</string>
@@ -627,7 +664,6 @@
     <string name="label_device_calendars">சாதன நாட்காட்டிகள்</string>
     <string name="label_default_calendar_hint">புதிய நிகழ்வுகள் இந்த நாட்காட்டியில் உருவாக்கப்படும்</string>
     <string name="label_visible_count">%1$d / %2$d காணக்கூடியவை</string>
-    <string name="label_enabled_count">%1$d / %2$d இயக்கப்பட்டவை</string>
     <string name="label_reminders_truncated">%1$d காட்டப்படவில்லை (%2$d மொத்தம், அதிகபட்சம் %3$d திருத்தக்கூடியவை)</string>
     <string name="label_found_events">கண்டறியப்பட்டவை: %1$d நிகழ்வுகள்</string>
     <string name="label_open_debug_menu">பிழைத்திருத்த மெனு திற</string>
@@ -649,8 +685,6 @@
     <string name="device_calendars_grant">வழங்கு</string>
     <string name="device_calendars_none_found">சாதன நாட்காட்டிகள் கிடைக்கவில்லை.</string>
     <string name="device_calendars_local">உள்ளூர்</string>
-    <string name="device_calendars_reminders">நினைவூட்டல்கள்</string>
-    <string name="device_calendars_reminders_desc">சாதன நாட்காட்டி நிகழ்வுகளுக்கு அறிவிப்பு பெறு</string>
     <string name="device_calendars_read_only_no_write">படிக்க மட்டும் (எழுத அனுமதி இல்லை)</string>
     <string name="device_calendars_read_only_calendar">படிக்க மட்டும் (நாட்காட்டி படிக்க மட்டும்)</string>
     <string name="settings_developer_options">டெவலப்பர் விருப்பங்கள்</string>
@@ -760,6 +794,59 @@
         <item quantity="one">%1$d நிகழ்வு இறக்குமதி செய்யப்பட்டது</item>
         <item quantity="other">%1$d நிகழ்வுகள் இறக்குமதி செய்யப்பட்டன</item>
     </plurals>
+    <string name="ics_import_preview_loading">இந்த நாட்காட்டியைச் சரிபார்க்கிறது…</string>
+    <string name="ics_import_preview_failed">இந்த நிகழ்வுகளுக்காக இந்த நாட்காட்டியைச் சரிபார்க்க முடியவில்லை. நீங்கள் இன்னும் இறக்குமதி செய்யலாம்.</string>
+    <string name="ics_import_will_cancel">இது %1$s ஐ ரத்து செய்யும், ஏற்பாட்டாளர்: %2$s</string>
+    <string name="ics_import_will_cancel_no_organizer">இது %1$s ஐ ரத்து செய்யும்</string>
+    <string name="ics_import_will_update">இது %1$s ஐப் புதுப்பிக்கும்</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d நிகழ்வு ஏற்கெனவே புதுப்பித்த நிலையில் உள்ளது</item>
+        <item quantity="other">%1$d நிகழ்வுகள் ஏற்கெனவே புதுப்பித்த நிலையில் உள்ளன</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">%1$d தவிர்க்கப்பட்டது: %2$s</item>
+        <item quantity="other">%1$d தவிர்க்கப்பட்டன: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">இது ஒரு அழைப்புக்கான பதில், இது உங்கள் நாட்காட்டியில் எதையும் சேர்க்காது</string>
+    <string name="ics_import_reason_unsupported">இந்த வகை அழைப்புச் செய்தி ஆதரிக்கப்படவில்லை</string>
+    <string name="ics_import_reason_organizer_mismatch">இது சந்திப்பின் ஏற்பாட்டாளர் அல்லாத வேறொருவரிடமிருந்து வந்துள்ளது</string>
+    <string name="ics_import_reason_cancel_no_match">ரத்து செய்யப்பட்ட சந்திப்பு இந்த நாட்காட்டியில் இல்லை</string>
+    <string name="ics_import_reason_cancel_not_for_you">இந்த ரத்து அறிவிப்பு மற்ற விருந்தினர்களுக்கானது</string>
+    <string name="ics_import_reason_deletion_pending">நிகழ்வு நீக்கப்படுகிறது</string>
+    <string name="ics_import_reason_cancelled_in_file">இது கோப்பில் ஏற்கெனவே ரத்து செய்யப்பட்டுள்ளது</string>
+    <string name="ics_import_reason_this_and_future">இதற்கும் அடுத்த மறுநிகழ்வுகளுக்குமான மாற்றங்கள் ஆதரிக்கப்படவில்லை</string>
+    <string name="ics_import_reason_own_cancel">இந்தச் சந்திப்பை நீங்கள் ஏற்பாடு செய்கிறீர்கள், எனவே நிகழ்விலிருந்தே ரத்து செய்யுங்கள்</string>
+    <string name="ics_import_reason_on_another_calendar">இது ஏற்கெனவே இந்தக் கணக்கின் மற்றொரு நாட்காட்டியில் உள்ளது</string>
+    <string name="ics_import_notice_unverified">அழைப்புக் கோப்பை அனுப்பியவரைச் சரிபார்க்க முடியாது. இது ஏற்பாட்டாளரிடமிருந்து வந்ததா எனச் சரிபாருங்கள்.</string>
+    <string name="ics_import_notice_answer_notifies">இந்த அழைப்புக்குப் பதிலளித்தால் ஏற்பாட்டாளருக்குத் தெரிவிக்கப்படலாம்.</string>
+    <string name="ics_import_notice_guests_again">நீங்கள் ஏற்பாட்டாளர், எனவே விருந்தினர்கள் இந்த அழைப்பை மீண்டும் பெறக்கூடும்.</string>
+    <string name="cd_dismiss_notice">அறிவிப்பை நிராகரி</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d சேர்க்கப்பட்டது</item>
+        <item quantity="other">%1$d சேர்க்கப்பட்டன</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d புதுப்பிக்கப்பட்டது</item>
+        <item quantity="other">%1$d புதுப்பிக்கப்பட்டன</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d ரத்து செய்யப்பட்டது</item>
+        <item quantity="other">%1$d ரத்து செய்யப்பட்டன</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d ஏற்கெனவே புதுப்பித்த நிலையில்</item>
+        <item quantity="other">%1$d ஏற்கெனவே புதுப்பித்த நிலையில்</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d தவிர்க்கப்பட்டது</item>
+        <item quantity="other">%1$d தவிர்க்கப்பட்டன</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d தோல்வி</item>
+        <item quantity="other">%1$d தோல்வி</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">இறக்குமதி செய்ய எதுவும் இல்லை</string>
     <plurals name="exported_events">
         <item quantity="one">%1$d நிகழ்வு ஏற்றுமதி செய்யப்பட்டது</item>
         <item quantity="other">%1$d நிகழ்வுகள் ஏற்றுமதி செய்யப்பட்டன</item>
@@ -913,6 +1000,14 @@
     <string name="cd_active_view">செயலில் காட்சி</string>
     <string name="view_agenda">நிகழ்ச்சி நிரல்</string>
     <string name="view_month_full">மாதம் (முழு)</string>
+    <string name="view_planner">பிளானர்</string>
+    <string name="planner_free_day">ஓய்வு நாள்</string>
+    <string name="cd_planner_show_day_events">இந்த நாளின் நிகழ்வுகளைக் காட்டு</string>
+    <string name="planner_different_this_week">இந்த வாரம் வேறுபட்டவை</string>
+    <string name="planner_usual_week">வழக்கமான வாரம்.</string>
+    <string name="planner_moved_was">முன்பு %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">நாள்</string>
     <string name="view_three_days">3 நாட்கள்</string>
     <string name="view_year">ஆண்டு</string>
@@ -969,11 +1064,6 @@
     <string name="cd_increase_interval">இடைவெளியை அதிகரி</string>
     <string name="rrule_starting">%1$s %2$s இலிருந்து தொடங்குகிறது%3$s</string>
     <string name="rrule_since">%1$s · %2$s முதல்</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d புதிய</string>
-    <string name="sync_summary_updated">%1$d புதுப்பிக்கப்பட்டது</string>
-    <string name="sync_summary_removed">%1$d நீக்கப்பட்டது</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">வட்ட உருளல் இயக்கப்பட்டது</string>
@@ -1076,10 +1166,31 @@
         <item quantity="one">%1$d நிகழ்வு நீக்கப்பட்டது</item>
         <item quantity="other">%1$d நிகழ்வுகள் நீக்கப்பட்டன</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d மறுநிகழ்வு ரத்து செய்யப்பட்டது</item>
+        <item quantity="other">%1$d மறுநிகழ்வுகள் ரத்து செய்யப்பட்டன</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d நாட்காட்டி புதுப்பிப்பு</item>
         <item quantity="other">%1$d நாட்காட்டி புதுப்பிப்புகள்</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">சமீபத்திய மாற்றங்கள்</string>
+    <string name="recent_changes_empty">சமீபத்திய மாற்றங்கள் இல்லை</string>
+    <string name="recent_changes_clear_all">அனைத்தையும் அழி</string>
+    <string name="recent_changes_cleared">சமீபத்திய மாற்றங்கள் அழிக்கப்பட்டன</string>
+    <string name="recent_changes_dismiss">நிராகரி</string>
+    <string name="recent_changes_moved_from">%1$s இலிருந்து நகர்த்தப்பட்டது</string>
+    <string name="recent_changes_time_changed">நேரம் மாற்றப்பட்டது</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">இடம் மாற்றப்பட்டது</string>
+    <string name="recent_changes_title_changed">தலைப்பு மாற்றப்பட்டது</string>
+    <string name="recent_changes_repeat_changed">மறுநிகழ்வு மாற்றப்பட்டது</string>
+    <string name="recent_changes_cancelled">ரத்துசெய்யப்பட்டது</string>
+    <string name="cd_recent_change_new">புதிய நிகழ்வு</string>
+    <string name="cd_recent_change_updated">புதுப்பிக்கப்பட்டது</string>
+    <string name="cd_recent_change_removed">நீக்கப்பட்டது</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">நாள் %1$d / %2$d</string>

@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">Kennisgewings oor sinkronisasievoltooiing en foute</string>
     <string name="channel_event_invitations">Gebeurtenisuitnodigings</string>
     <string name="channel_event_invitations_desc">Kennisgewings wanneer jy \'n nuwe kalenderuitnodiging ontvang</string>
+    <string name="channel_calendar_updates">Kalenderveranderinge</string>
     <string name="invite_notification_body">Van %1$s · Tik om te reageer</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">Jou antwoord geld vir die hele reeks.</string>
+    <string name="rsvp_receipt_pending">Antwoord hangende</string>
+    <string name="rsvp_receipt_sent">Antwoord gestuur</string>
+    <string name="rsvp_receipt_not_delivered">Antwoord nie afgelewer nie</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">Hierdie en alle toekomstige</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">Verstek</string>
     <string name="app_icon_supporter">Ondersteuner</string>
     <string name="app_icon_supporter_calendar">Ondersteuner, genaamd Kalender</string>
+    <string name="app_icon_todays_date">Vandag se datum</string>
     <string name="app_icon_label_calendar">Kalender</string>
     <string name="app_icon_support_cta">Ondersteun KashCal</string>
     <string name="app_icon_switch_note">Die verandering van die ikoon kan die program herbegin. Kennisgewings gebruik altyd die verstekikoon en -naam.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">Koppel iCloud om jou gebeurtenisse hier te sien</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">Later</string>
+    <string name="whats_new_skip">Slaan oor</string>
+    <string name="whats_new_next">Volgende</string>
+    <string name="whats_new_page_of">Bladsy %1$d van %2$d</string>
+    <string name="whats_new_find_it_in">Vind dit in</string>
     <string name="whats_new_v598_title">Help om Android oop te hou</string>
     <string name="whats_new_v598_body">Google verander die manier waarop jy programme op jou toestel installeer. Ons het jou hulp nodig.</string>
     <string name="whats_new_v598_action_label">Besoek keepandroidopen.org</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">Hierdie weergawe is opgedra aan KashCal se ondersteuners. \'n Klein bydrae met \'n groot blywende voordeel.</string>
     <string name="whats_new_v732_caption">Nog nie \'n ondersteuner nie?</string>
     <string name="whats_new_v732_action_label">Voeg ons by jou planne</string>
+    <string name="whats_new_v772_icon_title">Jou ikoon ken die datum</string>
+    <string name="whats_new_v772_icon_body">Kies die Vandag se datum-ikoon en KashCal wys die dag van die maand op jou tuisskerm. Dit verander elke nag vanself.</string>
+    <string name="whats_new_v772_changes_title">Sien wat verander het</string>
+    <string name="whats_new_v772_changes_body">Nuwe, gewysigde en verwyderde gebeurtenisse van jou iCloud- en CalDAV-kalenders word 7 dae lank in Onlangse veranderinge bewaar. Tik op een om dit oop te maak.</string>
+    <string name="whats_new_v772_notifications_body">Kry \'n kennisgewing wanneer \'n agtergrondsinkronisering veranderinge aan jou iCloud- of CalDAV-gebeurtenisse vind. Dit bly af totdat jy dit aanskakel.</string>
+    <string name="whats_new_hero_sample_lunch">Spanmiddagete</string>
+    <string name="whats_new_hero_sample_review">Ontwerpoorsig</string>
+    <string name="whats_new_hero_sample_book_club">Boekklub</string>
+    <string name="whats_new_hero_sample_calendar">Werk</string>
+    <string name="whats_new_hero_now">nou</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Koppel iCloud</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">Nog geen sinkroniseringsessies nie.\n\nBegin \'n sinkronisering deur af te trek om te herlaai op die kalenderaansig.</string>
     <string name="status_no_writable_calendars">Geen skryfbare kalenders beskikbaar nie</string>
     <string name="status_events_count">%1$d Gebeurtenisse</string>
-    <string name="status_sync_changes">Sinkroniseringsveranderinge</string>
     <string name="status_sync_history">Sinkroniseringsgeskiedenis</string>
     <string name="status_parse_failures">Ontledingsfoute</string>
     <string name="status_error">Fout</string>
@@ -584,6 +601,26 @@
     <string name="settings_detailed_widget_rows_info">Kompakte enkele reël, of gedetailleerde twee reëls met eindtyd.</string>
     <string name="settings_sync_lookback">Sinkroniseringsrugsig</string>
     <string name="settings_sync_lookback_hint">Hoe ver terug om gebeurtenisse te sinkroniseer</string>
+    <string name="settings_change_notifications">Veranderingskennisgewings</string>
+    <string name="settings_change_notifications_info">Stuur \'n kennisgewing wanneer \'n agtergrondsinkronisering veranderinge aan jou gebeurtenisse vind. Werk vir iCloud- en CalDAV-kalenders.</string>
+    <string name="settings_calendar_notifications">Kalenderkennisgewings</string>
+    <string name="settings_calendar_notifications_all">Alle kalenders</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">%d gedemp</item>
+        <item quantity="other">%d gedemp</item>
+    </plurals>
+    <string name="calendar_notifications_intro">Kies watter kalenders jou in kennis kan stel.</string>
+    <string name="calendar_notifications_info">Gedempte kalenders word steeds gewys en gesinkroniseer, maar stel jou nie in kennis nie.</string>
+    <string name="cd_calendar_notifications_info">Oor gedempte kalenders</string>
+    <string name="cd_state_expanded">uitgevou</string>
+    <string name="cd_state_collapsed">ingevou</string>
+    <string name="calendar_notifications_device_info">Skakel af om alle toestelkalenders te demp, insluitend dié wat jy later byvoeg.</string>
+    <string name="cd_calendar_notifications_device_info">Oor toestelkalenderkennisgewings</string>
+    <string name="cd_device_calendar_notifications">Toestelkalenderkennisgewings</string>
+    <string name="calendar_notifications_hidden">Versteek</string>
+    <string name="calendar_notifications_app_off">Kennisgewings is af vir KashCal in stelselinstellings, so geen kalender kan jou in kennis stel nie.</string>
+    <string name="calendar_notifications_reminders_off">Gebeurtenisherinneringe is af in stelselinstellings, so geen herinneringe kan verskyn nie.</string>
+    <string name="cd_notifications_off">kennisgewings af</string>
     <string name="settings_not_set">Nie gestel nie</string>
     <string name="settings_on">Aan</string>
     <string name="settings_off">Af</string>
@@ -627,7 +664,6 @@
     <string name="label_device_calendars">Toestelkalenders</string>
     <string name="label_default_calendar_hint">Nuwe gebeurtenisse sal in hierdie kalender geskep word</string>
     <string name="label_visible_count">%1$d / %2$d sigbaar</string>
-    <string name="label_enabled_count">%1$d / %2$d geaktiveer</string>
     <string name="label_reminders_truncated">%1$d nie gewys nie (%2$d totaal, maks %3$d redigeerbaar)</string>
     <string name="label_found_events">Gevind: %1$d gebeurtenisse</string>
     <string name="label_open_debug_menu">Open ontfoutkieslys</string>
@@ -649,8 +685,6 @@
     <string name="device_calendars_grant">Verleen</string>
     <string name="device_calendars_none_found">Geen toestelkalenders gevind nie.</string>
     <string name="device_calendars_local">Plaaslik</string>
-    <string name="device_calendars_reminders">Herinneringe</string>
-    <string name="device_calendars_reminders_desc">Word in kennis gestel vir toestelkalendergebeurtenisse</string>
     <string name="device_calendars_read_only_no_write">Leesalleen (geen skryftoestemming)</string>
     <string name="device_calendars_read_only_calendar">Leesalleen (kalender is leesalleen)</string>
     <string name="settings_developer_options">Ontwikkelaaropsies</string>
@@ -760,6 +794,59 @@
         <item quantity="one">%1$d gebeurtenis ingevoer</item>
         <item quantity="other">%1$d gebeurtenisse ingevoer</item>
     </plurals>
+    <string name="ics_import_preview_loading">Gaan hierdie kalender na…</string>
+    <string name="ics_import_preview_failed">Kon nie hierdie kalender vir hierdie gebeurtenisse nagaan nie. Jy kan steeds invoer.</string>
+    <string name="ics_import_will_cancel">Dit kanselleer %1$s, gereël deur %2$s</string>
+    <string name="ics_import_will_cancel_no_organizer">Dit kanselleer %1$s</string>
+    <string name="ics_import_will_update">Dit werk %1$s by</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d gebeurtenis is reeds op datum</item>
+        <item quantity="other">%1$d gebeurtenisse is reeds op datum</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">%1$d oorgeslaan: %2$s</item>
+        <item quantity="other">%1$d oorgeslaan: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">dit is \'n antwoord op \'n uitnodiging, wat niks by jou kalender voeg nie</string>
+    <string name="ics_import_reason_unsupported">hierdie soort uitnodigingsboodskap word nie ondersteun nie</string>
+    <string name="ics_import_reason_organizer_mismatch">dit kom van iemand anders as die vergadering se reëlaar</string>
+    <string name="ics_import_reason_cancel_no_match">die gekanselleerde vergadering is nie in hierdie kalender nie</string>
+    <string name="ics_import_reason_cancel_not_for_you">die kansellasie is vir ander gaste</string>
+    <string name="ics_import_reason_deletion_pending">die gebeurtenis word tans uitgevee</string>
+    <string name="ics_import_reason_cancelled_in_file">dit is reeds in die lêer gekanselleer</string>
+    <string name="ics_import_reason_this_and_future">veranderinge aan hierdie en latere voorkomste word nie ondersteun nie</string>
+    <string name="ics_import_reason_own_cancel">jy reël hierdie vergadering, so kanselleer dit vanaf die gebeurtenis</string>
+    <string name="ics_import_reason_on_another_calendar">dit is reeds in \'n ander kalender van hierdie rekening</string>
+    <string name="ics_import_notice_unverified">Die sender van \'n uitnodigingslêer kan nie geverifieer word nie. Maak seker dit kom van die reëlaar.</string>
+    <string name="ics_import_notice_answer_notifies">As jy hierdie uitnodiging beantwoord, kan die reëlaar in kennis gestel word.</string>
+    <string name="ics_import_notice_guests_again">Jy is die reëlaar, so gaste kan hierdie uitnodiging weer ontvang.</string>
+    <string name="cd_dismiss_notice">Maak kennisgewing toe</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d bygevoeg</item>
+        <item quantity="other">%1$d bygevoeg</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d bygewerk</item>
+        <item quantity="other">%1$d bygewerk</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d gekanselleer</item>
+        <item quantity="other">%1$d gekanselleer</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d reeds op datum</item>
+        <item quantity="other">%1$d reeds op datum</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d oorgeslaan</item>
+        <item quantity="other">%1$d oorgeslaan</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d het misluk</item>
+        <item quantity="other">%1$d het misluk</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">Niks om in te voer nie</string>
     <plurals name="exported_events">
         <item quantity="one">%1$d gebeurtenis uitgevoer</item>
         <item quantity="other">%1$d gebeurtenisse uitgevoer</item>
@@ -913,6 +1000,14 @@
     <string name="cd_active_view">Aktiewe aansig</string>
     <string name="view_agenda">Agenda</string>
     <string name="view_month_full">Maand (Vol)</string>
+    <string name="view_planner">Beplanner</string>
+    <string name="planner_free_day">Vry dag</string>
+    <string name="cd_planner_show_day_events">Wys hierdie dag se gebeurtenisse</string>
+    <string name="planner_different_this_week">Anders hierdie week</string>
+    <string name="planner_usual_week">Die gewone week.</string>
+    <string name="planner_moved_was">was %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">Dag</string>
     <string name="view_three_days">3 Dae</string>
     <string name="view_year">Jaar</string>
@@ -969,11 +1064,6 @@
     <string name="cd_increase_interval">Verhoog interval</string>
     <string name="rrule_starting">%1$s vanaf %2$s%3$s</string>
     <string name="rrule_since">%1$s · sedert %2$s</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d nuut</string>
-    <string name="sync_summary_updated">%1$d opgedateer</string>
-    <string name="sync_summary_removed">%1$d verwyder</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">Sirkulere blaai geaktiveer</string>
@@ -1076,10 +1166,31 @@
         <item quantity="one">%1$d gebeurtenis verwyder</item>
         <item quantity="other">%1$d gebeurtenisse verwyder</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d voorkoms gekanselleer</item>
+        <item quantity="other">%1$d voorkomste gekanselleer</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d kalenderbywerking</item>
         <item quantity="other">%1$d kalenderbywerkings</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">Onlangse veranderinge</string>
+    <string name="recent_changes_empty">Geen onlangse veranderinge nie</string>
+    <string name="recent_changes_clear_all">Maak alles skoon</string>
+    <string name="recent_changes_cleared">Onlangse veranderinge skoongemaak</string>
+    <string name="recent_changes_dismiss">Maak Toe</string>
+    <string name="recent_changes_moved_from">Geskuif vanaf %1$s</string>
+    <string name="recent_changes_time_changed">Tyd verander</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">Ligging verander</string>
+    <string name="recent_changes_title_changed">Titel verander</string>
+    <string name="recent_changes_repeat_changed">Herhaling verander</string>
+    <string name="recent_changes_cancelled">Gekanselleer</string>
+    <string name="cd_recent_change_new">Nuwe gebeurtenis</string>
+    <string name="cd_recent_change_updated">Bygewerk</string>
+    <string name="cd_recent_change_removed">Verwyder</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">Dag %1$d van %2$d</string>

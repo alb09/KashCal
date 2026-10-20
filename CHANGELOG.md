@@ -1,3 +1,125 @@
+## [2026.10.16]
+
+Calendars have a habit of telling you that something called "Quarterly plann…" is happening at some point on Thursday. This release is about reading the whole name.
+
+In Week, 3-day and Day, an event's title now wraps over as many lines as its block has room for, with the place underneath, and nothing ends in three dots. When two events overlap, the later one is drawn on top of the first, a little to the right, so the earlier one keeps its name in view instead of being squeezed into half a column. The full-height month view fits as many rows into each day as the day has room for, and a small count in the corner says how many more there are. Pinch it to zoom.
+
+Moving between those views got easier too. Pinch sideways on the week and it opens three days around your fingers, then the day itself; pinch the other way to step back. Events that have already ended fade as the clock passes them.
+
+Thursday's meeting is still at ten. Now you can read what it's about.
+
+### Everything in this release
+
+- Changed event titles in Week, 3-day and Day to wrap over the lines their block fits, cut at the last line with no ellipsis; the location follows, and the time when it fits on one line, #361
+- Added cascading overlaps in Week, 3-day and Day: a later event is drawn on top of the one it overlaps, indented a quarter of the column, when the earlier one still shows its first line; otherwise they sit side by side as before, #277
+- Changed the 7-day view to a more compact title style, so more of each title fits a narrow column
+- Changed the hour column to the width of its widest label, which gives the days more room
+- Added sideways pinch in Week, 3-day and Day: spread to show fewer days around your fingers, pinch in to show more; the view you land on is the one the app opens in next time
+- Fixed a slow pinch in Week, 3-day and Day not zooming the hours
+- Added fading of past events in Week, 3-day and Day, the minute each one ends, including all-day events and the list behind a `+N` count
+- Added faint dashed half-hour lines in Week, 3-day and Day at the default zoom and closer
+- Changed the Week header, the Day view's week strip and the Agenda's week strip to one date style: a small weekday letter above the number in a round circle that grows with large text; the Day view's dates now sit where the Week view's do
+- Changed the all-day strip to drop its caption and toggle from any blank space, with the chevron centred
+- Fixed dragging an indented or right-hand event sideways changing day a quarter or half a column late
+- Improved screen-reader support in Week, 3-day and Day: each day column reads its date and can create an event there, and each Week header reads its full date
+- Changed the full-height month view to fit as many rows into each day as it has room for, cut titles at the edge with no ellipsis, show a `+N` count in the corner for the rest, and open the day from anywhere in its cell, #361
+- Added pinch zoom to the full-height month view, saved per device
+- Changed the full-height month view to fade past events and past dates, and to read each day as one item to screen readers
+- Fixed the themed (Material You) Today's date icon showing a blank calendar instead of the day's number
+- Fixed a very long event title, such as a pasted note, crashing the Planner, the full-height month view and the all-day strip
+
+## [2026.10.15]
+
+If you're the parent who knows when swimming is, that the dentist is on Tuesday, that Friday is a school holiday and that Saturday's birthday party still needs a present, this release is for you. You've been carrying the family's week around in your head. KashCal now has somewhere to put it down.
+
+Open the view menu and pick Planner. The whole week fits on one screen, a box for each day, with every event's time and name. When a day is too full to show everything, the box tells you how many more there are, and a tap lists them all. A day with nothing in it shows a sun and says "Free day". Guard it.
+
+The eighth box is called "Different this week". It lists the trip, the school closure, the swimming lesson that moved to four, the class that was cancelled. The things that happen every week stay out, because you already know about those.
+
+The present is still your job. At least now you'll see Saturday coming.
+
+### Everything in this release
+
+- Added the `Planner` view, after Week in the view menu: the week as seven day boxes plus `Different this week`, which lists one-off all-day events, moved occurrences and cancellations; tap a day to see all its events, pinch to zoom
+- Changed the day's events sheet in the full-height month view to always open at full height with a drag handle, so it no longer stops halfway or grows as the events load
+- Fixed hiding or showing a calendar from another app in the drawer leaving Week, 3-day, Day, Agenda and the full-height month view on the old events until you left the view
+
+## [2026.10.14]
+
+Every calendar you subscribe to thinks it is the most important one. The team calendar, the school newsletter feed, the shared family calendar where someone sets a reminder for the bins: each one wants to ping you, and each one is sure it has a good reason.
+
+Now you decide. Settings has a new Calendar notifications page, under Calendars & accounts. It lists every calendar KashCal shows (local, iCloud, CalDAV, calendar feeds, birthdays and anniversaries, and calendars from other apps on your phone), each with its own switch.
+
+Turn a calendar off and it stops sending reminders, invitation alerts and change notifications. It still shows and syncs, and the drawer marks it with a bell-off icon. Calendars from other apps also get one switch on their heading that silences all of them, including ones you add later.
+
+The bins still go out on Thursday. You just won't hear about it from three calendars.
+
+### Everything in this release
+
+- Added `Calendar notifications` to Settings under Calendars & accounts, with a switch for every calendar; a muted calendar still shows and syncs but sends no reminders, invitation alerts or change notifications, #137
+- Added a bell-off mark in the drawer next to each muted calendar
+- Moved the switch that turns off reminders for all device calendars from the Device calendars screen to the Device calendars heading in Calendar notifications; it also covers device calendars you add later, and your setting carries over
+- Removed the enabled count from the Device calendars screen
+- Changed the drawer and Calendar notifications to list Offline calendars last, after device calendars
+- Changed pausing a calendar feed (`Sync paused`) to stop only its syncing; its reminders still fire, and muting its calendar silences them
+- Fixed reminders not being set for hidden calendars
+- Fixed an unticked device calendar sending its next reminder
+- Fixed two device-calendar reminders at the same time notifying only once; a reminder that arrives late also shows the ones it overtook
+- Removed the Beta label from Add attendees
+- Fixed "Anniversary of Death" getting the anniversary emoji, #389
+
+## [2026.10.12]
+
+Recent changes has been keeping a careful diary of your shared calendars: the dinner someone moved to eight, the one Tuesday of a series that got cancelled, the trip that changed its name. It only had one flaw. You had to go and read it.
+
+Now the diary can come to you. Turn on Change notifications in Settings, under Sync, and when a background sync finds something new, moved, renamed or cancelled on your iCloud or CalDAV calendars, KashCal posts a notification, worded the way the Recent changes list reads. If one event changed, tapping it opens that event; if several did, it opens the list. An event that already arrived as an invitation in the same sync isn't announced twice, and a sync you start yourself keeps its usual message inside the app, since you are already looking.
+
+It stays off until you switch it on. A calendar that buzzes for every edit someone else makes is charming for about a day.
+
+Plans still change behind your back. They just don't get to keep it to themselves.
+
+### Everything in this release
+
+- Added `Change notifications` to Settings under Sync: when a background sync finds changes to your iCloud or CalDAV events, a notification lists them the way Recent changes does; one change opens the event, more open Recent changes; off by default
+- Added importing an invitation `.ics` file as an invitation, keeping its organizer and guests so `Accept`, `Maybe` and `Decline` work; importing it again updates the event instead of making a copy, and a cancellation file cancels the meeting or the one occurrence it names, #364
+- Fixed Quick Add failing to save when the default calendar had been removed or had become read-only; it now saves to the first calendar you can write to, #388
+- Localized the app name in Chinese as 开序历 (Simplified) and 開序曆 (Traditional), in the app and in the store listings, #387
+
+## [2026.10.08]
+
+A calendar has one fact it should never get wrong. KashCal's icon said 31 every single day, which is right about seven days a year.
+
+What kind of calendar doesn't know what day it is? Not this one, not any more. In the account hub, open App Icon and pick Today's date. The home-screen icon now shows today's number on the same card artwork and turns the page on its own: at midnight, when you change the clock, after a restart. You don't have to open the app for any of it.
+
+Today's date is opt-in, so if you've grown fond of the 31, it keeps its job until you say otherwise, and it's one tap away in the same list if you ever want it back. Themed icons keep the plain calendar glyph.
+
+The 31 is down to seven days a year.
+
+### Everything in this release
+
+- Added `Today's date` to App Icon in the account hub: the home-screen icon shows today's day of the month and changes on its own at midnight, after a clock change and after a restart; off by default, and themed icons keep the undated glyph
+- Changed `Duplicate` on a repeating event to copy its repeat rule, starting from the occurrence you tapped; a changed occurrence still duplicates as a single event, #381
+- Changed the app icon background to navy, with the store and in-app icons cropped to match the launcher
+- Improved the event title field, which now grows to four lines before scrolling
+- Changed how KashCal registers for the notification-shade date tap, so a saved `Always` choice survives an app icon change; Android may ask once more after this update
+
+## [2026.10.07]
+
+Shared calendars change behind your back. Someone moves Thursday's meeting, cancels one week of the book club, renames the trip, and the only sign is that your week looks slightly different from the one you remember.
+
+Meet the change detector. Each time KashCal syncs your iCloud and CalDAV calendars, it now notices what changed elsewhere, on another device or by someone you share with, and writes it down: a new event, an occurrence moved from Tuesday, one date of a series cancelled, a new place to be. Open the account hub and tap Recent changes to read the past week, grouped by the day each change arrived. Tap a row to open the event, swipe it away once you have seen it, or clear the lot. It speaks up only for real changes, so an event a server merely re-stamped stays quiet.
+
+The detector watches iCloud and CalDAV calendars. Device calendars and ICS subscriptions aren't part of it.
+
+Your calendar still changes when you are not looking. Now it leaves a note.
+
+### Everything in this release
+
+- Added Recent changes to the account hub, below Invites: a week of what iCloud and CalDAV sync added, changed, moved or cancelled, grouped by the day it arrived, with swipe to dismiss and `Clear all` with Undo; device calendars and ICS subscriptions aren't included
+- Changed the after-sync message to match the Recent changes list, including cancelled occurrences, and translated it into every language
+- Fixed sync reporting events as updated when nothing in them had changed, such as the rest of a series after one occurrence moved
+- Fixed a drag that starts in an event form text field hiding the keyboard while you select or edit text, #384
+
 ## [2026.09.27]
 
 ### Everything in this release

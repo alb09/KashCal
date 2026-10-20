@@ -168,6 +168,8 @@ class AccountSettingsDeviceObserverLifecycleTest {
             backupExporter = mockk(),
             backupImporter = importer,
             permissionChecker = permissionChecker,
+            changeNotificationChannels = org.onekash.kashcal.sync.notification.blockedChangeNotificationChannels(),
+            reminderNotificationChannels = org.onekash.kashcal.reminder.notification.allowedReminderNotificationChannels(),
             context = context,
             applicationScope = CoroutineScope(SupervisorJob() + testDispatcher),
         )

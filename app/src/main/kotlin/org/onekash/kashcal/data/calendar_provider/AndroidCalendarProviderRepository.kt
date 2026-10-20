@@ -87,7 +87,8 @@ class AndroidCalendarProviderRepository @Inject constructor(
             // The color columns are read by name, so a projection reorder can't shift them.
             Instances.CALENDAR_COLOR,    // 19 - raw calendar color (identity)
             Instances.EVENT_COLOR,       // 20 - raw event override (0 = no override)
-            Instances.DTSTART            // 21 - the event row's DTSTART (first-occurrence anchor)
+            Instances.DTSTART,           // 21 - the event row's DTSTART (first-occurrence anchor)
+            Instances.ORIGINAL_ALL_DAY   // 22 - the series' all-day flag, for exceptions
         )
 
         // Column indices
@@ -111,12 +112,16 @@ class AndroidCalendarProviderRepository @Inject constructor(
         private const val COL_ORIGINAL_INSTANCE_TIME = 17
         private const val COL_EVENT_TIMEZONE = 18
         private const val COL_DTSTART = 21
+        private const val COL_ORIGINAL_ALL_DAY = 22
 
         private const val SELECTION_VISIBLE = "${Calendars.VISIBLE} = 1"
         private const val SELECTION_HIDE_DECLINED = "$SELECTION_VISIBLE AND " +
             "${Instances.SELF_ATTENDEE_STATUS} != ${Attendees.ATTENDEE_STATUS_DECLINED}"
 
         private const val SORT_ORDER = "${Instances.BEGIN} ASC, ${Instances.END} ASC"
+
+        /** How far past its anchor (`afterMs`, or `nowMs`) a reminder read looks. */
+        private const val REMINDER_WINDOW_MS = 30L * DateUtils.DAY_IN_MILLIS
 
         /** Upper bound for the next-occurrence lookup window (~10 years). */
         private const val TEN_YEARS_MS = 10L * 365L * DateUtils.DAY_IN_MILLIS
@@ -267,6 +272,7 @@ class AndroidCalendarProviderRepository @Inject constructor(
                     originalInstanceTime = originalInstanceTime,
                     timezone = cursor.getString(COL_EVENT_TIMEZONE),
                     eventStartTs = cursor.getLong(COL_DTSTART),
+                    originalAllDay = if (cursor.isNull(COL_ORIGINAL_ALL_DAY)) null else cursor.getInt(COL_ORIGINAL_ALL_DAY) == 1,
                 )
             )
         }
@@ -408,13 +414,17 @@ class AndroidCalendarProviderRepository @Inject constructor(
         dataStore: org.onekash.kashcal.data.preferences.KashCalDataStore
     ) {
         val storedIds = dataStore.getEnabledDeviceCalendarIds()
-        if (storedIds.isEmpty()) return
+        val mutedIds = dataStore.getMutedDeviceCalendarIds()
+        if (storedIds.isEmpty() && mutedIds.isEmpty()) return
 
         val actualCalendarIds = getDeviceCalendars().map { it.id }.toSet()
         val staleIds = storedIds - actualCalendarIds
         if (staleIds.isNotEmpty()) {
             Log.i(TAG, "Pruning ${staleIds.size} stale calendar IDs: $staleIds")
             dataStore.setEnabledDeviceCalendarIds(storedIds - staleIds)
+        }
+        if ((mutedIds - actualCalendarIds).isNotEmpty()) {
+            dataStore.pruneMutedDeviceCalendarIds(actualCalendarIds)
         }
     }
 
@@ -544,12 +554,14 @@ class AndroidCalendarProviderRepository @Inject constructor(
         availability: Int,
         eventColor: Int?,
         attendees: List<DeviceAttendee>?,
-        categories: List<String>?
+        categories: List<String>?,
+        uid: String?
     ): Result<Long> = withContext(Dispatchers.IO) {
         try {
             val guests = attendees.orEmpty()
             val values = buildEventValues(title, description, location, startTs, endTs, isAllDay, rrule, duration, timezone)
             values.put(CalendarContract.Events.CALENDAR_ID, calendarId)
+            uid?.let { values.put(CalendarContract.Events.UID_2445, it) }
             values.put(CalendarContract.Events.AVAILABILITY, availability)
             eventColor?.let { values.put(CalendarContract.Events.EVENT_COLOR, it) }
             // Set only when there are guests. Without it the sync adapter treats the event as
@@ -610,6 +622,129 @@ class AndroidCalendarProviderRepository @Inject constructor(
             Result.failure(CalendarErrorException(CalendarError.DeviceCalendar.PermissionDenied))
         } catch (e: Exception) {
             Log.e(TAG, "Error creating event", e)
+            Result.failure(CalendarErrorException(CalendarError.DeviceCalendar.WriteFailed(e.message ?: "Unknown error")))
+        }
+    }
+
+    override suspend fun createInvitation(
+        calendarId: Long,
+        title: String,
+        description: String?,
+        location: String?,
+        startTs: Long,
+        endTs: Long?,
+        isAllDay: Boolean,
+        rrule: String?,
+        duration: String?,
+        timezone: String,
+        reminders: List<Int>,
+        uid: String,
+        organizer: String,
+        status: Int,
+        attendees: List<DeviceAttendee>
+    ): Result<Long> = withContext(Dispatchers.IO) {
+        try {
+            val values = buildEventValues(title, description, location, startTs, endTs, isAllDay, rrule, duration, timezone)
+            values.put(CalendarContract.Events.CALENDAR_ID, calendarId)
+            values.put(CalendarContract.Events.UID_2445, uid)
+            // Without ORGANIZER the provider stores the calendar's owner, which would make the
+            // user the organizer of someone else's meeting.
+            values.put(CalendarContract.Events.ORGANIZER, organizer)
+            values.put(CalendarContract.Events.STATUS, status)
+            values.put(CalendarContract.Events.HAS_ATTENDEE_DATA, 1)
+
+            val ops = ArrayList<android.content.ContentProviderOperation>()
+            ops.add(
+                android.content.ContentProviderOperation.newInsert(CalendarContract.Events.CONTENT_URI)
+                    .withValues(values)
+                    .build()
+            )
+            ops.addAll(reminderInsertOps(alertRows(reminders), eventBackReference = 0))
+            for (attendee in attendees) {
+                if (attendee.email.isNullOrBlank()) continue
+                ops.add(
+                    android.content.ContentProviderOperation.newInsert(Attendees.CONTENT_URI)
+                        .withValueBackReference(Attendees.EVENT_ID, 0)
+                        .withValues(buildImportedAttendeeValues(attendee))
+                        .build()
+                )
+            }
+
+            val results = contentResolver.applyBatch(CalendarContract.AUTHORITY, ops)
+            val eventId = ContentUris.parseId(results[0].uri!!)
+            Log.d(TAG, "Created imported invitation: id=$eventId")
+            Result.success(eventId)
+        } catch (e: SecurityException) {
+            Log.w(TAG, "Permission denied creating invitation", e)
+            Result.failure(CalendarErrorException(CalendarError.DeviceCalendar.PermissionDenied))
+        } catch (e: Exception) {
+            Log.e(TAG, "Error creating invitation", e)
+            Result.failure(CalendarErrorException(CalendarError.DeviceCalendar.WriteFailed(e.message ?: "Unknown error")))
+        }
+    }
+
+    override suspend fun findEventsByUid(
+        uid: String,
+        calendarIds: Collection<Long>
+    ): Result<List<DeviceUidRow>> = withContext(Dispatchers.IO) {
+        if (calendarIds.isEmpty()) return@withContext Result.success(emptyList())
+        try {
+            val placeholders = calendarIds.joinToString(",") { "?" }
+            val rows = contentResolver.query(
+                CalendarContract.Events.CONTENT_URI,
+                arrayOf(
+                    CalendarContract.Events._ID, CalendarContract.Events.CALENDAR_ID,
+                    CalendarContract.Events.ORIGINAL_ID, CalendarContract.Events.ORIGINAL_INSTANCE_TIME,
+                    CalendarContract.Events.ORGANIZER, CalendarContract.Events.STATUS,
+                    CalendarContract.Events.ALL_DAY,
+                ),
+                "${CalendarContract.Events.UID_2445} = ? AND ${CalendarContract.Events.DELETED} = 0 AND " +
+                    "${CalendarContract.Events.CALENDAR_ID} IN ($placeholders)",
+                arrayOf(uid) + calendarIds.map { it.toString() },
+                null
+            )?.use { c ->
+                buildList<DeviceUidRow> {
+                    while (c.moveToNext()) {
+                        add(
+                            DeviceUidRow(
+                                eventId = c.getLong(0),
+                                calendarId = c.getLong(1),
+                                uid = uid,
+                                originalId = if (c.isNull(2)) null else c.getLong(2),
+                                originalInstanceTime = if (c.isNull(3)) null else c.getLong(3),
+                                organizer = c.getString(4),
+                                status = if (c.isNull(5)) CalendarContract.Events.STATUS_CONFIRMED else c.getInt(5),
+                                isAllDay = c.getInt(6) != 0,
+                            )
+                        )
+                    }
+                }
+            } ?: return@withContext Result.failure(
+                CalendarErrorException(CalendarError.DeviceCalendar.WriteFailed("UID lookup returned no cursor"))
+            )
+            Result.success(rows)
+        } catch (e: SecurityException) {
+            Log.w(TAG, "Permission denied looking up a UID", e)
+            Result.failure(CalendarErrorException(CalendarError.DeviceCalendar.PermissionDenied))
+        } catch (e: Exception) {
+            Log.w(TAG, "UID lookup failed", e)
+            Result.failure(CalendarErrorException(CalendarError.DeviceCalendar.WriteFailed(e.message ?: "Unknown error")))
+        }
+    }
+
+    override suspend fun setEventStatus(eventId: Long, status: Int): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val values = android.content.ContentValues().apply { put(CalendarContract.Events.STATUS, status) }
+            val updated = contentResolver.update(
+                ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId), values, null, null
+            )
+            if (updated == 0) Result.failure(CalendarErrorException(CalendarError.DeviceCalendar.EventNotFound))
+            else Result.success(Unit)
+        } catch (e: SecurityException) {
+            Log.w(TAG, "Permission denied setting event status", e)
+            Result.failure(CalendarErrorException(CalendarError.DeviceCalendar.PermissionDenied))
+        } catch (e: Exception) {
+            Log.e(TAG, "Error setting event status", e)
             Result.failure(CalendarErrorException(CalendarError.DeviceCalendar.WriteFailed(e.message ?: "Unknown error")))
         }
     }
@@ -1932,92 +2067,121 @@ class AndroidCalendarProviderRepository @Inject constructor(
         if (enabledCalendarIds.isEmpty()) return@withContext null
 
         try {
-            // The next 30 days.
-            val startMs = afterMs
-            val endMs = afterMs + (30L * DateUtils.DAY_IN_MILLIS)
-
-            val builder = Instances.CONTENT_URI.buildUpon()
-            ContentUris.appendId(builder, startMs)
-            ContentUris.appendId(builder, endMs)
-
-            val selection = buildUpcomingReminderSelection()
-
-            val instancesWithAlarms = mutableListOf<InstanceWithAlarm>()
-
-            contentResolver.query(
-                builder.build(),
-                INSTANCES_PROJECTION,
-                selection,
-                null,
-                SORT_ORDER
-            )?.use { cursor ->
-                val colCalendarColor = cursor.getColumnIndexOrThrow(Instances.CALENDAR_COLOR)
-                val colEventColor = cursor.getColumnIndexOrThrow(Instances.EVENT_COLOR)
-                while (cursor.moveToNext()) {
-                    val calendarId = cursor.getLong(COL_CALENDAR_ID)
-                    if (calendarId !in enabledCalendarIds) continue
-
-                    val eventId = cursor.getLong(COL_EVENT_ID)
-                    val beginMs = cursor.getLong(COL_BEGIN)
-                    val isAllDay = cursor.getInt(COL_ALL_DAY) == 1
-                    val title = cursor.getString(COL_TITLE).orEmpty()
-                    val location = cursor.getString(COL_LOCATION)
-                    val calendarColorValue = cursor.getInt(colCalendarColor)
-                    val eventColorValue = cursor.getInt(colEventColor).takeIf { it != 0 }
-
-                    instancesWithAlarms.add(
-                        InstanceWithAlarm(
-                            eventId = eventId,
-                            occurrenceStartTs = beginMs,
-                            title = title,
-                            location = location,
-                            isAllDay = isAllDay,
-                            // The event color if set, else the calendar's.
-                            calendarColor = eventColorValue ?: calendarColorValue,
-                            calendarId = calendarId
-                        )
-                    )
-                }
-            }
-
-            if (instancesWithAlarms.isEmpty()) return@withContext null
-
-            var earliest: UpcomingDeviceReminder? = null
-
-            for (instance in instancesWithAlarms) {
-                val reminders = getReminders(instance.eventId)
-                for (reminderMinutes in reminders) {
-                    val triggerTime = calculateReminderTriggerTime(
-                        occurrenceStartTs = instance.occurrenceStartTs,
-                        reminderMinutes = reminderMinutes,
-                        isAllDay = instance.isAllDay
-                    )
-
-                    if (triggerTime <= afterMs) continue
-
-                    if (earliest == null || triggerTime < earliest.triggerTime) {
-                        earliest = UpcomingDeviceReminder(
-                            eventId = instance.eventId,
-                            occurrenceStartTs = instance.occurrenceStartTs,
-                            title = instance.title,
-                            location = instance.location,
-                            isAllDay = instance.isAllDay,
-                            reminderMinutes = reminderMinutes,
-                            triggerTime = triggerTime,
-                            calendarColor = instance.calendarColor,
-                            calendarId = instance.calendarId
-                        )
-                    }
-                }
-            }
-
-            earliest
+            reminderCandidates(enabledCalendarIds, afterMs, afterMs + REMINDER_WINDOW_MS)
+                .filter { it.triggerTime > afterMs }
+                .minByOrNull { it.cursor }
         } catch (e: SecurityException) {
             Log.w(TAG, "Calendar permission revoked", e)
             null
         } catch (e: Exception) {
             Log.e(TAG, "Error getting next upcoming reminder", e)
             null
+        }
+    }
+
+    override suspend fun getDueAndNextReminders(
+        enabledCalendarIds: Set<Long>,
+        after: DeviceReminderCursor,
+        nowMs: Long,
+        limit: Int,
+    ): DeviceReminderBatch = withContext(Dispatchers.IO) {
+        if (enabledCalendarIds.isEmpty()) return@withContext DeviceReminderBatch.EMPTY
+
+        try {
+            val candidates = reminderCandidates(
+                enabledCalendarIds, minOf(after.triggerTime, nowMs), nowMs + REMINDER_WINDOW_MS
+            )
+            val due = candidates
+                .filter { it.cursor > after && it.triggerTime <= nowMs }
+                .distinctBy { it.cursor }
+                .sortedBy { it.cursor }
+            DeviceReminderBatch(
+                due = due.take(limit),
+                next = due.getOrNull(limit)
+                    ?: candidates.filter { it.triggerTime > nowMs }.minByOrNull { it.cursor },
+                overflowed = due.size > limit,
+            )
+        } catch (e: SecurityException) {
+            Log.w(TAG, "Calendar permission revoked", e)
+            DeviceReminderBatch.EMPTY
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting due device reminders", e)
+            DeviceReminderBatch.EMPTY
+        }
+    }
+
+    /**
+     * Returns every reminder of [enabledCalendarIds]' occurrences with alarms in [fromMs]..[toMs],
+     * declined ones skipped ([buildUpcomingReminderSelection]); the caller filters and orders.
+     */
+    private suspend fun reminderCandidates(
+        enabledCalendarIds: Set<Long>,
+        fromMs: Long,
+        toMs: Long,
+    ): List<UpcomingDeviceReminder> {
+        val builder = Instances.CONTENT_URI.buildUpon()
+        ContentUris.appendId(builder, fromMs)
+        ContentUris.appendId(builder, toMs)
+
+        val selection = buildUpcomingReminderSelection()
+
+        val instancesWithAlarms = mutableListOf<InstanceWithAlarm>()
+
+        contentResolver.query(
+            builder.build(),
+            INSTANCES_PROJECTION,
+            selection,
+            null,
+            SORT_ORDER
+        )?.use { cursor ->
+            val colCalendarColor = cursor.getColumnIndexOrThrow(Instances.CALENDAR_COLOR)
+            val colEventColor = cursor.getColumnIndexOrThrow(Instances.EVENT_COLOR)
+            while (cursor.moveToNext()) {
+                val calendarId = cursor.getLong(COL_CALENDAR_ID)
+                if (calendarId !in enabledCalendarIds) continue
+
+                val eventId = cursor.getLong(COL_EVENT_ID)
+                val beginMs = cursor.getLong(COL_BEGIN)
+                val isAllDay = cursor.getInt(COL_ALL_DAY) == 1
+                val title = cursor.getString(COL_TITLE).orEmpty()
+                val location = cursor.getString(COL_LOCATION)
+                val calendarColorValue = cursor.getInt(colCalendarColor)
+                val eventColorValue = cursor.getInt(colEventColor).takeIf { it != 0 }
+
+                instancesWithAlarms.add(
+                    InstanceWithAlarm(
+                        eventId = eventId,
+                        occurrenceStartTs = beginMs,
+                        title = title,
+                        location = location,
+                        isAllDay = isAllDay,
+                        // The event color if set, else the calendar's.
+                        calendarColor = eventColorValue ?: calendarColorValue,
+                        calendarId = calendarId
+                    )
+                )
+            }
+        }
+
+        val minutesByEvent = getRemindersForEvents(instancesWithAlarms.mapTo(mutableSetOf()) { it.eventId })
+        return instancesWithAlarms.flatMap { instance ->
+            minutesByEvent[instance.eventId].orEmpty().map { reminderMinutes ->
+                UpcomingDeviceReminder(
+                    eventId = instance.eventId,
+                    occurrenceStartTs = instance.occurrenceStartTs,
+                    title = instance.title,
+                    location = instance.location,
+                    isAllDay = instance.isAllDay,
+                    reminderMinutes = reminderMinutes,
+                    triggerTime = calculateReminderTriggerTime(
+                        occurrenceStartTs = instance.occurrenceStartTs,
+                        reminderMinutes = reminderMinutes,
+                        isAllDay = instance.isAllDay
+                    ),
+                    calendarColor = instance.calendarColor,
+                    calendarId = instance.calendarId
+                )
+            }
         }
     }
 
@@ -2324,6 +2488,19 @@ internal fun buildGuestAttendeeValues(attendee: DeviceAttendee): android.content
             android.provider.CalendarContract.Attendees.ATTENDEE_STATUS,
             android.provider.CalendarContract.Attendees.ATTENDEE_STATUS_NONE
         )
+    }
+
+/** Builds an imported attendee's row: its relationship and status as given, type required. */
+internal fun buildImportedAttendeeValues(attendee: DeviceAttendee): android.content.ContentValues =
+    android.content.ContentValues().apply {
+        attendee.name?.let { put(android.provider.CalendarContract.Attendees.ATTENDEE_NAME, it) }
+        put(android.provider.CalendarContract.Attendees.ATTENDEE_EMAIL, attendee.email)
+        put(android.provider.CalendarContract.Attendees.ATTENDEE_RELATIONSHIP, attendee.relationship)
+        put(
+            android.provider.CalendarContract.Attendees.ATTENDEE_TYPE,
+            android.provider.CalendarContract.Attendees.TYPE_REQUIRED
+        )
+        put(android.provider.CalendarContract.Attendees.ATTENDEE_STATUS, attendee.status)
     }
 
 /**

@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">Уведомления о завершении синхронизации и ошибках</string>
     <string name="channel_event_invitations">Приглашения на события</string>
     <string name="channel_event_invitations_desc">Уведомления о новых приглашениях в календаре</string>
+    <string name="channel_calendar_updates">Изменения в календаре</string>
     <string name="invite_notification_body">От %1$s · Нажмите, чтобы ответить</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">Ответ распространяется на всю серию.</string>
+    <string name="rsvp_receipt_pending">Ответ ожидает отправки</string>
+    <string name="rsvp_receipt_sent">Ответ отправлен</string>
+    <string name="rsvp_receipt_not_delivered">Ответ не доставлен</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">Это и все будущие</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">По умолчанию</string>
     <string name="app_icon_supporter">Сторонник</string>
     <string name="app_icon_supporter_calendar">Сторонник, с названием Календарь</string>
+    <string name="app_icon_todays_date">Сегодняшняя дата</string>
     <string name="app_icon_label_calendar">Календарь</string>
     <string name="app_icon_support_cta">Поддержать KashCal</string>
     <string name="app_icon_switch_note">Смена значка может перезапустить приложение. Уведомления всегда используют значок и название по умолчанию.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">Подключите iCloud, чтобы видеть свои события здесь</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">Позже</string>
+    <string name="whats_new_skip">Пропустить</string>
+    <string name="whats_new_next">Далее</string>
+    <string name="whats_new_page_of">Страница %1$d из %2$d</string>
+    <string name="whats_new_find_it_in">Где найти</string>
     <string name="whats_new_v598_title">Помоги сохранить Android открытым</string>
     <string name="whats_new_v598_body">Google меняет способ установки приложений на устройство. Нам нужна твоя помощь.</string>
     <string name="whats_new_v598_action_label">Перейти на keepandroidopen.org</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">Этот выпуск посвящён тем, кто поддерживает KashCal. Небольшой вклад с большой регулярной отдачей.</string>
     <string name="whats_new_v732_caption">Ещё не поддерживаешь нас?</string>
     <string name="whats_new_v732_action_label">Добавь нас в свои планы</string>
+    <string name="whats_new_v772_icon_title">Твой значок знает дату</string>
+    <string name="whats_new_v772_icon_body">Выбери значок «Сегодняшняя дата», и KashCal будет показывать число месяца на главном экране. Каждую ночь оно меняется само.</string>
+    <string name="whats_new_v772_changes_title">Узнай, что изменилось</string>
+    <string name="whats_new_v772_changes_body">Новые, изменённые и удалённые события из твоих календарей iCloud и CalDAV 7 дней хранятся в разделе «Последние изменения». Нажми на событие, чтобы открыть его.</string>
+    <string name="whats_new_v772_notifications_body">Получай уведомление, когда фоновая синхронизация находит изменения в твоих событиях iCloud или CalDAV. Функция выключена, пока ты её не включишь.</string>
+    <string name="whats_new_hero_sample_lunch">Обед с командой</string>
+    <string name="whats_new_hero_sample_review">Обзор дизайна</string>
+    <string name="whats_new_hero_sample_book_club">Книжный клуб</string>
+    <string name="whats_new_hero_sample_calendar">Работа</string>
+    <string name="whats_new_hero_now">сейчас</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Подключить iCloud</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">Нет сеансов синхронизации.\n\nПотяните вниз на экране календаря, чтобы запустить синхронизацию.</string>
     <string name="status_no_writable_calendars">Нет доступных для записи календарей</string>
     <string name="status_events_count">Событий: %1$d</string>
-    <string name="status_sync_changes">Изменения синхронизации</string>
     <string name="status_sync_history">История синхронизации</string>
     <string name="status_parse_failures">Ошибки разбора</string>
     <string name="status_error">Ошибка</string>
@@ -584,6 +601,28 @@
     <string name="settings_detailed_widget_rows_info">Компактная одна строка или подробные две строки с временем окончания.</string>
     <string name="settings_sync_lookback">Глубина синхронизации</string>
     <string name="settings_sync_lookback_hint">Насколько давние события синхронизировать</string>
+    <string name="settings_change_notifications">Уведомления об изменениях</string>
+    <string name="settings_change_notifications_info">Отправляет уведомление, когда фоновая синхронизация находит изменения в твоих событиях. Работает с календарями iCloud и CalDAV.</string>
+    <string name="settings_calendar_notifications">Уведомления календарей</string>
+    <string name="settings_calendar_notifications_all">Все календари</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">Без уведомлений: %d</item>
+        <item quantity="few">Без уведомлений: %d</item>
+        <item quantity="many">Без уведомлений: %d</item>
+        <item quantity="other">Без уведомлений: %d</item>
+    </plurals>
+    <string name="calendar_notifications_intro">Выбери, какие календари могут присылать тебе уведомления.</string>
+    <string name="calendar_notifications_info">Календари без уведомлений по-прежнему отображаются и синхронизируются, но не присылают уведомлений.</string>
+    <string name="cd_calendar_notifications_info">О календарях без уведомлений</string>
+    <string name="cd_state_expanded">развёрнуто</string>
+    <string name="cd_state_collapsed">свёрнуто</string>
+    <string name="calendar_notifications_device_info">Выключи, и все календари устройства, включая добавленные позже, будут без уведомлений.</string>
+    <string name="cd_calendar_notifications_device_info">Об уведомлениях календарей устройства</string>
+    <string name="cd_device_calendar_notifications">Уведомления календарей устройства</string>
+    <string name="calendar_notifications_hidden">Скрыт</string>
+    <string name="calendar_notifications_app_off">Уведомления KashCal отключены в системных настройках, поэтому ни один календарь не сможет присылать уведомления.</string>
+    <string name="calendar_notifications_reminders_off">Напоминания о событиях отключены в системных настройках, поэтому напоминания не будут показываться.</string>
+    <string name="cd_notifications_off">уведомления отключены</string>
     <string name="settings_not_set">Не задано</string>
     <string name="settings_on">Вкл.</string>
     <string name="settings_off">Выкл.</string>
@@ -627,7 +666,6 @@
     <string name="label_device_calendars">Календари устройства</string>
     <string name="label_default_calendar_hint">Новые события создаются в этом календаре</string>
     <string name="label_visible_count">%1$d / %2$d видимых</string>
-    <string name="label_enabled_count">%1$d / %2$d включено</string>
     <string name="label_reminders_truncated">%1$d не показано (%2$d всего, макс. %3$d редактируемых)</string>
     <string name="label_found_events">Найдено: %1$d событий</string>
     <string name="label_open_debug_menu">Открыть меню отладки</string>
@@ -649,8 +687,6 @@
     <string name="device_calendars_grant">Разрешить</string>
     <string name="device_calendars_none_found">Календари устройства не найдены.</string>
     <string name="device_calendars_local">Локальный</string>
-    <string name="device_calendars_reminders">Напоминания</string>
-    <string name="device_calendars_reminders_desc">Получать уведомления о событиях календаря устройства</string>
     <string name="device_calendars_read_only_no_write">Только чтение (нет разрешения на запись)</string>
     <string name="device_calendars_read_only_calendar">Только чтение (календарь доступен только для чтения)</string>
     <string name="settings_developer_options">Для разработчиков</string>
@@ -794,6 +830,75 @@
         <item quantity="many">Импортировано %1$d событий</item>
         <item quantity="other">Импортировано %1$d событий</item>
     </plurals>
+    <string name="ics_import_preview_loading">Проверка этого календаря…</string>
+    <string name="ics_import_preview_failed">Не удалось проверить этот календарь на наличие этих событий. Импортировать всё равно можно.</string>
+    <string name="ics_import_will_cancel">Это отменит %1$s (организатор: %2$s)</string>
+    <string name="ics_import_will_cancel_no_organizer">Это отменит %1$s</string>
+    <string name="ics_import_will_update">Это обновит %1$s</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d событие уже актуально</item>
+        <item quantity="few">%1$d события уже актуальны</item>
+        <item quantity="many">%1$d событий уже актуальны</item>
+        <item quantity="other">%1$d события уже актуальны</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">%1$d пропущено: %2$s</item>
+        <item quantity="few">%1$d пропущено: %2$s</item>
+        <item quantity="many">%1$d пропущено: %2$s</item>
+        <item quantity="other">%1$d пропущено: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">это ответ на приглашение, он ничего не добавляет в календарь</string>
+    <string name="ics_import_reason_unsupported">такой тип приглашения не поддерживается</string>
+    <string name="ics_import_reason_organizer_mismatch">оно отправлено не организатором встречи</string>
+    <string name="ics_import_reason_cancel_no_match">отменённой встречи нет в этом календаре</string>
+    <string name="ics_import_reason_cancel_not_for_you">отмена адресована другим участникам</string>
+    <string name="ics_import_reason_deletion_pending">событие удаляется</string>
+    <string name="ics_import_reason_cancelled_in_file">оно уже отменено в файле</string>
+    <string name="ics_import_reason_this_and_future">изменения этого и последующих повторений не поддерживаются</string>
+    <string name="ics_import_reason_own_cancel">ты организатор этой встречи, поэтому отмени её в самом событии</string>
+    <string name="ics_import_reason_on_another_calendar">оно уже есть в другом календаре этого аккаунта</string>
+    <string name="ics_import_notice_unverified">Отправителя файла приглашения нельзя проверить. Убедись, что файл пришёл от организатора.</string>
+    <string name="ics_import_notice_answer_notifies">Ответ на это приглашение может уведомить организатора.</string>
+    <string name="ics_import_notice_guests_again">Ты организатор, поэтому участники могут снова получить это приглашение.</string>
+    <string name="cd_dismiss_notice">Закрыть уведомление</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d добавлено</item>
+        <item quantity="few">%1$d добавлено</item>
+        <item quantity="many">%1$d добавлено</item>
+        <item quantity="other">%1$d добавлено</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d обновлено</item>
+        <item quantity="few">%1$d обновлено</item>
+        <item quantity="many">%1$d обновлено</item>
+        <item quantity="other">%1$d обновлено</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d отменено</item>
+        <item quantity="few">%1$d отменено</item>
+        <item quantity="many">%1$d отменено</item>
+        <item quantity="other">%1$d отменено</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d уже актуально</item>
+        <item quantity="few">%1$d уже актуально</item>
+        <item quantity="many">%1$d уже актуально</item>
+        <item quantity="other">%1$d уже актуально</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d пропущено</item>
+        <item quantity="few">%1$d пропущено</item>
+        <item quantity="many">%1$d пропущено</item>
+        <item quantity="other">%1$d пропущено</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d с ошибкой</item>
+        <item quantity="few">%1$d с ошибкой</item>
+        <item quantity="many">%1$d с ошибкой</item>
+        <item quantity="other">%1$d с ошибкой</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">Нечего импортировать</string>
     <plurals name="exported_events">
         <item quantity="one">Экспортировано %1$d событие</item>
         <item quantity="few">Экспортировано %1$d события</item>
@@ -989,6 +1094,14 @@
     <string name="cd_active_view">Активный вид</string>
     <string name="view_agenda">Повестка</string>
     <string name="view_month_full">Месяц (полный)</string>
+    <string name="view_planner">Планер</string>
+    <string name="planner_free_day">Свободный день</string>
+    <string name="cd_planner_show_day_events">Показать события этого дня</string>
+    <string name="planner_different_this_week">Отличия этой недели</string>
+    <string name="planner_usual_week">Обычная неделя.</string>
+    <string name="planner_moved_was">ранее %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">День</string>
     <string name="view_three_days">3 дня</string>
     <string name="view_year">Год</string>
@@ -1047,11 +1160,6 @@
     <string name="cd_increase_interval">Увеличить интервал</string>
     <string name="rrule_starting">%1$s начиная с %2$s%3$s</string>
     <string name="rrule_since">%1$s · с %2$s</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d новых</string>
-    <string name="sync_summary_updated">%1$d обновлено</string>
-    <string name="sync_summary_removed">%1$d удалено</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">Циклическая прокрутка включена</string>
@@ -1170,12 +1278,35 @@
         <item quantity="many">%1$d событий удалено</item>
         <item quantity="other">%1$d событий удалено</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d повторение отменено</item>
+        <item quantity="few">%1$d повторения отменены</item>
+        <item quantity="many">%1$d повторений отменено</item>
+        <item quantity="other">%1$d повторений отменено</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d обновление календаря</item>
         <item quantity="few">%1$d обновления календаря</item>
         <item quantity="many">%1$d обновлений календаря</item>
         <item quantity="other">%1$d обновлений календаря</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">Последние изменения</string>
+    <string name="recent_changes_empty">Нет последних изменений</string>
+    <string name="recent_changes_clear_all">Очистить всё</string>
+    <string name="recent_changes_cleared">Последние изменения очищены</string>
+    <string name="recent_changes_dismiss">Скрыть</string>
+    <string name="recent_changes_moved_from">Перенесено с %1$s</string>
+    <string name="recent_changes_time_changed">Время изменено</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">Место изменено</string>
+    <string name="recent_changes_title_changed">Название изменено</string>
+    <string name="recent_changes_repeat_changed">Повторение изменено</string>
+    <string name="recent_changes_cancelled">Отменено</string>
+    <string name="cd_recent_change_new">Новое событие</string>
+    <string name="cd_recent_change_updated">Обновлено</string>
+    <string name="cd_recent_change_removed">Удалено</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">День %1$d из %2$d</string>

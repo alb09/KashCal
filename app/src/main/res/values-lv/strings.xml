@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">Paziņojumi par sinhronizācijas pabeigšanu un kļūdām</string>
     <string name="channel_event_invitations">Notikumu ielūgumi</string>
     <string name="channel_event_invitations_desc">Paziņojumi par jauniem kalendāra ielūgumiem</string>
+    <string name="channel_calendar_updates">Kalendāra izmaiņas</string>
     <string name="invite_notification_body">No %1$s · Pieskarieties, lai atbildētu</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">Atbilde attiecas uz visu sēriju.</string>
+    <string name="rsvp_receipt_pending">Atbilde gaida nosūtīšanu</string>
+    <string name="rsvp_receipt_sent">Atbilde nosūtīta</string>
+    <string name="rsvp_receipt_not_delivered">Atbilde nav piegādāta</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">Šo un visus nākamos</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">Noklusējums</string>
     <string name="app_icon_supporter">Atbalstītājs</string>
     <string name="app_icon_supporter_calendar">Atbalstītājs, ar nosaukumu Kalendārs</string>
+    <string name="app_icon_todays_date">Šodienas datums</string>
     <string name="app_icon_label_calendar">Kalendārs</string>
     <string name="app_icon_support_cta">Atbalstīt KashCal</string>
     <string name="app_icon_switch_note">Ikonas maiņa var restartēt lietotni. Paziņojumos vienmēr tiek izmantota noklusējuma ikona un nosaukums.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">Savienojiet iCloud, lai šeit redzētu savus notikumus</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">Vēlāk</string>
+    <string name="whats_new_skip">Izlaist</string>
+    <string name="whats_new_next">Tālāk</string>
+    <string name="whats_new_page_of">Lapa %1$d no %2$d</string>
+    <string name="whats_new_find_it_in">Kur atrast</string>
     <string name="whats_new_v598_title">Palīdzi saglabāt Android atvērtu</string>
     <string name="whats_new_v598_body">Google maina veidu, kā tu instalē lietotnes savā ierīcē. Mums vajadzīga tava palīdzība.</string>
     <string name="whats_new_v598_action_label">Apmeklēt keepandroidopen.org</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">Šis laidiens ir veltīts KashCal atbalstītājiem. Mazs ieguldījums ar lielu regulāru atdevi.</string>
     <string name="whats_new_v732_caption">Vēl neesi atbalstītājs?</string>
     <string name="whats_new_v732_action_label">Pievieno mūs saviem plāniem</string>
+    <string name="whats_new_v772_icon_title">Tava ikona zina datumu</string>
+    <string name="whats_new_v772_icon_body">Izvēlies ikonu “Šodienas datums”, un KashCal sākuma ekrānā rādīs mēneša dienu. Katru nakti tā nomainās pati.</string>
+    <string name="whats_new_v772_changes_title">Apskati, kas mainījies</string>
+    <string name="whats_new_v772_changes_body">Jauni, rediģēti un noņemti notikumi no taviem iCloud un CalDAV kalendāriem 7 dienas tiek apkopoti sadaļā “Nesenās izmaiņas”. Pieskaries notikumam, lai to atvērtu.</string>
+    <string name="whats_new_v772_notifications_body">Saņem paziņojumu, kad fona sinhronizācija atrod izmaiņas tavos iCloud vai CalDAV notikumos. Funkcija ir izslēgta, līdz tu to ieslēgsi.</string>
+    <string name="whats_new_hero_sample_lunch">Komandas pusdienas</string>
+    <string name="whats_new_hero_sample_review">Dizaina apskate</string>
+    <string name="whats_new_hero_sample_book_club">Grāmatu klubs</string>
+    <string name="whats_new_hero_sample_calendar">Darbs</string>
+    <string name="whats_new_hero_now">tagad</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Savienot iCloud</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">Vēl nav sinhronizācijas sesiju.\n\nVelciet uz leju kalendāra skatā, lai sāktu sinhronizāciju.</string>
     <string name="status_no_writable_calendars">Nav pieejamu rediģējamu kalendāru</string>
     <string name="status_events_count">%1$d notikumi</string>
-    <string name="status_sync_changes">Sinhronizācijas izmaiņas</string>
     <string name="status_sync_history">Sinhronizācijas vēsture</string>
     <string name="status_parse_failures">Parsēšanas kļūdas</string>
     <string name="status_error">Kļūda</string>
@@ -584,6 +601,27 @@
     <string name="settings_detailed_widget_rows_info">Kompakta viena rinda vai detalizētas divas rindas ar beigu laiku.</string>
     <string name="settings_sync_lookback">Sinhronizācijas atskats</string>
     <string name="settings_sync_lookback_hint">Cik senus notikumus sinhronizēt</string>
+    <string name="settings_change_notifications">Paziņojumi par izmaiņām</string>
+    <string name="settings_change_notifications_info">Nosūta paziņojumu, kad fona sinhronizācija atrod izmaiņas tavos notikumos. Darbojas ar iCloud un CalDAV kalendāriem.</string>
+    <string name="settings_calendar_notifications">Kalendāru paziņojumi</string>
+    <string name="settings_calendar_notifications_all">Visi kalendāri</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="zero">%d apklusināti</item>
+        <item quantity="one">%d apklusināts</item>
+        <item quantity="other">%d apklusināti</item>
+    </plurals>
+    <string name="calendar_notifications_intro">Izvēlies, kuri kalendāri var tev paziņot.</string>
+    <string name="calendar_notifications_info">Apklusinātie kalendāri joprojām tiek rādīti un sinhronizēti, bet tev nepaziņo.</string>
+    <string name="cd_calendar_notifications_info">Par apklusinātajiem kalendāriem</string>
+    <string name="cd_state_expanded">izvērsts</string>
+    <string name="cd_state_collapsed">sakļauts</string>
+    <string name="calendar_notifications_device_info">Izslēdz, lai apklusinātu visus ierīces kalendārus, arī tos, ko pievienosi vēlāk.</string>
+    <string name="cd_calendar_notifications_device_info">Par ierīces kalendāru paziņojumiem</string>
+    <string name="cd_device_calendar_notifications">Ierīces kalendāru paziņojumi</string>
+    <string name="calendar_notifications_hidden">Slēpts</string>
+    <string name="calendar_notifications_app_off">KashCal paziņojumi ir izslēgti sistēmas iestatījumos, tāpēc neviens kalendārs nevar tev paziņot.</string>
+    <string name="calendar_notifications_reminders_off">Notikumu atgādinājumi ir izslēgti sistēmas iestatījumos, tāpēc atgādinājumi netiks rādīti.</string>
+    <string name="cd_notifications_off">paziņojumi izslēgti</string>
     <string name="settings_not_set">Nav iestatīts</string>
     <string name="settings_on">Ieslēgts</string>
     <string name="settings_off">Izslēgts</string>
@@ -627,7 +665,6 @@
     <string name="label_device_calendars">Ierīces kalendāri</string>
     <string name="label_default_calendar_hint">Jauni notikumi tiks veidoti šajā kalendārā</string>
     <string name="label_visible_count">%1$d / %2$d redzami</string>
-    <string name="label_enabled_count">%1$d / %2$d iespējoti</string>
     <string name="label_reminders_truncated">%1$d nav rādīti (%2$d kopā, maks. %3$d rediģējami)</string>
     <string name="label_found_events">Atrasti: %1$d notikumi</string>
     <string name="label_open_debug_menu">Atvērt atkļūdošanas izvēlni</string>
@@ -649,8 +686,6 @@
     <string name="device_calendars_grant">Piešķirt</string>
     <string name="device_calendars_none_found">Ierīces kalendāri nav atrasti.</string>
     <string name="device_calendars_local">Lokāls</string>
-    <string name="device_calendars_reminders">Atgādinājumi</string>
-    <string name="device_calendars_reminders_desc">Saņemt paziņojumus par ierīces kalendāra notikumiem</string>
     <string name="device_calendars_read_only_no_write">Tikai lasāms (nav rakstīšanas atļaujas)</string>
     <string name="device_calendars_read_only_calendar">Tikai lasāms (kalendārs ir tikai lasāms)</string>
     <string name="settings_developer_options">Izstrādātāja iespējas</string>
@@ -777,6 +812,67 @@
         <item quantity="one">Importēts %1$d notikums</item>
         <item quantity="other">Importēti %1$d notikumi</item>
     </plurals>
+    <string name="ics_import_preview_loading">Pārbauda šo kalendāru…</string>
+    <string name="ics_import_preview_failed">Neizdevās pārbaudīt, vai šajā kalendārā ir šie notikumi. Tu joprojām vari importēt.</string>
+    <string name="ics_import_will_cancel">Tas atcels %1$s (organizators: %2$s)</string>
+    <string name="ics_import_will_cancel_no_organizer">Tas atcels %1$s</string>
+    <string name="ics_import_will_update">Tas atjauninās %1$s</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="zero">%1$d notikumi jau ir aktuāli</item>
+        <item quantity="one">%1$d notikums jau ir aktuāls</item>
+        <item quantity="other">%1$d notikumi jau ir aktuāli</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="zero">%1$d izlaisti: %2$s</item>
+        <item quantity="one">%1$d izlaists: %2$s</item>
+        <item quantity="other">%1$d izlaisti: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">tā ir atbilde uz ielūgumu, kas kalendāram neko nepievieno</string>
+    <string name="ics_import_reason_unsupported">šāda veida ielūguma ziņojums netiek atbalstīts</string>
+    <string name="ics_import_reason_organizer_mismatch">to nosūtījis kāds cits, nevis sapulces organizators</string>
+    <string name="ics_import_reason_cancel_no_match">atceltās sapulces šajā kalendārā nav</string>
+    <string name="ics_import_reason_cancel_not_for_you">atcelšana attiecas uz citiem dalībniekiem</string>
+    <string name="ics_import_reason_deletion_pending">notikums tiek dzēsts</string>
+    <string name="ics_import_reason_cancelled_in_file">failā tas jau ir atcelts</string>
+    <string name="ics_import_reason_this_and_future">šīs un turpmāko reižu izmaiņas netiek atbalstītas</string>
+    <string name="ics_import_reason_own_cancel">tu organizē šo sapulci, tāpēc atcel to no notikuma</string>
+    <string name="ics_import_reason_on_another_calendar">tas jau ir citā šī konta kalendārā</string>
+    <string name="ics_import_notice_unverified">Ielūguma faila sūtītāju nevar pārbaudīt. Pārliecinies, ka fails ir no organizatora.</string>
+    <string name="ics_import_notice_answer_notifies">Atbildot uz šo ielūgumu, organizators var saņemt paziņojumu.</string>
+    <string name="ics_import_notice_guests_again">Tu esi organizators, tāpēc dalībnieki var vēlreiz saņemt šo ielūgumu.</string>
+    <string name="cd_dismiss_notice">Aizvērt paziņojumu</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="zero">%1$d pievienoti</item>
+        <item quantity="one">%1$d pievienots</item>
+        <item quantity="other">%1$d pievienoti</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="zero">%1$d atjaunināti</item>
+        <item quantity="one">%1$d atjaunināts</item>
+        <item quantity="other">%1$d atjaunināti</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="zero">%1$d atcelti</item>
+        <item quantity="one">%1$d atcelts</item>
+        <item quantity="other">%1$d atcelti</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="zero">%1$d jau aktuāli</item>
+        <item quantity="one">%1$d jau aktuāls</item>
+        <item quantity="other">%1$d jau aktuāli</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="zero">%1$d izlaisti</item>
+        <item quantity="one">%1$d izlaists</item>
+        <item quantity="other">%1$d izlaisti</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="zero">%1$d neizdevās</item>
+        <item quantity="one">%1$d neizdevās</item>
+        <item quantity="other">%1$d neizdevās</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">Nav ko importēt</string>
     <plurals name="exported_events">
         <item quantity="zero">Eksportēti %1$d notikumu</item>
         <item quantity="one">Eksportēts %1$d notikums</item>
@@ -951,6 +1047,14 @@
     <string name="cd_active_view">Aktīvais skats</string>
     <string name="view_agenda">Dienas kārtība</string>
     <string name="view_month_full">Mēnesis (pilns)</string>
+    <string name="view_planner">Plānotājs</string>
+    <string name="planner_free_day">Brīva diena</string>
+    <string name="cd_planner_show_day_events">Rādīt šīs dienas notikumus</string>
+    <string name="planner_different_this_week">Citādi šonedēļ</string>
+    <string name="planner_usual_week">Parasta nedēļa.</string>
+    <string name="planner_moved_was">agrāk %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">Diena</string>
     <string name="view_three_days">3 dienas</string>
     <string name="view_year">Gads</string>
@@ -1008,11 +1112,6 @@
     <string name="cd_increase_interval">Palielināt intervālu</string>
     <string name="rrule_starting">%1$s sākot ar %2$s%3$s</string>
     <string name="rrule_since">%1$s · kopš %2$s</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d jauni</string>
-    <string name="sync_summary_updated">%1$d atjaunināti</string>
-    <string name="sync_summary_removed">%1$d noņemti</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">Apļveida ritināšana iespējota</string>
@@ -1123,11 +1222,33 @@
         <item quantity="one">%1$d notikums noņemts</item>
         <item quantity="other">%1$d notikumi noņemti</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="zero">%1$d atkārtojumu atcelti</item>
+        <item quantity="one">%1$d atkārtojums atcelts</item>
+        <item quantity="other">%1$d atkārtojumi atcelti</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="zero">%1$d kalendāra atjauninājumu</item>
         <item quantity="one">%1$d kalendāra atjauninājums</item>
         <item quantity="other">%1$d kalendāra atjauninājumi</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">Nesenās izmaiņas</string>
+    <string name="recent_changes_empty">Nav nesenu izmaiņu</string>
+    <string name="recent_changes_clear_all">Notīrīt visu</string>
+    <string name="recent_changes_cleared">Nesenās izmaiņas notīrītas</string>
+    <string name="recent_changes_dismiss">Noraidīt</string>
+    <string name="recent_changes_moved_from">Pārcelts no %1$s</string>
+    <string name="recent_changes_time_changed">Laiks mainīts</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">Vieta mainīta</string>
+    <string name="recent_changes_title_changed">Nosaukums mainīts</string>
+    <string name="recent_changes_repeat_changed">Atkārtošana mainīta</string>
+    <string name="recent_changes_cancelled">Atcelts</string>
+    <string name="cd_recent_change_new">Jauns notikums</string>
+    <string name="cd_recent_change_updated">Atjaunināts</string>
+    <string name="cd_recent_change_removed">Noņemts</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">Diena %1$d no %2$d</string>

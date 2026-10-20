@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">Értesítések a szinkronizálás befejezéséről és hibákról</string>
     <string name="channel_event_invitations">Eseménymeghívók</string>
     <string name="channel_event_invitations_desc">Értesítések, amikor új naptármeghívót kap</string>
+    <string name="channel_calendar_updates">Naptárváltozások</string>
     <string name="invite_notification_body">Feladó: %1$s · Koppintson a válaszhoz</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">A válasz a teljes sorozatra érvényes.</string>
+    <string name="rsvp_receipt_pending">Válasz küldésre vár</string>
+    <string name="rsvp_receipt_sent">Válasz elküldve</string>
+    <string name="rsvp_receipt_not_delivered">A válasz nem lett kézbesítve</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">Ezt és az összes jövőbelit</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">Alapértelmezett</string>
     <string name="app_icon_supporter">Támogató</string>
     <string name="app_icon_supporter_calendar">Támogató, Naptár néven</string>
+    <string name="app_icon_todays_date">Mai dátum</string>
     <string name="app_icon_label_calendar">Naptár</string>
     <string name="app_icon_support_cta">KashCal támogatása</string>
     <string name="app_icon_switch_note">Az ikon módosítása újraindíthatja az alkalmazást. Az értesítések mindig az alapértelmezett ikont és nevet használják.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">Csatlakozz az iCloud-hoz, hogy itt lásd az eseményeidet</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">Talán később</string>
+    <string name="whats_new_skip">Kihagyás</string>
+    <string name="whats_new_next">Tovább</string>
+    <string name="whats_new_page_of">%1$d. oldal / %2$d</string>
+    <string name="whats_new_find_it_in">Itt találod</string>
     <string name="whats_new_v598_title">Segíts nyitva tartani az Androidot</string>
     <string name="whats_new_v598_body">A Google megváltoztatja, ahogyan alkalmazásokat telepítesz a készülékedre. Szükségünk van a segítségedre.</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org megnyitása</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">Ez a kiadás a KashCal támogatóinak szól. Kis hozzájárulás, nagy és visszatérő haszonnal.</string>
     <string name="whats_new_v732_caption">Még nem vagy támogató?</string>
     <string name="whats_new_v732_action_label">Vegyél fel minket a terveidbe</string>
+    <string name="whats_new_v772_icon_title">Az ikonod tudja, hányadika van</string>
+    <string name="whats_new_v772_icon_body">Válaszd a Mai dátum ikont, és a KashCal megmutatja a hónap napját a kezdőképernyődön. Minden éjjel magától vált az új napra.</string>
+    <string name="whats_new_v772_changes_title">Nézd meg, mi változott</string>
+    <string name="whats_new_v772_changes_body">Az iCloud- és CalDAV-naptáraid új, szerkesztett és törölt eseményei 7 napig a Legutóbbi változások listában gyűlnek. Koppints egyre a megnyitásához.</string>
+    <string name="whats_new_v772_notifications_body">Kapj értesítést, ha a háttérben futó szinkronizálás változásokat talál az iCloud- vagy CalDAV-eseményeidben. Kikapcsolva marad, amíg be nem kapcsolod.</string>
+    <string name="whats_new_hero_sample_lunch">Csapatebéd</string>
+    <string name="whats_new_hero_sample_review">Tervezési áttekintés</string>
+    <string name="whats_new_hero_sample_book_club">Könyvklub</string>
+    <string name="whats_new_hero_sample_calendar">Munka</string>
+    <string name="whats_new_hero_now">most</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud csatlakoztatása</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">Még nincs szinkronizálási munkamenet.\n\nIndíts szinkronizálást a naptárnézetben lefelé húzással.</string>
     <string name="status_no_writable_calendars">Nincs írható naptár</string>
     <string name="status_events_count">%1$d esemény</string>
-    <string name="status_sync_changes">Szinkronizálási változások</string>
     <string name="status_sync_history">Szinkronizálási előzmények</string>
     <string name="status_parse_failures">Feldolgozási hibák</string>
     <string name="status_error">Hiba</string>
@@ -584,6 +601,26 @@
     <string name="settings_detailed_widget_rows_info">Kompakt egy sor, vagy részletes két sor a befejezés idejével.</string>
     <string name="settings_sync_lookback">Szinkronizálási visszatekintés</string>
     <string name="settings_sync_lookback_hint">Milyen messzire szinkronizálja az eseményeket visszamenőleg</string>
+    <string name="settings_change_notifications">Változásértesítések</string>
+    <string name="settings_change_notifications_info">Értesítést küld, ha a háttérben futó szinkronizálás változásokat talál az eseményeidben. iCloud- és CalDAV-naptárakkal működik.</string>
+    <string name="settings_calendar_notifications">Naptárértesítések</string>
+    <string name="settings_calendar_notifications_all">Minden naptár</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">%d némítva</item>
+        <item quantity="other">%d némítva</item>
+    </plurals>
+    <string name="calendar_notifications_intro">Válaszd ki, mely naptárak értesíthetnek.</string>
+    <string name="calendar_notifications_info">A némított naptárak továbbra is megjelennek és szinkronizálódnak, de nem értesítenek.</string>
+    <string name="cd_calendar_notifications_info">A némított naptárakról</string>
+    <string name="cd_state_expanded">kinyitva</string>
+    <string name="cd_state_collapsed">összecsukva</string>
+    <string name="calendar_notifications_device_info">Kapcsold ki az összes eszköz naptár némításához, a később hozzáadottakat is beleértve.</string>
+    <string name="cd_calendar_notifications_device_info">Az eszköz naptárak értesítéseiről</string>
+    <string name="cd_device_calendar_notifications">Eszköz naptárak értesítései</string>
+    <string name="calendar_notifications_hidden">Elrejtve</string>
+    <string name="calendar_notifications_app_off">A KashCal értesítései ki vannak kapcsolva a rendszerbeállításokban, így egyetlen naptár sem tud értesíteni.</string>
+    <string name="calendar_notifications_reminders_off">Az eseményemlékeztetők ki vannak kapcsolva a rendszerbeállításokban, így nem jelenhetnek meg emlékeztetők.</string>
+    <string name="cd_notifications_off">értesítések kikapcsolva</string>
     <string name="settings_not_set">Nincs beállítva</string>
     <string name="settings_on">Be</string>
     <string name="settings_off">Ki</string>
@@ -627,7 +664,6 @@
     <string name="label_device_calendars">Eszköz naptárak</string>
     <string name="label_default_calendar_hint">Az új események ebben a naptárban jönnek létre</string>
     <string name="label_visible_count">%1$d / %2$d látható</string>
-    <string name="label_enabled_count">%1$d / %2$d engedélyezve</string>
     <string name="label_reminders_truncated">%1$d nem látható (%2$d összesen, max. %3$d szerkeszthető)</string>
     <string name="label_found_events">Találat: %1$d esemény</string>
     <string name="label_open_debug_menu">Hibakeresési menü megnyitása</string>
@@ -649,8 +685,6 @@
     <string name="device_calendars_grant">Megadás</string>
     <string name="device_calendars_none_found">Nem található eszköz naptár.</string>
     <string name="device_calendars_local">Helyi</string>
-    <string name="device_calendars_reminders">Emlékeztetők</string>
-    <string name="device_calendars_reminders_desc">Értesítések az eszköz naptáreseményeiről</string>
     <string name="device_calendars_read_only_no_write">Csak olvasható (nincs írási engedély)</string>
     <string name="device_calendars_read_only_calendar">Csak olvasható (a naptár csak olvasható)</string>
     <string name="settings_developer_options">Fejlesztői beállítások</string>
@@ -760,6 +794,59 @@
         <item quantity="one">%1$d esemény importálva</item>
         <item quantity="other">%1$d esemény importálva</item>
     </plurals>
+    <string name="ics_import_preview_loading">Naptár ellenőrzése…</string>
+    <string name="ics_import_preview_failed">Nem sikerült ellenőrizni, hogy ezek az események szerepelnek-e ebben a naptárban. Ettől még importálhatod őket.</string>
+    <string name="ics_import_will_cancel">Ez lemondja a következőt: %1$s, szervező: %2$s</string>
+    <string name="ics_import_will_cancel_no_organizer">Ez lemondja a következőt: %1$s</string>
+    <string name="ics_import_will_update">Ez frissíti a következőt: %1$s</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d esemény már naprakész</item>
+        <item quantity="other">%1$d esemény már naprakész</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">%1$d kihagyva: %2$s</item>
+        <item quantity="other">%1$d kihagyva: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">ez egy meghívóra adott válasz, amely semmit sem ad hozzá a naptáradhoz</string>
+    <string name="ics_import_reason_unsupported">ez a fajta meghívóüzenet nem támogatott</string>
+    <string name="ics_import_reason_organizer_mismatch">nem a megbeszélés szervezőjétől származik</string>
+    <string name="ics_import_reason_cancel_no_match">a lemondott megbeszélés nincs ebben a naptárban</string>
+    <string name="ics_import_reason_cancel_not_for_you">a lemondás más vendégeknek szól</string>
+    <string name="ics_import_reason_deletion_pending">az esemény törlése folyamatban van</string>
+    <string name="ics_import_reason_cancelled_in_file">a fájlban már le van mondva</string>
+    <string name="ics_import_reason_this_and_future">az erre és a későbbi előfordulásokra vonatkozó módosítások nem támogatottak</string>
+    <string name="ics_import_reason_own_cancel">te szervezed ezt a megbeszélést, ezért az eseményből mondd le</string>
+    <string name="ics_import_reason_on_another_calendar">már szerepel a fiók egy másik naptárában</string>
+    <string name="ics_import_notice_unverified">A meghívófájl feladója nem ellenőrizhető. Győződj meg róla, hogy a szervezőtől érkezett.</string>
+    <string name="ics_import_notice_answer_notifies">Ha válaszolsz erre a meghívóra, a szervező értesítést kaphat.</string>
+    <string name="ics_import_notice_guests_again">Te vagy a szervező, ezért a vendégek újra megkaphatják ezt a meghívót.</string>
+    <string name="cd_dismiss_notice">Üzenet bezárása</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d hozzáadva</item>
+        <item quantity="other">%1$d hozzáadva</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d frissítve</item>
+        <item quantity="other">%1$d frissítve</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d lemondva</item>
+        <item quantity="other">%1$d lemondva</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d már naprakész</item>
+        <item quantity="other">%1$d már naprakész</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d kihagyva</item>
+        <item quantity="other">%1$d kihagyva</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d sikertelen</item>
+        <item quantity="other">%1$d sikertelen</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">Nincs mit importálni</string>
     <plurals name="exported_events">
         <item quantity="one">%1$d esemény exportálva</item>
         <item quantity="other">%1$d esemény exportálva</item>
@@ -913,6 +1000,14 @@
     <string name="cd_active_view">Aktív nézet</string>
     <string name="view_agenda">Napirend</string>
     <string name="view_month_full">Hónap (teljes)</string>
+    <string name="view_planner">Tervező</string>
+    <string name="planner_free_day">Szabad nap</string>
+    <string name="cd_planner_show_day_events">A nap eseményeinek megjelenítése</string>
+    <string name="planner_different_this_week">Ezen a héten más</string>
+    <string name="planner_usual_week">A szokásos hét.</string>
+    <string name="planner_moved_was">korábban %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">Nap</string>
     <string name="view_three_days">3 nap</string>
     <string name="view_year">Év</string>
@@ -969,11 +1064,6 @@
     <string name="cd_increase_interval">Időköz növelése</string>
     <string name="rrule_starting">%1$s kezdve: %2$s%3$s</string>
     <string name="rrule_since">%1$s · óta: %2$s</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d új</string>
-    <string name="sync_summary_updated">%1$d frissítve</string>
-    <string name="sync_summary_removed">%1$d eltávolítva</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">Körkörös görgetés engedélyezve</string>
@@ -1076,10 +1166,31 @@
         <item quantity="one">%1$d esemény eltávolítva</item>
         <item quantity="other">%1$d esemény eltávolítva</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d előfordulás törölve</item>
+        <item quantity="other">%1$d előfordulás törölve</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d naptárfrissítés</item>
         <item quantity="other">%1$d naptárfrissítés</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">Legutóbbi változások</string>
+    <string name="recent_changes_empty">Nincsenek legutóbbi változások</string>
+    <string name="recent_changes_clear_all">Összes törlése</string>
+    <string name="recent_changes_cleared">Legutóbbi változások törölve</string>
+    <string name="recent_changes_dismiss">Elrejtés</string>
+    <string name="recent_changes_moved_from">Áthelyezve, korábban: %1$s</string>
+    <string name="recent_changes_time_changed">Időpont módosult</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">Helyszín módosult</string>
+    <string name="recent_changes_title_changed">Cím módosult</string>
+    <string name="recent_changes_repeat_changed">Ismétlés módosult</string>
+    <string name="recent_changes_cancelled">Lemondva</string>
+    <string name="cd_recent_change_new">Új esemény</string>
+    <string name="cd_recent_change_updated">Frissítve</string>
+    <string name="cd_recent_change_removed">Eltávolítva</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">%1$d. nap / %2$d</string>

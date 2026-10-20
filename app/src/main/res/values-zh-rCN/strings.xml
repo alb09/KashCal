@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">KashCal</string>
+    <string name="app_name">开序历</string>
 
     <!-- ==================== Widget ==================== -->
     <string name="widget_name">今日日程</string>
@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">有关同步完成和错误的通知</string>
     <string name="channel_event_invitations">活动邀请</string>
     <string name="channel_event_invitations_desc">收到新日历邀请时的通知</string>
+    <string name="channel_calendar_updates">日历更新</string>
     <string name="invite_notification_body">来自 %1$s · 点按以回复</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">您的回复将应用于整个系列。</string>
+    <string name="rsvp_receipt_pending">回复待发送</string>
+    <string name="rsvp_receipt_sent">回复已发送</string>
+    <string name="rsvp_receipt_not_delivered">回复未送达</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">此次及所有未来</string>
@@ -160,7 +164,7 @@
     <string name="settings_theme_light_desc">始终浅色</string>
     <string name="settings_theme_dark_desc">始终深色</string>
     <string name="settings_accent_color">强调色</string>
-    <string name="settings_accent_color_brand">KashCal 青色</string>
+    <string name="settings_accent_color_brand">开序历青色</string>
     <string name="settings_accent_color_dynamic">自动</string>
     <string name="settings_accent_color_dynamic_desc">跟随设备的 Material You 配色</string>
     <string name="settings_widgets_section">小部件</string>
@@ -176,8 +180,9 @@
     <string name="app_icon_default">默认</string>
     <string name="app_icon_supporter">支持者</string>
     <string name="app_icon_supporter_calendar">支持者（标为“日历”）</string>
+    <string name="app_icon_todays_date">今天的日期</string>
     <string name="app_icon_label_calendar">日历</string>
-    <string name="app_icon_support_cta">支持 KashCal</string>
+    <string name="app_icon_support_cta">支持开序历</string>
     <string name="app_icon_switch_note">更改图标可能会重启应用。通知始终使用默认图标和名称。</string>
     <string name="settings_time_format">时间格式</string>
     <string name="settings_start_week_on">每周开始于</string>
@@ -199,21 +204,21 @@
 
     <!-- ==================== App Lock (Privacy) ==================== -->
     <string name="app_lock_label">应用锁</string>
-    <string name="settings_app_lock_info">打开 KashCal 需要进行设备身份验证。</string>
+    <string name="settings_app_lock_info">打开开序历需要进行设备身份验证。</string>
     <string name="app_lock_veil_locked">已锁定</string>
     <string name="app_lock_veil_unlock">解锁</string>
     <string name="app_lock_veil_footnote">指纹、面容或屏幕锁</string>
     <string name="app_lock_prompt_title">解锁以查看你的活动</string>
     <string name="app_lock_enroll_message">请在系统设置中设置指纹、面容或屏幕锁，以使用应用锁。</string>
     <string name="app_lock_unsupported_message">此设备无法使用应用锁。</string>
-    <string name="app_lock_enabled_message">应用锁已开启。下次打开 KashCal 时会要求你验证身份。</string>
+    <string name="app_lock_enabled_message">应用锁已开启。下次打开开序历时会要求你验证身份。</string>
     <string name="app_lock_disable_prompt_title">解锁以关闭应用锁</string>
 
     <!-- ==================== Backup &amp; Restore Settings ==================== -->
     <string name="backup_settings_label">备份设置</string>
-    <string name="backup_settings_subtitle">将 KashCal 配置保存为 JSON 文件</string>
+    <string name="backup_settings_subtitle">将开序历配置保存为 JSON 文件</string>
     <string name="restore_settings_label">恢复设置</string>
-    <string name="restore_settings_subtitle">从备份文件恢复 KashCal 配置</string>
+    <string name="restore_settings_subtitle">从备份文件恢复开序历配置</string>
     <string name="restore_confirm_title">恢复备份？</string>
     <string name="restore_confirm_from">来自 KashCal %1$s 的备份，%2$s</string>
     <string name="restore_confirm_message_prefs_only">将导入您的偏好设置。</string>
@@ -222,7 +227,7 @@
     <string name="restore_success_message_prefs_only">已导入偏好设置。</string>
     <string name="restore_success_device_calendars_note">如果您使用设备日历功能，请重新选择。</string>
     <string name="restore_error_title">恢复失败</string>
-    <string name="restore_error_version_too_new">此备份是由更高版本的 KashCal 创建的。请更新 KashCal 后重试。</string>
+    <string name="restore_error_version_too_new">此备份是由更高版本的开序历创建的。请更新开序历后重试。</string>
     <string name="restore_error_malformed_json">此文件不是有效的 KashCal 备份。</string>
     <string name="restore_error_invalid_value">此备份文件包含无效数据，无法恢复。</string>
     <string name="restore_error_apply_failure">应用备份时出现问题。未保存任何更改。</string>
@@ -236,14 +241,27 @@
     <string name="onboarding_connect_prompt">连接 iCloud 查看你的事件</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">以后再说</string>
+    <string name="whats_new_skip">跳过</string>
+    <string name="whats_new_next">下一步</string>
+    <string name="whats_new_page_of">第 %1$d 页，共 %2$d 页</string>
+    <string name="whats_new_find_it_in">位置</string>
     <string name="whats_new_v598_title">帮助保持 Android 开放</string>
     <string name="whats_new_v598_body">Google 正在改变你在设备上安装应用的方式。我们需要你的帮助。</string>
     <string name="whats_new_v598_action_label">访问 keepandroidopen.org</string>
     <string name="whats_new_v732_title">长久的感谢</string>
-    <string name="whats_new_v732_body">本次更新献给 KashCal 的支持者。小小的付出，却能带来长久的回报。</string>
+    <string name="whats_new_v732_body">本次更新献给开序历的支持者。小小的付出，却能带来长久的回报。</string>
     <string name="whats_new_v732_caption">还不是支持者吗？</string>
     <string name="whats_new_v732_action_label">加入你的计划</string>
+    <string name="whats_new_v772_icon_title">你的图标知道今天几号</string>
+    <string name="whats_new_v772_icon_body">选择“今天的日期”图标后，开序历会在主屏幕上显示今天是几号，每晚自动换成新的日期。</string>
+    <string name="whats_new_v772_changes_title">看看有哪些更改</string>
+    <string name="whats_new_v772_changes_body">你的 iCloud 和 CalDAV 日历中新建、编辑和删除的事件会在“最近更改”中保留 7 天。点按即可打开。</string>
+    <string name="whats_new_v772_notifications_body">后台同步发现你的 iCloud 或 CalDAV 事件有变更时，向你发送通知。此功能默认关闭，需手动开启。</string>
+    <string name="whats_new_hero_sample_lunch">团队午餐</string>
+    <string name="whats_new_hero_sample_review">设计评审</string>
+    <string name="whats_new_hero_sample_book_club">读书会</string>
+    <string name="whats_new_hero_sample_calendar">工作</string>
+    <string name="whats_new_hero_now">现在</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">连接 iCloud</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">暂无同步记录。\n\n在日历视图下拉刷新以触发同步。</string>
     <string name="status_no_writable_calendars">没有可写入的日历</string>
     <string name="status_events_count">%1$d 个事件</string>
-    <string name="status_sync_changes">同步更改</string>
     <string name="status_sync_history">同步历史</string>
     <string name="status_parse_failures">解析失败</string>
     <string name="status_error">错误</string>
@@ -315,15 +332,15 @@
     <string name="caldav_error_no_calendars">在此服务器上找不到日历。</string>
     <string name="caldav_error_unexpected">意外错误。请重试。</string>
     <string name="caldav_error_with_lan_hint">%1$s\n\n如果这是本地网络上的服务器，请允许访问本地网络以进行连接。</string>
-    <string name="caldav_error_connection_refused_insecure">服务器将连接重定向到了 KashCal 不会跟随的地方（未加密的地址或重定向循环），因此 KashCal 在发送你的密码之前已停止。请检查服务器地址。</string>
+    <string name="caldav_error_connection_refused_insecure">服务器将连接重定向到了开序历不会跟随的地方（未加密的地址或重定向循环），因此开序历在发送你的密码之前已停止。请检查服务器地址。</string>
     <string name="local_network_banner_title">需要访问本地网络</string>
-    <string name="local_network_banner_body">此服务器似乎位于您的本地网络中。请允许访问本地网络，以便 KashCal 可以连接到它。</string>
+    <string name="local_network_banner_body">此服务器似乎位于您的本地网络中。请允许访问本地网络，以便开序历可以连接到它。</string>
     <string name="local_network_banner_allow">允许访问</string>
     <string name="local_network_banner_dismiss">暂不</string>
     <string name="hub_app_permissions">应用权限</string>
     <string name="status_allowed">已允许</string>
     <string name="permission_name_notifications">通知</string>
-    <string name="permission_why_notifications">让 KashCal 提醒你即将到来的事件。若未授予，提醒将不会发出提示音。</string>
+    <string name="permission_why_notifications">让开序历提醒你即将到来的事件。若未授予，提醒将不会发出提示音。</string>
     <string name="permission_name_contacts">联系人</string>
     <string name="permission_why_contacts">在你为事件添加人员时推荐嘉宾，并显示联系人生日。你的联系人始终保留在设备上。</string>
     <string name="permission_name_calendars">日历</string>
@@ -350,9 +367,9 @@
     <string name="error_migration_title">更新错误</string>
     <string name="error_migration_failed">应用数据更新失败。请重新安装应用。</string>
     <string name="error_permission_notification_title">启用通知？</string>
-    <string name="error_permission_notification">KashCal 需要通知权限以提醒你即将到来的事件。</string>
+    <string name="error_permission_notification">开序历需要通知权限以提醒你即将到来的事件。</string>
     <string name="error_permission_alarm_title">启用精确闹钟？</string>
-    <string name="error_permission_alarm">KashCal 需要精确闹钟权限以提供准确的提醒。</string>
+    <string name="error_permission_alarm">开序历需要精确闹钟权限以提供准确的提醒。</string>
     <string name="error_permission_storage">导入/导出需要存储权限。</string>
     <string name="error_device_calendar_title">日历错误</string>
     <string name="error_device_calendar_write_failed">保存到设备日历失败。请重试。</string>
@@ -464,7 +481,7 @@
     <string name="help_app_password_step_5">5. 点击生成并复制到此处</string>
 
     <!-- ==================== Notification Permission Dialog ==================== -->
-    <string name="dialog_notification_permission_message">KashCal 需要通知权限以提醒你即将到来的事件。</string>
+    <string name="dialog_notification_permission_message">开序历需要通知权限以提醒你即将到来的事件。</string>
     <string name="dialog_notification_permission_settings_hint">你可以稍后在设置中更改。</string>
 
     <!-- ==================== Accounts Screen ==================== -->
@@ -564,8 +581,8 @@
     <string name="change_password_label_default">密码</string>
 
     <!-- ==================== System Account ==================== -->
-    <string name="kashcal_account_label">KashCal</string>
-    <string name="kashcal_contacts_account_label">KashCal 联系人</string>
+    <string name="kashcal_account_label">开序历</string>
+    <string name="kashcal_contacts_account_label">开序历联系人</string>
 
     <!-- ==================== Settings Screen ==================== -->
     <string name="settings_device_calendars">设备日历</string>
@@ -584,6 +601,25 @@
     <string name="settings_detailed_widget_rows_info">紧凑单行显示，或包含结束时间的详细两行显示。</string>
     <string name="settings_sync_lookback">同步回溯范围</string>
     <string name="settings_sync_lookback_hint">同步事件的回溯时长</string>
+    <string name="settings_change_notifications">变更通知</string>
+    <string name="settings_change_notifications_info">后台同步发现事件有变更时发送通知。适用于 iCloud 和 CalDAV 日历。</string>
+    <string name="settings_calendar_notifications">日历通知</string>
+    <string name="settings_calendar_notifications_all">所有日历</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="other">已静音 %d 个</item>
+    </plurals>
+    <string name="calendar_notifications_intro">选择哪些日历可以通知你。</string>
+    <string name="calendar_notifications_info">已静音的日历仍会显示和同步，但不会通知你。</string>
+    <string name="cd_calendar_notifications_info">关于已静音的日历</string>
+    <string name="cd_state_expanded">已展开</string>
+    <string name="cd_state_collapsed">已折叠</string>
+    <string name="calendar_notifications_device_info">关闭后，所有设备日历都会静音，包括以后添加的日历。</string>
+    <string name="cd_calendar_notifications_device_info">关于设备日历通知</string>
+    <string name="cd_device_calendar_notifications">设备日历通知</string>
+    <string name="calendar_notifications_hidden">已隐藏</string>
+    <string name="calendar_notifications_app_off">系统设置中已关闭开序历的通知，因此所有日历都无法通知你。</string>
+    <string name="calendar_notifications_reminders_off">系统设置中已关闭事件提醒，因此无法显示任何提醒。</string>
+    <string name="cd_notifications_off">通知已关闭</string>
     <string name="settings_not_set">未设置</string>
     <string name="settings_on">开</string>
     <string name="settings_off">关</string>
@@ -627,7 +663,6 @@
     <string name="label_device_calendars">设备日历</string>
     <string name="label_default_calendar_hint">新事件将在此日历中创建</string>
     <string name="label_visible_count">%1$d / %2$d 可见</string>
-    <string name="label_enabled_count">%1$d / %2$d 已启用</string>
     <string name="label_reminders_truncated">%1$d 个未显示（共 %2$d 个，最多可编辑 %3$d 个）</string>
     <string name="label_found_events">发现：%1$d 个事件</string>
     <string name="label_open_debug_menu">打开调试菜单</string>
@@ -649,8 +684,6 @@
     <string name="device_calendars_grant">授权</string>
     <string name="device_calendars_none_found">未找到设备日历。</string>
     <string name="device_calendars_local">本地</string>
-    <string name="device_calendars_reminders">提醒</string>
-    <string name="device_calendars_reminders_desc">接收设备日历事件通知</string>
     <string name="device_calendars_read_only_no_write">只读（无写入权限）</string>
     <string name="device_calendars_read_only_calendar">只读（日历为只读）</string>
     <string name="settings_developer_options">开发者选项</string>
@@ -743,6 +776,51 @@
     <plurals name="imported_events">
         <item quantity="other">已导入 %1$d 个事件</item>
     </plurals>
+    <string name="ics_import_preview_loading">正在检查此日历…</string>
+    <string name="ics_import_preview_failed">无法在此日历中检查这些事件。您仍可以导入。</string>
+    <string name="ics_import_will_cancel">这将取消 %1$s（组织者：%2$s）</string>
+    <string name="ics_import_will_cancel_no_organizer">这将取消 %1$s</string>
+    <string name="ics_import_will_update">这将更新 %1$s</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="other">%1$d 个事件已是最新</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="other">已跳过 %1$d 个：%2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">这是对邀请的回复，不会向日历添加任何内容</string>
+    <string name="ics_import_reason_unsupported">不支持此类邀请消息</string>
+    <string name="ics_import_reason_organizer_mismatch">发送者不是会议的组织者</string>
+    <string name="ics_import_reason_cancel_no_match">已取消的会议不在此日历中</string>
+    <string name="ics_import_reason_cancel_not_for_you">此取消通知针对其他嘉宾</string>
+    <string name="ics_import_reason_deletion_pending">该事件正在删除</string>
+    <string name="ics_import_reason_cancelled_in_file">文件中已将其取消</string>
+    <string name="ics_import_reason_this_and_future">不支持对此次及以后重复的更改</string>
+    <string name="ics_import_reason_own_cancel">您是此会议的组织者，请从事件中取消</string>
+    <string name="ics_import_reason_on_another_calendar">已在此账户的另一个日历中</string>
+    <string name="ics_import_notice_unverified">无法验证邀请文件的发件人。请确认它来自组织者。</string>
+    <string name="ics_import_notice_answer_notifies">回复此邀请可能会通知组织者。</string>
+    <string name="ics_import_notice_guests_again">您是组织者，因此嘉宾可能会再次收到此邀请。</string>
+    <string name="cd_dismiss_notice">关闭提示</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="other">已添加 %1$d 个</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="other">已更新 %1$d 个</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="other">已取消 %1$d 个</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="other">%1$d 个已是最新</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="other">已跳过 %1$d 个</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="other">%1$d 个失败</item>
+    </plurals>
+    <string name="ics_import_summary_separator">"、"</string>
+    <string name="ics_import_summary_nothing">没有可导入的内容</string>
     <plurals name="exported_events">
         <item quantity="other">已导出 %1$d 个事件</item>
     </plurals>
@@ -875,6 +953,14 @@
     <string name="cd_active_view">当前视图</string>
     <string name="view_agenda">日程</string>
     <string name="view_month_full">月（完整）</string>
+    <string name="view_planner">计划本</string>
+    <string name="planner_free_day">无安排</string>
+    <string name="cd_planner_show_day_events">查看当天的事件</string>
+    <string name="planner_different_this_week">本周变化</string>
+    <string name="planner_usual_week">和往常一样的一周。</string>
+    <string name="planner_moved_was">原为%1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">日</string>
     <string name="view_three_days">3天</string>
     <string name="view_year">年</string>
@@ -930,11 +1016,6 @@
     <string name="cd_increase_interval">增加间隔</string>
     <string name="rrule_starting">%1$s从%2$s开始%3$s</string>
     <string name="rrule_since">%1$s · 自%2$s起</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d 个新增</string>
-    <string name="sync_summary_updated">%1$d 个更新</string>
-    <string name="sync_summary_removed">%1$d 个删除</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">循环滚动已启用</string>
@@ -1029,9 +1110,29 @@
     <plurals name="sync_snackbar_events_removed">
         <item quantity="other">%1$d个事件已移除</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="other">已取消%1$d个重复事件</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="other">%1$d项日历更新</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">最近更改</string>
+    <string name="recent_changes_empty">没有最近更改</string>
+    <string name="recent_changes_clear_all">全部清除</string>
+    <string name="recent_changes_cleared">已清除最近更改</string>
+    <string name="recent_changes_dismiss">关闭</string>
+    <string name="recent_changes_moved_from">原时间：%1$s</string>
+    <string name="recent_changes_time_changed">时间已更改</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">地点已更改</string>
+    <string name="recent_changes_title_changed">标题已更改</string>
+    <string name="recent_changes_repeat_changed">重复规则已更改</string>
+    <string name="recent_changes_cancelled">已取消</string>
+    <string name="cd_recent_change_new">新事件</string>
+    <string name="cd_recent_change_updated">已更新</string>
+    <string name="cd_recent_change_removed">已移除</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">第%1$d天（共%2$d天）</string>

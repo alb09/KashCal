@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">ਸਿੰਕ ਪੂਰਾ ਹੋਣ ਅਤੇ ਗਲਤੀਆਂ ਬਾਰੇ ਸੂਚਨਾਵਾਂ</string>
     <string name="channel_event_invitations">ਘਟਨਾ ਸੱਦੇ</string>
     <string name="channel_event_invitations_desc">ਜਦੋਂ ਤੁਹਾਨੂੰ ਨਵਾਂ ਕੈਲੰਡਰ ਸੱਦਾ ਮਿਲਦਾ ਹੈ ਤਾਂ ਸੂਚਨਾਵਾਂ</string>
+    <string name="channel_calendar_updates">ਕੈਲੰਡਰ ਤਬਦੀਲੀਆਂ</string>
     <string name="invite_notification_body">%1$s ਤੋਂ · ਜਵਾਬ ਦੇਣ ਲਈ ਟੈਪ ਕਰੋ</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">ਇਹ ਜਵਾਬ ਪੂਰੀ ਲੜੀ \'ਤੇ ਲਾਗੂ ਹੁੰਦਾ ਹੈ।</string>
+    <string name="rsvp_receipt_pending">ਜਵਾਬ ਬਕਾਇਆ</string>
+    <string name="rsvp_receipt_sent">ਜਵਾਬ ਭੇਜਿਆ ਗਿਆ</string>
+    <string name="rsvp_receipt_not_delivered">ਜਵਾਬ ਨਹੀਂ ਪਹੁੰਚਿਆ</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">ਇਹ ਅਤੇ ਸਾਰੀਆਂ ਅਗਲੀਆਂ</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">ਪੂਰਵ-ਨਿਰਧਾਰਤ</string>
     <string name="app_icon_supporter">ਸਮਰਥਕ</string>
     <string name="app_icon_supporter_calendar">ਸਮਰਥਕ, ਕੈਲੰਡਰ ਲੇਬਲ ਵਾਲਾ</string>
+    <string name="app_icon_todays_date">ਅੱਜ ਦੀ ਤਾਰੀਖ</string>
     <string name="app_icon_label_calendar">ਕੈਲੰਡਰ</string>
     <string name="app_icon_support_cta">KashCal ਦਾ ਸਮਰਥਨ ਕਰੋ</string>
     <string name="app_icon_switch_note">ਆਈਕਨ ਬਦਲਣ ਨਾਲ ਐਪ ਮੁੜ ਚਾਲੂ ਹੋ ਸਕਦੀ ਹੈ। ਸੂਚਨਾਵਾਂ ਹਮੇਸ਼ਾ ਮੂਲ ਆਈਕਨ ਅਤੇ ਨਾਮ ਵਰਤਦੀਆਂ ਹਨ।</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">ਆਪਣੀਆਂ ਘਟਨਾਵਾਂ ਇੱਥੇ ਦੇਖਣ ਲਈ iCloud ਨਾਲ ਜੋੜੋ</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">ਬਾਅਦ ਵਿੱਚ</string>
+    <string name="whats_new_skip">ਛੱਡੋ</string>
+    <string name="whats_new_next">ਅੱਗੇ</string>
+    <string name="whats_new_page_of">%2$d ਵਿੱਚੋਂ ਪੰਨਾ %1$d</string>
+    <string name="whats_new_find_it_in">ਇੱਥੇ ਲੱਭੋ</string>
     <string name="whats_new_v598_title">Android ਨੂੰ ਖੁੱਲ੍ਹਾ ਰੱਖਣ ਵਿੱਚ ਮਦਦ ਕਰੋ</string>
     <string name="whats_new_v598_body">Google ਤੁਹਾਡੇ ਡਿਵਾਈਸ \'ਤੇ ਐਪਾਂ ਇੰਸਟਾਲ ਕਰਨ ਦਾ ਤਰੀਕਾ ਬਦਲ ਰਿਹਾ ਹੈ। ਸਾਨੂੰ ਤੁਹਾਡੀ ਮਦਦ ਚਾਹੀਦੀ ਹੈ।</string>
     <string name="whats_new_v598_action_label">keepandroidopen.org \'ਤੇ ਜਾਓ</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">ਇਹ ਰਿਲੀਜ਼ KashCal ਦੇ ਸਮਰਥਕਾਂ ਨੂੰ ਸਮਰਪਿਤ ਹੈ। ਇੱਕ ਛੋਟਾ ਯੋਗਦਾਨ, ਵੱਡਾ ਤੇ ਲਗਾਤਾਰ ਲਾਭ।</string>
     <string name="whats_new_v732_caption">ਅਜੇ ਸਮਰਥਕ ਨਹੀਂ ਬਣੇ?</string>
     <string name="whats_new_v732_action_label">ਸਾਨੂੰ ਆਪਣੀਆਂ ਯੋਜਨਾਵਾਂ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="whats_new_v772_icon_title">ਤੁਹਾਡੇ ਆਈਕਨ ਨੂੰ ਤਾਰੀਖ ਪਤਾ ਹੈ</string>
+    <string name="whats_new_v772_icon_body">ਅੱਜ ਦੀ ਤਾਰੀਖ ਆਈਕਨ ਚੁਣੋ ਅਤੇ KashCal ਤੁਹਾਡੀ ਹੋਮ ਸਕ੍ਰੀਨ \'ਤੇ ਮਹੀਨੇ ਦੀ ਤਾਰੀਖ ਦਿਖਾਉਂਦਾ ਹੈ। ਇਹ ਹਰ ਰਾਤ ਆਪਣੇ ਆਪ ਬਦਲ ਜਾਂਦਾ ਹੈ।</string>
+    <string name="whats_new_v772_changes_title">ਦੇਖੋ ਕੀ ਬਦਲਿਆ</string>
+    <string name="whats_new_v772_changes_body">ਤੁਹਾਡੇ iCloud ਅਤੇ CalDAV ਕੈਲੰਡਰਾਂ ਦੀਆਂ ਨਵੀਆਂ, ਸੋਧੀਆਂ ਅਤੇ ਹਟਾਈਆਂ ਗਈਆਂ ਘਟਨਾਵਾਂ 7 ਦਿਨਾਂ ਲਈ ਹਾਲੀਆ ਤਬਦੀਲੀਆਂ ਵਿੱਚ ਇਕੱਠੀਆਂ ਹੁੰਦੀਆਂ ਹਨ। ਕਿਸੇ ਇੱਕ ਨੂੰ ਖੋਲ੍ਹਣ ਲਈ ਟੈਪ ਕਰੋ।</string>
+    <string name="whats_new_v772_notifications_body">ਜਦੋਂ ਬੈਕਗ੍ਰਾਊਂਡ ਸਿੰਕ ਨੂੰ ਤੁਹਾਡੀਆਂ iCloud ਜਾਂ CalDAV ਘਟਨਾਵਾਂ ਵਿੱਚ ਤਬਦੀਲੀਆਂ ਮਿਲਣ ਤਾਂ ਸੂਚਨਾ ਪ੍ਰਾਪਤ ਕਰੋ। ਇਹ ਉਦੋਂ ਤੱਕ ਬੰਦ ਰਹਿੰਦਾ ਹੈ ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਇਸਨੂੰ ਚਾਲੂ ਨਹੀਂ ਕਰਦੇ।</string>
+    <string name="whats_new_hero_sample_lunch">ਟੀਮ ਦਾ ਦੁਪਹਿਰ ਦਾ ਖਾਣਾ</string>
+    <string name="whats_new_hero_sample_review">ਡਿਜ਼ਾਈਨ ਸਮੀਖਿਆ</string>
+    <string name="whats_new_hero_sample_book_club">ਕਿਤਾਬ ਕਲੱਬ</string>
+    <string name="whats_new_hero_sample_calendar">ਕੰਮ</string>
+    <string name="whats_new_hero_now">ਹੁਣੇ</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">iCloud ਨਾਲ ਜੋੜੋ</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">ਅਜੇ ਕੋਈ ਸਿੰਕ ਸੈਸ਼ਨ ਨਹੀਂ।\n\nਕੈਲੰਡਰ ਵਿਊ \'ਤੇ ਹੇਠਾਂ ਖਿੱਚ ਕੇ ਰਿਫ਼ਰੈਸ਼ ਕਰੋ।</string>
     <string name="status_no_writable_calendars">ਕੋਈ ਲਿਖਣਯੋਗ ਕੈਲੰਡਰ ਉਪਲਬਧ ਨਹੀਂ</string>
     <string name="status_events_count">%1$d ਘਟਨਾਵਾਂ</string>
-    <string name="status_sync_changes">ਸਿੰਕ ਬਦਲਾਅ</string>
     <string name="status_sync_history">ਸਿੰਕ ਇਤਿਹਾਸ</string>
     <string name="status_parse_failures">ਪਾਰਸ ਅਸਫ਼ਲਤਾਵਾਂ</string>
     <string name="status_error">ਗਲਤੀ</string>
@@ -584,6 +601,26 @@
     <string name="settings_detailed_widget_rows_info">ਸੰਖੇਪ ਇੱਕ ਲਾਈਨ, ਜਾਂ ਸਮਾਪਤੀ ਸਮੇਂ ਦੇ ਨਾਲ ਵਿਸਤ੍ਰਿਤ ਦੋ ਲਾਈਨਾਂ।</string>
     <string name="settings_sync_lookback">ਸਿੰਕ ਲੁੱਕਬੈਕ</string>
     <string name="settings_sync_lookback_hint">ਸਮਾਗਮਾਂ ਨੂੰ ਕਿੰਨਾ ਪਿੱਛੇ ਤੱਕ ਸਿੰਕ ਕਰਨਾ ਹੈ</string>
+    <string name="settings_change_notifications">ਤਬਦੀਲੀ ਸੂਚਨਾਵਾਂ</string>
+    <string name="settings_change_notifications_info">ਜਦੋਂ ਬੈਕਗ੍ਰਾਊਂਡ ਸਿੰਕ ਨੂੰ ਤੁਹਾਡੇ ਸਮਾਗਮਾਂ ਵਿੱਚ ਤਬਦੀਲੀਆਂ ਮਿਲਦੀਆਂ ਹਨ ਤਾਂ ਸੂਚਨਾ ਭੇਜਦਾ ਹੈ। iCloud ਅਤੇ CalDAV ਕੈਲੰਡਰਾਂ ਲਈ ਕੰਮ ਕਰਦਾ ਹੈ।</string>
+    <string name="settings_calendar_notifications">ਕੈਲੰਡਰ ਸੂਚਨਾਵਾਂ</string>
+    <string name="settings_calendar_notifications_all">ਸਾਰੇ ਕੈਲੰਡਰ</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">%d ਮਿਊਟ ਕੀਤਾ</item>
+        <item quantity="other">%d ਮਿਊਟ ਕੀਤੇ</item>
+    </plurals>
+    <string name="calendar_notifications_intro">ਚੁਣੋ ਕਿ ਕਿਹੜੇ ਕੈਲੰਡਰ ਤੁਹਾਨੂੰ ਸੂਚਿਤ ਕਰ ਸਕਦੇ ਹਨ।</string>
+    <string name="calendar_notifications_info">ਮਿਊਟ ਕੀਤੇ ਕੈਲੰਡਰ ਹਾਲੇ ਵੀ ਦਿਖਾਈ ਦਿੰਦੇ ਹਨ ਅਤੇ ਸਿੰਕ ਹੁੰਦੇ ਹਨ, ਪਰ ਤੁਹਾਨੂੰ ਸੂਚਿਤ ਨਹੀਂ ਕਰਦੇ।</string>
+    <string name="cd_calendar_notifications_info">ਮਿਊਟ ਕੀਤੇ ਕੈਲੰਡਰਾਂ ਬਾਰੇ</string>
+    <string name="cd_state_expanded">ਫੈਲਾਇਆ ਹੋਇਆ</string>
+    <string name="cd_state_collapsed">ਸਮੇਟਿਆ ਹੋਇਆ</string>
+    <string name="calendar_notifications_device_info">ਬਾਅਦ ਵਿੱਚ ਸ਼ਾਮਲ ਕੀਤੇ ਜਾਣ ਵਾਲਿਆਂ ਸਮੇਤ ਸਾਰੇ ਡਿਵਾਈਸ ਕੈਲੰਡਰ ਮਿਊਟ ਕਰਨ ਲਈ ਬੰਦ ਕਰੋ।</string>
+    <string name="cd_calendar_notifications_device_info">ਡਿਵਾਈਸ ਕੈਲੰਡਰ ਸੂਚਨਾਵਾਂ ਬਾਰੇ</string>
+    <string name="cd_device_calendar_notifications">ਡਿਵਾਈਸ ਕੈਲੰਡਰ ਸੂਚਨਾਵਾਂ</string>
+    <string name="calendar_notifications_hidden">ਲੁਕਿਆ ਹੋਇਆ</string>
+    <string name="calendar_notifications_app_off">ਸਿਸਟਮ ਸੈਟਿੰਗਾਂ ਵਿੱਚ KashCal ਲਈ ਸੂਚਨਾਵਾਂ ਬੰਦ ਹਨ, ਇਸ ਲਈ ਕੋਈ ਵੀ ਕੈਲੰਡਰ ਤੁਹਾਨੂੰ ਸੂਚਿਤ ਨਹੀਂ ਕਰ ਸਕਦਾ।</string>
+    <string name="calendar_notifications_reminders_off">ਸਿਸਟਮ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਘਟਨਾ ਯਾਦ-ਦਹਾਨੀਆਂ ਬੰਦ ਹਨ, ਇਸ ਲਈ ਕੋਈ ਯਾਦ-ਦਹਾਨੀ ਨਹੀਂ ਦਿਖਾਈ ਜਾ ਸਕਦੀ।</string>
+    <string name="cd_notifications_off">ਸੂਚਨਾਵਾਂ ਬੰਦ</string>
     <string name="settings_not_set">ਸੈੱਟ ਨਹੀਂ ਹੈ</string>
     <string name="settings_on">ਚਾਲੂ</string>
     <string name="settings_off">ਬੰਦ</string>
@@ -627,7 +664,6 @@
     <string name="label_device_calendars">ਡਿਵਾਈਸ ਕੈਲੰਡਰ</string>
     <string name="label_default_calendar_hint">ਨਵੀਆਂ ਘਟਨਾਵਾਂ ਇਸ ਕੈਲੰਡਰ ਵਿੱਚ ਬਣਾਈਆਂ ਜਾਣਗੀਆਂ</string>
     <string name="label_visible_count">%1$d / %2$d ਦਿੱਸਣਯੋਗ</string>
-    <string name="label_enabled_count">%1$d / %2$d ਸਮਰੱਥ</string>
     <string name="label_reminders_truncated">%1$d ਨਹੀਂ ਦਿਖਾਈਆਂ (%2$d ਕੁੱਲ, ਅਧਿਕਤਮ %3$d ਸੰਪਾਦਨਯੋਗ)</string>
     <string name="label_found_events">ਮਿਲੀਆਂ: %1$d ਘਟਨਾਵਾਂ</string>
     <string name="label_open_debug_menu">ਡੀਬੱਗ ਮੈਨੂ ਖੋਲ੍ਹੋ</string>
@@ -649,8 +685,6 @@
     <string name="device_calendars_grant">ਦਿਓ</string>
     <string name="device_calendars_none_found">ਕੋਈ ਡਿਵਾਈਸ ਕੈਲੰਡਰ ਨਹੀਂ ਮਿਲੇ।</string>
     <string name="device_calendars_local">ਸਥਾਨਕ</string>
-    <string name="device_calendars_reminders">ਯਾਦ-ਦਹਾਨੀਆਂ</string>
-    <string name="device_calendars_reminders_desc">ਡਿਵਾਈਸ ਕੈਲੰਡਰ ਘਟਨਾਵਾਂ ਲਈ ਸੂਚਿਤ ਕੀਤਾ ਜਾਓ</string>
     <string name="device_calendars_read_only_no_write">ਸਿਰਫ਼ ਪੜ੍ਹਨ (ਲਿਖਣ ਇਜਾਜ਼ਤ ਨਹੀਂ)</string>
     <string name="device_calendars_read_only_calendar">ਸਿਰਫ਼ ਪੜ੍ਹਨ (ਸਿਰਫ਼-ਪੜ੍ਹਨਯੋਗ ਕੈਲੰਡਰ)</string>
     <string name="settings_developer_options">ਡਿਵੈਲਪਰ ਵਿਕਲਪ</string>
@@ -760,6 +794,59 @@
         <item quantity="one">%1$d ਘਟਨਾ ਇੰਪੋਰਟ ਹੋਈ</item>
         <item quantity="other">%1$d ਘਟਨਾਵਾਂ ਇੰਪੋਰਟ ਹੋਈਆਂ</item>
     </plurals>
+    <string name="ics_import_preview_loading">ਇਸ ਕੈਲੰਡਰ ਦੀ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ…</string>
+    <string name="ics_import_preview_failed">ਇਹਨਾਂ ਘਟਨਾਵਾਂ ਲਈ ਇਸ ਕੈਲੰਡਰ ਦੀ ਜਾਂਚ ਨਹੀਂ ਹੋ ਸਕੀ। ਤੁਸੀਂ ਫਿਰ ਵੀ ਇੰਪੋਰਟ ਕਰ ਸਕਦੇ ਹੋ।</string>
+    <string name="ics_import_will_cancel">ਇਹ %1$s ਨੂੰ ਰੱਦ ਕਰਦਾ ਹੈ, ਪ੍ਰਬੰਧਕ %2$s</string>
+    <string name="ics_import_will_cancel_no_organizer">ਇਹ %1$s ਨੂੰ ਰੱਦ ਕਰਦਾ ਹੈ</string>
+    <string name="ics_import_will_update">ਇਹ %1$s ਨੂੰ ਅੱਪਡੇਟ ਕਰਦਾ ਹੈ</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d ਘਟਨਾ ਪਹਿਲਾਂ ਹੀ ਅੱਪ ਟੂ ਡੇਟ ਹੈ</item>
+        <item quantity="other">%1$d ਘਟਨਾਵਾਂ ਪਹਿਲਾਂ ਹੀ ਅੱਪ ਟੂ ਡੇਟ ਹਨ</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">%1$d ਛੱਡੀ ਗਈ: %2$s</item>
+        <item quantity="other">%1$d ਛੱਡੀਆਂ ਗਈਆਂ: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">ਇਹ ਸੱਦੇ ਦਾ ਜਵਾਬ ਹੈ, ਜੋ ਤੁਹਾਡੇ ਕੈਲੰਡਰ ਵਿੱਚ ਕੁਝ ਨਹੀਂ ਜੋੜਦਾ</string>
+    <string name="ics_import_reason_unsupported">ਇਸ ਕਿਸਮ ਦਾ ਸੱਦਾ ਸੁਨੇਹਾ ਸਮਰਥਿਤ ਨਹੀਂ ਹੈ</string>
+    <string name="ics_import_reason_organizer_mismatch">ਇਹ ਮੀਟਿੰਗ ਦੇ ਪ੍ਰਬੰਧਕ ਤੋਂ ਇਲਾਵਾ ਕਿਸੇ ਹੋਰ ਵੱਲੋਂ ਆਇਆ ਹੈ</string>
+    <string name="ics_import_reason_cancel_no_match">ਰੱਦ ਕੀਤੀ ਮੀਟਿੰਗ ਇਸ ਕੈਲੰਡਰ ਵਿੱਚ ਨਹੀਂ ਹੈ</string>
+    <string name="ics_import_reason_cancel_not_for_you">ਇਹ ਰੱਦੀਕਰਨ ਹੋਰ ਹਾਜ਼ਰੀਨ ਲਈ ਹੈ</string>
+    <string name="ics_import_reason_deletion_pending">ਘਟਨਾ ਮਿਟਾਈ ਜਾ ਰਹੀ ਹੈ</string>
+    <string name="ics_import_reason_cancelled_in_file">ਇਹ ਫ਼ਾਈਲ ਵਿੱਚ ਪਹਿਲਾਂ ਹੀ ਰੱਦ ਹੈ</string>
+    <string name="ics_import_reason_this_and_future">ਇਸ ਅਤੇ ਬਾਅਦ ਦੀਆਂ ਘਟਨਾਵਾਂ ਵਿੱਚ ਤਬਦੀਲੀਆਂ ਸਮਰਥਿਤ ਨਹੀਂ ਹਨ</string>
+    <string name="ics_import_reason_own_cancel">ਤੁਸੀਂ ਇਸ ਮੀਟਿੰਗ ਦੇ ਪ੍ਰਬੰਧਕ ਹੋ, ਇਸ ਲਈ ਇਸਨੂੰ ਘਟਨਾ ਤੋਂ ਰੱਦ ਕਰੋ</string>
+    <string name="ics_import_reason_on_another_calendar">ਇਹ ਪਹਿਲਾਂ ਹੀ ਇਸ ਖਾਤੇ ਦੇ ਕਿਸੇ ਹੋਰ ਕੈਲੰਡਰ ਵਿੱਚ ਹੈ</string>
+    <string name="ics_import_notice_unverified">ਸੱਦਾ ਫ਼ਾਈਲ ਭੇਜਣ ਵਾਲੇ ਦੀ ਪੁਸ਼ਟੀ ਨਹੀਂ ਹੋ ਸਕਦੀ। ਜਾਂਚ ਕਰੋ ਕਿ ਇਹ ਪ੍ਰਬੰਧਕ ਵੱਲੋਂ ਆਈ ਹੈ।</string>
+    <string name="ics_import_notice_answer_notifies">ਇਸ ਸੱਦੇ ਦਾ ਜਵਾਬ ਦੇਣ ਨਾਲ ਪ੍ਰਬੰਧਕ ਨੂੰ ਸੂਚਨਾ ਜਾ ਸਕਦੀ ਹੈ।</string>
+    <string name="ics_import_notice_guests_again">ਤੁਸੀਂ ਪ੍ਰਬੰਧਕ ਹੋ, ਇਸ ਲਈ ਹਾਜ਼ਰੀਨ ਨੂੰ ਇਹ ਸੱਦਾ ਦੁਬਾਰਾ ਮਿਲ ਸਕਦਾ ਹੈ।</string>
+    <string name="cd_dismiss_notice">ਸੂਚਨਾ ਖ਼ਾਰਜ ਕਰੋ</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d ਸ਼ਾਮਲ ਕੀਤੀ</item>
+        <item quantity="other">%1$d ਸ਼ਾਮਲ ਕੀਤੀਆਂ</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d ਅੱਪਡੇਟ ਹੋਈ</item>
+        <item quantity="other">%1$d ਅੱਪਡੇਟ ਹੋਈਆਂ</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d ਰੱਦ ਹੋਈ</item>
+        <item quantity="other">%1$d ਰੱਦ ਹੋਈਆਂ</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d ਪਹਿਲਾਂ ਹੀ ਅੱਪ ਟੂ ਡੇਟ</item>
+        <item quantity="other">%1$d ਪਹਿਲਾਂ ਹੀ ਅੱਪ ਟੂ ਡੇਟ</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d ਛੱਡੀ ਗਈ</item>
+        <item quantity="other">%1$d ਛੱਡੀਆਂ ਗਈਆਂ</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d ਅਸਫ਼ਲ</item>
+        <item quantity="other">%1$d ਅਸਫ਼ਲ</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਕੁਝ ਨਹੀਂ</string>
     <plurals name="exported_events">
         <item quantity="one">%1$d ਘਟਨਾ ਐਕਸਪੋਰਟ ਹੋਈ</item>
         <item quantity="other">%1$d ਘਟਨਾਵਾਂ ਐਕਸਪੋਰਟ ਹੋਈਆਂ</item>
@@ -913,6 +1000,14 @@
     <string name="cd_active_view">ਸਰਗਰਮ ਦ੍ਰਿਸ਼</string>
     <string name="view_agenda">ਏਜੰਡਾ</string>
     <string name="view_month_full">ਮਹੀਨਾ (ਪੂਰਾ)</string>
+    <string name="view_planner">ਯੋਜਨਾਕਾਰ</string>
+    <string name="planner_free_day">ਖਾਲੀ ਦਿਨ</string>
+    <string name="cd_planner_show_day_events">ਇਸ ਦਿਨ ਦੀਆਂ ਘਟਨਾਵਾਂ ਦਿਖਾਓ</string>
+    <string name="planner_different_this_week">ਇਸ ਹਫ਼ਤੇ ਵੱਖਰਾ</string>
+    <string name="planner_usual_week">ਆਮ ਵਾਂਗ ਹਫ਼ਤਾ।</string>
+    <string name="planner_moved_was">ਪਹਿਲਾਂ %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">ਦਿਨ</string>
     <string name="view_three_days">3 ਦਿਨ</string>
     <string name="view_year">ਸਾਲ</string>
@@ -969,11 +1064,6 @@
     <string name="cd_increase_interval">ਅੰਤਰਾਲ ਵਧਾਓ</string>
     <string name="rrule_starting">%1$s %2$s ਤੋਂ ਸ਼ੁਰੂ%3$s</string>
     <string name="rrule_since">%1$s · %2$s ਤੋਂ</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d ਨਵਾਂ</string>
-    <string name="sync_summary_updated">%1$d ਅੱਪਡੇਟ ਹੋਇਆ</string>
-    <string name="sync_summary_removed">%1$d ਹਟਾਇਆ ਗਿਆ</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">ਗੋਲ ਸਕ੍ਰੋਲਿੰਗ ਸਮਰੱਥ</string>
@@ -1076,10 +1166,31 @@
         <item quantity="one">%1$d ਘਟਨਾ ਹਟਾਈ ਗਈ</item>
         <item quantity="other">%1$d ਘਟਨਾਵਾਂ ਹਟਾਈਆਂ ਗਈਆਂ</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d ਘਟਨਾ ਰੱਦ ਕੀਤੀ ਗਈ</item>
+        <item quantity="other">%1$d ਘਟਨਾਵਾਂ ਰੱਦ ਕੀਤੀਆਂ ਗਈਆਂ</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d ਕੈਲੰਡਰ ਅੱਪਡੇਟ</item>
         <item quantity="other">%1$d ਕੈਲੰਡਰ ਅੱਪਡੇਟ</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">ਹਾਲੀਆ ਤਬਦੀਲੀਆਂ</string>
+    <string name="recent_changes_empty">ਕੋਈ ਹਾਲੀਆ ਤਬਦੀਲੀ ਨਹੀਂ</string>
+    <string name="recent_changes_clear_all">ਸਭ ਸਾਫ਼ ਕਰੋ</string>
+    <string name="recent_changes_cleared">ਹਾਲੀਆ ਤਬਦੀਲੀਆਂ ਸਾਫ਼ ਕੀਤੀਆਂ ਗਈਆਂ</string>
+    <string name="recent_changes_dismiss">ਖ਼ਾਰਜ ਕਰੋ</string>
+    <string name="recent_changes_moved_from">%1$s ਤੋਂ ਤਬਦੀਲ ਕੀਤਾ ਗਿਆ</string>
+    <string name="recent_changes_time_changed">ਸਮਾਂ ਬਦਲਿਆ ਗਿਆ</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">ਟਿਕਾਣਾ ਬਦਲਿਆ ਗਿਆ</string>
+    <string name="recent_changes_title_changed">ਸਿਰਲੇਖ ਬਦਲਿਆ ਗਿਆ</string>
+    <string name="recent_changes_repeat_changed">ਦੁਹਰਾਓ ਬਦਲਿਆ ਗਿਆ</string>
+    <string name="recent_changes_cancelled">ਰੱਦ ਕੀਤਾ ਗਿਆ</string>
+    <string name="cd_recent_change_new">ਨਵੀਂ ਘਟਨਾ</string>
+    <string name="cd_recent_change_updated">ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ</string>
+    <string name="cd_recent_change_removed">ਹਟਾਇਆ ਗਿਆ</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">ਦਿਨ %1$d / %2$d</string>

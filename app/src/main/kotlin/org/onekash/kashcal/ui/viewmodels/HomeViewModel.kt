@@ -1,5 +1,8 @@
 package org.onekash.kashcal.ui.viewmodels
 
+import org.onekash.kashcal.data.ics.IcsImportFile
+import org.onekash.kashcal.domain.ics.GroupPlan
+import org.onekash.kashcal.domain.ics.IcsImportResult
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -52,10 +55,21 @@ import org.onekash.kashcal.domain.identity.canEditAsOrganizer
 import org.onekash.kashcal.domain.identity.effectiveAddresses
 import org.onekash.kashcal.data.repository.AccountRepository
 import org.onekash.kashcal.di.IoDispatcher
+import org.onekash.kashcal.domain.changes.RecentChangeItem
+import org.onekash.kashcal.domain.changes.isSeriesRow
+import org.onekash.kashcal.domain.changes.opens
 import org.onekash.kashcal.domain.coordinator.EventCoordinator
 import org.onekash.kashcal.domain.rrule.RruleShift
 import org.onekash.kashcal.domain.model.DisplayEvent
+import org.onekash.kashcal.domain.model.isStripItem
+import org.onekash.kashcal.domain.planner.PlannerWeekState
+import org.onekash.kashcal.domain.planner.isChangedOccurrence
+import org.onekash.kashcal.domain.monthfull.clampMonthFullZoom
+import org.onekash.kashcal.domain.planner.clampPlannerZoom
+import org.onekash.kashcal.ui.util.plannerPageForDate
+import org.onekash.kashcal.ui.util.plannerWeekStart
 import org.onekash.kashcal.domain.model.SearchResult
+import org.onekash.kashcal.domain.model.toEventForDuplicate
 import org.onekash.kashcal.domain.reader.DeviceEventReader
 import org.onekash.kashcal.domain.reader.DisplayEventRepository
 import org.onekash.kashcal.domain.reader.EventReader
@@ -127,31 +141,18 @@ data class WeekEventsUiState(
     companion object {
         val EMPTY = WeekEventsUiState()
 
-        /**
-         * Minimum duration for a day-crossing timed event to move to the all-day strip.
-         * `endDay > startDay` alone also holds for an ordinary event that spills past midnight
-         * (11pm to 12:30am); without this floor every such event would leave the grid and show
-         * as a bar across two days.
-         */
-        private const val MIN_MULTIDAY_STRIP_DURATION_MS = 20L * 60 * 60 * 1000
-
         fun ofError(message: String?) = WeekEventsUiState(error = message ?: "Failed to load events")
 
-        private fun isMultiDayForStrip(event: DisplayEvent): Boolean =
-            event.endDay > event.startDay &&
-                (event.endTs - event.startTs) >= MIN_MULTIDAY_STRIP_DURATION_MS
-
+        /** Splits [events] into timed rows and strip items by [isStripItem]. */
         fun fromEvents(
             events: List<DisplayEvent>,
             showMultiDayTimedInAllDayStrip: Boolean =
                 PreferencesKeys.DEFAULT_SHOW_MULTIDAY_TIMED_IN_ALLDAY_STRIP
         ): WeekEventsUiState = WeekEventsUiState(
-            timedEvents = events.filter {
-                !it.isAllDay && (!showMultiDayTimedInAllDayStrip || !isMultiDayForStrip(it))
-            }.sortedBy { it.startTs }.toPersistentList(),
-            allDayEvents = events.filter {
-                it.isAllDay || (showMultiDayTimedInAllDayStrip && isMultiDayForStrip(it))
-            }.sortedBy { it.startTs }.toPersistentList(),
+            timedEvents = events.filter { !it.isStripItem(showMultiDayTimedInAllDayStrip) }
+                .sortedBy { it.startTs }.toPersistentList(),
+            allDayEvents = events.filter { it.isStripItem(showMultiDayTimedInAllDayStrip) }
+                .sortedBy { it.startTs }.toPersistentList(),
             isLoading = false,
             error = null
         )
@@ -265,6 +266,18 @@ class HomeViewModel(
      * DROP_OLDEST keeps only the latest pending value.
      */
     private val hourHeightToPersist = MutableSharedFlow<Float>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    /** Planner zoom scales awaiting persistence, debounced like [hourHeightToPersist]. */
+    private val plannerZoomToPersist = MutableSharedFlow<Float>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    /** Month view zoom scales awaiting persistence, debounced like [hourHeightToPersist]. */
+    private val monthFullZoomToPersist = MutableSharedFlow<Float>(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
@@ -593,6 +606,76 @@ class HomeViewModel(
             }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), persistentMapOf())
 
+    // Planner events, keyed by the day code of the settled week's first day: set only while
+    // PLANNER is active, null otherwise, like monthGridKey.
+    private val plannerWeekKey = MutableStateFlow<Int?>(null)
+
+    /**
+     * The Planner's events for the settled week and one week either side, so a page swiped into
+     * view already has its days. Null before the first load after the Planner is entered, and
+     * after it is left. A re-key (swipe, Today, a picked date) keeps the previous state until
+     * the new range loads, so a page never blanks mid-swipe. Re-emits while subscribed on the
+     * sources of [DisplayEventRepository.getDisplayEventsForDateRange] and on the multi-day
+     * strip setting.
+     */
+    @Suppress("OPT_IN_USAGE")
+    val plannerState: StateFlow<PlannerWeekState?> =
+        plannerWeekKey
+            .flatMapLatest { weekStartDayCode ->
+                if (weekStartDayCode == null) {
+                    flowOf(null)
+                } else {
+                    val weekStart = DayPagerUtils.dayCodeToLocalDate(weekStartDayCode)
+                    val rangeStart = DayPagerUtils.localDateToDayCode(weekStart.minusDays(7))
+                    val rangeEnd = DayPagerUtils.localDateToDayCode(weekStart.plusDays(13))
+                    displayEventRepository.getDisplayEventsForDateRange(rangeStart, rangeEnd)
+                        .map { byDay ->
+                            PlannerWeekState(
+                                eventsByDayCode = byDay,
+                                rangeStartDayCode = rangeStart,
+                                rangeEndDayCode = rangeEnd,
+                                roomSeriesAllDayById = lookUpRoomSeriesAllDay(byDay),
+                            )
+                        }
+                        .catch { e ->
+                            if (e is CancellationException) throw e
+                            Log.e(TAG, "Error loading planner events", e)
+                            emit(PlannerWeekState(persistentMapOf(), rangeStart, rangeEnd))
+                        }
+                }
+            }
+            // Combined after flatMapLatest so a toggle re-partitions in memory, as in weekEvents.
+            .combine(dataStore.showMultiDayTimedInAllDayStrip) { state, show ->
+                state?.copy(showMultiDayTimedInAllDayStrip = show)
+            }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    /**
+     * Returns the all-day flag of each Room series with a changed occurrence in [byDay], for the
+     * Planner's "was" cue. One read for the whole range, none when there is no changed Room
+     * occurrence. A failed read is logged and returns an empty map, so the events still show and
+     * the cue falls back to what the occurrence alone says.
+     */
+    private suspend fun lookUpRoomSeriesAllDay(
+        byDay: Map<Int, List<DisplayEvent>>
+    ): ImmutableMap<Long, Boolean> {
+        val seriesIds = byDay.values.asSequence().flatten()
+            .filterIsInstance<DisplayEvent.Room>()
+            .filter { it.isChangedOccurrence() }
+            .map { it.occurrence.eventId }
+            .distinct()
+            .toList()
+        if (seriesIds.isEmpty()) return persistentMapOf()
+        return try {
+            eventReader.getEventsByIds(seriesIds).mapValues { (_, event) -> event.isAllDay }.toPersistentMap()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Log.w(TAG, "Planner series look-up failed: ${e.javaClass.simpleName}")
+            persistentMapOf()
+        }
+    }
+
     /**
      * Emits the attendee state of [eventId] for the quick view and the form.
      *
@@ -676,6 +759,9 @@ class HomeViewModel(
     // Debounced search; cancelled when a new query arrives.
     private var searchJob: Job? = null
 
+    // Reads the Recent changes log while its sheet shows.
+    private var recentChangesJob: Job? = null
+
     /** Checks which series scopes a staged cross-day drop may offer. */
     private var dragAvailabilityJob: Job? = null
 
@@ -731,6 +817,8 @@ class HomeViewModel(
 
         // Persists the settled pinch-zoom level across restarts.
         observeHourHeightPersistence()
+        observePlannerZoomPersistence()
+        observeMonthFullZoomPersistence()
     }
 
     /**
@@ -785,7 +873,9 @@ class HomeViewModel(
                     viewMode = defaultView,
                     previousNonInsightsMode = defaultView,
                     weekViewSavedScrollMinutes = savedScrollMinutes,
-                    weekViewHourHeight = savedHourHeight
+                    weekViewHourHeight = savedHourHeight,
+                    plannerZoom = clampPlannerZoom(dataStore.getPlannerZoom()),
+                    monthFullZoom = clampMonthFullZoom(dataStore.getMonthFullZoom())
                 )
             }
 
@@ -797,6 +887,7 @@ class HomeViewModel(
                 ViewMode.DAY -> {} // goToToday() below handles week initialization
                 ViewMode.THREE_DAYS -> {} // goToToday() below handles week initialization
                 ViewMode.WEEK -> {} // goToToday() below handles week initialization
+                ViewMode.PLANNER -> enterPlanner()
                 ViewMode.MONTH -> {} // goToToday() below handles dot loading + day selection
                 ViewMode.MONTH_FULL -> setMonthGridKey(MonthKey(_uiState.value.viewingYear, _uiState.value.viewingMonth))
                 ViewMode.YEAR -> loadYearDots(_uiState.value.viewingYear)
@@ -998,21 +1089,19 @@ class HomeViewModel(
     }
 
     /**
-     * Shows a snackbar for every worker sync that reports changes, whatever triggered it, with a
-     * "View" action that opens the sync-changes sheet. The changes are cleared once handled.
+     * Shows a snackbar for every worker sync that published Recent changes (a background sync whose
+     * changes [org.onekash.kashcal.sync.notification.ChangeNotifier.notify] announced publishes
+     * none), with a "View" action that opens the Recent changes sheet. The published entries are
+     * cleared once shown, so a later ViewModel doesn't show them again; the log stays in Room.
      */
     private fun observeSyncChanges() {
         viewModelScope.launch {
             syncScheduler.lastSyncChanges.collect { changes ->
                 if (changes.isNotEmpty()) {
-                    val message = generateSnackbarMessage(changes)
+                    val message = generateSnackbarMessage(changes, context.resources)
                     if (message != null) {
-                        Log.d(TAG, "Sync changes notification: $message (${changes.size} changes)")
-                        // Kept for the sheet.
-                        _uiState.update { it.copy(syncChanges = changes.toPersistentList()) }
-                        showSnackbar(message) {
-                            _uiState.update { it.copy(showSyncChangesSheet = true) }
-                        }
+                        Log.d(TAG, "Sync changes notification: ${changes.size} changes")
+                        showSnackbar(message) { openRecentChanges() }
                     }
                     syncScheduler.clearSyncChanges()
                 }
@@ -1039,6 +1128,8 @@ class HomeViewModel(
         viewModelScope.launch {
             dataStore.firstDayOfWeek.collect { day ->
                 _uiState.update { it.copy(firstDayOfWeek = day) }
+                // Planner pages count weeks from a week start, which a new first day moves.
+                if (_uiState.value.plannerAnchorDayCode != null) reanchorPlanner()
             }
         }
         viewModelScope.launch {
@@ -1317,9 +1408,10 @@ class HomeViewModel(
     }
 
     /**
-     * Keeps the device calendar drawer state in uiState: the feature flag, the enabled calendars
-     * and the hidden IDs. Only a change to the flag or the enabled IDs queries the provider for
-     * the calendar list; a hidden-ID change only updates state.
+     * Keeps the device calendar drawer state in uiState: the device calendars flag, the enabled
+     * calendars, the hidden IDs, the muted IDs and the device reminders setting. Only a change to
+     * the device calendars flag or the enabled IDs queries the provider for the calendar list; the
+     * others only update state.
      */
     private fun observeDeviceCalendarDrawerState() {
         viewModelScope.launch {
@@ -1343,6 +1435,18 @@ class HomeViewModel(
                 _uiState.update {
                     it.copy(hiddenDeviceCalendarIds = hiddenIds.toPersistentSet())
                 }
+            }
+        }
+        viewModelScope.launch {
+            dataStore.mutedDeviceCalendarIds.collect { mutedIds ->
+                _uiState.update {
+                    it.copy(mutedDeviceCalendarIds = mutedIds.toPersistentSet())
+                }
+            }
+        }
+        viewModelScope.launch {
+            dataStore.deviceCalendarRemindersEnabled.collect { enabled ->
+                _uiState.update { it.copy(deviceRemindersEnabled = enabled) }
             }
         }
     }
@@ -1610,7 +1714,7 @@ class HomeViewModel(
     /**
      * Moves the current view to today: the day and week pagers to today's page, the agenda to
      * its top, the month views to today's month with today selected, the year view to this
-     * year. Insights is left alone.
+     * year, the Planner to this week. Insights is left alone.
      *
      * @param animate true (the Today button) animates the month pager's scroll; false (the
      *   cold-start landing) jumps so the pager settles in one frame. Only the month views read
@@ -1647,6 +1751,7 @@ class HomeViewModel(
             ViewMode.YEAR -> {
                 _uiState.update { it.copy(pendingNavigateToToday = true) }
             }
+            ViewMode.PLANNER -> goToTodayPlanner()
             ViewMode.INSIGHTS -> {}
         }
     }
@@ -1961,6 +2066,10 @@ class HomeViewModel(
         hideWeekViewDatePicker()
 
         val date = WeekViewUtils.epochMsToDate(dateMs)
+        if (_uiState.value.viewMode == ViewMode.PLANNER) {
+            navigatePlannerToDate(date)
+            return
+        }
         val targetPage = if (_uiState.value.viewMode == ViewMode.WEEK)
             WeekViewUtils.dateToWeekPage(date, _uiState.value.firstDayOfWeek)
         else WeekViewUtils.dateToPage(date)
@@ -1983,9 +2092,141 @@ class HomeViewModel(
         onWeekViewDateSelected(WeekViewUtils.dateToEpochMs(date))
     }
 
+    /**
+     * Switches the time grid to [visibleDays] (1, 3 or 7) after a sideways pinch and opens it on
+     * [date]: that day, a 3-day view starting on it, or the week holding it. Unlike a header
+     * drill-in it is a view choice, saved as the startup view the way the drawer saves one. Any
+     * other count, or the view already shown, does nothing.
+     */
+    fun onWeekViewPinchSwitch(visibleDays: Int, date: LocalDate) {
+        val mode = when (visibleDays) {
+            1 -> ViewMode.DAY
+            3 -> ViewMode.THREE_DAYS
+            7 -> ViewMode.WEEK
+            else -> return
+        }
+        if (_uiState.value.viewMode == mode) return
+        // Mode first, as in onWeekViewDayHeaderClick.
+        setViewMode(mode)
+        onWeekViewDateSelected(WeekViewUtils.dateToEpochMs(date))
+    }
+
     /** Clears the pending pager position once the UI has consumed it. */
     fun clearPendingWeekViewPagerPosition() {
         _uiState.update { it.copy(pendingWeekViewPagerPosition = null) }
+    }
+
+    // ==================== Planner ====================
+
+    /** Returns the day code of the first day of the week holding today. */
+    private fun thisWeekStartDayCode(): Int =
+        DayPagerUtils.localDateToDayCode(WeekViewUtils.getWeekStart(LocalDate.now(), _uiState.value.firstDayOfWeek))
+
+    /** Keys [plannerState] to the week of Planner page [page]; does nothing before an anchor. */
+    private fun keyPlannerWeek(page: Int) {
+        val anchor = _uiState.value.plannerAnchorDayCode ?: return
+        plannerWeekKey.value = DayPagerUtils.localDateToDayCode(plannerWeekStart(anchor, page, _uiState.value.firstDayOfWeek))
+    }
+
+    /** Anchors the Planner on this week the first time it is shown and keys its current page. */
+    private fun enterPlanner() {
+        if (_uiState.value.plannerAnchorDayCode == null) {
+            _uiState.update { it.copy(plannerAnchorDayCode = thisWeekStartDayCode()) }
+        }
+        keyPlannerWeek(_uiState.value.plannerWeekPagerPosition)
+    }
+
+    /** Re-anchors the Planner on this week and asks its pager to scroll there. */
+    private fun goToTodayPlanner() {
+        val center = WeekViewUtils.CENTER_WEEK_PAGE
+        _uiState.update {
+            it.copy(
+                plannerAnchorDayCode = thisWeekStartDayCode(),
+                plannerWeekPagerPosition = center,
+                pendingPlannerPagerPosition = center
+            )
+        }
+        keyPlannerWeek(center)
+    }
+
+    /**
+     * Re-anchors on this week after a first-day change, keeping the page, so the same relative
+     * week shows, aligned to the new first day.
+     */
+    private fun reanchorPlanner() {
+        _uiState.update { it.copy(plannerAnchorDayCode = thisWeekStartDayCode()) }
+        if (_uiState.value.viewMode == ViewMode.PLANNER) keyPlannerWeek(_uiState.value.plannerWeekPagerPosition)
+    }
+
+    /** Moves the Planner to the week holding [date]. */
+    private fun navigatePlannerToDate(date: LocalDate) {
+        val anchor = _uiState.value.plannerAnchorDayCode ?: thisWeekStartDayCode()
+        val page = plannerPageForDate(anchor, date, _uiState.value.firstDayOfWeek)
+        _uiState.update {
+            it.copy(plannerAnchorDayCode = anchor, plannerWeekPagerPosition = page, pendingPlannerPagerPosition = page)
+        }
+        keyPlannerWeek(page)
+    }
+
+    /**
+     * Records the Planner pager's settled page and keys its week while the Planner shows. A
+     * page other than a pending target means a swipe interrupted that scroll, so the pending
+     * target is dropped; left in place it would equal the next Today's target and that Today
+     * wouldn't scroll.
+     */
+    fun onPlannerPageChanged(page: Int) {
+        _uiState.update {
+            val pending = it.pendingPlannerPagerPosition
+            it.copy(
+                plannerWeekPagerPosition = page,
+                pendingPlannerPagerPosition = pending?.takeIf { target -> target == page },
+            )
+        }
+        if (_uiState.value.viewMode == ViewMode.PLANNER) keyPlannerWeek(page)
+    }
+
+    /** Clears the Planner's pending page once the pager has scrolled to it. */
+    fun clearPendingPlannerPagerPosition() {
+        _uiState.update { it.copy(pendingPlannerPagerPosition = null) }
+    }
+
+    /** Sets the Planner's pinch zoom at once and queues it for debounced persistence. */
+    fun setPlannerZoom(zoom: Float) {
+        val clamped = clampPlannerZoom(zoom)
+        _uiState.update { it.copy(plannerZoom = clamped) }
+        plannerZoomToPersist.tryEmit(clamped)
+    }
+
+    /** Persists the settled Planner zoom, debounced so a pinch writes DataStore once. */
+    private fun observePlannerZoomPersistence() {
+        viewModelScope.launch {
+            @OptIn(FlowPreview::class)
+            plannerZoomToPersist
+                .debounce(1000)
+                .distinctUntilChanged()
+                .collect { dataStore.setPlannerZoom(it) }
+        }
+    }
+
+    /**
+     * Sets the full-height month view's pinch zoom at once and queues it for debounced
+     * persistence.
+     */
+    fun setMonthFullZoom(zoom: Float) {
+        val clamped = clampMonthFullZoom(zoom)
+        _uiState.update { it.copy(monthFullZoom = clamped) }
+        monthFullZoomToPersist.tryEmit(clamped)
+    }
+
+    /** Persists the settled month view zoom, debounced so a pinch writes DataStore once. */
+    private fun observeMonthFullZoomPersistence() {
+        viewModelScope.launch {
+            @OptIn(FlowPreview::class)
+            monthFullZoomToPersist
+                .debounce(1000)
+                .distinctUntilChanged()
+                .collect { dataStore.setMonthFullZoom(it) }
+        }
     }
 
     // ==================== Day Selection ====================
@@ -2417,23 +2658,128 @@ class HomeViewModel(
         }
     }
 
-    fun toggleSyncChangesSheet() {
-        _uiState.update { it.copy(showSyncChangesSheet = !it.showSyncChangesSheet) }
+    /**
+     * Opens the Recent changes sheet and reads the log while it shows. The expiry window
+     * ([EventReader.observeRecentChanges]) starts from now each time the sheet opens. Clears the
+     * change notification, whose changes the sheet now shows.
+     */
+    fun openRecentChanges() {
+        syncScheduler.cancelChangeNotification()
+        _uiState.update { it.copy(isRecentChangesOpen = true) }
+        recentChangesJob?.cancel()
+        recentChangesJob = viewModelScope.launch {
+            eventReader.observeRecentChanges(System.currentTimeMillis()).collect { items ->
+                _uiState.update { it.copy(recentChanges = items.toPersistentList()) }
+            }
+        }
     }
 
-    /** Closes the sync-changes sheet and clears its changes. */
-    fun dismissSyncChangesSheet() {
+    /** Closes the Recent changes sheet and stops reading the log; the rows stay stored. */
+    fun closeRecentChanges() {
+        recentChangesJob?.cancel()
+        recentChangesJob = null
         _uiState.update {
             it.copy(
-                showSyncChangesSheet = false,
-                syncChanges = persistentListOf()
+                isRecentChangesOpen = false,
+                recentChanges = persistentListOf(),
+                recentChangesClearedIds = persistentListOf()
             )
         }
     }
 
+    /** Hides one Recent changes row (a swipe). A log row isn't an event, so there is no undo. */
+    fun dismissRecentChange(id: Long) {
+        viewModelScope.launch { eventCoordinator.dismissRecentChanges(listOf(id)) }
+    }
+
     /**
-     * Switches the calendar view, persists it as the startup view, clears the agenda and
-     * month-grid keys when leaving those views, and sets the new view's key or loads its data.
+     * Hides every row the sheet shows and offers one undo for them. Only the shown rows: one a
+     * sync adds meanwhile stays.
+     */
+    fun clearAllRecentChanges() {
+        val ids = _uiState.value.recentChanges.map { it.id }
+        if (ids.isEmpty()) return
+        _uiState.update { it.copy(recentChangesClearedIds = ids.toPersistentList()) }
+        viewModelScope.launch { eventCoordinator.dismissRecentChanges(ids) }
+    }
+
+    /** Brings back the rows the last Clear all hid, while its undo is on offer. */
+    fun undoClearRecentChanges() {
+        val ids = _uiState.value.recentChangesClearedIds
+        if (ids.isEmpty()) return
+        _uiState.update { it.copy(recentChangesClearedIds = persistentListOf()) }
+        viewModelScope.launch { eventCoordinator.restoreRecentChanges(ids) }
+    }
+
+    /** Ends Clear all's undo offer once the sheet's Undo row has timed out. */
+    fun onRecentChangesUndoShown() {
+        _uiState.update { it.copy(recentChangesClearedIds = persistentListOf()) }
+    }
+
+    /**
+     * Handles a change notification's tap and clears the notification. Returns the quick view to
+     * open when [recentChangeId] is a row still in the log that opens
+     * ([resolveRecentChangeTarget]), closing the Recent changes sheet if it is open, as a row tap
+     * in the sheet does; otherwise opens the sheet and returns null.
+     */
+    suspend fun openChangeNotification(recentChangeId: Long?): RecentChangeTarget? {
+        val target = recentChangeId?.let { id ->
+            val row = withContext(ioDispatcher) {
+                eventReader.observeRecentChanges(System.currentTimeMillis()).first().find { it.id == id }
+            }
+            row?.let { resolveRecentChangeTarget(it) }
+        }
+        if (target == null) {
+            openRecentChanges()
+        } else {
+            syncScheduler.cancelChangeNotification()
+            if (_uiState.value.isRecentChangesOpen) closeRecentChanges()
+        }
+        return target
+    }
+
+    /**
+     * Returns where a Recent changes row opens, or null for a deleted row or one whose event is
+     * gone or waiting to be deleted. A series row opens at its next occurrence, since its stored
+     * start is the first one, possibly months back; when that occurrence was changed on its own,
+     * the changed occurrence opens instead, and with none left the series opens at its start.
+     */
+    suspend fun resolveRecentChangeTarget(item: RecentChangeItem): RecentChangeTarget? {
+        val eventId = item.eventId?.takeIf { item.opens } ?: return null
+        val event = getEventForEdit(eventId)?.takeUnless { it.isPendingDelete }
+            ?: return null
+        if (!item.isSeriesRow) return RecentChangeTarget(event, null)
+        val next = withContext(ioDispatcher) { eventReader.getNextOccurrence(eventId, System.currentTimeMillis()) }
+            ?: return RecentChangeTarget(event, null)
+        val changed = next.exceptionEventId?.let { getEventForEdit(it) }
+        return if (changed != null) RecentChangeTarget(changed, null) else RecentChangeTarget(event, next.startTs)
+    }
+
+    /**
+     * Returns the source the duplicate form copies for [event] opened at [occurrenceTs]: the
+     * occurrence's own row when it is a changed one, else [event], built with
+     * [toEventForDuplicate].
+     *
+     * Search opens a series row with the start of its next occurrence, which can be a moved
+     * one, so the row behind the occurrence is looked up here. With no occurrence at exactly
+     * [occurrenceTs] the copy is built from [event].
+     */
+    suspend fun duplicateSourceFor(
+        event: org.onekash.kashcal.data.db.entity.Event,
+        occurrenceTs: Long?,
+    ): org.onekash.kashcal.data.db.entity.Event {
+        val shown = if (occurrenceTs != null && event.isRecurring && !event.isException) {
+            withContext(ioDispatcher) { eventReader.getOccurrenceWithEvent(event.id, occurrenceTs) }?.event
+        } else {
+            null
+        }
+        return (shown ?: event).toEventForDuplicate(occurrenceTs)
+    }
+
+    /**
+     * Switches the calendar view, persists it as the startup view, clears the agenda,
+     * month-grid and Planner keys when leaving those views, and sets the new view's key or loads
+     * its data.
      * A switch to Insights only sets the mode: nothing is persisted, cleared or loaded.
      *
      * @param persist write the new mode as the startup default. False for transient switches,
@@ -2474,6 +2820,9 @@ class HomeViewModel(
         if (mode != ViewMode.MONTH_FULL) {
             setMonthGridKey(null)
         }
+        if (mode != ViewMode.PLANNER) {
+            plannerWeekKey.value = null
+        }
 
         when (mode) {
             ViewMode.AGENDA -> {
@@ -2495,6 +2844,7 @@ class HomeViewModel(
             ViewMode.YEAR -> {
                 loadYearDots(_uiState.value.viewingYear)
             }
+            ViewMode.PLANNER -> enterPlanner()
             ViewMode.INSIGHTS -> {}
         }
     }
@@ -3821,16 +4171,20 @@ class HomeViewModel(
         }
     }
 
-    /** Imports events parsed from an ICS file into a device calendar; returns the count created. */
-    suspend fun importIcsToDeviceCalendar(events: List<Event>, calendarId: Long): Int {
-        val count = withContext(ioDispatcher) {
-            deviceEventWriter.importIcsEvents(events, calendarId)
+    /** Imports a parsed ICS file into a device calendar and returns what it did. */
+    suspend fun importIcsToDeviceCalendar(file: IcsImportFile, calendarId: Long): IcsImportResult {
+        val result = withContext(ioDispatcher) {
+            deviceEventWriter.importIcsFile(file, calendarId)
         }
         // The writer has signalled the device change; the view is reloaded too, as after every
         // other device write, since the caller only refreshes calendars and selects a date.
-        if (count > 0) reloadCurrentView()
-        return count
+        if (result.changedAnything) reloadCurrentView()
+        return result
     }
+
+    /** Returns what [importIcsToDeviceCalendar] would do in device calendar [calendarId]. */
+    suspend fun previewIcsImportOnDevice(file: IcsImportFile, calendarId: Long): List<GroupPlan> =
+        withContext(ioDispatcher) { deviceEventReader.previewIcsImport(file, calendarId) }
 
     /**
      * Saves a device event from the form, picking the writer method for the edit scope the way
@@ -4049,7 +4403,7 @@ class HomeViewModel(
 
     /**
      * Runs the action of an error presentation's button, then clears the error. Retry syncs,
-     * ForceFullSync forces a full sync, ViewSyncDetails opens the sync-changes sheet, OpenUrl
+     * ForceFullSync forces a full sync, ViewSyncDetails opens Recent changes, OpenUrl
      * queues the URL for HomeScreen to open, and Custom runs its action. OpenSettings also
      * clears the snackbar; the other variants only clear the error.
      */
@@ -4085,7 +4439,7 @@ class HomeViewModel(
             is ErrorActionCallback.ViewSyncDetails -> {
                 Log.d(TAG, "Error action: ViewSyncDetails")
                 clearError()
-                _uiState.update { it.copy(showSyncChangesSheet = true) }
+                openRecentChanges()
             }
             is ErrorActionCallback.Dismiss -> {
                 Log.d(TAG, "Error action: Dismiss")

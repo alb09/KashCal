@@ -75,8 +75,10 @@ data class Calendar(
     val sortOrder: Int = 0,
 
     /**
-     * Per-calendar notification mute (#137). Nothing reads it yet: reminders are scheduled
-     * whatever its value.
+     * Whether the calendar's notifications are muted (#137). A muted calendar still shows and
+     * syncs, and its changes still reach Recent changes, but it sends no event reminders, no
+     * invitation notifications and no background-sync change notifications. Hiding a calendar
+     * ([isVisible]) never changes its reminders.
      */
     @ColumnInfo(name = "is_notification_muted", defaultValue = "0")
     val isNotificationMuted: Boolean = false,
@@ -104,5 +106,14 @@ data class Calendar(
      * at runtime.
      */
     @ColumnInfo(name = "auto_schedule_supported")
-    val autoScheduleSupported: Boolean? = null
+    val autoScheduleSupported: Boolean? = null,
+
+    /**
+     * Whether a pull of this calendar has succeeded once. The first pull lists every event the
+     * server has, so its changes stay out of Recent changes; PullStrategy sets this after it.
+     * The upgrade to schema 25 sets it only where a sync-token or ctag was stored
+     * ([org.onekash.kashcal.data.db.migration.Migrations.MIGRATION_24_25]).
+     */
+    @ColumnInfo(name = "initial_pull_done", defaultValue = "0")
+    val initialPullDone: Boolean = false
 )

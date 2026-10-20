@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Do NOT translate — brand name -->
+    <!-- Brand name: keep "KashCal" in every locale except zh-rCN (开序历) and zh-rTW (開序曆) -->
     <string name="app_name">KashCal</string>
 
     <!-- ==================== Widget ==================== -->
@@ -56,6 +56,8 @@
     <string name="channel_sync_status_desc">Notifications about sync completion and errors</string>
     <string name="channel_event_invitations">Event Invitations</string>
     <string name="channel_event_invitations_desc">Notifications when you receive a new calendar invitation</string>
+    <!-- Notification channel for calendar changes found by a background sync; also the lock-screen text of those notifications -->
+    <string name="channel_calendar_updates">Calendar updates</string>
     <!-- Body of the invite notification. %1$s is the organizer's email or name. -->
     <string name="invite_notification_body">From %1$s · Tap to respond</string>
 
@@ -145,6 +147,10 @@
          supported mode, so this disclosure prevents the surprise of "I declined Friday and now every
          Friday is gone from my calendar." -->
     <string name="rsvp_series_disclosure">Your reply applies to the whole series.</string>
+    <!-- Under the RSVP section of an imported invitation: what the server reported for the user's reply. -->
+    <string name="rsvp_receipt_pending">Reply pending</string>
+    <string name="rsvp_receipt_sent">Reply sent</string>
+    <string name="rsvp_receipt_not_delivered">Reply not delivered</string>
     <!-- Snackbar shown when an RSVP write is rejected because the organizer concurrently edited the event. %1$s is the event title. -->
 
     <!-- ==================== Recurring Event Actions ==================== -->
@@ -276,6 +282,7 @@
     <string name="app_icon_default">Default</string>
     <string name="app_icon_supporter">Supporter</string>
     <string name="app_icon_supporter_calendar">Supporter, labeled Calendar</string>
+    <string name="app_icon_todays_date">Today\'s date</string>
     <string name="app_icon_label_calendar">Calendar</string>
     <string name="app_icon_support_cta">Support KashCal</string>
     <string name="app_icon_switch_note">Changing the icon may restart the app. Notifications always use the default icon and name.</string>
@@ -361,8 +368,14 @@
     <string name="onboarding_connect_prompt">Connect iCloud to see your events here</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <!-- Dismiss button on the post-update sheet; defers the ask without committing to it. -->
-    <string name="whats_new_later">Later</string>
+    <!-- Top-right button on the post-update pager; closes it without reading the rest. -->
+    <string name="whats_new_skip">Skip</string>
+    <!-- Bottom button on the post-update pager; goes to the next page. -->
+    <string name="whats_new_next">Next</string>
+    <!-- Spoken position of the post-update pager's page dots. %1$d = this page, %2$d = number of pages. -->
+    <string name="whats_new_page_of">Page %1$d of %2$d</string>
+    <!-- Label above a menu path (for example "Make it yours > App Icon") telling the user where an option lives. -->
+    <string name="whats_new_find_it_in">Find it in</string>
 
     <!-- v23.7.80 release-note: signal-boost for the keep-Android-open campaign. -->
     <!-- Section title. "Android" is a brand name; keep untranslated. -->
@@ -385,6 +398,26 @@
     <string name="whats_new_v732_action_label">Add us to your plans</string>
     <!-- URL the support button opens. Don\'t translate. -->
     <string name="whats_new_v732_action_url" translatable="false">https://kashcal.onekash.org/donate/</string>
+
+    <!-- Release-note pages announcing three features; each page also shows the menu path to the option. -->
+    <!-- Page heading for the launcher icon that shows the day of the month. -->
+    <string name="whats_new_v772_icon_title">Your icon knows the date</string>
+    <!-- Page body. "Today's date" is the icon option's name: use the same words as app_icon_todays_date. "KashCal" is a brand name; keep untranslated. -->
+    <string name="whats_new_v772_icon_body">Pick the Today\'s date icon and KashCal shows the day of the month on your home screen. It turns over on its own each night.</string>
+    <!-- Page heading for the Recent changes list. -->
+    <string name="whats_new_v772_changes_title">See what changed</string>
+    <!-- Page body. "Recent changes" is the list's name: use the same words as recent_changes_title. Keep "iCloud" and "CalDAV" untranslated. -->
+    <string name="whats_new_v772_changes_body">New, edited and removed events from your iCloud and CalDAV calendars collect in Recent changes for 7 days. Tap one to open it.</string>
+    <!-- Page body for the Change notifications setting (the page heading is settings_change_notifications). Keep "iCloud" and "CalDAV" untranslated. -->
+    <string name="whats_new_v772_notifications_body">Get a notification when a background sync finds changes to your iCloud or CalDAV events. It stays off until you switch it on.</string>
+    <!-- Sample event names shown in an illustration of the Recent changes list and a notification; they are not the user's events. Translate as ordinary event titles. -->
+    <string name="whats_new_hero_sample_lunch">Team lunch</string>
+    <string name="whats_new_hero_sample_review">Design review</string>
+    <string name="whats_new_hero_sample_book_club">Book club</string>
+    <!-- Sample calendar name in the same illustration. -->
+    <string name="whats_new_hero_sample_calendar">Work</string>
+    <!-- Time label in an illustrated notification's header, as Android shows a notification that just arrived. -->
+    <string name="whats_new_hero_now">now</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <!-- Keep "iCloud" and "CalDAV" untranslated -->
@@ -423,7 +456,6 @@
     <string name="status_no_writable_calendars">No writable calendars available</string>
     <!-- %1$d = number of events -->
     <string name="status_events_count">%1$d Events</string>
-    <string name="status_sync_changes">Sync Changes</string>
     <string name="status_sync_history">Sync History</string>
     <string name="status_parse_failures">Parse Failures</string>
     <string name="status_error">Error</string>
@@ -836,9 +868,9 @@
     <string name="change_password_label_default">Password</string>
 
     <!-- ==================== System Account ==================== -->
-    <!-- Do NOT translate — brand name used as system account label -->
+    <!-- System account label: the brand name, localised only in zh-rCN and zh-rTW -->
     <string name="kashcal_account_label">KashCal</string>
-    <!-- Do NOT translate — brand name used as system account label for the contacts source -->
+    <!-- Contacts source account label: the brand name, localised only in zh-rCN and zh-rTW -->
     <string name="kashcal_contacts_account_label">KashCal Contacts</string>
 
     <!-- ==================== Settings Screen ==================== -->
@@ -874,6 +906,43 @@
     <string name="settings_sync_lookback">Sync lookback</string>
     <!-- Subtitle hint under the Sync lookback row -->
     <string name="settings_sync_lookback_hint">How far back to sync events</string>
+    <!-- Settings toggle: post a system notification when a background sync finds calendar changes -->
+    <string name="settings_change_notifications">Change notifications</string>
+    <!-- Info tooltip for the Change notifications toggle; also the description of its notification channel -->
+    <string name="settings_change_notifications_info">Sends a notification when a background sync finds changes to your events. Works for iCloud and CalDAV calendars.</string>
+    <!-- Settings row in "Calendars & accounts" and the title of the sheet it opens, where each calendar has an on/off switch for its notifications -->
+    <string name="settings_calendar_notifications">Calendar notifications</string>
+    <!-- Subtitle of the Calendar notifications row when no calendar is muted -->
+    <string name="settings_calendar_notifications_all">All calendars</string>
+    <!-- Subtitle of the Calendar notifications row: how many calendars have their notifications turned off -->
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">%d muted</item>
+        <item quantity="other">%d muted</item>
+    </plurals>
+    <!-- Always-visible line under the Calendar notifications sheet title saying what the sheet is for; each calendar has an on/off switch for its notifications -->
+    <string name="calendar_notifications_intro">Choose which calendars can notify you.</string>
+    <!-- Detail shown inline when the info button next to the Calendar notifications intro is tapped: a calendar whose switch is off (muted) is still shown and synced, it just sends no notifications -->
+    <string name="calendar_notifications_info">Muted calendars still show and sync, but don\'t notify you.</string>
+    <!-- Read by TalkBack for the info button next to the Calendar notifications intro; tapping it shows or hides what muting a calendar does -->
+    <string name="cd_calendar_notifications_info">About muted calendars</string>
+    <!-- Read by TalkBack after a button's label when the detail it shows is open (lowercase state word, not an action) -->
+    <string name="cd_state_expanded">expanded</string>
+    <!-- Read by TalkBack after a button's label when the detail it shows is closed (lowercase state word, not an action) -->
+    <string name="cd_state_collapsed">collapsed</string>
+    <!-- Detail shown inline when the info button next to the "Device calendars" heading in the Calendar notifications sheet is tapped; that heading has a switch that turns KashCal's reminders off for every device calendar (calendars from other apps on the phone) -->
+    <string name="calendar_notifications_device_info">Turn off to silence all device calendars, including ones you add later.</string>
+    <!-- Read by TalkBack for the info button next to the "Device calendars" heading in the Calendar notifications sheet -->
+    <string name="cd_calendar_notifications_device_info">About device calendar notifications</string>
+    <!-- Read by TalkBack for the switch next to the "Device calendars" heading in the Calendar notifications sheet; it turns KashCal's reminders on or off for every device calendar -->
+    <string name="cd_device_calendar_notifications">Device calendar notifications</string>
+    <!-- Second line of a calendar row in the Calendar notifications sheet: the calendar is hidden from the calendar views (hiding doesn't change its notifications) -->
+    <string name="calendar_notifications_hidden">Hidden</string>
+    <!-- Banner at the top of the Calendar notifications sheet when KashCal's notifications are turned off in Android's system settings; its button opens those settings -->
+    <string name="calendar_notifications_app_off">Notifications are off for KashCal in system settings, so no calendar can notify you.</string>
+    <!-- Banner at the top of the Calendar notifications sheet when only the Event Reminders notification channel is turned off in Android's system settings; its button opens that channel's settings -->
+    <string name="calendar_notifications_reminders_off">Event reminders are off in system settings, so no reminders can show.</string>
+    <!-- Read by TalkBack after a calendar's name in the drawer when that calendar's notifications are muted -->
+    <string name="cd_notifications_off">notifications off</string>
     <string name="settings_not_set">Not set</string>
     <!-- Toggle state: feature is turned on -->
     <string name="settings_on">On</string>
@@ -940,8 +1009,6 @@
     <string name="label_default_calendar_hint">New events will be created in this calendar</string>
     <!-- %1$d = visible count, %2$d = total count -->
     <string name="label_visible_count">%1$d / %2$d visible</string>
-    <!-- %1$d = enabled count, %2$d = total count -->
-    <string name="label_enabled_count">%1$d / %2$d enabled</string>
     <!-- %1$d = truncated count, %2$d = total count, %3$d = max editable -->
     <string name="label_reminders_truncated">%1$d not shown (%2$d total, max %3$d editable)</string>
     <!-- %1$d = event count found from ICS fetch -->
@@ -968,8 +1035,6 @@
     <string name="device_calendars_grant">Grant</string>
     <string name="device_calendars_none_found">No device calendars found.</string>
     <string name="device_calendars_local">Local</string>
-    <string name="device_calendars_reminders">Reminders</string>
-    <string name="device_calendars_reminders_desc">Get notified for device calendar events</string>
     <string name="device_calendars_read_only_no_write">Read only (no write permission)</string>
     <string name="device_calendars_read_only_calendar">Read only (calendar is read-only)</string>
 
@@ -1102,6 +1167,66 @@
         <item quantity="one">Imported %1$d event</item>
         <item quantity="other">Imported %1$d events</item>
     </plurals>
+    <!-- Import sheet, before the tap: what importing this file into the chosen calendar does. -->
+    <string name="ics_import_preview_loading">Checking this calendar…</string>
+    <string name="ics_import_preview_failed">Couldn\'t check this calendar for these events. You can still import.</string>
+    <!-- %1$s is the event title, %2$s the organizer's address. -->
+    <string name="ics_import_will_cancel">This cancels %1$s, organized by %2$s</string>
+    <!-- %1$s is the event title. -->
+    <string name="ics_import_will_cancel_no_organizer">This cancels %1$s</string>
+    <!-- %1$s is the event title. -->
+    <string name="ics_import_will_update">This updates %1$s</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d event is already up to date</item>
+        <item quantity="other">%1$d events are already up to date</item>
+    </plurals>
+    <!-- %1$d is how many events the import leaves out, %2$s the reason (one of the ics_import_reason_* strings). -->
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">%1$d skipped: %2$s</item>
+        <item quantity="other">%1$d skipped: %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">it\'s a reply to an invitation, which adds nothing to your calendar</string>
+    <string name="ics_import_reason_unsupported">this kind of invitation message isn\'t supported</string>
+    <string name="ics_import_reason_organizer_mismatch">it comes from someone other than the meeting\'s organizer</string>
+    <string name="ics_import_reason_cancel_no_match">the cancelled meeting isn\'t in this calendar</string>
+    <string name="ics_import_reason_cancel_not_for_you">the cancellation is for other guests</string>
+    <string name="ics_import_reason_deletion_pending">the event is being deleted</string>
+    <string name="ics_import_reason_cancelled_in_file">it\'s already cancelled in the file</string>
+    <string name="ics_import_reason_this_and_future">changes to this and later occurrences aren\'t supported</string>
+    <string name="ics_import_reason_own_cancel">you organize this meeting, so cancel it from the event</string>
+    <string name="ics_import_reason_on_another_calendar">it\'s already in another calendar of this account</string>
+    <!-- Inline notices in the import sheet; each can be dismissed. -->
+    <string name="ics_import_notice_unverified">The sender of an invitation file can\'t be verified. Check it came from the organizer.</string>
+    <string name="ics_import_notice_answer_notifies">Answering this invitation may notify the organizer.</string>
+    <string name="ics_import_notice_guests_again">You\'re the organizer, so guests may receive this invitation again.</string>
+    <string name="cd_dismiss_notice">Dismiss notice</string>
+    <!-- Snackbar after an import: the ics_import_summary_* parts joined with ics_import_summary_separator. -->
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d added</item>
+        <item quantity="other">%1$d added</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d updated</item>
+        <item quantity="other">%1$d updated</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d cancelled</item>
+        <item quantity="other">%1$d cancelled</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d already up to date</item>
+        <item quantity="other">%1$d already up to date</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d skipped</item>
+        <item quantity="other">%1$d skipped</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d failed</item>
+        <item quantity="other">%1$d failed</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">Nothing to import</string>
     <plurals name="exported_events">
         <item quantity="one">Exported %1$d event</item>
         <item quantity="other">Exported %1$d events</item>
@@ -1317,6 +1442,16 @@
     <!-- View Picker Labels -->
     <string name="view_agenda">Agenda</string>
     <string name="view_month_full">Month (Full)</string>
+    <string name="view_planner">Planner</string>
+    <string name="planner_free_day">Free day</string>
+    <!-- Screen-reader action on a Planner event row or the space beside it: opens a sheet listing that day's events. -->
+    <string name="cd_planner_show_day_events">Show this day\'s events</string>
+    <string name="planner_different_this_week">Different this week</string>
+    <string name="planner_usual_week">The usual week.</string>
+    <string name="planner_moved_was">was %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <!-- A Planner row's time range, start and end, e.g. "4:30–6 pm". Use the same joiner as planner_day_range. -->
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">Day</string>
     <string name="view_three_days">3 Days</string>
     <string name="view_year">Year</string>
@@ -1403,13 +1538,6 @@
     <string name="rrule_starting">%1$s starting %2$s%3$s</string>
     <!-- "since" variant (no end suffix) — %1$s = freq, %2$s = date -->
     <string name="rrule_since">%1$s · since %2$s</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <!-- Sync result counts — adjective form (e.g., "3 new", "2 updated") -->
-    <!-- %1$d = count -->
-    <string name="sync_summary_new">%1$d new</string>
-    <string name="sync_summary_updated">%1$d updated</string>
-    <string name="sync_summary_removed">%1$d removed</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">Circular scrolling enabled</string>
@@ -1553,11 +1681,40 @@
         <item quantity="one">%1$d event removed</item>
         <item quantity="other">%1$d events removed</item>
     </plurals>
+    <!-- %1$d = number of single occurrences of repeating events cancelled -->
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d occurrence cancelled</item>
+        <item quantity="other">%1$d occurrences cancelled</item>
+    </plurals>
     <!-- %1$d = total change count -->
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d calendar update</item>
         <item quantity="other">%1$d calendar updates</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <!-- Account hub row and sheet title for the list of changes sync brought in -->
+    <string name="recent_changes_title">Recent changes</string>
+    <string name="recent_changes_empty">No recent changes</string>
+    <string name="recent_changes_clear_all">Clear all</string>
+    <string name="recent_changes_cleared">Recent changes cleared</string>
+    <!-- Accessibility action that does what swiping a row away does -->
+    <string name="recent_changes_dismiss">Dismiss</string>
+    <!-- %1$s = the earlier date and/or time, e.g. "Tue, Sep 29, 2:00 PM" or "2:00 PM" -->
+    <string name="recent_changes_moved_from">Moved from %1$s</string>
+    <string name="recent_changes_time_changed">Time changed</string>
+    <!-- %1$s = start, %2$s = end, e.g. "Tue, Oct 6, 2:00 PM – 3:30 PM" -->
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <!-- Joins the change descriptions of one row, e.g. "Moved from 2:00 PM · Location changed" -->
+    <string name="recent_changes_detail_separator" translatable="false">" · "</string>
+    <string name="recent_changes_location_changed">Location changed</string>
+    <string name="recent_changes_title_changed">Title changed</string>
+    <string name="recent_changes_repeat_changed">Repeat changed</string>
+    <!-- A single occurrence of a repeating event was cancelled -->
+    <string name="recent_changes_cancelled">Cancelled</string>
+    <string name="cd_recent_change_new">New event</string>
+    <string name="cd_recent_change_updated">Updated</string>
+    <string name="cd_recent_change_removed">Removed</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <!-- Multi-day event indicators — %1$d = current day, %2$d = total days -->

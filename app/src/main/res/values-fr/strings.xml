@@ -42,6 +42,7 @@
     <string name="channel_sync_status_desc">Notifications sur l\'achèvement et les erreurs de synchronisation</string>
     <string name="channel_event_invitations">Invitations à des événements</string>
     <string name="channel_event_invitations_desc">Notifications lorsque vous recevez une nouvelle invitation de calendrier</string>
+    <string name="channel_calendar_updates">Modifications du calendrier</string>
     <string name="invite_notification_body">De %1$s · Appuyez pour répondre</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -98,6 +99,9 @@
 
     <!-- ==================== RSVP Actions ==================== -->
     <string name="rsvp_series_disclosure">Votre réponse s\'applique à toute la série.</string>
+    <string name="rsvp_receipt_pending">Réponse en attente</string>
+    <string name="rsvp_receipt_sent">Réponse envoyée</string>
+    <string name="rsvp_receipt_not_delivered">Réponse non remise</string>
 
     <!-- ==================== Recurring Event Actions ==================== -->
     <string name="recurring_this_and_future">Celui-ci et tous les suivants</string>
@@ -176,6 +180,7 @@
     <string name="app_icon_default">Par défaut</string>
     <string name="app_icon_supporter">Soutien</string>
     <string name="app_icon_supporter_calendar">Soutien, nommé Agenda</string>
+    <string name="app_icon_todays_date">Date du jour</string>
     <string name="app_icon_label_calendar">Agenda</string>
     <string name="app_icon_support_cta">Soutenir KashCal</string>
     <string name="app_icon_switch_note">Changer l\'icône peut redémarrer l\'application. Les notifications utilisent toujours l\'icône et le nom par défaut.</string>
@@ -236,7 +241,10 @@
     <string name="onboarding_connect_prompt">Connecte iCloud pour voir tes événements ici</string>
 
     <!-- ==================== What\'s New ==================== -->
-    <string name="whats_new_later">Plus tard</string>
+    <string name="whats_new_skip">Passer</string>
+    <string name="whats_new_next">Suivant</string>
+    <string name="whats_new_page_of">Page %1$d sur %2$d</string>
+    <string name="whats_new_find_it_in">À retrouver dans</string>
     <string name="whats_new_v598_title">Aidez à garder Android ouvert</string>
     <string name="whats_new_v598_body">Google modifie la façon dont vous installez des applications sur votre appareil. Nous avons besoin de votre aide.</string>
     <string name="whats_new_v598_action_label">Visiter keepandroidopen.org</string>
@@ -244,6 +252,16 @@
     <string name="whats_new_v732_body">Cette version est dédiée à celles et ceux qui soutiennent KashCal. Un petit geste, un grand bénéfice qui revient.</string>
     <string name="whats_new_v732_caption">Tu ne nous soutiens pas encore ?</string>
     <string name="whats_new_v732_action_label">Nous ajouter à tes plans</string>
+    <string name="whats_new_v772_icon_title">Ton icône affiche la date</string>
+    <string name="whats_new_v772_icon_body">Choisis l\'icône Date du jour et KashCal affiche le jour du mois sur ton écran d\'accueil. Elle change toute seule chaque nuit.</string>
+    <string name="whats_new_v772_changes_title">Vois ce qui a changé</string>
+    <string name="whats_new_v772_changes_body">Les événements nouveaux, modifiés et supprimés de tes calendriers iCloud et CalDAV sont regroupés dans Modifications récentes pendant 7 jours. Appuie sur l\'un d\'eux pour l\'ouvrir.</string>
+    <string name="whats_new_v772_notifications_body">Reçois une notification quand une synchronisation en arrière-plan détecte des modifications de tes événements iCloud ou CalDAV. L\'option reste désactivée tant que tu ne l\'actives pas.</string>
+    <string name="whats_new_hero_sample_lunch">Déjeuner d\'équipe</string>
+    <string name="whats_new_hero_sample_review">Revue de design</string>
+    <string name="whats_new_hero_sample_book_club">Club de lecture</string>
+    <string name="whats_new_hero_sample_calendar">Travail</string>
+    <string name="whats_new_hero_now">maintenant</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <string name="signin_icloud_title">Connecter iCloud</string>
@@ -269,7 +287,6 @@
     <string name="status_no_sync_sessions">Aucune session de synchronisation.\n\nTire vers le bas sur la vue calendrier pour déclencher une synchronisation.</string>
     <string name="status_no_writable_calendars">Aucun calendrier modifiable disponible</string>
     <string name="status_events_count">%1$d événements</string>
-    <string name="status_sync_changes">Modifications de synchronisation</string>
     <string name="status_sync_history">Historique de synchronisation</string>
     <string name="status_parse_failures">Échecs d\'analyse</string>
     <string name="status_error">Erreur</string>
@@ -584,6 +601,26 @@
     <string name="settings_detailed_widget_rows_info">Une seule ligne compacte, ou deux lignes détaillées avec l\'heure de fin.</string>
     <string name="settings_sync_lookback">Période de synchronisation passée</string>
     <string name="settings_sync_lookback_hint">Jusqu\'où synchroniser les événements passés</string>
+    <string name="settings_change_notifications">Notifications de modifications</string>
+    <string name="settings_change_notifications_info">Envoie une notification quand une synchronisation en arrière-plan détecte des modifications de tes événements. Fonctionne avec les calendriers iCloud et CalDAV.</string>
+    <string name="settings_calendar_notifications">Notifications des calendriers</string>
+    <string name="settings_calendar_notifications_all">Tous les calendriers</string>
+    <plurals name="settings_calendar_notifications_muted_count">
+        <item quantity="one">%d en sourdine</item>
+        <item quantity="other">%d en sourdine</item>
+    </plurals>
+    <string name="calendar_notifications_intro">Choisis quels calendriers peuvent te prévenir.</string>
+    <string name="calendar_notifications_info">Les calendriers en sourdine restent affichés et synchronisés, mais ne te préviennent pas.</string>
+    <string name="cd_calendar_notifications_info">À propos des calendriers en sourdine</string>
+    <string name="cd_state_expanded">développé</string>
+    <string name="cd_state_collapsed">réduit</string>
+    <string name="calendar_notifications_device_info">Désactive pour mettre en sourdine tous les calendriers de l\'appareil, y compris ceux que tu ajouteras plus tard.</string>
+    <string name="cd_calendar_notifications_device_info">À propos des notifications des calendriers de l\'appareil</string>
+    <string name="cd_device_calendar_notifications">Notifications des calendriers de l\'appareil</string>
+    <string name="calendar_notifications_hidden">Masqué</string>
+    <string name="calendar_notifications_app_off">Les notifications de KashCal sont désactivées dans les paramètres système, donc aucun calendrier ne peut te prévenir.</string>
+    <string name="calendar_notifications_reminders_off">Les rappels d\'événements sont désactivés dans les paramètres système, donc aucun rappel ne peut s\'afficher.</string>
+    <string name="cd_notifications_off">notifications désactivées</string>
     <string name="settings_not_set">Non défini</string>
     <string name="settings_on">Activé</string>
     <string name="settings_off">Désactivé</string>
@@ -627,7 +664,6 @@
     <string name="label_device_calendars">Calendriers de l\'appareil</string>
     <string name="label_default_calendar_hint">Les nouveaux événements seront créés dans ce calendrier</string>
     <string name="label_visible_count">%1$d / %2$d visibles</string>
-    <string name="label_enabled_count">%1$d / %2$d activés</string>
     <string name="label_reminders_truncated">%1$d non affichés (%2$d au total, %3$d modifiables max)</string>
     <string name="label_found_events">Trouvés : %1$d événements</string>
     <string name="label_open_debug_menu">Ouvrir le menu de débogage</string>
@@ -649,8 +685,6 @@
     <string name="device_calendars_grant">Accorder</string>
     <string name="device_calendars_none_found">Aucun calendrier d\'appareil trouvé.</string>
     <string name="device_calendars_local">Local</string>
-    <string name="device_calendars_reminders">Rappels</string>
-    <string name="device_calendars_reminders_desc">Recevoir des notifications pour les événements du calendrier de l\'appareil</string>
     <string name="device_calendars_read_only_no_write">Lecture seule (pas d\'autorisation d\'écriture)</string>
     <string name="device_calendars_read_only_calendar">Lecture seule (calendrier en lecture seule)</string>
     <string name="settings_developer_options">Options pour développeurs</string>
@@ -776,6 +810,59 @@
         <item quantity="many">%1$d événements importés</item>
         <item quantity="other">%1$d événements importés</item>
     </plurals>
+    <string name="ics_import_preview_loading">Vérification de ce calendrier…</string>
+    <string name="ics_import_preview_failed">Impossible de vérifier ces événements dans ce calendrier. Tu peux quand même importer.</string>
+    <string name="ics_import_will_cancel">Ceci annule %1$s, organisé par %2$s</string>
+    <string name="ics_import_will_cancel_no_organizer">Ceci annule %1$s</string>
+    <string name="ics_import_will_update">Ceci met à jour %1$s</string>
+    <plurals name="ics_import_preview_up_to_date">
+        <item quantity="one">%1$d événement est déjà à jour</item>
+        <item quantity="other">%1$d événements sont déjà à jour</item>
+    </plurals>
+    <plurals name="ics_import_preview_skipped">
+        <item quantity="one">%1$d ignoré : %2$s</item>
+        <item quantity="other">%1$d ignorés : %2$s</item>
+    </plurals>
+    <string name="ics_import_reason_reply">c\'est une réponse à une invitation, qui n\'ajoute rien à ton calendrier</string>
+    <string name="ics_import_reason_unsupported">ce type de message d\'invitation n\'est pas pris en charge</string>
+    <string name="ics_import_reason_organizer_mismatch">il provient d\'une autre personne que l\'organisateur de la réunion</string>
+    <string name="ics_import_reason_cancel_no_match">la réunion annulée n\'est pas dans ce calendrier</string>
+    <string name="ics_import_reason_cancel_not_for_you">l\'annulation concerne d\'autres participants</string>
+    <string name="ics_import_reason_deletion_pending">l\'événement est en cours de suppression</string>
+    <string name="ics_import_reason_cancelled_in_file">il est déjà annulé dans le fichier</string>
+    <string name="ics_import_reason_this_and_future">les modifications de cette occurrence et des suivantes ne sont pas prises en charge</string>
+    <string name="ics_import_reason_own_cancel">tu organises cette réunion, annule-la donc depuis l\'événement</string>
+    <string name="ics_import_reason_on_another_calendar">il est déjà dans un autre calendrier de ce compte</string>
+    <string name="ics_import_notice_unverified">L\'expéditeur d\'un fichier d\'invitation ne peut pas être vérifié. Vérifie qu\'il provient de l\'organisateur.</string>
+    <string name="ics_import_notice_answer_notifies">Répondre à cette invitation peut avertir l\'organisateur.</string>
+    <string name="ics_import_notice_guests_again">Tu es l\'organisateur, les participants pourraient donc recevoir à nouveau cette invitation.</string>
+    <string name="cd_dismiss_notice">Fermer l\'avis</string>
+    <plurals name="ics_import_summary_created">
+        <item quantity="one">%1$d ajouté</item>
+        <item quantity="other">%1$d ajoutés</item>
+    </plurals>
+    <plurals name="ics_import_summary_updated">
+        <item quantity="one">%1$d mis à jour</item>
+        <item quantity="other">%1$d mis à jour</item>
+    </plurals>
+    <plurals name="ics_import_summary_cancelled">
+        <item quantity="one">%1$d annulé</item>
+        <item quantity="other">%1$d annulés</item>
+    </plurals>
+    <plurals name="ics_import_summary_up_to_date">
+        <item quantity="one">%1$d déjà à jour</item>
+        <item quantity="other">%1$d déjà à jour</item>
+    </plurals>
+    <plurals name="ics_import_summary_skipped">
+        <item quantity="one">%1$d ignoré</item>
+        <item quantity="other">%1$d ignorés</item>
+    </plurals>
+    <plurals name="ics_import_summary_failed">
+        <item quantity="one">%1$d en échec</item>
+        <item quantity="other">%1$d en échec</item>
+    </plurals>
+    <string name="ics_import_summary_separator">", "</string>
+    <string name="ics_import_summary_nothing">Rien à importer</string>
     <plurals name="exported_events">
         <item quantity="one">%1$d événement exporté</item>
         <item quantity="many">%1$d événements exportés</item>
@@ -943,6 +1030,14 @@
     <string name="cd_active_view">Vue active</string>
     <string name="view_agenda">Agenda</string>
     <string name="view_month_full">Mois (complet)</string>
+    <string name="view_planner">Planning</string>
+    <string name="planner_free_day">Journée libre</string>
+    <string name="cd_planner_show_day_events">Afficher les événements de ce jour</string>
+    <string name="planner_different_this_week">Différent cette semaine</string>
+    <string name="planner_usual_week">Une semaine habituelle.</string>
+    <string name="planner_moved_was">avant %1$s</string>
+    <string name="planner_day_range">%1$s–%2$s</string>
+    <string name="planner_time_range">%1$s–%2$s</string>
     <string name="view_day">Jour</string>
     <string name="view_three_days">3 jours</string>
     <string name="view_year">Année</string>
@@ -1000,11 +1095,6 @@
     <string name="cd_increase_interval">Augmenter l\'intervalle</string>
     <string name="rrule_starting">%1$s à partir du %2$s%3$s</string>
     <string name="rrule_since">%1$s · depuis le %2$s</string>
-
-    <!-- ==================== Sync Summary ==================== -->
-    <string name="sync_summary_new">%1$d nouveaux</string>
-    <string name="sync_summary_updated">%1$d mis à jour</string>
-    <string name="sync_summary_removed">%1$d supprimés</string>
 
     <!-- ==================== Additional Content Descriptions ==================== -->
     <string name="cd_circular_scrolling">Défilement circulaire activé</string>
@@ -1114,11 +1204,33 @@
         <item quantity="many">%1$d événements supprimés</item>
         <item quantity="other">%1$d événements supprimés</item>
     </plurals>
+    <plurals name="sync_snackbar_occurrences_cancelled">
+        <item quantity="one">%1$d occurrence annulée</item>
+        <item quantity="many">%1$d occurrences annulées</item>
+        <item quantity="other">%1$d occurrences annulées</item>
+    </plurals>
     <plurals name="sync_snackbar_calendar_updates">
         <item quantity="one">%1$d mise à jour de calendrier</item>
         <item quantity="many">%1$d mises à jour de calendrier</item>
         <item quantity="other">%1$d mises à jour de calendrier</item>
     </plurals>
+
+    <!-- ==================== Recent changes ==================== -->
+    <string name="recent_changes_title">Modifications récentes</string>
+    <string name="recent_changes_empty">Aucune modification récente</string>
+    <string name="recent_changes_clear_all">Tout effacer</string>
+    <string name="recent_changes_cleared">Modifications récentes effacées</string>
+    <string name="recent_changes_dismiss">Ignorer</string>
+    <string name="recent_changes_moved_from">Déplacé de %1$s</string>
+    <string name="recent_changes_time_changed">Heure modifiée</string>
+    <string name="recent_changes_time_range">%1$s – %2$s</string>
+    <string name="recent_changes_location_changed">Lieu modifié</string>
+    <string name="recent_changes_title_changed">Titre modifié</string>
+    <string name="recent_changes_repeat_changed">Répétition modifiée</string>
+    <string name="recent_changes_cancelled">Annulé</string>
+    <string name="cd_recent_change_new">Nouvel événement</string>
+    <string name="cd_recent_change_updated">Mis à jour</string>
+    <string name="cd_recent_change_removed">Supprimé</string>
 
     <!-- ==================== i18n: HomeScreen Day View ==================== -->
     <string name="day_x_of_y">Jour %1$d sur %2$d</string>

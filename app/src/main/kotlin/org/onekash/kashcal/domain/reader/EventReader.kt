@@ -11,11 +11,15 @@ import kotlinx.coroutines.flow.map
 import org.onekash.kashcal.data.db.KashCalDatabase
 import org.onekash.kashcal.data.db.dao.EventWithNextOccurrence
 import org.onekash.kashcal.data.db.dao.EventWithOccurrenceAndColor
+import org.onekash.kashcal.data.db.dao.OccurrencesDao
+import org.onekash.kashcal.data.db.dao.RecentChangeWithCalendar
 import org.onekash.kashcal.data.db.dao.TitleSuggestion
 import org.onekash.kashcal.data.db.entity.Attendee
 import org.onekash.kashcal.data.db.entity.Calendar
 import org.onekash.kashcal.data.db.entity.Event
 import org.onekash.kashcal.data.db.entity.Occurrence
+import org.onekash.kashcal.domain.changes.RecentChangeItem
+import org.onekash.kashcal.domain.changes.RecentChangesRecorder
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,7 +27,8 @@ import javax.inject.Singleton
  * Reads Room events, occurrences, calendars, attendees and tags for the domain and UI layers.
  *
  * ViewModels read through this class instead of the DAOs. Queries the UI observes return a
- * Room [Flow], so views update while a sync writes. Its one write is [setCalendarVisibility].
+ * Room [Flow], so views update while a sync writes. Its writes are [setCalendarVisibility] and
+ * [setCalendarNotificationMuted].
  */
 @Singleton
 class EventReader @Inject constructor(
@@ -36,6 +41,8 @@ class EventReader @Inject constructor(
     private val attendeesDao by lazy { database.attendeesDao() }
 
     private val categoryDao by lazy { database.categoryDao() }
+
+    private val recentChangesDao by lazy { database.recentChangesDao() }
 
     companion object {
         /** Cap on tag suggestions so the autocomplete popup stays scannable. */
@@ -76,6 +83,31 @@ class EventReader @Inject constructor(
         categoryDao.observeAll()
             .map { rows -> rows.associate { it.name to it.color } }
             .distinctUntilChanged()
+
+    /**
+     * Emits the Recent changes rows not dismissed that arrived within
+     * [RecentChangesRecorder.RETENTION_MS] of [now], newest first. The window is fixed at
+     * subscription, so a sheet left open past a row's expiry still shows it until reopened.
+     */
+    fun observeRecentChanges(now: Long = System.currentTimeMillis()): Flow<List<RecentChangeItem>> =
+        recentChangesDao.observeVisible(now - RecentChangesRecorder.RETENTION_MS)
+            .map { rows -> rows.map { it.toItem() } }
+            .distinctUntilChanged()
+
+    private fun RecentChangeWithCalendar.toItem() = RecentChangeItem(
+        id = change.id, calendarId = change.calendarId, eventUid = change.eventUid,
+        instanceTs = change.instanceTs, eventId = change.eventId,
+        changeType = change.changeType, title = change.title,
+        startTs = change.startTs, endTs = change.endTs, isAllDay = change.isAllDay,
+        isRecurring = change.isRecurring, detectedAt = change.detectedAt,
+        changedFields = change.changedFields,
+        previousStartTs = change.previousStartTs, previousIsAllDay = change.previousIsAllDay,
+        calendarName = calendarName, calendarColor = calendarColor
+    )
+
+    /** Returns [eventId]'s next occurrence not yet ended ([OccurrencesDao.getNextOccurrence]). */
+    suspend fun getNextOccurrence(eventId: Long, now: Long = System.currentTimeMillis()): Occurrence? =
+        occurrencesDao.getNextOccurrence(eventId, now)
 
     suspend fun getEventById(eventId: Long): Event? {
         return eventsDao.getById(eventId)
@@ -238,6 +270,16 @@ class EventReader @Inject constructor(
     /** Stores [visible] in the calendar's `is_visible`, the source of truth for visibility. */
     suspend fun setCalendarVisibility(calendarId: Long, visible: Boolean) {
         calendarsDao.setVisible(calendarId, visible)
+    }
+
+    /** Stores [muted] in [Calendar.isNotificationMuted]. */
+    suspend fun setCalendarNotificationMuted(calendarId: Long, muted: Boolean) {
+        calendarsDao.setNotificationMuted(calendarId, muted)
+    }
+
+    /** Returns the ids of the calendars whose notifications are muted, read fresh. */
+    suspend fun getNotificationMutedCalendarIds(): Set<Long> {
+        return calendarsDao.getNotificationMutedIds().toSet()
     }
 
     // ========== Occurrence Queries (for Calendar Views) ==========
@@ -658,7 +700,8 @@ class EventReader @Inject constructor(
 
     /**
      * Returns one row per non-cancelled occurrence starting in [fromTime]..[toTime] (epoch ms,
-     * inclusive) in a visible calendar whose event has reminders. An exception without its own
+     * inclusive) in a calendar that notifies ([Calendar.isNotificationMuted] false, hidden ones
+     * included) whose event has reminders. An exception without its own
      * reminders inherits the master's ([EventWithOccurrenceAndColor]).
      */
     suspend fun getEventsWithRemindersInRange(
