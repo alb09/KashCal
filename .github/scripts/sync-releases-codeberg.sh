@@ -154,6 +154,44 @@ echo "=========================================="
 echo "Neu synchronisiert: $synced_count | Übersprungen: $skipped_count | Fehlgeschlagen: $failed_count"
 echo "==========================================";
 
+# ── 1:1: Releases entfernen, die upstream nicht (mehr) hat ──
+# Vollständige Upstream-Liste (nicht nur das Sync-Fenster). Tags entfernt der Git-Mirror (--prune).
+all_source_tags=$(gh release list --repo "$SOURCE_REPO" --limit 1000 --json tagName,isDraft \
+  -q '.[] | select(.isDraft==false) | .tagName')
+source_total=$(echo "$all_source_tags" | grep -c . || true)
+if [ "$source_total" -eq 0 ] || [ "$source_total" -ge 1000 ]; then
+  echo "⚠️  Upstream-Liste unplausibel ($source_total) — überspringe Bereinigung verwaister Releases."
+else
+  echo "🔎 Prüfe auf Codeberg-Releases ohne Upstream-Pendant ($source_total Upstream-Releases)..."
+  pruned_count=0
+  # erst komplett einsammeln, dann löschen (Löschen während der Pagination verschiebt die Seiten)
+  page=1
+  codeberg_releases=""
+  while true; do
+    batch=$(curl -s "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases?page=$page&limit=50" \
+      -H "Authorization: token $CODEBERG_TOKEN" | jq -r '.[] | "\(.id)|\(.tag_name)"')
+    [ -z "$batch" ] && break
+    codeberg_releases="$codeberg_releases
+$batch"
+    page=$((page+1))
+  done
+  while IFS='|' read -r rel_id rel_tag; do
+    [ -z "$rel_id" ] && continue
+    if ! echo "$all_source_tags" | grep -qxF -- "$rel_tag"; then
+      del_code=$(curl -s -o /tmp/del_release_resp.json -w "%{http_code}" -X DELETE \
+        "$CODEBERG_API/repos/$TARGET_REPO_CODEBERG/releases/$rel_id" \
+        -H "Authorization: token $CODEBERG_TOKEN")
+      if [ "$del_code" = "204" ]; then
+        echo "🗑️  Release '$rel_tag' gelöscht (upstream nicht vorhanden)"
+        pruned_count=$((pruned_count+1))
+      else
+        echo "❌ Release '$rel_tag' nicht gelöscht (HTTP $del_code): $(cat /tmp/del_release_resp.json)"
+      fi
+    fi
+  done <<< "$codeberg_releases"
+  echo "Verwaiste Releases entfernt: $pruned_count"
+fi
+
 # ── APK-Retention: nur die neuesten $MAX_APK_RETAIN Releases behalten Assets ──
 if [ "$apk_uploaded_this_run" -gt 0 ]; then
   echo ""
