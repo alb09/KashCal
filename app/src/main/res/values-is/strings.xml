@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Viðburðaboð</string>
     <string name="channel_event_invitations_desc">Tilkynningar þegar þú færð nýtt dagatalsboð</string>
     <string name="channel_calendar_updates">Dagatalsbreytingar</string>
+    <string name="channel_calendar_backup">Sjálfvirk afritun dagatala</string>
+    <string name="channel_calendar_backup_description">Lætur þig vita þegar afritun dagatala mistekst</string>
     <string name="invite_notification_body">Frá %1$s · Ýttu til að svara</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,35 @@
     <string name="backup_error_read_failed">Ekki tókst að lesa skrána</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple dagatal?</string>
-    <string name="onboarding_got_you">Við sjáum um þig.</string>
-    <string name="onboarding_connect_prompt">Tengdu iCloud til að sjá viðburðina þína hér</string>
+    <string name="onboarding_title">Hvar eru dagatölin þín?</string>
+    <string name="onboarding_subtitle">Veldu eitt til að tengja.</string>
+    <string name="onboarding_icloud_detail">Apple ID og lykilorð forrits</string>
+    <string name="onboarding_caldav_title">CalDAV-þjónn</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale og fleiri</string>
+    <string name="onboarding_device_title">Í þessu tæki</string>
+    <string name="onboarding_phone_detail">Google, Outlook og samstillingarforrit</string>
+    <string name="onboarding_use_offline">Nota ónettengt dagatal</string>
+    <string name="onboarding_trust">Opinn hugbúnaður. Engar auglýsingar. Engin rakning.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Slökkt er á áminningum</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">%d viðburður í þessari viku er með áminningu.</item>
+        <item quantity="other">%d viðburðir í þessari viku eru með áminningar.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Ekki núna</string>
+    <string name="reminders_off_turn_on">Kveikja</string>
+    <string name="reminders_on_snackbar">Kveikt á áminningum</string>
+    <string name="about_tagline">Öll dagatölin þín í einu einkaforriti.</string>
+    <string name="about_help_title">Hjálp og leiðbeiningar</string>
+    <string name="about_help_detail">Uppsetning, samstilling og spurningar</string>
+    <string name="about_source_title">Frumkóði</string>
+    <string name="about_source_detail">Apache 2.0, á GitHub</string>
+    <string name="about_support_title">Styðja KashCal</string>
+    <string name="about_support_detail">Takk til allra sem styðja nú þegar</string>
+    <string name="about_link_failed">Ekkert forrit getur opnað þennan tengil.</string>
+    <string name="about_built_in_austin">Búið til með ❤️ í Austin</string>
+    <string name="about_version">Útgáfa %1$s</string>
     <string name="whats_new_skip">Sleppa</string>
     <string name="whats_new_next">Áfram</string>
     <string name="whats_new_page_of">Síða %1$d af %2$d</string>
@@ -275,10 +301,21 @@
     <string name="whats_new_v772_changes_title">Sjáðu hvað breyttist</string>
     <string name="whats_new_v772_changes_body">Nýir, breyttir og fjarlægðir viðburðir úr iCloud- og CalDAV-dagatölunum þínum safnast í Nýlegar breytingar í 7 daga. Ýttu á einn til að opna hann.</string>
     <string name="whats_new_v772_notifications_body">Fáðu tilkynningu þegar samstilling í bakgrunni finnur breytingar á iCloud- eða CalDAV-viðburðunum þínum. Slökkt er á þessu þar til þú kveikir á því.</string>
+    <string name="whats_new_v803_offline_title">Dagatöl sem halda sig í símanum</string>
+    <string name="whats_new_v803_offline_body">Sum plön eiga ekki heima á netþjóni. Gefðu þeim eigin ónettengd dagatöl, eins mörg og þú vilt.</string>
+    <string name="whats_new_v803_backup_title">Afrit sem sjá um sig sjálf</string>
+    <string name="whats_new_v803_backup_body">Veldu möppu einu sinni og KashCal geymir þar alltaf nýtt afrit af ónettengdu dagatölunum þínum.</string>
+    <string name="whats_new_v803_print_title">Vikan þín á pappír</string>
+    <string name="whats_new_v803_print_body">Prentaðu vikuna sem þú ert að skoða. Á hvaða ísskáp hún fer er undir þér komið.</string>
     <string name="whats_new_hero_sample_lunch">Hádegisverður teymisins</string>
     <string name="whats_new_hero_sample_review">Hönnunarrýni</string>
     <string name="whats_new_hero_sample_book_club">Bókaklúbbur</string>
+    <string name="whats_new_hero_sample_dentist">Tannlæknir</string>
+    <string name="whats_new_hero_sample_yoga">Jóga</string>
     <string name="whats_new_hero_sample_calendar">Vinna</string>
+    <string name="whats_new_hero_sample_family">Fjölskylda</string>
+    <string name="whats_new_hero_sample_garden">Garður</string>
+    <string name="whats_new_hero_sample_folder">Dagatalsafrit</string>
     <string name="whats_new_hero_now">núna</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +431,6 @@
     <string name="error_device_calendar_title">Dagatalsvilla</string>
     <string name="error_device_calendar_write_failed">Mistókst að vista í dagatal tækis. Reyndu aftur.</string>
     <string name="error_device_calendar_permission">Dagatalsheimild nauðsynleg. Veittu heimild í Stillingum.</string>
-    <string name="error_device_calendar_permission_denied">Slökktu og kveiktu á dagatalsheimildinni í Stillingum til að veita skrifaðgang</string>
     <string name="error_device_calendar_not_found">Dagatal fannst ekki. Það gæti hafa verið fjarlægt.</string>
     <string name="error_device_event_not_found">Viðburður fannst ekki. Honum gæti hafa verið eytt.</string>
     <string name="error_device_calendar_read_only">Þetta dagatal er skrifvarið.</string>
@@ -537,6 +573,7 @@
     <string name="subscriptions_section_add">Bæta við</string>
     <string name="subscriptions_empty_ics">Engar ICS-áskriftir</string>
     <string name="subscriptions_empty_ics_hint">Bættu við dagatalsstraumi til að sjá viðburði</string>
+    <string name="subscriptions_swipe_hint">Strjúktu straum til að eyða honum.</string>
     <string name="subscriptions_add_ics">Bæta við ICS-dagatali</string>
     <string name="qs_tile_label">Bæta við</string>
     <string name="holiday_catalog_add">Bæta við frídagadagatali</string>
@@ -623,7 +660,7 @@
     <string name="settings_device_calendars_hint">Dagatöl úr öðrum forritum</string>
     <string name="offline_calendars_row_label">Ónettengd dagatöl</string>
     <string name="offline_calendars_row_hint">Dagatöl sem eru bara í þessum síma</string>
-    <string name="offline_calendars_manage_note">Bættu við, endurnefndu, breyttu lit á eða fjarlægðu ónettengdu dagatölin þín.</string>
+    <string name="offline_calendars_manage_note">Strjúktu dagatal til að eyða því.</string>
     <string name="offline_calendars_info">Geymt eingöngu í þessum síma og aldrei samstillt. Öryggisafrit innihalda ekki viðburði, svo fluttu dagatal út til að eiga afrit.</string>
     <string name="offline_calendars_info_cd">Um ónettengd dagatöl</string>
     <string name="offline_calendar_default_state">Sjálfgefið</string>
@@ -649,6 +686,79 @@
     </plurals>
     <string name="offline_calendar_deleted">%1$s eytt</string>
     <string name="offline_calendar_duplicate_name">Ónettengt dagatal sem heitir \"%1$s\" er þegar til</string>
+    <string name="offline_calendar_similar_name">Of líkt \"%1$s\". Veldu annað nafn.</string>
+    <string name="calendar_backup_title">Sjálfvirk afritun dagatala</string>
+    <string name="calendar_backup_row_off">Slökkt</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Næst ekki í afritunarmöppuna</string>
+    <string name="calendar_backup_intro">Vistar hvert ónettengt dagatal sem ICS-skrá í möppu sem þú velur.</string>
+    <string name="calendar_backup_choose_folder">Velja möppu</string>
+    <string name="calendar_backup_choose_folder_hint">Veldu eða búðu til möppu, til dæmis í Documents. Android leyfir hvorki efsta stig geymslunnar né sjálfa Download-möppuna.</string>
+    <string name="calendar_backup_folder">Mappa</string>
+    <string name="calendar_backup_change">Breyta</string>
+    <string name="calendar_backup_frequency">Tíðni</string>
+    <string name="calendar_backup_frequency_info">Afritun getur tafist: Android heldur aftur af bakgrunnsvinnslu þegar síminn er í hvíld eða KashCal hefur ekki verið opnað í nokkurn tíma.</string>
+    <string name="calendar_backup_copies">Fjöldi afrita</string>
+    <string name="calendar_backup_copies_explained">Við hverja afritun er fyrri skráin geymd sem dagsett afrit. Þegar afritin eru fleiri en þessi fjöldi er þeim elstu eytt. Nýjasta skráin ber alltaf heiti dagatalsins.</string>
+    <string name="calendar_backup_copies_fewer">Geyma færri afrit</string>
+    <string name="calendar_backup_copies_more">Geyma fleiri afrit</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d afrit</item>
+        <item quantity="other">%d afrit</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">Eyðir %d eldra afriti. Ekki er hægt að afturkalla þetta.</item>
+        <item quantity="other">Eyðir %d eldri afritum. Ekki er hægt að afturkalla þetta.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Eyðir eldri afritum umfram þennan fjölda. Ekki er hægt að afturkalla þetta.</string>
+    <string name="calendar_backup_calendars">Ónettengd dagatöl</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Engir viðburðir, ekkert vistað</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Ekki tókst að vista. Reynt verður aftur við næstu afritun.</string>
+    <string name="calendar_backup_status">Síðasta afritun %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Síðasta afritun %1$s · %2$d dagatal mistókst</item>
+        <item quantity="other">Síðasta afritun %1$s · %2$d dagatöl mistókust</item>
+    </plurals>
+    <string name="calendar_backup_now">Taka afrit núna</string>
+    <string name="calendar_backup_running">Tekur afrit…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal skrifar yfir þessar skrár við hverja afritun, svo breytingar sem gerðar eru í öðrum forritum haldast ekki. Notaðu „Flytja viðburði inn úr skrá“ til að endurheimta dagatal.</string>
+    <string name="calendar_backup_off_files_stay">Fyrirliggjandi skrár verða áfram í möppu: %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Næst ekki í möppu: %1$s. Hún gæti hafa verið færð, fjarlægð eða aftengd.</string>
+    <string name="calendar_backup_error_unsupported">Ekki hægt að vista skrár í möppu: %1$s. Veldu aðra möppu.</string>
+    <string name="calendar_backup_choose_again">Velja aftur</string>
+    <string name="calendar_backup_pick_refused">KashCal getur ekki notað þessa möppu. Veldu aðra.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal getur ekki búið til skrár í þessari möppu. Veldu aðra.</string>
+    <string name="calendar_backup_failed_title">Afritun dagatala mistókst</string>
+    <string name="calendar_backup_folder_unnamed">afritunarmappan</string>
+    <string name="calendar_backup_alert_unreachable">Næst ekki í möppu: %1$s. Ýttu til að velja möppuna aftur.</string>
+    <string name="calendar_backup_alert_unsupported">Ekki hægt að vista skrár í möppu: %1$s. Ýttu til að velja aðra möppu.</string>
+    <string name="calendar_backup_alert_file_retry">Ekki tókst að vista %1$s. KashCal reynir aftur við næstu afritun.</string>
+    <string name="calendar_backup_every_hour">Á klukkustundar fresti</string>
+    <string name="calendar_backup_every_day">Daglega</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">Á %d klukkustundar fresti</item>
+        <item quantity="other">Á %d klukkustunda fresti</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">Á %d dags fresti</item>
+        <item quantity="other">Á %d daga fresti</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">1 dagur og %1$s á milli</string>
+    <string name="calendar_backup_every_days_hours">%1$s og %2$s á milli</string>
+    <string name="calendar_backup_interval_too_short">Veldu að minnsta kosti 1 klukkustund.</string>
+    <string name="calendar_backup_interval_too_long">Veldu 30 daga eða minna.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">Ekki tókst að vista %d dagatal. KashCal reynir aftur við næstu afritun.</item>
+        <item quantity="other">Ekki tókst að vista %d dagatöl. KashCal reynir aftur við næstu afritun.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">Slökkt er á tilkynningum fyrir KashCal, svo KashCal getur ekki látið þig vita ef afritun mistekst.</string>
+    <string name="calendar_backup_notifications_channel_off">Slökkt er á tilkynningum um afritun, svo KashCal getur ekki látið þig vita ef afritun mistekst.</string>
+    <string name="calendar_backup_open_settings">Opna stillingar</string>
+    <string name="calendar_backup_not_now">Ekki núna</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">%d dagatal mistókst</item>
+        <item quantity="other">%d dagatöl mistókust</item>
+    </plurals>
     <string name="settings_quick_event_add">Snjöll viðburðaskráning</string>
     <string name="settings_quick_event_add_info">Búðu til viðburði með því að skrifa á eðlilegan hátt. \"Hádegismatur með Sam föstudag 13:00\" fyllir út heiti, dagsetningu og tíma fyrir þig.</string>
     <string name="settings_suggest_titles">Stinga upp á heiti viðburða</string>
@@ -717,6 +827,7 @@
     <string name="label_on_days">Á dögum</string>
     <string name="label_pattern">Mynstur</string>
     <string name="label_ends">Endar</string>
+    <string name="sheet_hint_change_end">Ýttu á dag til að breyta lokum</string>
     <string name="label_timezone">Tímabelti</string>
     <string name="label_alerts">Áminningar</string>
     <string name="label_add_alert">Bæta við áminningu</string>
@@ -738,14 +849,11 @@
     <string name="status_hours_ago">%1$d klst síðan</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Sýna viðburði úr öðrum dagatalsforritum á tækinu þínu (samstillingarmilliþjónar, staðbundin dagatöl).</string>
-    <string name="device_calendars_permission_required">Dagatalsheimild nauðsynleg. Ýttu á Virkja til að veita aðgang.</string>
-    <string name="device_calendars_read_only_access">Skrifvarinn aðgangur</string>
-    <string name="device_calendars_grant_write">Veittu skrifheimild til að breyta viðburðum í dagatölum tækis</string>
-    <string name="device_calendars_grant">Veita aðgang</string>
-    <string name="device_calendars_none_found">Engin dagatöl tækis fundust.</string>
+    <string name="device_calendars_intro">Sýna dagatöl tækisins: Google, Outlook og samstillingarforrit.</string>
+    <string name="device_calendars_show_switch">Sýna dagatöl tækis</string>
+    <string name="device_calendars_pick_hint">Veldu dagatöl til að sýna.</string>
+    <string name="device_calendars_empty">Engin dagatöl fundust.</string>
     <string name="device_calendars_local">Staðbundið</string>
-    <string name="device_calendars_read_only_no_write">Skrifvarið (engin skrifheimild)</string>
     <string name="device_calendars_read_only_calendar">Skrifvarið (dagatalið er skrifvarið)</string>
     <string name="settings_sync_frequency">Samstillingartíðni</string>
     <string name="settings_sync_frequency_hint">Hversu oft er samstillt í bakgrunni</string>
@@ -1291,6 +1399,10 @@
     <string name="ics_fetch_error_http">Netþjónninn skilaði villu (%1$d). Athugaðu URL-slóðina.</string>
     <string name="ics_fetch_error_empty">Dagatalsstraumurinn er tómur.</string>
     <string name="ics_fetch_error_not_calendar">Þessi URL-slóð lítur ekki út fyrir að vera dagatalsstraumur.</string>
+    <string name="ics_feed_error_empty_response">Netþjónninn sendi ekki gildan straum.</string>
+    <string name="ics_feed_error_access_denied">Netþjónn þessa straums neitaði um aðgang.</string>
+    <string name="ics_feed_error_too_large">Þessi dagatalsstraumur er of stór til að sækja.</string>
+    <string name="ics_feed_error_unreadable">Ekki tókst að birta viðburði þessa straums.</string>
     <string name="insights_title">Yfirlit</string>
     <string name="insights_period_this_week">Vika</string>
     <string name="insights_period_last_week">Síðasta vika</string>
@@ -1418,7 +1530,7 @@
         <item quantity="other">Laus næstu %1$d daga (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Engar lausar lotur sem eru að minnsta kosti klukkustund á völdu tímabili.</string>
     <string name="share_from_kashcal_footer">Deilt frá KashCal</string>
@@ -1440,5 +1552,31 @@
     <string name="share_as_card_all_day">Allan daginn</string>
     <string name="share_as_card_chooser_title">Deila viðburði</string>
     <string name="share_as_card_share_failed">Ekki tókst að deila kortinu</string>
+    <string name="print_your_week">Prentaðu vikuna þína</string>
+    <string name="print_options_title">Veldu prentvalkosti</string>
+    <string name="print_pages_header">Síður</string>
+    <string name="print_page_week">Vikudagatal</string>
+    <string name="print_page_week_detail">Vikan sem tafla</string>
+    <string name="print_page_details">Upplýsingar</string>
+    <string name="print_page_details_detail">Hver viðburður í heild sinni</string>
+    <string name="print_action">Prenta</string>
+    <string name="cd_print_previous_week">Fyrri vika</string>
+    <string name="cd_print_next_week">Næsta vika</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d síða</item>
+        <item quantity="other">%d síður</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d af %2$d dagatali</item>
+        <item quantity="other">%1$d af %2$d dagatölum</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – Vikan frá %2$s</string>
+    <string name="print_failed">Ekki tókst að prenta. Reyndu aftur.</string>
+    <string name="print_doc_week">Vika</string>
+    <string name="print_doc_printed">Prentað %1$s</string>
+    <string name="print_doc_page_of">Síða %1$s af %2$s</string>
+    <string name="print_doc_numbers_note">Númerin samsvara upplýsingunum, þar sem hver viðburður er skráður í heild sinni.</string>
+    <string name="print_doc_times_in">Tímar sýndir í %1$s</string>
 
 </resources>

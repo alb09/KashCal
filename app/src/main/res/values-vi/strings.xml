@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Lời mời sự kiện</string>
     <string name="channel_event_invitations_desc">Thông báo khi bạn nhận được lời mời lịch mới</string>
     <string name="channel_calendar_updates">Cập nhật lịch</string>
+    <string name="channel_calendar_backup">Tự động sao lưu lịch</string>
+    <string name="channel_calendar_backup_description">Thông báo cho bạn khi sao lưu lịch không thành công</string>
     <string name="invite_notification_body">Từ %1$s · Nhấn để phản hồi</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,34 @@
     <string name="backup_error_read_failed">Không thể đọc tệp</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Dùng Apple Calendar?</string>
-    <string name="onboarding_got_you">Để đây lo.</string>
-    <string name="onboarding_connect_prompt">Kết nối iCloud để xem sự kiện tại đây</string>
+    <string name="onboarding_title">Lịch của bạn ở đâu?</string>
+    <string name="onboarding_subtitle">Chọn một mục để kết nối.</string>
+    <string name="onboarding_icloud_detail">Apple ID và mật khẩu ứng dụng</string>
+    <string name="onboarding_caldav_title">Máy chủ CalDAV</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale và các dịch vụ khác</string>
+    <string name="onboarding_device_title">Trên thiết bị này</string>
+    <string name="onboarding_phone_detail">Google, Outlook và ứng dụng đồng bộ</string>
+    <string name="onboarding_use_offline">Dùng lịch ngoại tuyến</string>
+    <string name="onboarding_trust">Mã nguồn mở. Không quảng cáo. Không theo dõi.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Nhắc nhở đang tắt</string>
+    <plurals name="reminders_off_body">
+        <item quantity="other">%d sự kiện trong tuần này có nhắc nhở.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Không phải bây giờ</string>
+    <string name="reminders_off_turn_on">Bật</string>
+    <string name="reminders_on_snackbar">Đã bật nhắc nhở</string>
+    <string name="about_tagline">Mọi lịch của bạn trong một ứng dụng riêng tư.</string>
+    <string name="about_help_title">Trợ giúp và hướng dẫn</string>
+    <string name="about_help_detail">Thiết lập, đồng bộ và câu hỏi</string>
+    <string name="about_source_title">Mã nguồn</string>
+    <string name="about_source_detail">Apache 2.0, trên GitHub</string>
+    <string name="about_support_title">Ủng hộ KashCal</string>
+    <string name="about_support_detail">Cảm ơn tất cả những ai đã ủng hộ</string>
+    <string name="about_link_failed">Không có ứng dụng nào mở được liên kết này.</string>
+    <string name="about_built_in_austin">Được tạo với ❤️ tại Austin</string>
+    <string name="about_version">Phiên bản %1$s</string>
     <string name="whats_new_skip">Bỏ qua</string>
     <string name="whats_new_next">Tiếp</string>
     <string name="whats_new_page_of">Trang %1$d trên %2$d</string>
@@ -275,10 +300,21 @@
     <string name="whats_new_v772_changes_title">Xem những gì đã thay đổi</string>
     <string name="whats_new_v772_changes_body">Các sự kiện mới, đã sửa và đã xóa từ lịch iCloud và CalDAV của bạn được gom vào Thay đổi gần đây trong 7 ngày. Nhấn vào một mục để mở.</string>
     <string name="whats_new_v772_notifications_body">Nhận thông báo khi đồng bộ chạy nền phát hiện thay đổi trong sự kiện iCloud hoặc CalDAV của bạn. Tính năng này tắt cho đến khi bạn bật lên.</string>
+    <string name="whats_new_v803_offline_title">Lịch chỉ ở trong máy</string>
+    <string name="whats_new_v803_offline_body">Có những kế hoạch không cần đưa lên máy chủ. Hãy tạo lịch ngoại tuyến riêng cho chúng, bao nhiêu tùy bạn.</string>
+    <string name="whats_new_v803_backup_title">Sao lưu mà không cần bận tâm</string>
+    <string name="whats_new_v803_backup_body">Chỉ cần chọn thư mục một lần, KashCal sẽ luôn lưu bản sao mới nhất của lịch ngoại tuyến vào đó.</string>
+    <string name="whats_new_v803_print_title">Tuần của bạn trên giấy</string>
+    <string name="whats_new_v803_print_body">In tuần bạn đang xem. Dán lên tủ lạnh nào là tùy bạn.</string>
     <string name="whats_new_hero_sample_lunch">Ăn trưa cùng nhóm</string>
     <string name="whats_new_hero_sample_review">Họp duyệt thiết kế</string>
     <string name="whats_new_hero_sample_book_club">Câu lạc bộ sách</string>
+    <string name="whats_new_hero_sample_dentist">Nha sĩ</string>
+    <string name="whats_new_hero_sample_yoga">Yoga</string>
     <string name="whats_new_hero_sample_calendar">Công việc</string>
+    <string name="whats_new_hero_sample_family">Gia đình</string>
+    <string name="whats_new_hero_sample_garden">Làm vườn</string>
+    <string name="whats_new_hero_sample_folder">Bản sao lưu lịch</string>
     <string name="whats_new_hero_now">bây giờ</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +430,6 @@
     <string name="error_device_calendar_title">Lỗi lịch</string>
     <string name="error_device_calendar_write_failed">Lưu vào lịch thiết bị thất bại. Vui lòng thử lại.</string>
     <string name="error_device_calendar_permission">Cần quyền ghi lịch. Vui lòng cấp quyền trong Cài đặt.</string>
-    <string name="error_device_calendar_permission_denied">Để cấp quyền ghi, hãy tắt rồi bật lại quyền Lịch trong Cài đặt</string>
     <string name="error_device_calendar_not_found">Không tìm thấy lịch. Có thể đã bị xóa.</string>
     <string name="error_device_event_not_found">Không tìm thấy sự kiện. Có thể đã bị xóa.</string>
     <string name="error_device_calendar_read_only">Lịch này chỉ cho phép đọc.</string>
@@ -538,6 +573,7 @@
     <string name="subscriptions_section_add">Thêm</string>
     <string name="subscriptions_empty_ics">Chưa có đăng ký ICS nào</string>
     <string name="subscriptions_empty_ics_hint">Thêm nguồn cấp lịch để xem sự kiện</string>
+    <string name="subscriptions_swipe_hint">Vuốt nguồn cấp để xóa.</string>
     <string name="subscriptions_add_ics">Thêm lịch ICS</string>
     <string name="qs_tile_label">Thêm sự kiện</string>
     <string name="holiday_catalog_add">Thêm lịch ngày lễ</string>
@@ -624,7 +660,7 @@
     <string name="settings_device_calendars_hint">Lịch từ các ứng dụng khác</string>
     <string name="offline_calendars_row_label">Lịch ngoại tuyến</string>
     <string name="offline_calendars_row_hint">Lịch chỉ lưu trên điện thoại này</string>
-    <string name="offline_calendars_manage_note">Thêm, đổi tên, đổi màu hoặc xóa lịch ngoại tuyến của bạn.</string>
+    <string name="offline_calendars_manage_note">Vuốt lịch để xóa.</string>
     <string name="offline_calendars_info">Chỉ lưu trên điện thoại này và không bao giờ đồng bộ. Bản sao lưu không gồm sự kiện, vì vậy hãy xuất lịch để giữ một bản sao.</string>
     <string name="offline_calendars_info_cd">Giới thiệu về lịch ngoại tuyến</string>
     <string name="offline_calendar_default_state">Mặc định</string>
@@ -648,6 +684,72 @@
     </plurals>
     <string name="offline_calendar_deleted">Đã xóa %1$s</string>
     <string name="offline_calendar_duplicate_name">Đã có lịch ngoại tuyến tên \"%1$s\"</string>
+    <string name="offline_calendar_similar_name">Quá giống với \"%1$s\". Hãy chọn tên khác.</string>
+    <string name="calendar_backup_title">Tự động sao lưu lịch</string>
+    <string name="calendar_backup_row_off">Tắt</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Không thể truy cập thư mục sao lưu</string>
+    <string name="calendar_backup_intro">Lưu từng lịch ngoại tuyến thành tệp ICS trong thư mục bạn chọn.</string>
+    <string name="calendar_backup_choose_folder">Chọn thư mục</string>
+    <string name="calendar_backup_choose_folder_hint">Chọn hoặc tạo một thư mục, ví dụ trong Documents. Android không cho phép dùng thư mục gốc của bộ nhớ hoặc chính thư mục Download.</string>
+    <string name="calendar_backup_folder">Thư mục</string>
+    <string name="calendar_backup_change">Thay đổi</string>
+    <string name="calendar_backup_frequency">Tần suất</string>
+    <string name="calendar_backup_frequency_info">Sao lưu có thể chạy trễ: Android hạn chế tác vụ nền khi điện thoại không được sử dụng hoặc khi bạn chưa mở KashCal trong một thời gian.</string>
+    <string name="calendar_backup_copies">Số bản sao giữ lại</string>
+    <string name="calendar_backup_copies_explained">Mỗi lần sao lưu sẽ giữ tệp trước đó dưới dạng bản sao có ghi ngày. Khi số bản sao vượt quá con số này, các bản cũ nhất sẽ bị xóa. Tệp mới nhất luôn mang tên của lịch.</string>
+    <string name="calendar_backup_copies_fewer">Giữ ít bản sao hơn</string>
+    <string name="calendar_backup_copies_more">Giữ nhiều bản sao hơn</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="other">%d bản sao</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="other">Xóa %d bản sao cũ. Không thể hoàn tác.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Xóa các bản sao cũ vượt quá con số này. Không thể hoàn tác.</string>
+    <string name="calendar_backup_calendars">Lịch ngoại tuyến</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Không có sự kiện, chưa lưu gì</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Không thể lưu. Sẽ thử lại ở lần sao lưu tiếp theo.</string>
+    <string name="calendar_backup_status">Sao lưu lần cuối %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="other">Sao lưu lần cuối %1$s · %2$d lịch không thành công</item>
+    </plurals>
+    <string name="calendar_backup_now">Sao lưu ngay</string>
+    <string name="calendar_backup_running">Đang sao lưu…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal ghi đè các tệp này mỗi lần sao lưu, vì vậy thay đổi thực hiện trong ứng dụng khác sẽ không được giữ lại. Để khôi phục lịch, hãy dùng "Nhập sự kiện từ tệp".</string>
+    <string name="calendar_backup_off_files_stay">Các tệp hiện có vẫn nằm trong %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Không thể truy cập %1$s. Thư mục có thể đã bị di chuyển, xóa hoặc ngắt kết nối.</string>
+    <string name="calendar_backup_error_unsupported">Không thể lưu tệp vào %1$s. Hãy chọn thư mục khác.</string>
+    <string name="calendar_backup_choose_again">Chọn lại</string>
+    <string name="calendar_backup_pick_refused">KashCal không thể dùng thư mục đó. Hãy chọn thư mục khác.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal không thể tạo tệp trong thư mục đó. Hãy chọn thư mục khác.</string>
+    <string name="calendar_backup_failed_title">Sao lưu lịch không thành công</string>
+    <string name="calendar_backup_folder_unnamed">thư mục sao lưu</string>
+    <string name="calendar_backup_alert_unreachable">Không thể truy cập %1$s. Nhấn để chọn lại.</string>
+    <string name="calendar_backup_alert_unsupported">Không thể lưu tệp vào %1$s. Nhấn để chọn thư mục khác.</string>
+    <string name="calendar_backup_alert_file_retry">Không thể lưu %1$s. KashCal sẽ thử lại ở lần sao lưu tiếp theo.</string>
+    <string name="calendar_backup_every_hour">Mỗi giờ</string>
+    <string name="calendar_backup_every_day">Mỗi ngày</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="other">Mỗi %d giờ</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="other">Mỗi %d ngày</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Mỗi 1 ngày %1$s</string>
+    <string name="calendar_backup_every_days_hours">Mỗi %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">Hãy chọn ít nhất 1 giờ.</string>
+    <string name="calendar_backup_interval_too_long">Hãy chọn tối đa 30 ngày.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="other">Không thể lưu %d lịch. KashCal sẽ thử lại ở lần sao lưu tiếp theo.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">Thông báo của KashCal đang tắt nên ứng dụng không thể báo cho bạn khi sao lưu không thành công.</string>
+    <string name="calendar_backup_notifications_channel_off">Thông báo sao lưu đang tắt nên KashCal không thể báo cho bạn khi sao lưu không thành công.</string>
+    <string name="calendar_backup_open_settings">Mở cài đặt</string>
+    <string name="calendar_backup_not_now">Để sau</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="other">%d lịch không thành công</item>
+    </plurals>
     <string name="settings_quick_event_add">Thêm sự kiện thông minh</string>
     <string name="settings_quick_event_add_info">Tạo sự kiện bằng cách gõ tự nhiên. \"Ăn trưa với Sam thứ Sáu 13:00\" sẽ tự điền tiêu đề, ngày và giờ cho bạn.</string>
     <string name="settings_suggest_titles">Gợi ý tiêu đề sự kiện</string>
@@ -715,6 +817,7 @@
     <string name="label_on_days">Vào ngày</string>
     <string name="label_pattern">Mẫu</string>
     <string name="label_ends">Kết thúc</string>
+    <string name="sheet_hint_change_end">Chạm vào một ngày để đổi ngày kết thúc</string>
     <string name="label_timezone">Múi giờ</string>
     <string name="label_alerts">Nhắc nhở</string>
     <string name="label_add_alert">Thêm nhắc nhở</string>
@@ -736,14 +839,11 @@
     <string name="status_hours_ago">%1$d giờ trước</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Hiển thị sự kiện từ ứng dụng lịch khác trên thiết bị (bộ đồng bộ, lịch nội bộ).</string>
-    <string name="device_calendars_permission_required">Cần quyền truy cập lịch. Nhấn Bật để cấp quyền.</string>
-    <string name="device_calendars_read_only_access">Chỉ đọc</string>
-    <string name="device_calendars_grant_write">Cấp quyền ghi để chỉnh sửa sự kiện lịch thiết bị</string>
-    <string name="device_calendars_grant">Cấp quyền</string>
-    <string name="device_calendars_none_found">Không tìm thấy lịch thiết bị.</string>
+    <string name="device_calendars_intro">Hiển thị lịch từ Google, Outlook và ứng dụng đồng bộ trên thiết bị này.</string>
+    <string name="device_calendars_show_switch">Hiển thị lịch thiết bị</string>
+    <string name="device_calendars_pick_hint">Chọn lịch để hiển thị.</string>
+    <string name="device_calendars_empty">Không tìm thấy lịch nào.</string>
     <string name="device_calendars_local">Nội bộ</string>
-    <string name="device_calendars_read_only_no_write">Chỉ đọc (không có quyền ghi)</string>
     <string name="device_calendars_read_only_calendar">Chỉ đọc (lịch chỉ đọc)</string>
     <string name="settings_sync_frequency">Tần suất đồng bộ</string>
     <string name="settings_sync_frequency_hint">Tần suất đồng bộ chạy nền</string>
@@ -1233,6 +1333,10 @@
     <string name="ics_fetch_error_http">Máy chủ trả về lỗi (%1$d). Vui lòng kiểm tra URL.</string>
     <string name="ics_fetch_error_empty">Nguồn cấp lịch trống.</string>
     <string name="ics_fetch_error_not_calendar">URL đó có vẻ không phải là nguồn cấp lịch.</string>
+    <string name="ics_feed_error_empty_response">Máy chủ không gửi nguồn cấp hợp lệ.</string>
+    <string name="ics_feed_error_access_denied">Máy chủ của nguồn cấp này đã từ chối truy cập.</string>
+    <string name="ics_feed_error_too_large">Nguồn cấp lịch này quá lớn để tải xuống.</string>
+    <string name="ics_feed_error_unreadable">Không thể hiển thị sự kiện của nguồn cấp này.</string>
     <string name="insights_title">Phân tích</string>
     <string name="insights_period_this_week">Tuần</string>
     <string name="insights_period_last_week">Tuần trước</string>
@@ -1355,7 +1459,7 @@
         <item quantity="other">Rảnh trong %1$d ngày tới (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Không có khoảng trống ít nhất một giờ trong phạm vi đã chọn.</string>
     <string name="share_from_kashcal_footer">Chia sẻ từ KashCal</string>
@@ -1376,5 +1480,29 @@
     <string name="share_as_card_all_day">Cả ngày</string>
     <string name="share_as_card_chooser_title">Chia sẻ sự kiện</string>
     <string name="share_as_card_share_failed">Không thể chia sẻ thẻ</string>
+    <string name="print_your_week">In lịch tuần của bạn</string>
+    <string name="print_options_title">Chọn tùy chọn in</string>
+    <string name="print_pages_header">Trang</string>
+    <string name="print_page_week">Lịch tuần</string>
+    <string name="print_page_week_detail">Cả tuần dạng lưới</string>
+    <string name="print_page_details">Chi tiết</string>
+    <string name="print_page_details_detail">Đầy đủ mọi sự kiện</string>
+    <string name="print_action">In</string>
+    <string name="cd_print_previous_week">Tuần trước</string>
+    <string name="cd_print_next_week">Tuần sau</string>
+    <plurals name="print_summary_pages">
+        <item quantity="other">%d trang</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="other">%1$d/%2$d lịch</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – Tuần %2$s</string>
+    <string name="print_failed">Không in được. Hãy thử lại.</string>
+    <string name="print_doc_week">Tuần</string>
+    <string name="print_doc_printed">In ngày %1$s</string>
+    <string name="print_doc_page_of">Trang %1$s/%2$s</string>
+    <string name="print_doc_numbers_note">Các số khớp với trang chi tiết, nơi liệt kê đầy đủ mọi sự kiện.</string>
+    <string name="print_doc_times_in">Giờ hiển thị theo %1$s</string>
 
 </resources>

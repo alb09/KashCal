@@ -479,4 +479,50 @@ class ContactAnniversaryRepositoryTest {
         assertTrue(event.isAllDay)
         assertNull(event.reminders)
     }
+
+    /**
+     * A phone holding the 1604 form keeps it until the contact is next pulled, then holds the
+     * year-less form: both name the same anniversary, so the second sync keeps the event as it is.
+     */
+    @Test
+    fun `syncEvents keeps the anniversary when its 1604 date becomes the year-less form`() = runTest {
+        coEvery {
+            accountRepository.getAccountByProviderAndEmail(AccountProvider.CONTACTS, ContactEventType.ANNIVERSARY.accountEmail)
+        } returns testAccount
+        coEvery { calendarsDao.getByAccountIdOnce(10L) } returns listOf(testCalendar)
+        coEvery { calendarsDao.getById(20L) } returns testCalendar
+        coEvery { dataStore.getAnniversaryReminder() } returns KashCalDataStore.REMINDER_OFF
+        val inserted = slot<Event>()
+        coEvery { eventsDao.insert(capture(inserted)) } returns 100L
+        coEvery { eventsDao.getAllMasterEventsForCalendar(20L) } answers {
+            if (inserted.isCaptured) listOf(inserted.captured.copy(id = 100L)) else emptyList()
+        }
+
+        fun cursorWith(startDate: String): Cursor = mockk<Cursor>(relaxed = true).also { c ->
+            every { c.getColumnIndex(ContactsContract.Data.LOOKUP_KEY) } returns 0
+            every { c.getColumnIndex(ContactsContract.Data.DISPLAY_NAME) } returns 1
+            every { c.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE) } returns 2
+            every { c.moveToNext() } returnsMany listOf(true, false)
+            every { c.getString(0) } returns "lookup-jane"
+            every { c.getString(1) } returns "Jane Doe"
+            every { c.getString(2) } returns startDate
+        }
+        every { contentResolver.query(any(), any(), any(), any(), any()) } returnsMany
+            listOf(cursorWith("1604-09-22"), cursorWith("--09-22"))
+
+        val first = repository.syncEvents()
+        assertTrue("first sync failed: $first", first is ContactEventSyncResult.Success)
+        assertEquals(1, (first as ContactEventSyncResult.Success).added)
+        assertNull(inserted.captured.description)
+        assertEquals(ContactEventType.ANNIVERSARY.getCaldavUrl("lookup-jane", 9, 22), inserted.captured.caldavUrl)
+
+        val second = repository.syncEvents()
+        assertTrue("second sync failed: $second", second is ContactEventSyncResult.Success)
+        second as ContactEventSyncResult.Success
+        assertEquals(0, second.added)
+        assertEquals(0, second.updated)
+        assertEquals(0, second.deleted)
+        coVerify(exactly = 0) { eventsDao.deleteById(any()) }
+        coVerify(exactly = 1) { eventsDao.insert(any()) }
+    }
 }

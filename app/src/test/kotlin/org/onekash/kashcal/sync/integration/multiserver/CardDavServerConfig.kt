@@ -39,6 +39,20 @@ data class CardDavServerConfig(
      */
     val dropsKind: Boolean = false,
     /**
+     * True when the server stores a date in an early year one day earlier than sent: Zoho serves
+     * `1604-03-15` and `1700-03-15` as the 14th, while 1899 and later come back unchanged
+     * (live, 2026-10-29). So a vCard 3.0 birthday without a year, sent in the 1604 form, reads
+     * back without a year but a day early. This is server behavior, asserted as observed in
+     * [MultiServerCardDavYearlessDateRoundTripTest].
+     */
+    val shiftsEarlyYearDates: Boolean = false,
+    /**
+     * True when the server accepts a vCard 3.0 Apple `itemN.X-ABDATE` anniversary on write but
+     * doesn't store it, dated or not (Zoho, live 2026-10-29). Anniversary read-back checks are
+     * skipped for such a server.
+     */
+    val dropsAppleAnniversary: Boolean = false,
+    /**
      * The host a real account of this provider stores from CalDAV setup, when it differs from
      * the CardDAV [defaultServerUrl]. Only split-host providers set it (Zoho: contacts on
      * `contacts.zoho.com`, calendars on `calendar.zoho.com`; Fastmail likewise).
@@ -152,6 +166,8 @@ data class CardDavServerConfig(
             caldavHostUrl = "https://calendar.zoho.com",
             quirksFactory = { ZohoCardDavQuirks() },
             usesWellKnownDiscovery = true,
+            shiftsEarlyYearDates = true,
+            dropsAppleAnniversary = true,
         )
 
         // Fastmail serves CardDAV from carddav.fastmail.com, a different host from its

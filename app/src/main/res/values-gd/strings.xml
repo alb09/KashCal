@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Cuiridhean tachartais</string>
     <string name="channel_event_invitations_desc">Brathan nuair a gheibh thu cuireadh mìosachain ùr</string>
     <string name="channel_calendar_updates">Atharraichean mìosachain</string>
+    <string name="channel_calendar_backup">Lethbhreac-glèidhidh fèin-obrachail nam mìosachan</string>
+    <string name="channel_calendar_backup_description">Innsidh seo dhut nuair a dh\'fhàilligeas lethbhreac-glèidhidh nam mìosachan</string>
     <string name="invite_notification_body">O %1$s · Thoir gnogag gus freagairt</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,37 @@
     <string name="backup_error_read_failed">Cha b\'urrainnear am faidhle a leughadh</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Mìosachan Apple?</string>
-    <string name="onboarding_got_you">Tha sinn an seo dhut.</string>
-    <string name="onboarding_connect_prompt">Ceangail iCloud gus na tachartasan agad fhaicinn an seo</string>
+    <string name="onboarding_title">Càit a bheil na mìosachain agad?</string>
+    <string name="onboarding_subtitle">Tagh fear dhiubh gus a cheangal.</string>
+    <string name="onboarding_icloud_detail">Apple ID agus facal-faire aplacaid</string>
+    <string name="onboarding_caldav_title">Frithealaiche CalDAV</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale is feadhainn eile</string>
+    <string name="onboarding_device_title">Air an uidheam seo</string>
+    <string name="onboarding_phone_detail">Google, Outlook is aplacaidean sioncronachaidh</string>
+    <string name="onboarding_use_offline">Cleachd mìosachan far loidhne</string>
+    <string name="onboarding_trust">Còd fosgailte. Gun sanasan. Gun tracadh.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Tha cuimhneachain dheth</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">Tha cuimhneachan aig %d tachartas an t-seachdain seo.</item>
+        <item quantity="two">Tha cuimhneachain aig %d thachartas an t-seachdain seo.</item>
+        <item quantity="few">Tha cuimhneachain aig %d tachartasan an t-seachdain seo.</item>
+        <item quantity="other">Tha cuimhneachain aig %d tachartas an t-seachdain seo.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Chan ann an-dràsta</string>
+    <string name="reminders_off_turn_on">Cuir air</string>
+    <string name="reminders_on_snackbar">Cuimhneachain air</string>
+    <string name="about_tagline">Do mhìosachain uile ann an aon aplacaid phrìobhaideach.</string>
+    <string name="about_help_title">Cobhair is treòraichean</string>
+    <string name="about_help_detail">Suidheachadh, sioncronachadh is ceistean</string>
+    <string name="about_source_title">Còd tùsail</string>
+    <string name="about_source_detail">Apache 2.0, air GitHub</string>
+    <string name="about_support_title">Cuir taic ri KashCal</string>
+    <string name="about_support_detail">Mòran taing dhaibhsan a tha a\' cur taic mu thràth</string>
+    <string name="about_link_failed">Chan urrainn do dh\'aplacaid sam bith an ceangal seo fhosgladh.</string>
+    <string name="about_built_in_austin">Air a thogail le ❤️ ann an Austin</string>
+    <string name="about_version">Tionndadh %1$s</string>
     <string name="whats_new_skip">Leum seachad</string>
     <string name="whats_new_next">Air adhart</string>
     <string name="whats_new_page_of">Duilleag %1$d à %2$d</string>
@@ -275,10 +303,21 @@
     <string name="whats_new_v772_changes_title">Faic dè dh\'atharraich</string>
     <string name="whats_new_v772_changes_body">Thèid tachartasan ùra, deasaichte is air an toirt air falbh o na mìosachain iCloud is CalDAV agad a chruinneachadh ann an Atharraichean o chionn ghoirid fad 7 latha. Thoir gnogag air fear dhiubh gus fhosgladh.</string>
     <string name="whats_new_v772_notifications_body">Faigh brath nuair a lorgas sioncronachadh sa chùlaibh atharraichean air na tachartasan iCloud no CalDAV agad. Bidh e dheth gus an cuir thu air e.</string>
+    <string name="whats_new_v803_offline_title">Mìosachain a dh\'fhanas air an fhòn agad</string>
+    <string name="whats_new_v803_offline_body">Chan eil àite aig cuid de phlanaichean air frithealaiche. Thoir dhaibh am mìosachain far loidhne fhèin, uiread \'s a thogras tu.</string>
+    <string name="whats_new_v803_backup_title">Lethbhreacan-glèidhidh nach fheum thu smaoineachadh orra</string>
+    <string name="whats_new_v803_backup_body">Tagh pasgan aon turas, agus cumaidh KashCal lethbhreac ùr de na mìosachain far loidhne agad ann.</string>
+    <string name="whats_new_v803_print_title">An t-seachdain agad, air pàipear</string>
+    <string name="whats_new_v803_print_body">Clò-bhuail an t-seachdain air a bheil thu a\' coimhead. Tha e an urra riut fhèin dè am frids air an tèid i.</string>
     <string name="whats_new_hero_sample_lunch">Lòn na sgioba</string>
     <string name="whats_new_hero_sample_review">Lèirmheas dealbhaidh</string>
     <string name="whats_new_hero_sample_book_club">Club leabhraichean</string>
+    <string name="whats_new_hero_sample_dentist">Fiaclair</string>
+    <string name="whats_new_hero_sample_yoga">Ioga</string>
     <string name="whats_new_hero_sample_calendar">Obair</string>
+    <string name="whats_new_hero_sample_family">Teaghlach</string>
+    <string name="whats_new_hero_sample_garden">Gàrradh</string>
+    <string name="whats_new_hero_sample_folder">Lethbhreacan-glèidhidh nam mìosachan</string>
     <string name="whats_new_hero_now">an-dràsta</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +433,6 @@
     <string name="error_device_calendar_title">Mearachd Mìosachain</string>
     <string name="error_device_calendar_write_failed">Dh\'fhàillig sàbhladh gu mìosachan an uidheim. Feuch a-rithist.</string>
     <string name="error_device_calendar_permission">Tha cead sgrìobhaidh mìosachain a dhìth. Thoir cead sna Roghainnean.</string>
-    <string name="error_device_calendar_permission_denied">Cuir dheth is air a-rithist cead a\' Mhìosachain sna Roghainnean gus inntrigeadh sgrìobhaidh a thoirt seachad</string>
     <string name="error_device_calendar_not_found">Mìosachan nach deach a lorg. \'S dòcha gun deach a thoirt air falbh.</string>
     <string name="error_device_event_not_found">Tachartas nach deach a lorg. \'S dòcha gun deach a sguabadh às.</string>
     <string name="error_device_calendar_read_only">Tha am mìosachan seo airson leughaidh a-mhàin.</string>
@@ -538,6 +576,7 @@
     <string name="subscriptions_section_add">Cuir Ris</string>
     <string name="subscriptions_empty_ics">Gun fho-sgrìobhaidhean ICS</string>
     <string name="subscriptions_empty_ics_hint">Cuir fotha mìosachain ris gus tachartasan fhaicinn</string>
+    <string name="subscriptions_swipe_hint">Grad-shlaighd inbhir gus a sguabadh às.</string>
     <string name="subscriptions_add_ics">Cuir Mìosachan ICS Ris</string>
     <string name="qs_tile_label">Cuir ris</string>
     <string name="holiday_catalog_add">Cuir mìosachan làithean-saora ris</string>
@@ -624,7 +663,7 @@
     <string name="settings_device_calendars_hint">Mìosachain bho aplacaidean eile</string>
     <string name="offline_calendars_row_label">Mìosachain far loidhne</string>
     <string name="offline_calendars_row_hint">Mìosachain a dh\'fhanas air an fhòn seo</string>
-    <string name="offline_calendars_manage_note">Cuir ris, thoir ainm ùr, atharraich an dath no sguab às na mìosachain far loidhne agad.</string>
+    <string name="offline_calendars_manage_note">Grad-shlaighd mìosachan gus a sguabadh às.</string>
     <string name="offline_calendars_info">Cha tèid an cumail ach air an fhòn seo is cha tèid an sioncronachadh idir. Chan eil tachartasan sna lethbhreacan-glèidhidh, mar sin às-phortaich mìosachan airson lethbhreac a chumail.</string>
     <string name="offline_calendars_info_cd">Mu na mìosachain far loidhne</string>
     <string name="offline_calendar_default_state">Bunaiteach</string>
@@ -654,6 +693,93 @@
     </plurals>
     <string name="offline_calendar_deleted">Chaidh %1$s a sguabadh às</string>
     <string name="offline_calendar_duplicate_name">Tha mìosachan far loidhne air a bheil \"%1$s\" ann mu thràth</string>
+    <string name="offline_calendar_similar_name">Ro choltach ri \"%1$s\". Tagh ainm eile.</string>
+    <string name="calendar_backup_title">Lethbhreac-glèidhidh fèin-obrachail nam mìosachan</string>
+    <string name="calendar_backup_row_off">Dheth</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Cha ruig sinn am pasgan lethbhreac-glèidhidh</string>
+    <string name="calendar_backup_intro">Sàbhailidh seo gach mìosachan far loidhne mar fhaidhle ICS ann am pasgan a thaghas tu.</string>
+    <string name="calendar_backup_choose_folder">Tagh pasgan</string>
+    <string name="calendar_backup_choose_folder_hint">Tagh no cruthaich pasgan, can ann an Documents. Cha cheadaich Android bàrr an stòrais no am pasgan Download fhèin.</string>
+    <string name="calendar_backup_folder">Pasgan</string>
+    <string name="calendar_backup_change">Atharraich</string>
+    <string name="calendar_backup_frequency">Tricead</string>
+    <string name="calendar_backup_frequency_info">Dh\'fhaoidte gun ruith lethbhreacan-glèidhidh anmoch: cumaidh Android obair sa chùlaibh air ais nuair a bhios am fòn na thàmh no mur deach KashCal fhosgladh o chionn greis.</string>
+    <string name="calendar_backup_copies">Lethbhreacan ri chumail</string>
+    <string name="calendar_backup_copies_explained">Cumaidh gach lethbhreac-glèidhidh am faidhle roimhe mar lethbhreac le ceann-latha. Nuair a bhios barrachd air an àireamh seo ann, thèid an fheadhainn as sine a sguabadh às. Bidh ainm a\' mhìosachain air an fhaidhle as ùire an-còmhnaidh.</string>
+    <string name="calendar_backup_copies_fewer">Cùm nas lugha de lethbhreacan</string>
+    <string name="calendar_backup_copies_more">Cùm barrachd lethbhreacan</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d lethbhreac</item>
+        <item quantity="two">%d lethbhreac</item>
+        <item quantity="few">%d lethbhreacan</item>
+        <item quantity="other">%d lethbhreac</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">Sguabaidh seo às %d lethbhreac nas sine. Cha ghabh seo a neo-dhèanamh.</item>
+        <item quantity="two">Sguabaidh seo às %d lethbhreac nas sine. Cha ghabh seo a neo-dhèanamh.</item>
+        <item quantity="few">Sguabaidh seo às %d lethbhreacan nas sine. Cha ghabh seo a neo-dhèanamh.</item>
+        <item quantity="other">Sguabaidh seo às %d lethbhreac nas sine. Cha ghabh seo a neo-dhèanamh.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Sguabaidh seo às na lethbhreacan as sine thar na h-àireimh seo. Cha ghabh seo a neo-dhèanamh.</string>
+    <string name="calendar_backup_calendars">Mìosachain far loidhne</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Gun tachartas, cha deach dad a shàbhaladh</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Cha b\' urrainn dhuinn a shàbhaladh. Feuchaidh sinn ris a-rithist aig an ath lethbhreac-glèidhidh.</string>
+    <string name="calendar_backup_status">An lethbhreac-glèidhidh mu dheireadh %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">An lethbhreac-glèidhidh mu dheireadh %1$s · dh\'fhàillig %2$d mhìosachan</item>
+        <item quantity="two">An lethbhreac-glèidhidh mu dheireadh %1$s · dh\'fhàillig %2$d mhìosachan</item>
+        <item quantity="few">An lethbhreac-glèidhidh mu dheireadh %1$s · dh\'fhàillig %2$d mìosachain</item>
+        <item quantity="other">An lethbhreac-glèidhidh mu dheireadh %1$s · dh\'fhàillig %2$d mìosachan</item>
+    </plurals>
+    <string name="calendar_backup_now">Dèan lethbhreac an-dràsta</string>
+    <string name="calendar_backup_running">A’ dèanamh lethbhreac-glèidhidh…</string>
+    <string name="calendar_backup_footer_overwrites">Sgrìobhaidh KashCal thairis air na faidhlichean seo aig gach lethbhreac-glèidhidh, mar sin cha mhair atharraichean a nì thu orra ann an aplacaidean eile. Airson mìosachan aiseag, cleachd Ion-phortaich tachartasan bho fhaidhle.</string>
+    <string name="calendar_backup_off_files_stay">Fuirichidh na faidhlichean a th\' ann mu thràth ann an %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Cha ruig sinn %1$s. Dh\'fhaoidte gun deach a ghluasad, a sguabadh às no a dhì-cheangal.</string>
+    <string name="calendar_backup_error_unsupported">Chan urrainn dhuinn faidhlichean a shàbhaladh an-seo: %1$s. Tagh pasgan eile.</string>
+    <string name="calendar_backup_choose_again">Tagh a-rithist</string>
+    <string name="calendar_backup_pick_refused">Chan urrainn do KashCal am pasgan sin a chleachdadh. Tagh fear eile.</string>
+    <string name="calendar_backup_pick_cannot_create">Chan urrainn do KashCal faidhlichean a chruthachadh sa phasgan sin. Tagh fear eile.</string>
+    <string name="calendar_backup_failed_title">Dh\'fhàillig lethbhreac-glèidhidh nam mìosachan</string>
+    <string name="calendar_backup_folder_unnamed">am pasgan lethbhreac-glèidhidh</string>
+    <string name="calendar_backup_alert_unreachable">Cha ruig sinn %1$s. Thoir gnogag gus a thaghadh a-rithist.</string>
+    <string name="calendar_backup_alert_unsupported">Chan urrainn dhuinn faidhlichean a shàbhaladh an-seo: %1$s. Thoir gnogag gus pasgan eile a thaghadh.</string>
+    <string name="calendar_backup_alert_file_retry">Cha b\' urrainn dhuinn %1$s a shàbhaladh. Feuchaidh KashCal ris a-rithist aig an ath lethbhreac-glèidhidh.</string>
+    <string name="calendar_backup_every_hour">Gach uair a thìde</string>
+    <string name="calendar_backup_every_day">Gach là</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">Gach %d uair</item>
+        <item quantity="two">Gach %d uair</item>
+        <item quantity="few">Gach %d uairean</item>
+        <item quantity="other">Gach %d uair</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">Gach %d là</item>
+        <item quantity="two">Gach %d là</item>
+        <item quantity="few">Gach %d làithean</item>
+        <item quantity="other">Gach %d là</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Gach 1 là is %1$s</string>
+    <string name="calendar_backup_every_days_hours">Gach %1$s is %2$s</string>
+    <string name="calendar_backup_interval_too_short">Tagh uair a thìde air a char as lugha.</string>
+    <string name="calendar_backup_interval_too_long">Tagh 30 là no nas lugha.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">Cha b\' urrainn dhuinn %d mhìosachan a shàbhaladh. Feuchaidh KashCal ris a-rithist aig an ath lethbhreac-glèidhidh.</item>
+        <item quantity="two">Cha b\' urrainn dhuinn %d mhìosachan a shàbhaladh. Feuchaidh KashCal ris a-rithist aig an ath lethbhreac-glèidhidh.</item>
+        <item quantity="few">Cha b\' urrainn dhuinn %d mìosachain a shàbhaladh. Feuchaidh KashCal ris a-rithist aig an ath lethbhreac-glèidhidh.</item>
+        <item quantity="other">Cha b\' urrainn dhuinn %d mìosachan a shàbhaladh. Feuchaidh KashCal ris a-rithist aig an ath lethbhreac-glèidhidh.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">Tha na brathan dheth airson KashCal, mar sin chan urrainn dha innse dhut ma dh\'fhàilligeas lethbhreac-glèidhidh.</string>
+    <string name="calendar_backup_notifications_channel_off">Tha brathan nan lethbhreacan-glèidhidh dheth, mar sin chan urrainn do KashCal innse dhut ma dh\'fhàilligeas lethbhreac-glèidhidh.</string>
+    <string name="calendar_backup_open_settings">Fosgail na roghainnean</string>
+    <string name="calendar_backup_not_now">Chan ann an-dràsta</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">Dh\'fhàillig %d mhìosachan</item>
+        <item quantity="two">Dh\'fhàillig %d mhìosachan</item>
+        <item quantity="few">Dh\'fhàillig %d mìosachain</item>
+        <item quantity="other">Dh\'fhàillig %d mìosachan</item>
+    </plurals>
     <string name="settings_quick_event_add">Cuir tachartasan ris gu tapaidh</string>
     <string name="settings_quick_event_add_info">Cruthaich tachartasan le bhith a\' sgrìobhadh gu nàdarra. Lìonaidh \"Lòn le Sam Dihaoine 1f\" an tiotal, an ceann-latha agus an t-àm dhut.</string>
     <string name="settings_suggest_titles">Mol tiotalan thachartasan</string>
@@ -724,6 +850,7 @@
     <string name="label_on_days">Air làithean</string>
     <string name="label_pattern">Pàtran</string>
     <string name="label_ends">A\' Crìochnachadh</string>
+    <string name="sheet_hint_change_end">Thoir gnogag air latha gus an deireadh atharrachadh</string>
     <string name="label_timezone">Roinn-tìde</string>
     <string name="label_alerts">Rabhaidhean</string>
     <string name="label_add_alert">Cuir Rabhadh Ris</string>
@@ -745,14 +872,11 @@
     <string name="status_hours_ago">%1$d uair air ais</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Seall tachartasan bho aipeanna mìosachain eile air an uidheam agad (adapairean sioncronachaidh, mìosachain ionadail).</string>
-    <string name="device_calendars_permission_required">Tha cead mìosachain a dhìth. Thoir gnogag air Cuir an Comas gus ruigse a thoirt.</string>
-    <string name="device_calendars_read_only_access">Ruigse leughaidh a-mhàin</string>
-    <string name="device_calendars_grant_write">Thoir cead sgrìobhaidh gus tachartasan mìosachain an uidheim a dheasachadh</string>
-    <string name="device_calendars_grant">Thoir</string>
-    <string name="device_calendars_none_found">Cha deach mìosachain uidheim a lorg.</string>
+    <string name="device_calendars_intro">Seall mìosachain o Google, Outlook is aplacaidean sioncronachaidh air an uidheam seo.</string>
+    <string name="device_calendars_show_switch">Seall mìosachain an uidheim</string>
+    <string name="device_calendars_pick_hint">Tagh mìosachain airson an sealltainn.</string>
+    <string name="device_calendars_empty">Cha deach mìosachan a lorg.</string>
     <string name="device_calendars_local">Ionadail</string>
-    <string name="device_calendars_read_only_no_write">Leughadh a-mhàin (gun chead sgrìobhaidh)</string>
     <string name="device_calendars_read_only_calendar">Leughadh a-mhàin (mìosachan leughaidh a-mhàin)</string>
     <string name="settings_sync_frequency">Tricead Sioncronachaidh</string>
     <string name="settings_sync_frequency_hint">Dè cho tric \'s a shioncronaichear air a\' chùlaibh</string>
@@ -1410,6 +1534,10 @@
     <string name="ics_fetch_error_http">Thill am frithealaiche mearachd (%1$d). Thoir sùil air an URL.</string>
     <string name="ics_fetch_error_empty">Tha inbhir a\' mhìosachain falamh.</string>
     <string name="ics_fetch_error_not_calendar">Chan eil coltas inbhir mìosachain air an URL sin.</string>
+    <string name="ics_feed_error_empty_response">Cha do chuir am frithealaiche inbhir dligheach.</string>
+    <string name="ics_feed_error_access_denied">Dhiùlt am frithealaiche inntrigeadh dhan inbhir seo.</string>
+    <string name="ics_feed_error_too_large">Tha an t-inbhir mìosachain seo ro mhòr airson a luchdadh a-nuas.</string>
+    <string name="ics_feed_error_unreadable">Cha b\'urrainnear na tachartasan san inbhir seo a shealltainn.</string>
     <string name="insights_title">Fiosrachaidhean</string>
     <string name="insights_period_this_week">Seachdain</string>
     <string name="insights_period_last_week">Seachd. sa chaidh</string>
@@ -1545,7 +1673,7 @@
         <item quantity="other">Saor an ath %1$d làithean (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Chan eil blocaichean saora de uair a thìde air a\' char as lugha san raon a thaghadh.</string>
     <string name="share_from_kashcal_footer">Air co-roinneadh o KashCal</string>
@@ -1569,5 +1697,35 @@
     <string name="share_as_card_all_day">Fad an latha</string>
     <string name="share_as_card_chooser_title">Co-roinn tachartas</string>
     <string name="share_as_card_share_failed">Cha b\'urrainn dhuinn an cairt a cho-roinneadh</string>
+    <string name="print_your_week">Clò-bhuail an t-seachdain agad</string>
+    <string name="print_options_title">Tagh roghainnean clò-bhualaidh</string>
+    <string name="print_pages_header">Duilleagan</string>
+    <string name="print_page_week">Mìosachan na seachdain</string>
+    <string name="print_page_week_detail">An t-seachdain mar ghriod</string>
+    <string name="print_page_details">Mion-fhiosrachadh</string>
+    <string name="print_page_details_detail">Gach tachartas gu slàn</string>
+    <string name="print_action">Clò-bhuail</string>
+    <string name="cd_print_previous_week">An t-seachdain roimhe</string>
+    <string name="cd_print_next_week">An ath-sheachdain</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d duilleag</item>
+        <item quantity="two">%d dhuilleag</item>
+        <item quantity="few">%d duilleagan</item>
+        <item quantity="other">%d duilleag</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d à %2$d mhìosachan</item>
+        <item quantity="two">%1$d à %2$d mhìosachan</item>
+        <item quantity="few">%1$d à %2$d mìosachain</item>
+        <item quantity="other">%1$d à %2$d mìosachan</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – An t-seachdain o %2$s</string>
+    <string name="print_failed">Cha b\'urrainn dhuinn clò-bhualadh. Feuch a-rithist.</string>
+    <string name="print_doc_week">Seachdain</string>
+    <string name="print_doc_printed">Clò-bhuailte %1$s</string>
+    <string name="print_doc_page_of">Duilleag %1$s à %2$s</string>
+    <string name="print_doc_numbers_note">Tha na h-àireamhan a\' freagairt ris a\' mhion-fhiosrachadh, far a bheil gach tachartas gu slàn.</string>
+    <string name="print_doc_times_in">Amannan a rèir %1$s</string>
 
 </resources>

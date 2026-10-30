@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">คำเชิญกิจกรรม</string>
     <string name="channel_event_invitations_desc">การแจ้งเตือนเมื่อได้รับคำเชิญปฏิทินใหม่</string>
     <string name="channel_calendar_updates">การอัปเดตปฏิทิน</string>
+    <string name="channel_calendar_backup">สำรองข้อมูลปฏิทินอัตโนมัติ</string>
+    <string name="channel_calendar_backup_description">แจ้งให้คุณทราบเมื่อการสำรองข้อมูลปฏิทินล้มเหลว</string>
     <string name="invite_notification_body">จาก %1$s · แตะเพื่อตอบกลับ</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,34 @@
     <string name="backup_error_read_failed">อ่านไฟล์ไม่ได้</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">ใช้ Apple Calendar อยู่?</string>
-    <string name="onboarding_got_you">เราช่วยได้</string>
-    <string name="onboarding_connect_prompt">เชื่อมต่อ iCloud เพื่อดูกิจกรรมของคุณ</string>
+    <string name="onboarding_title">ปฏิทินของคุณอยู่ที่ไหน</string>
+    <string name="onboarding_subtitle">เลือกหนึ่งรายการเพื่อเชื่อมต่อ</string>
+    <string name="onboarding_icloud_detail">Apple ID และรหัสผ่านเฉพาะแอป</string>
+    <string name="onboarding_caldav_title">เซิร์ฟเวอร์ CalDAV</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale และอื่นๆ</string>
+    <string name="onboarding_device_title">ในอุปกรณ์นี้</string>
+    <string name="onboarding_phone_detail">Google, Outlook และแอปซิงค์</string>
+    <string name="onboarding_use_offline">ใช้ปฏิทินออฟไลน์</string>
+    <string name="onboarding_trust">โอเพนซอร์ส ไม่มีโฆษณา ไม่มีการติดตาม</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">การเตือนปิดอยู่</string>
+    <plurals name="reminders_off_body">
+        <item quantity="other">สัปดาห์นี้มี %d กิจกรรมที่ตั้งการเตือนไว้</item>
+    </plurals>
+    <string name="reminders_off_not_now">ไว้ทีหลัง</string>
+    <string name="reminders_off_turn_on">เปิด</string>
+    <string name="reminders_on_snackbar">เปิดการเตือนแล้ว</string>
+    <string name="about_tagline">ปฏิทินทั้งหมดของคุณในแอปส่วนตัวแอปเดียว</string>
+    <string name="about_help_title">ความช่วยเหลือและคู่มือ</string>
+    <string name="about_help_detail">การตั้งค่า การซิงค์ และคำถาม</string>
+    <string name="about_source_title">ซอร์สโค้ด</string>
+    <string name="about_source_detail">Apache 2.0 บน GitHub</string>
+    <string name="about_support_title">สนับสนุน KashCal</string>
+    <string name="about_support_detail">ขอบคุณทุกคนที่สนับสนุนอยู่แล้ว</string>
+    <string name="about_link_failed">ไม่มีแอปที่เปิดลิงก์นี้ได้</string>
+    <string name="about_built_in_austin">สร้างด้วย ❤️ ใน Austin</string>
+    <string name="about_version">เวอร์ชัน %1$s</string>
     <string name="whats_new_skip">ข้าม</string>
     <string name="whats_new_next">ถัดไป</string>
     <string name="whats_new_page_of">หน้า %1$d จาก %2$d</string>
@@ -275,10 +300,21 @@
     <string name="whats_new_v772_changes_title">ดูว่ามีอะไรเปลี่ยนแปลง</string>
     <string name="whats_new_v772_changes_body">กิจกรรมที่สร้างใหม่ แก้ไข และลบจากปฏิทิน iCloud และ CalDAV ของคุณจะรวมอยู่ใน “การเปลี่ยนแปลงล่าสุด” เป็นเวลา 7 วัน แตะรายการเพื่อเปิด</string>
     <string name="whats_new_v772_notifications_body">รับการแจ้งเตือนเมื่อการซิงค์เบื้องหลังพบการเปลี่ยนแปลงในกิจกรรม iCloud หรือ CalDAV ของคุณ ฟีเจอร์นี้จะปิดอยู่จนกว่าคุณจะเปิดใช้</string>
+    <string name="whats_new_v803_offline_title">ปฏิทินที่อยู่แต่ในเครื่อง</string>
+    <string name="whats_new_v803_offline_body">บางแผนก็ไม่จำเป็นต้องไปอยู่บนเซิร์ฟเวอร์ สร้างปฏิทินออฟไลน์แยกไว้ให้แผนเหล่านั้นได้มากเท่าที่ต้องการ</string>
+    <string name="whats_new_v803_backup_title">สำรองข้อมูลแบบตั้งแล้วลืมได้เลย</string>
+    <string name="whats_new_v803_backup_body">เลือกโฟลเดอร์แค่ครั้งเดียว แล้ว KashCal จะเก็บสำเนาล่าสุดของปฏิทินออฟไลน์ไว้ที่นั่นให้คุณ</string>
+    <string name="whats_new_v803_print_title">สัปดาห์ของคุณบนกระดาษ</string>
+    <string name="whats_new_v803_print_body">พิมพ์สัปดาห์ที่คุณกำลังดูอยู่ได้เลย จะแปะไว้ที่ตู้เย็นเครื่องไหนก็แล้วแต่คุณ</string>
     <string name="whats_new_hero_sample_lunch">มื้อกลางวันกับทีม</string>
     <string name="whats_new_hero_sample_review">รีวิวงานออกแบบ</string>
     <string name="whats_new_hero_sample_book_club">ชมรมหนังสือ</string>
+    <string name="whats_new_hero_sample_dentist">หาหมอฟัน</string>
+    <string name="whats_new_hero_sample_yoga">โยคะ</string>
     <string name="whats_new_hero_sample_calendar">งาน</string>
+    <string name="whats_new_hero_sample_family">ครอบครัว</string>
+    <string name="whats_new_hero_sample_garden">สวน</string>
+    <string name="whats_new_hero_sample_folder">สำรองข้อมูลปฏิทิน</string>
     <string name="whats_new_hero_now">ตอนนี้</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +430,6 @@
     <string name="error_device_calendar_title">ข้อผิดพลาดของปฏิทิน</string>
     <string name="error_device_calendar_write_failed">บันทึกลงปฏิทินอุปกรณ์ไม่สำเร็จ กรุณาลองอีกครั้ง</string>
     <string name="error_device_calendar_permission">ต้องการสิทธิ์เขียนปฏิทิน กรุณาอนุญาตในการตั้งค่า</string>
-    <string name="error_device_calendar_permission_denied">หากต้องการให้สิทธิ์เขียน ให้ปิดแล้วเปิดสิทธิ์ปฏิทินอีกครั้งในการตั้งค่า</string>
     <string name="error_device_calendar_not_found">ไม่พบปฏิทิน อาจถูกลบไปแล้ว</string>
     <string name="error_device_event_not_found">ไม่พบกิจกรรม อาจถูกลบไปแล้ว</string>
     <string name="error_device_calendar_read_only">ปฏิทินนี้เป็นแบบอ่านอย่างเดียว</string>
@@ -538,6 +573,7 @@
     <string name="subscriptions_section_add">เพิ่ม</string>
     <string name="subscriptions_empty_ics">ไม่มีการสมัครรับ ICS</string>
     <string name="subscriptions_empty_ics_hint">เพิ่มฟีดปฏิทินเพื่อดูกิจกรรม</string>
+    <string name="subscriptions_swipe_hint">ปัดฟีดเพื่อลบ</string>
     <string name="subscriptions_add_ics">เพิ่มปฏิทิน ICS</string>
     <string name="qs_tile_label">เพิ่มกิจกรรม</string>
     <string name="holiday_catalog_add">เพิ่มปฏิทินวันหยุด</string>
@@ -624,7 +660,7 @@
     <string name="settings_device_calendars_hint">ปฏิทินจากแอปอื่น</string>
     <string name="offline_calendars_row_label">ปฏิทินออฟไลน์</string>
     <string name="offline_calendars_row_hint">ปฏิทินที่เก็บไว้ในโทรศัพท์เครื่องนี้</string>
-    <string name="offline_calendars_manage_note">เพิ่ม เปลี่ยนชื่อ เปลี่ยนสี หรือลบปฏิทินออฟไลน์ของคุณ</string>
+    <string name="offline_calendars_manage_note">ปัดปฏิทินเพื่อลบ</string>
     <string name="offline_calendars_info">เก็บไว้ในโทรศัพท์เครื่องนี้เท่านั้นและไม่ซิงค์ การสำรองข้อมูลไม่รวมกิจกรรม ส่งออกปฏิทินเพื่อเก็บสำเนาไว้</string>
     <string name="offline_calendars_info_cd">เกี่ยวกับปฏิทินออฟไลน์</string>
     <string name="offline_calendar_default_state">ค่าเริ่มต้น</string>
@@ -648,6 +684,72 @@
     </plurals>
     <string name="offline_calendar_deleted">ลบ %1$s แล้ว</string>
     <string name="offline_calendar_duplicate_name">มีปฏิทินออฟไลน์ชื่อ \"%1$s\" อยู่แล้ว</string>
+    <string name="offline_calendar_similar_name">คล้ายกับ \"%1$s\" มากเกินไป เลือกชื่ออื่น</string>
+    <string name="calendar_backup_title">สำรองข้อมูลปฏิทินอัตโนมัติ</string>
+    <string name="calendar_backup_row_off">ปิด</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">เข้าถึงโฟลเดอร์สำรองข้อมูลไม่ได้</string>
+    <string name="calendar_backup_intro">บันทึกปฏิทินออฟไลน์แต่ละรายการเป็นไฟล์ ICS ในโฟลเดอร์ที่คุณเลือก</string>
+    <string name="calendar_backup_choose_folder">เลือกโฟลเดอร์</string>
+    <string name="calendar_backup_choose_folder_hint">เลือกหรือสร้างโฟลเดอร์ เช่น ใน Documents Android ไม่อนุญาตให้ใช้ระดับบนสุดของพื้นที่เก็บข้อมูลหรือโฟลเดอร์ Download โดยตรง</string>
+    <string name="calendar_backup_folder">โฟลเดอร์</string>
+    <string name="calendar_backup_change">เปลี่ยน</string>
+    <string name="calendar_backup_frequency">ความถี่</string>
+    <string name="calendar_backup_frequency_info">การสำรองข้อมูลอาจทำงานช้ากว่ากำหนด เพราะ Android จะชะลองานเบื้องหลังเมื่อโทรศัพท์ไม่ได้ใช้งาน หรือเมื่อไม่ได้เปิด KashCal มาสักพัก</string>
+    <string name="calendar_backup_copies">จำนวนสำเนาที่เก็บไว้</string>
+    <string name="calendar_backup_copies_explained">การสำรองข้อมูลแต่ละครั้งจะเก็บไฟล์ก่อนหน้าไว้เป็นสำเนาที่มีวันที่ เมื่อมีสำเนามากกว่าจำนวนนี้ สำเนาที่เก่าที่สุดจะถูกลบ ไฟล์ล่าสุดจะใช้ชื่อปฏิทินเสมอ</string>
+    <string name="calendar_backup_copies_fewer">เก็บสำเนาน้อยลง</string>
+    <string name="calendar_backup_copies_more">เก็บสำเนามากขึ้น</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="other">%d สำเนา</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="other">ลบสำเนาเก่า %d รายการ เลิกทำไม่ได้</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">ลบสำเนาเก่าที่เกินจำนวนนี้ เลิกทำไม่ได้</string>
+    <string name="calendar_backup_calendars">ปฏิทินออฟไลน์</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · ไม่มีกิจกรรม จึงไม่ได้บันทึก</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · บันทึกไม่ได้ จะลองอีกครั้งในการสำรองข้อมูลครั้งถัดไป</string>
+    <string name="calendar_backup_status">สำรองข้อมูลล่าสุด %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="other">สำรองข้อมูลล่าสุด %1$s · ปฏิทิน %2$d รายการล้มเหลว</item>
+    </plurals>
+    <string name="calendar_backup_now">สำรองข้อมูลเลย</string>
+    <string name="calendar_backup_running">กำลังสำรองข้อมูล…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal จะเขียนทับไฟล์เหล่านี้ทุกครั้งที่สำรองข้อมูล การเปลี่ยนแปลงที่ทำในแอปอื่นจึงจะไม่คงอยู่ หากต้องการกู้คืนปฏิทิน ให้ใช้ "นำเข้ากิจกรรมจากไฟล์"</string>
+    <string name="calendar_backup_off_files_stay">ไฟล์ที่มีอยู่จะยังอยู่ใน %1$s</string>
+    <string name="calendar_backup_folder_unreachable">เข้าถึง %1$s ไม่ได้ โฟลเดอร์อาจถูกย้าย ลบ หรือตัดการเชื่อมต่อ</string>
+    <string name="calendar_backup_error_unsupported">บันทึกไฟล์ใน %1$s ไม่ได้ เลือกโฟลเดอร์อื่น</string>
+    <string name="calendar_backup_choose_again">เลือกอีกครั้ง</string>
+    <string name="calendar_backup_pick_refused">KashCal ใช้โฟลเดอร์นั้นไม่ได้ เลือกโฟลเดอร์อื่น</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal สร้างไฟล์ในโฟลเดอร์นั้นไม่ได้ เลือกโฟลเดอร์อื่น</string>
+    <string name="calendar_backup_failed_title">การสำรองข้อมูลปฏิทินล้มเหลว</string>
+    <string name="calendar_backup_folder_unnamed">โฟลเดอร์สำรองข้อมูล</string>
+    <string name="calendar_backup_alert_unreachable">เข้าถึง %1$s ไม่ได้ แตะเพื่อเลือกอีกครั้ง</string>
+    <string name="calendar_backup_alert_unsupported">บันทึกไฟล์ใน %1$s ไม่ได้ แตะเพื่อเลือกโฟลเดอร์อื่น</string>
+    <string name="calendar_backup_alert_file_retry">บันทึก %1$s ไม่ได้ KashCal จะลองอีกครั้งในการสำรองข้อมูลครั้งถัดไป</string>
+    <string name="calendar_backup_every_hour">ทุกชั่วโมง</string>
+    <string name="calendar_backup_every_day">ทุกวัน</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="other">ทุก %d ชั่วโมง</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="other">ทุก %d วัน</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">ทุก 1 วัน %1$s</string>
+    <string name="calendar_backup_every_days_hours">ทุก %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">เลือกอย่างน้อย 1 ชั่วโมง</string>
+    <string name="calendar_backup_interval_too_long">เลือกไม่เกิน 30 วัน</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="other">บันทึกปฏิทิน %d รายการไม่ได้ KashCal จะลองอีกครั้งในการสำรองข้อมูลครั้งถัดไป</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">การแจ้งเตือนของ KashCal ปิดอยู่ จึงแจ้งให้คุณทราบไม่ได้หากการสำรองข้อมูลล้มเหลว</string>
+    <string name="calendar_backup_notifications_channel_off">การแจ้งเตือนการสำรองข้อมูลปิดอยู่ KashCal จึงแจ้งให้คุณทราบไม่ได้หากการสำรองข้อมูลล้มเหลว</string>
+    <string name="calendar_backup_open_settings">เปิดการตั้งค่า</string>
+    <string name="calendar_backup_not_now">ไว้ทีหลัง</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="other">ปฏิทิน %d รายการล้มเหลว</item>
+    </plurals>
     <string name="settings_quick_event_add">เพิ่มกิจกรรมอัจฉริยะ</string>
     <string name="settings_quick_event_add_info">สร้างกิจกรรมด้วยการพิมพ์อย่างเป็นธรรมชาติ \"กินข้าวเที่ยงกับ Sam วันศุกร์ 13:00\" จะกรอกชื่อเรื่อง วันที่ และเวลาให้คุณ</string>
     <string name="settings_suggest_titles">แนะนำชื่อกิจกรรม</string>
@@ -715,6 +817,7 @@
     <string name="label_on_days">วัน</string>
     <string name="label_pattern">รูปแบบ</string>
     <string name="label_ends">สิ้นสุด</string>
+    <string name="sheet_hint_change_end">แตะวันเพื่อเปลี่ยนวันสิ้นสุด</string>
     <string name="label_timezone">เขตเวลา</string>
     <string name="label_alerts">แจ้งเตือน</string>
     <string name="label_add_alert">เพิ่มแจ้งเตือน</string>
@@ -736,14 +839,11 @@
     <string name="status_hours_ago">%1$d ชั่วโมงที่แล้ว</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">แสดงกิจกรรมจากแอปปฏิทินอื่นในอุปกรณ์ (ตัวซิงค์ ปฏิทินในเครื่อง)</string>
-    <string name="device_calendars_permission_required">ต้องการสิทธิ์ปฏิทิน แตะเปิดใช้เพื่ออนุญาต</string>
-    <string name="device_calendars_read_only_access">อ่านอย่างเดียว</string>
-    <string name="device_calendars_grant_write">อนุญาตการเขียนเพื่อแก้ไขกิจกรรมปฏิทินอุปกรณ์</string>
-    <string name="device_calendars_grant">อนุญาต</string>
-    <string name="device_calendars_none_found">ไม่พบปฏิทินอุปกรณ์</string>
+    <string name="device_calendars_intro">แสดงปฏิทินจาก Google, Outlook และแอปซิงค์ในอุปกรณ์นี้</string>
+    <string name="device_calendars_show_switch">แสดงปฏิทินอุปกรณ์</string>
+    <string name="device_calendars_pick_hint">เลือกปฏิทินที่จะแสดง</string>
+    <string name="device_calendars_empty">ไม่พบปฏิทิน</string>
     <string name="device_calendars_local">ในเครื่อง</string>
-    <string name="device_calendars_read_only_no_write">อ่านอย่างเดียว (ไม่มีสิทธิ์เขียน)</string>
     <string name="device_calendars_read_only_calendar">อ่านอย่างเดียว (ปฏิทินอ่านอย่างเดียว)</string>
     <string name="settings_sync_frequency">ความถี่การซิงค์</string>
     <string name="settings_sync_frequency_hint">ความถี่ในการซิงค์เบื้องหลัง</string>
@@ -1233,6 +1333,10 @@
     <string name="ics_fetch_error_http">เซิร์ฟเวอร์แสดงข้อผิดพลาด (%1$d) โปรดตรวจสอบ URL</string>
     <string name="ics_fetch_error_empty">ฟีดปฏิทินว่างเปล่า</string>
     <string name="ics_fetch_error_not_calendar">URL นี้ดูเหมือนจะไม่ใช่ฟีดปฏิทิน</string>
+    <string name="ics_feed_error_empty_response">เซิร์ฟเวอร์ไม่ได้ส่งฟีดที่ถูกต้อง</string>
+    <string name="ics_feed_error_access_denied">เซิร์ฟเวอร์ของฟีดนี้ปฏิเสธการเข้าถึง</string>
+    <string name="ics_feed_error_too_large">ฟีดปฏิทินนี้มีขนาดใหญ่เกินกว่าจะดาวน์โหลดได้</string>
+    <string name="ics_feed_error_unreadable">ไม่สามารถแสดงกิจกรรมของฟีดนี้ได้</string>
     <string name="insights_title">วิเคราะห์</string>
     <string name="insights_period_this_week">สัปดาห์</string>
     <string name="insights_period_last_week">สัปดาห์ก่อน</string>
@@ -1355,7 +1459,7 @@
         <item quantity="other">ว่างใน %1$d วันถัดไป (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">ไม่มีช่วงเวลาว่างอย่างน้อยหนึ่งชั่วโมงในช่วงที่เลือก</string>
     <string name="share_from_kashcal_footer">แชร์จาก KashCal</string>
@@ -1376,5 +1480,29 @@
     <string name="share_as_card_all_day">ทั้งวัน</string>
     <string name="share_as_card_chooser_title">แชร์กิจกรรม</string>
     <string name="share_as_card_share_failed">ไม่สามารถแชร์การ์ดได้</string>
+    <string name="print_your_week">พิมพ์ตารางประจำสัปดาห์</string>
+    <string name="print_options_title">เลือกตัวเลือกการพิมพ์</string>
+    <string name="print_pages_header">หน้า</string>
+    <string name="print_page_week">ปฏิทินรายสัปดาห์</string>
+    <string name="print_page_week_detail">สัปดาห์ในรูปแบบตาราง</string>
+    <string name="print_page_details">รายละเอียด</string>
+    <string name="print_page_details_detail">กิจกรรมทุกรายการแบบเต็ม</string>
+    <string name="print_action">พิมพ์</string>
+    <string name="cd_print_previous_week">สัปดาห์ก่อนหน้า</string>
+    <string name="cd_print_next_week">สัปดาห์ถัดไป</string>
+    <plurals name="print_summary_pages">
+        <item quantity="other">%d หน้า</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="other">%1$d จาก %2$d ปฏิทิน</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – สัปดาห์ของ %2$s</string>
+    <string name="print_failed">พิมพ์ไม่ได้ ลองอีกครั้ง</string>
+    <string name="print_doc_week">สัปดาห์</string>
+    <string name="print_doc_printed">พิมพ์เมื่อ %1$s</string>
+    <string name="print_doc_page_of">หน้า %1$s จาก %2$s</string>
+    <string name="print_doc_numbers_note">หมายเลขตรงกับหน้ารายละเอียด ซึ่งแสดงกิจกรรมทุกรายการแบบเต็ม</string>
+    <string name="print_doc_times_in">แสดงเวลาตาม %1$s</string>
 
 </resources>

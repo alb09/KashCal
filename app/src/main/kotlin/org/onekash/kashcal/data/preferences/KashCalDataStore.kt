@@ -563,13 +563,6 @@ class KashCalDataStore(
         setPreference(PreferencesKeys.SHOWN_SHARE_CARD_TOOLTIP, shown)
     }
 
-    val onboardingDismissed: Flow<Boolean>
-        get() = getPreference(PreferencesKeys.ONBOARDING_DISMISSED, false)
-
-    suspend fun setOnboardingDismissed(dismissed: Boolean) {
-        setPreference(PreferencesKeys.ONBOARDING_DISMISSED, dismissed)
-    }
-
     /**
      * True once the user tapped "No thanks" on the attendee picker's contacts-permission card
      * or denied the system dialog. It hides the banner for good: Android exposes no "user said
@@ -623,6 +616,14 @@ class KashCalDataStore(
     /** Zeroes the denial count; called when the permission is granted. */
     suspend fun resetNotificationPermissionDeniedCount() {
         setPreference(PreferencesKeys.NOTIFICATION_PERMISSION_DENIED_COUNT, 0)
+    }
+
+    /** Whether the notification ask is done; see [PreferencesKeys.NOTIFICATION_ASK_DONE]. */
+    val notificationAskDone: Flow<Boolean>
+        get() = getPreference(PreferencesKeys.NOTIFICATION_ASK_DONE, false)
+
+    suspend fun setNotificationAskDone() {
+        setPreference(PreferencesKeys.NOTIFICATION_ASK_DONE, true)
     }
 
     // ========== Contact Birthdays ==========

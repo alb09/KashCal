@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Händelseinbjudningar</string>
     <string name="channel_event_invitations_desc">Aviseringar när du får en ny kalenderinbjudan</string>
     <string name="channel_calendar_updates">Kalenderändringar</string>
+    <string name="channel_calendar_backup">Automatisk säkerhetskopiering av kalendrar</string>
+    <string name="channel_calendar_backup_description">Meddelar dig när säkerhetskopieringen av kalendrar misslyckas</string>
     <string name="invite_notification_body">Från %1$s · Tryck för att svara</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,35 @@
     <string name="backup_error_read_failed">Kunde inte läsa filen</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple Kalender?</string>
-    <string name="onboarding_got_you">Vi har koll.</string>
-    <string name="onboarding_connect_prompt">Anslut iCloud för att se dina händelser här</string>
+    <string name="onboarding_title">Var finns dina kalendrar?</string>
+    <string name="onboarding_subtitle">Välj en att ansluta.</string>
+    <string name="onboarding_icloud_detail">Apple ID och applösenord</string>
+    <string name="onboarding_caldav_title">CalDAV-server</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale med flera</string>
+    <string name="onboarding_device_title">På den här enheten</string>
+    <string name="onboarding_phone_detail">Google, Outlook och synkappar</string>
+    <string name="onboarding_use_offline">Använd offlinekalender</string>
+    <string name="onboarding_trust">Öppen källkod. Inga annonser. Ingen spårning.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Påminnelser är avstängda</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">%d händelse den här veckan har en påminnelse.</item>
+        <item quantity="other">%d händelser den här veckan har påminnelser.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Inte nu</string>
+    <string name="reminders_off_turn_on">Slå på</string>
+    <string name="reminders_on_snackbar">Påminnelser är på</string>
+    <string name="about_tagline">Alla dina kalendrar i en privat app.</string>
+    <string name="about_help_title">Hjälp och guider</string>
+    <string name="about_help_detail">Konfiguration, synkronisering och frågor</string>
+    <string name="about_source_title">Källkod</string>
+    <string name="about_source_detail">Apache 2.0, på GitHub</string>
+    <string name="about_support_title">Stöd KashCal</string>
+    <string name="about_support_detail">Tack till alla som redan gör det</string>
+    <string name="about_link_failed">Ingen app kan öppna den här länken.</string>
+    <string name="about_built_in_austin">Byggt med ❤️ i Austin</string>
+    <string name="about_version">Version %1$s</string>
     <string name="whats_new_skip">Hoppa över</string>
     <string name="whats_new_next">Nästa</string>
     <string name="whats_new_page_of">Sida %1$d av %2$d</string>
@@ -275,10 +301,21 @@
     <string name="whats_new_v772_changes_title">Se vad som har ändrats</string>
     <string name="whats_new_v772_changes_body">Nya, redigerade och borttagna händelser från dina iCloud- och CalDAV-kalendrar samlas i Senaste ändringar i 7 dagar. Tryck på en för att öppna den.</string>
     <string name="whats_new_v772_notifications_body">Få en avisering när en synkronisering i bakgrunden hittar ändringar i dina iCloud- eller CalDAV-händelser. Funktionen är avstängd tills du slår på den.</string>
+    <string name="whats_new_v803_offline_title">Kalendrar som stannar i telefonen</string>
+    <string name="whats_new_v803_offline_body">Vissa planer hör inte hemma på en server. Ge dem egna offlinekalendrar, så många du vill.</string>
+    <string name="whats_new_v803_backup_title">Säkerhetskopior du kan glömma bort</string>
+    <string name="whats_new_v803_backup_body">Välj en mapp en gång, så sparar KashCal en färsk kopia av dina offlinekalendrar där.</string>
+    <string name="whats_new_v803_print_title">Din vecka på papper</string>
+    <string name="whats_new_v803_print_body">Skriv ut veckan du tittar på. Vilket kylskåp den hamnar på bestämmer du.</string>
     <string name="whats_new_hero_sample_lunch">Teamlunch</string>
     <string name="whats_new_hero_sample_review">Designgenomgång</string>
     <string name="whats_new_hero_sample_book_club">Bokklubb</string>
+    <string name="whats_new_hero_sample_dentist">Tandläkare</string>
+    <string name="whats_new_hero_sample_yoga">Yoga</string>
     <string name="whats_new_hero_sample_calendar">Jobb</string>
+    <string name="whats_new_hero_sample_family">Familj</string>
+    <string name="whats_new_hero_sample_garden">Trädgård</string>
+    <string name="whats_new_hero_sample_folder">Kalendersäkerhetskopior</string>
     <string name="whats_new_hero_now">nu</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +431,6 @@
     <string name="error_device_calendar_title">Kalenderfel</string>
     <string name="error_device_calendar_write_failed">Kunde inte spara till enhetskalender. Försök igen.</string>
     <string name="error_device_calendar_permission">Kalenderbehörighet krävs. Ge behörighet i Inställningar.</string>
-    <string name="error_device_calendar_permission_denied">Slå av och på kalenderbehörigheten i Inställningar för att ge skrivåtkomst</string>
     <string name="error_device_calendar_not_found">Kalender hittades inte. Den kan ha tagits bort.</string>
     <string name="error_device_event_not_found">Händelse hittades inte. Den kan ha raderats.</string>
     <string name="error_device_calendar_read_only">Denna kalender är skrivskyddad.</string>
@@ -537,6 +573,7 @@
     <string name="subscriptions_section_add">Lägg till</string>
     <string name="subscriptions_empty_ics">Inga ICS-prenumerationer</string>
     <string name="subscriptions_empty_ics_hint">Lägg till ett kalenderflöde för att se händelser</string>
+    <string name="subscriptions_swipe_hint">Svep ett flöde för att ta bort det.</string>
     <string name="subscriptions_add_ics">Lägg till ICS-kalender</string>
     <string name="qs_tile_label">Lägg till</string>
     <string name="holiday_catalog_add">Lägg till helgdagskalender</string>
@@ -623,7 +660,7 @@
     <string name="settings_device_calendars_hint">Kalendrar från andra appar</string>
     <string name="offline_calendars_row_label">Offlinekalendrar</string>
     <string name="offline_calendars_row_hint">Kalendrar som stannar på den här telefonen</string>
-    <string name="offline_calendars_manage_note">Lägg till, byt namn på, byt färg på eller ta bort dina offlinekalendrar.</string>
+    <string name="offline_calendars_manage_note">Svep en kalender för att ta bort den.</string>
     <string name="offline_calendars_info">Sparas bara på den här telefonen och synkas aldrig. Säkerhetskopior innehåller inte händelser, så exportera en kalender för att spara en kopia.</string>
     <string name="offline_calendars_info_cd">Om offlinekalendrar</string>
     <string name="offline_calendar_default_state">Standard</string>
@@ -649,6 +686,79 @@
     </plurals>
     <string name="offline_calendar_deleted">%1$s togs bort</string>
     <string name="offline_calendar_duplicate_name">Det finns redan en offlinekalender som heter \"%1$s\"</string>
+    <string name="offline_calendar_similar_name">För likt \"%1$s\". Välj ett annat namn.</string>
+    <string name="calendar_backup_title">Automatisk säkerhetskopiering av kalendrar</string>
+    <string name="calendar_backup_row_off">Av</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Når inte säkerhetskopieringsmappen</string>
+    <string name="calendar_backup_intro">Sparar varje offlinekalender som en ICS-fil i en mapp du väljer.</string>
+    <string name="calendar_backup_choose_folder">Välj mapp</string>
+    <string name="calendar_backup_choose_folder_hint">Välj eller skapa en mapp, till exempel i Documents. Android tillåter inte lagringens översta nivå eller själva mappen Download.</string>
+    <string name="calendar_backup_folder">Mapp</string>
+    <string name="calendar_backup_change">Ändra</string>
+    <string name="calendar_backup_frequency">Frekvens</string>
+    <string name="calendar_backup_frequency_info">Säkerhetskopieringar kan bli försenade: Android håller tillbaka bakgrundsarbete när telefonen är inaktiv eller när KashCal inte har öppnats på ett tag.</string>
+    <string name="calendar_backup_copies">Kopior att behålla</string>
+    <string name="calendar_backup_copies_explained">Varje säkerhetskopiering behåller den föregående filen som en daterad kopia. När det finns fler än detta antal raderas de äldsta. Den senaste filen har alltid kalenderns namn.</string>
+    <string name="calendar_backup_copies_fewer">Behåll färre kopior</string>
+    <string name="calendar_backup_copies_more">Behåll fler kopior</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d kopia</item>
+        <item quantity="other">%d kopior</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">Raderar %d äldre kopia. Det går inte att ångra.</item>
+        <item quantity="other">Raderar %d äldre kopior. Det går inte att ångra.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Raderar de äldre kopiorna utöver detta antal. Det går inte att ångra.</string>
+    <string name="calendar_backup_calendars">Offlinekalendrar</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Inga händelser, inget sparat</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Kunde inte spara. Försöker igen vid nästa säkerhetskopiering.</string>
+    <string name="calendar_backup_status">Senaste säkerhetskopiering %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Senaste säkerhetskopiering %1$s · %2$d kalender misslyckades</item>
+        <item quantity="other">Senaste säkerhetskopiering %1$s · %2$d kalendrar misslyckades</item>
+    </plurals>
+    <string name="calendar_backup_now">Säkerhetskopiera nu</string>
+    <string name="calendar_backup_running">Säkerhetskopierar…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal skriver över de här filerna vid varje säkerhetskopiering, så ändringar som görs i andra appar sparas inte. Återställ en kalender med ”Importera händelser från fil”.</string>
+    <string name="calendar_backup_off_files_stay">Befintliga filer ligger kvar i %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Når inte %1$s. Den kan ha flyttats, raderats eller kopplats från.</string>
+    <string name="calendar_backup_error_unsupported">Kan inte spara filer i %1$s. Välj en annan mapp.</string>
+    <string name="calendar_backup_choose_again">Välj igen</string>
+    <string name="calendar_backup_pick_refused">KashCal kan inte använda den mappen. Välj en annan.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal kan inte skapa filer i den mappen. Välj en annan.</string>
+    <string name="calendar_backup_failed_title">Säkerhetskopieringen av kalendrar misslyckades</string>
+    <string name="calendar_backup_folder_unnamed">säkerhetskopieringsmappen</string>
+    <string name="calendar_backup_alert_unreachable">Når inte %1$s. Tryck för att välja mappen igen.</string>
+    <string name="calendar_backup_alert_unsupported">Kan inte spara filer i %1$s. Tryck för att välja en annan mapp.</string>
+    <string name="calendar_backup_alert_file_retry">Kunde inte spara %1$s. KashCal försöker igen vid nästa säkerhetskopiering.</string>
+    <string name="calendar_backup_every_hour">Varje timme</string>
+    <string name="calendar_backup_every_day">Varje dag</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">Med %d timme emellan</item>
+        <item quantity="other">Med %d timmar emellan</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">Med %d dag emellan</item>
+        <item quantity="other">Med %d dagar emellan</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Med 1 dag och %1$s emellan</string>
+    <string name="calendar_backup_every_days_hours">Med %1$s och %2$s emellan</string>
+    <string name="calendar_backup_interval_too_short">Välj minst 1 timme.</string>
+    <string name="calendar_backup_interval_too_long">Välj högst 30 dagar.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">Kunde inte spara %d kalender. KashCal försöker igen vid nästa säkerhetskopiering.</item>
+        <item quantity="other">Kunde inte spara %d kalendrar. KashCal försöker igen vid nästa säkerhetskopiering.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">Aviseringar är avstängda för KashCal, så KashCal kan inte meddela dig om en säkerhetskopiering misslyckas.</string>
+    <string name="calendar_backup_notifications_channel_off">Aviseringar om säkerhetskopiering är avstängda, så KashCal kan inte meddela dig om en säkerhetskopiering misslyckas.</string>
+    <string name="calendar_backup_open_settings">Öppna inställningar</string>
+    <string name="calendar_backup_not_now">Inte nu</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">%d kalender misslyckades</item>
+        <item quantity="other">%d kalendrar misslyckades</item>
+    </plurals>
     <string name="settings_quick_event_add">Smart händelsetillägg</string>
     <string name="settings_quick_event_add_info">Skapa händelser genom att skriva naturligt. \"Lunch med Sam fredag 13:00\" fyller i titel, datum och tid åt dig.</string>
     <string name="settings_suggest_titles">Föreslå händelsetitlar</string>
@@ -717,6 +827,7 @@
     <string name="label_on_days">På dagar</string>
     <string name="label_pattern">Mönster</string>
     <string name="label_ends">Slutar</string>
+    <string name="sheet_hint_change_end">Tryck på en dag för att ändra slutet</string>
     <string name="label_timezone">Tidszon</string>
     <string name="label_alerts">Påminnelser</string>
     <string name="label_add_alert">Lägg till påminnelse</string>
@@ -738,14 +849,11 @@
     <string name="status_hours_ago">%1$d tim sedan</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Visa händelser från andra kalenderappar på din enhet (synk-adaptrar, lokala kalendrar).</string>
-    <string name="device_calendars_permission_required">Kalenderbehörighet krävs. Tryck på Aktivera för att ge åtkomst.</string>
-    <string name="device_calendars_read_only_access">Skrivskyddad åtkomst</string>
-    <string name="device_calendars_grant_write">Ge skrivbehörighet för att redigera enhetskalenderhändelser</string>
-    <string name="device_calendars_grant">Ge åtkomst</string>
-    <string name="device_calendars_none_found">Inga enhetskalendrar hittades.</string>
+    <string name="device_calendars_intro">Visa kalendrar från Google, Outlook och synkappar på den här enheten.</string>
+    <string name="device_calendars_show_switch">Visa enhetskalendrar</string>
+    <string name="device_calendars_pick_hint">Välj kalendrar att visa.</string>
+    <string name="device_calendars_empty">Inga kalendrar hittades.</string>
     <string name="device_calendars_local">Lokal</string>
-    <string name="device_calendars_read_only_no_write">Skrivskyddad (ingen skrivbehörighet)</string>
     <string name="device_calendars_read_only_calendar">Skrivskyddad (kalendern är skrivskyddad)</string>
     <string name="settings_sync_frequency">Synkfrekvens</string>
     <string name="settings_sync_frequency_hint">Hur ofta synkronisering sker i bakgrunden</string>
@@ -1291,6 +1399,10 @@
     <string name="ics_fetch_error_http">Servern returnerade ett fel (%1$d). Kontrollera URL:en.</string>
     <string name="ics_fetch_error_empty">Kalenderflödet är tomt.</string>
     <string name="ics_fetch_error_not_calendar">Den här URL:en verkar inte vara ett kalenderflöde.</string>
+    <string name="ics_feed_error_empty_response">Servern skickade inget giltigt flöde.</string>
+    <string name="ics_feed_error_access_denied">Servern för det här flödet nekade åtkomst.</string>
+    <string name="ics_feed_error_too_large">Det här kalenderflödet är för stort för att laddas ned.</string>
+    <string name="ics_feed_error_unreadable">Händelserna i det här flödet kunde inte visas.</string>
     <string name="insights_title">Insikter</string>
     <string name="insights_period_this_week">Vecka</string>
     <string name="insights_period_last_week">Förra veckan</string>
@@ -1418,7 +1530,7 @@
         <item quantity="other">Ledig de närmaste %1$d dagarna (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Inga lediga block på minst en timme i det valda intervallet.</string>
     <string name="share_from_kashcal_footer">Delat från KashCal</string>
@@ -1440,5 +1552,31 @@
     <string name="share_as_card_all_day">Heldag</string>
     <string name="share_as_card_chooser_title">Dela händelse</string>
     <string name="share_as_card_share_failed">Kortet kunde inte delas</string>
+    <string name="print_your_week">Skriv ut din vecka</string>
+    <string name="print_options_title">Välj utskriftsalternativ</string>
+    <string name="print_pages_header">Sidor</string>
+    <string name="print_page_week">Veckokalender</string>
+    <string name="print_page_week_detail">Veckan som ett rutnät</string>
+    <string name="print_page_details">Detaljer</string>
+    <string name="print_page_details_detail">Varje händelse i sin helhet</string>
+    <string name="print_action">Skriv ut</string>
+    <string name="cd_print_previous_week">Föregående vecka</string>
+    <string name="cd_print_next_week">Nästa vecka</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d sida</item>
+        <item quantity="other">%d sidor</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d av %2$d kalender</item>
+        <item quantity="other">%1$d av %2$d kalendrar</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – Veckan från %2$s</string>
+    <string name="print_failed">Det gick inte att skriva ut. Försök igen.</string>
+    <string name="print_doc_week">Vecka</string>
+    <string name="print_doc_printed">Utskriven %1$s</string>
+    <string name="print_doc_page_of">Sida %1$s av %2$s</string>
+    <string name="print_doc_numbers_note">Numren motsvarar detaljerna, där varje händelse visas i sin helhet.</string>
+    <string name="print_doc_times_in">Tider visas i %1$s</string>
 
 </resources>

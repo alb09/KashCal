@@ -205,7 +205,7 @@ object PreferencesKeys {
 
     // ========== Onboarding ==========
 
-    /** Onboarding completed. */
+    /** The first-launch calendars sheet was answered, by a row, its button or a dismissal. */
     val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
 
     /** The local calendar intro has been shown. */
@@ -213,9 +213,6 @@ object PreferencesKeys {
 
     /** The coach mark for the share-as-card Share icon has been shown. */
     val SHOWN_SHARE_CARD_TOOLTIP = booleanPreferencesKey("shown_share_card_tooltip")
-
-    /** Onboarding sheet dismissed. */
-    val ONBOARDING_DISMISSED = booleanPreferencesKey("onboarding_dismissed")
 
     /** The user declined contact suggestions in the attendee picker; never re-prompt. */
     val CONTACT_SUGGESTIONS_DECLINED = booleanPreferencesKey("contact_suggestions_declined")
@@ -233,6 +230,13 @@ object PreferencesKeys {
 
     /** Times the notification permission was denied; decides rationale vs permanently denied. */
     val NOTIFICATION_PERMISSION_DENIED_COUNT = intPreferencesKey("notification_permission_denied_count")
+
+    /**
+     * The app asked for notification permission and got an answer, the user answered the
+     * "Reminders are off" banner, or the app saw the permission granted; the banner then never
+     * shows. Device-local like [NOTIFICATION_PERMISSION_DENIED_COUNT].
+     */
+    val NOTIFICATION_ASK_DONE = booleanPreferencesKey("notification_ask_done")
 
     /**
      * Contact sync lacks its permission ([KashCalDataStore.contactSyncPermissionNeeded]).

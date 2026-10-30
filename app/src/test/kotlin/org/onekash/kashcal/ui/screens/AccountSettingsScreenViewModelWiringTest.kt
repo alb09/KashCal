@@ -1,6 +1,7 @@
 package org.onekash.kashcal.ui.screens
 
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import io.mockk.every
@@ -14,6 +15,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onekash.kashcal.R
 import org.onekash.kashcal.data.calendar_provider.DeviceCalendar
 import org.onekash.kashcal.data.db.entity.Calendar
 import org.onekash.kashcal.data.preferences.DefaultCalendar
@@ -57,6 +59,8 @@ class AccountSettingsScreenViewModelWiringTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    private val context = org.robolectric.RuntimeEnvironment.getApplication()
 
     private var originalLocale: Locale? = null
 
@@ -153,7 +157,12 @@ class AccountSettingsScreenViewModelWiringTest {
         return vm
     }
 
-    private fun setRoute(vm: AccountSettingsViewModel, onExportDebugReport: () -> Unit = {}) {
+    private fun setRoute(
+        vm: AccountSettingsViewModel,
+        onExportDebugReport: () -> Unit = {},
+        openDeviceCalendarsInitially: Boolean = false,
+        onFinish: () -> Unit = {},
+    ) {
         composeTestRule.setContent {
             SettingsRoute(
                 viewModel = vm,
@@ -169,8 +178,42 @@ class AccountSettingsScreenViewModelWiringTest {
                 writeBackup = { _, _ -> },
                 readBackup = { error("not used") },
                 onExportDebugReport = onExportDebugReport,
+                openDeviceCalendarsInitially = openDeviceCalendarsInitially,
+                onFinish = onFinish,
             )
         }
+    }
+
+    @Test
+    fun `Settings launched on Device calendars opens there and its Back finishes the activity`() {
+        val vm = mockVm(widget = 8, weekNumbers = false)
+        var finishes = 0
+        setRoute(vm, openDeviceCalendarsInitially = true, onFinish = { finishes++ })
+
+        composeTestRule.onNodeWithText(
+            context.getString(R.string.device_calendars_intro)
+        ).assertExists()
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.cd_back))
+            .performClick()
+        composeTestRule.waitForIdle()
+
+        assertEquals(1, finishes)
+    }
+
+    @Test
+    fun `Settings opened normally returns to its list from Device calendars`() {
+        val vm = mockVm(widget = 8, weekNumbers = false)
+        var finishes = 0
+        setRoute(vm, onFinish = { finishes++ })
+
+        composeTestRule.onNodeWithText(context.getString(R.string.settings_device_calendars))
+            .performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.cd_back))
+            .performClick()
+        composeTestRule.waitForIdle()
+
+        assertEquals(0, finishes)
     }
 
     @Test

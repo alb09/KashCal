@@ -52,6 +52,7 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -263,9 +264,8 @@ fun OfflineCalendarsScreen(
 }
 
 /**
- * Shows one offline calendar: color dot, [name] on one line and its event count. The default
- * calendar's row is tinted as the Default calendar sheet marks its pick, and TalkBack hears
- * "Default" as its state. [modifier] goes on the row's clickable node, where [SwipeRevealRow]
+ * Shows one offline calendar as [OfflineCalendarRowContent]. TalkBack hears "Default" as the
+ * default calendar's state. [modifier] goes on the row's clickable node, where [SwipeRevealRow]
  * puts its action.
  */
 @Composable
@@ -277,18 +277,47 @@ private fun OfflineCalendarRow(
     modifier: Modifier = Modifier,
 ) {
     val defaultState = stringResource(R.string.offline_calendar_default_state)
-    Row(
+    Box(
         modifier = Modifier
+            .fillMaxWidth()
+            .then(if (isDefault) Modifier.semantics { stateDescription = defaultState } else Modifier)
+            .then(modifier)
+            .clickable(onClick = onClick),
+    ) {
+        OfflineCalendarRowContent(
+            color = summary.calendar.color,
+            name = name,
+            eventCount = summary.eventCount,
+            isDefault = isDefault,
+        )
+    }
+}
+
+/**
+ * Draws one offline calendar row: [color] dot, [name] on one line and [eventCount]. The default
+ * calendar's row is tinted as the Default calendar sheet marks its pick. The screen's row adds the
+ * tap, the swipe action and the TalkBack state; the What's New illustration draws it bare with a
+ * tighter [contentPadding] and [minHeight].
+ */
+@Composable
+internal fun OfflineCalendarRowContent(
+    color: Int,
+    name: String,
+    eventCount: Int,
+    isDefault: Boolean,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
+    minHeight: Dp = 56.dp,
+) {
+    Row(
+        modifier = modifier
             .fillMaxWidth()
             .background(
                 if (isDefault) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                 else Color.Transparent
             )
-            .then(if (isDefault) Modifier.semantics { stateDescription = defaultState } else Modifier)
-            .then(modifier)
-            .clickable(onClick = onClick)
-            .heightIn(min = 56.dp)
-            .padding(horizontal = 24.dp, vertical = 12.dp),
+            .heightIn(min = minHeight)
+            .padding(contentPadding),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -296,7 +325,7 @@ private fun OfflineCalendarRow(
             modifier = Modifier
                 .size(14.dp)
                 .clip(CircleShape)
-                .background(Color(summary.calendar.color))
+                .background(Color(color))
         )
         Text(
             text = name,
@@ -306,7 +335,7 @@ private fun OfflineCalendarRow(
             modifier = Modifier.weight(1f),
         )
         Text(
-            text = pluralStringResource(R.plurals.event_count, summary.eventCount, summary.eventCount),
+            text = pluralStringResource(R.plurals.event_count, eventCount, eventCount),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

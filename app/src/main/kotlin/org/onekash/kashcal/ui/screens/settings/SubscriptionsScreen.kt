@@ -46,8 +46,9 @@ import org.onekash.kashcal.ui.theme.KashCalTheme
  * Each subscription is a [SwipeableSubscriptionItem]: a swipe reveals Delete, a tap edits in
  * [EditSubscriptionDialog]. One row is open at a time ([RevealedRow]). Scrolling closes it. While
  * one is open, a tap on a row, its switch or its refresh button only closes it; the Delete button
- * and the add buttons close it and then act. Below the list, buttons open [HolidayCatalogPicker],
- * the "Add from account" sheet and [AddSubscriptionDialog].
+ * and the add buttons close it and then act. While there are feeds, a line above the list names the
+ * swipe. Below the list, buttons open [HolidayCatalogPicker], the "Add from account" sheet and
+ * [AddSubscriptionDialog].
  *
  * @param onAddSubscription called with (url, name, color) from either add path; a holiday feed
  *   gets a random palette color.
@@ -135,6 +136,14 @@ fun SubscriptionsScreen(
                     }
                 }
             } else {
+                item(key = "swipe_hint", contentType = "hint") {
+                    Text(
+                        stringResource(R.string.subscriptions_swipe_hint),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
+                    )
+                }
                 items(
                     items = subscriptions,
                     key = { it.id ?: 0L },

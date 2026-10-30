@@ -5,7 +5,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasStateDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -14,6 +17,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.text.TextLayoutResult
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -90,7 +94,7 @@ class OfflineCalendarsScreenTest {
     fun `the info note is closed until the info button opens it`() {
         render()
         composeTestRule.onNodeWithText("Offline calendars").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Add, rename, recolor or remove your offline calendars.").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Swipe a calendar to delete it.").assertIsDisplayed()
         composeTestRule.onNodeWithText(info).assertDoesNotExist()
 
         composeTestRule.onNodeWithContentDescription("About offline calendars").performClick()
@@ -127,6 +131,19 @@ class OfflineCalendarsScreenTest {
         composeTestRule.onNode(hasText("Work") and hasStateDescription("Default")).assertExists()
         composeTestRule.onNode(hasText("Trips") and hasStateDescription("Default")).assertDoesNotExist()
         composeTestRule.onNode(hasText("Local") and hasStateDescription("Default")).assertDoesNotExist()
+    }
+
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    fun `only the default calendar's row is tinted`() {
+        render(defaultCalendarId = work.calendar.id)
+        // A pixel near the row's end edge, clear of the name and the count.
+        fun endPixel(name: String): Int {
+            val image = composeTestRule.onNode(hasText(name) and hasClickAction()).captureToImage().asAndroidBitmap()
+            return image.getPixel(image.width - 2, image.height / 2)
+        }
+        assertNotEquals(endPixel("Trips"), endPixel("Work"))
+        assertEquals(endPixel("Trips"), endPixel("Local"))
     }
 
     @Test

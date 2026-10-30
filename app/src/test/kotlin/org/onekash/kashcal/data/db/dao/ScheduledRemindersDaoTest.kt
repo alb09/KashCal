@@ -620,4 +620,41 @@ class ScheduledRemindersDaoTest {
 
         assertTrue("A single reminder has no siblings", siblings.isEmpty())
     }
+
+    // ==================== Occurrences with pending reminders ====================
+
+    @Test
+    fun `two reminders of one occurrence count as one event`() = runTest {
+        val occurrence = System.currentTimeMillis() + 3_600_000
+        remindersDao.insert(createReminder(occurrenceTime = occurrence))
+        remindersDao.insert(createReminder(occurrenceTime = occurrence))
+
+        val count = remindersDao.countOccurrencesWithPendingReminders(0, Long.MAX_VALUE)
+
+        assertEquals(1, count)
+    }
+
+    @Test
+    fun `only pending reminders in the range count`() = runTest {
+        val now = System.currentTimeMillis()
+        remindersDao.insert(createReminder(triggerTime = now + 1_000, occurrenceTime = now + 10_000))
+        remindersDao.insert(createReminder(triggerTime = now + 2_000, occurrenceTime = now + 20_000, status = ReminderStatus.SNOOZED))
+        remindersDao.insert(createReminder(triggerTime = now + 3_000, occurrenceTime = now + 30_000, status = ReminderStatus.FIRED))
+        remindersDao.insert(createReminder(triggerTime = now + 999_999, occurrenceTime = now + 40_000))
+
+        val count = remindersDao.countOccurrencesWithPendingReminders(now, now + 10_000)
+
+        assertEquals(1, count)
+    }
+
+    @Test
+    fun `a muted calendar's pending reminders don't count`() = runTest {
+        // Muting keeps the rows PENDING so an unmute can re-arm them; the count must skip them.
+        remindersDao.insert(createReminder())
+        database.calendarsDao().setNotificationMuted(testCalendarId, true)
+
+        val count = remindersDao.countOccurrencesWithPendingReminders(0, Long.MAX_VALUE)
+
+        assertEquals(0, count)
+    }
 }

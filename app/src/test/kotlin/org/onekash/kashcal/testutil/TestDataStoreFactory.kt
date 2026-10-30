@@ -63,7 +63,9 @@ object TestDataStoreFactory {
         every { showMultiDayTimedInAllDayStrip } returns MutableStateFlow(false)
         every { showEventEmojis } returns MutableStateFlow(true)
         every { quickAddEnabled } returns MutableStateFlow(false)
-        every { onboardingDismissed } returns MutableStateFlow(true)
+        every { onboardingCompleted } returns MutableStateFlow(true)
+        every { notificationAskDone } returns MutableStateFlow(false)
+        every { notificationPermissionDeniedCount } returns MutableStateFlow(0)
         every { hiddenDeviceCalendarIds } returns MutableStateFlow(emptySet())
         every { mutedDeviceCalendarIds } returns MutableStateFlow(emptySet())
         every { deviceCalendarRemindersEnabled } returns MutableStateFlow(true)
@@ -97,7 +99,8 @@ object TestDataStoreFactory {
         coJustRun { setUserInitials(any()) }
         coJustRun { setTagsAboveNotes(any()) }
         coJustRun { setShownShareCardTooltip(any()) }
-        coJustRun { setOnboardingDismissed(any()) }
+        coJustRun { setOnboardingCompleted(any()) }
+        coJustRun { setNotificationAskDone() }
         coJustRun { setDefaultCalendarView(any()) }
         coJustRun { setDayWeekBarExpanded(any()) }
         coJustRun { setContactSuggestionsDeclined(any()) }

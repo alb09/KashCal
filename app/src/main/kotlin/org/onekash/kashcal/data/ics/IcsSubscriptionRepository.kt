@@ -211,7 +211,8 @@ class IcsSubscriptionRepository @Inject constructor(
 
         try {
             // Cached validators with zero stored events means an earlier parse or store
-            // failed (#219). Drop the validators so the server returns the body again.
+            // failed (#219), or the feed is empty. Drop the validators so the server returns
+            // the body again; an empty feed is downloaded in full on every refresh.
             val hasCachedConditionals = subscription.etag != null || subscription.lastModified != null
             val isStuckWithStaleConditionals = hasCachedConditionals && !eventsDao.anyByCalendarIdAndCaldavUrlPrefix(
                 calendarId = subscription.calendarId,
@@ -246,7 +247,7 @@ class IcsSubscriptionRepository @Inject constructor(
                     // feed whose events are all CANCELLED. Caching the ETag would make every
                     // later refresh a 304 that never re-parses, so report an error instead.
                     if (events.isEmpty() && fetchResult.content.contains("BEGIN:VEVENT")) {
-                        val message = "Parsed 0 events from non-empty feed"
+                        val message = IcsFeedErrors.NO_EVENTS_PARSED
                         Log.w(TAG, "$message: ${subscription.name}")
                         icsSubscriptionsDao.updateSyncError(subscriptionId, message)
                         return@withContext SyncResult.Error(message)
@@ -285,7 +286,7 @@ class IcsSubscriptionRepository @Inject constructor(
             throw e
         } catch (e: Exception) {
             Log.e(TAG, "Error refreshing subscription: ${subscription.name}", e)
-            val errorMessage = e.message ?: "Unknown sync error"
+            val errorMessage = e.message ?: IcsFeedErrors.UNKNOWN
             icsSubscriptionsDao.updateSyncError(subscriptionId, errorMessage)
             return@withContext SyncResult.Error(errorMessage)
         }

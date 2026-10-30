@@ -11,6 +11,13 @@ enum class LocalCalendarRefusal {
      */
     DUPLICATE_NAME,
 
+    /**
+     * The trimmed name differs from another offline calendar's, but both would give the same
+     * backup file name ([org.onekash.kashcal.util.exportNameKey]), such as "Work!" next to
+     * "Work". [LocalCalendarException.conflictingName] holds the other calendar's shown name.
+     */
+    SIMILAR_NAME,
+
     /** No calendar has that id. */
     NOT_FOUND,
 
@@ -21,5 +28,11 @@ enum class LocalCalendarRefusal {
     BUILT_IN,
 }
 
-/** Carries a [LocalCalendarRefusal] in a failed [Result]. */
-class LocalCalendarException(val refusal: LocalCalendarRefusal) : Exception(refusal.name)
+/**
+ * Carries a [LocalCalendarRefusal] in a failed [Result]. [conflictingName] is the other
+ * calendar's shown name for [LocalCalendarRefusal.SIMILAR_NAME], otherwise null.
+ */
+class LocalCalendarException(
+    val refusal: LocalCalendarRefusal,
+    val conflictingName: String? = null,
+) : Exception(refusal.name)

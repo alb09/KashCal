@@ -58,6 +58,8 @@
     <string name="channel_event_invitations_desc">Notifications when you receive a new calendar invitation</string>
     <!-- Notification channel for calendar changes found by a background sync; also the lock-screen text of those notifications -->
     <string name="channel_calendar_updates">Calendar updates</string>
+    <string name="channel_calendar_backup">Automatic calendar backup</string>
+    <string name="channel_calendar_backup_description">Tells you when a calendar backup fails</string>
     <!-- Body of the invite notification. %1$s is the organizer's email or name. -->
     <string name="invite_notification_body">From %1$s · Tap to respond</string>
 
@@ -380,12 +382,58 @@
     <string name="backup_error_read_failed">Could not read file</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <!-- First-run screen. Casual/friendly tone. Keep "iCloud" untranslated. -->
-    <string name="onboarding_apple_calendar">Apple Calendar?</string>
-    <!-- Casual reassurance — informal tone -->
-    <string name="onboarding_got_you">We\'ve got you.</string>
-    <!-- Keep "iCloud" untranslated -->
-    <string name="onboarding_connect_prompt">Connect iCloud to see your events here</string>
+    <!-- First-launch sheet asking where the user's calendars are. Short, plain, direct. -->
+    <string name="onboarding_title">Where are your calendars?</string>
+    <string name="onboarding_subtitle">Pick one to connect.</string>
+    <!-- Detail under the "iCloud" row: what signing in needs. Keep "Apple ID" as Apple names it in the language. -->
+    <string name="onboarding_icloud_detail">Apple ID and app password</string>
+    <!-- Row title. Keep "CalDAV" untranslated. -->
+    <string name="onboarding_caldav_title">CalDAV server</string>
+    <!-- Detail under the CalDAV row: example servers. Keep the product names untranslated. -->
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale, and others</string>
+    <!-- Row title: calendars other apps keep on this device (phone or tablet); it opens the Device calendars screen -->
+    <string name="onboarding_device_title">On this device</string>
+    <!-- Detail under "On this device". Keep "Google" and "Outlook" untranslated; "sync apps" = apps that sync a calendar account into the device. -->
+    <string name="onboarding_phone_detail">Google, Outlook, and sync apps</string>
+    <!-- Button: start with KashCal's calendar that stays on this phone and never syncs -->
+    <string name="onboarding_use_offline">Use offline calendar</string>
+    <!-- Line under the button; three short statements -->
+    <string name="onboarding_trust">Open source. No ads. No tracking.</string>
+
+    <!-- ==================== Reminders are off ==================== -->
+    <!-- Banner title on the calendar when the app was never allowed to show notifications, so reminders stay silent -->
+    <string name="reminders_off_title">Reminders are off</string>
+    <!-- Banner body: how many events in the coming week have reminders the user won't get -->
+    <plurals name="reminders_off_body">
+        <item quantity="one">%d event this week has a reminder.</item>
+        <item quantity="other">%d events this week have reminders.</item>
+    </plurals>
+    <!-- Banner button: hide the banner for good without turning notifications on -->
+    <string name="reminders_off_not_now">Not now</string>
+    <!-- Banner button: ask Android for notification permission -->
+    <string name="reminders_off_turn_on">Turn on</string>
+    <!-- Short confirmation after the user allows notifications from the "Reminders are off" banner -->
+    <string name="reminders_on_snackbar">Reminders on</string>
+
+    <!-- ==================== About ==================== -->
+    <!-- The sheet the account hub's About row opens -->
+    <!-- One line under the app name: what KashCal is, as the README says it -->
+    <string name="about_tagline">All your calendars in one private app.</string>
+    <!-- Row that opens the website's help pages -->
+    <string name="about_help_title">Help and guides</string>
+    <string name="about_help_detail">Setup, sync and questions</string>
+    <!-- Row that opens the app's source code on GitHub. Keep "Apache 2.0" and "GitHub" untranslated. -->
+    <string name="about_source_title">Source code</string>
+    <string name="about_source_detail">Apache 2.0, on GitHub</string>
+    <!-- Row that opens the donate page. The app can't tell who has donated, so the line thanks supporters and invites everyone else. -->
+    <string name="about_support_title">Support KashCal</string>
+    <string name="about_support_detail">Thank you to everyone who already does</string>
+    <!-- Shown under the rows when no app on the device can open a web link -->
+    <string name="about_link_failed">No app can open this link.</string>
+    <!-- Footer. Keep the heart emoji and "Austin". -->
+    <string name="about_built_in_austin">Built with ❤️ in Austin</string>
+    <!-- Footer, under the line above: the installed version, e.g. "Version 2026.10.30-2" -->
+    <string name="about_version">Version %1$s</string>
 
     <!-- ==================== What\'s New ==================== -->
     <!-- Top-right button on the post-update pager; closes it without reading the rest. -->
@@ -430,19 +478,39 @@
     <string name="whats_new_v772_changes_body">New, edited and removed events from your iCloud and CalDAV calendars collect in Recent changes for 7 days. Tap one to open it.</string>
     <!-- Page body for the Change notifications setting (the page heading is settings_change_notifications). Keep "iCloud" and "CalDAV" untranslated. -->
     <string name="whats_new_v772_notifications_body">Get a notification when a background sync finds changes to your iCloud or CalDAV events. It stays off until you switch it on.</string>
-    <!-- Sample event names shown in an illustration of the Recent changes list and a notification; they are not the user's events. Translate as ordinary event titles. -->
+    <!-- Release-note pages announcing offline calendars, automatic calendar backup and printing a week; each page also shows the menu path to the option. -->
+    <!-- Page heading for offline calendars, which never leave the phone. A playful line; render the idea ("calendars that stay on your phone"), not the literal words. -->
+    <string name="whats_new_v803_offline_title">Calendars that stay home</string>
+    <!-- Page body. "offline calendars" is the feature's name: use the same words as offline_calendars_row_label. -->
+    <string name="whats_new_v803_offline_body">Some plans don\'t belong on a server. Give them their own offline calendars, as many as you like.</string>
+    <!-- Page heading for the automatic calendar backup: it runs by itself once set up. A playful line; keep the idea, not the literal words. -->
+    <string name="whats_new_v803_backup_title">Backups you can forget about</string>
+    <!-- Page body. "offline calendars" uses the same words as offline_calendars_row_label. "KashCal" is a brand name; keep untranslated. -->
+    <string name="whats_new_v803_backup_body">Pick a folder once, and KashCal keeps a fresh copy of your offline calendars there.</string>
+    <!-- Page heading for printing the week shown on screen. A playful line; keep the idea (your week, printed out), not the literal words. -->
+    <string name="whats_new_v803_print_title">Your week, on paper</string>
+    <!-- Page body. The second sentence is a joke about sticking the printout on a fridge door; keep it light and natural, adapt it rather than translate it word for word. -->
+    <string name="whats_new_v803_print_body">Print the week you\'re looking at. Which fridge it goes on is up to you.</string>
+    <!-- Sample event names shown in illustrations of the Recent changes list, a notification and a printed week; they are not the user's events. Translate as ordinary event titles. -->
     <string name="whats_new_hero_sample_lunch">Team lunch</string>
     <string name="whats_new_hero_sample_review">Design review</string>
     <string name="whats_new_hero_sample_book_club">Book club</string>
-    <!-- Sample calendar name in the same illustration. -->
+    <string name="whats_new_hero_sample_dentist">Dentist</string>
+    <string name="whats_new_hero_sample_yoga">Yoga</string>
+    <!-- Sample calendar name in the Recent changes and notification illustrations. -->
     <string name="whats_new_hero_sample_calendar">Work</string>
+    <!-- Sample offline calendar names shown in illustrations of the offline calendars list and backup folder; they are not the user's calendars. Translate as ordinary calendar names. -->
+    <string name="whats_new_hero_sample_family">Family</string>
+    <string name="whats_new_hero_sample_garden">Garden</string>
+    <!-- Sample folder name in an illustration of the automatic calendar backup folder. Translate as an ordinary folder name. -->
+    <string name="whats_new_hero_sample_folder">Calendar backups</string>
     <!-- Time label in an illustrated notification's header, as Android shows a notification that just arrived. -->
     <string name="whats_new_hero_now">now</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
     <!-- Keep "iCloud" and "CalDAV" untranslated -->
     <string name="signin_icloud_title">Connect iCloud</string>
-    <string name="signin_caldav_title">Add CalDAV Account</string>
+    <string name="signin_caldav_title">Add CalDAV account</string>
     <string name="signin_caldav_sign_in_again_title">Sign In Again</string>
     <!-- %1$s = provider name (e.g., "iCloud", "Nextcloud") -->
     <string name="signin_connected_to">Connected to %1$s</string>
@@ -608,7 +676,6 @@
     <string name="error_device_calendar_title">Calendar Error</string>
     <string name="error_device_calendar_write_failed">Failed to save to device calendar. Please try again.</string>
     <string name="error_device_calendar_permission">Calendar write permission required. Please grant permission in Settings.</string>
-    <string name="error_device_calendar_permission_denied">Toggle Calendar permission off/on in Settings to grant write access</string>
     <string name="error_device_calendar_not_found">Calendar not found. It may have been removed.</string>
     <string name="error_device_event_not_found">Event not found. It may have been deleted.</string>
     <string name="error_device_calendar_read_only">This calendar is read-only.</string>
@@ -803,6 +870,8 @@
     <!-- Keep "ICS" untranslated -->
     <string name="subscriptions_empty_ics">No ICS subscriptions</string>
     <string name="subscriptions_empty_ics_hint">Add a calendar feed to see events</string>
+    <!-- Line under the Calendar Feeds heading while the list has feeds. Name no direction: the swipe flips in right-to-left layouts. -->
+    <string name="subscriptions_swipe_hint">Swipe a feed to delete it.</string>
     <string name="subscriptions_add_ics">Add ICS Calendar</string>
     <!-- Quick Settings tile (shade pulldown): taps to open Quick Add event capture -->
     <string name="qs_tile_label">Add event</string>
@@ -924,7 +993,7 @@
     <string name="settings_device_calendars_hint">Calendars from other apps</string>
     <string name="offline_calendars_row_label">Offline calendars</string>
     <string name="offline_calendars_row_hint">Calendars that stay on this phone</string>
-    <string name="offline_calendars_manage_note">Add, rename, recolor or remove your offline calendars.</string>
+    <string name="offline_calendars_manage_note">Swipe a calendar to delete it.</string>
     <string name="offline_calendars_info">Kept only on this phone and never synced. Backups don\'t include events, so export a calendar to keep a copy.</string>
     <string name="offline_calendars_info_cd">About offline calendars</string>
     <!-- TalkBack state of the row of the calendar new events go to by default. -->
@@ -958,6 +1027,88 @@
     <string name="offline_calendar_deleted">%1$s deleted</string>
     <!-- Shown under the name field when another offline calendar already has the name. %1$s = the typed name. -->
     <string name="offline_calendar_duplicate_name">An offline calendar named \"%1$s\" already exists</string>
+    <string name="offline_calendar_similar_name">Too similar to \"%1$s\". Choose a different name.</string>
+    <string name="calendar_backup_title">Automatic calendar backup</string>
+    <string name="calendar_backup_row_off">Off</string>
+    <!-- %1$s is how often ("Every 12 hours"), %2$s the folder name. -->
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Can\'t reach the backup folder</string>
+    <string name="calendar_backup_intro">Saves each offline calendar as an ICS file in a folder you choose.</string>
+    <string name="calendar_backup_choose_folder">Choose folder</string>
+    <string name="calendar_backup_choose_folder_hint">Choose or create a folder, for example in Documents. Android doesn\'t allow the top of storage or the Download folder itself.</string>
+    <string name="calendar_backup_folder">Folder</string>
+    <string name="calendar_backup_change">Change</string>
+    <string name="calendar_backup_frequency">Frequency</string>
+    <string name="calendar_backup_frequency_info">Backups can run late: Android holds back background work when the phone is idle or KashCal hasn\'t been opened for a while.</string>
+    <string name="calendar_backup_copies">Copies to keep</string>
+    <string name="calendar_backup_copies_explained">Each backup keeps the previous file as a dated copy. When there are more than this number, the oldest are deleted. The newest file always has the calendar\'s name.</string>
+    <string name="calendar_backup_copies_fewer">Keep fewer copies</string>
+    <string name="calendar_backup_copies_more">Keep more copies</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d copy</item>
+        <item quantity="other">%d copies</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">Deletes %d older copy. This can\'t be undone.</item>
+        <item quantity="other">Deletes %d older copies. This can\'t be undone.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Deletes the older copies beyond this number. This can\'t be undone.</string>
+    <string name="calendar_backup_calendars">Offline calendars</string>
+    <!-- %1$s is a file name ("Ideas.ics"). -->
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · No events, nothing saved</string>
+    <!-- %1$s is a file name ("Trips.ics"). -->
+    <string name="calendar_backup_calendar_save_failed">%1$s · Couldn\'t save. Will try again at the next backup.</string>
+    <!-- %1$s is a date and time. -->
+    <string name="calendar_backup_status">Last backup %1$s</string>
+    <!-- %1$s is a date and time, %2$d how many calendars failed. -->
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Last backup %1$s · %2$d calendar failed</item>
+        <item quantity="other">Last backup %1$s · %2$d calendars failed</item>
+    </plurals>
+    <string name="calendar_backup_now">Back up now</string>
+    <string name="calendar_backup_running">Backing up…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal overwrites these files at each backup, so changes made to them in other apps don\'t last. To restore a calendar, use Import events from file.</string>
+    <string name="calendar_backup_off_files_stay">Existing files stay in %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Can\'t reach %1$s. It may have been moved, deleted or disconnected.</string>
+    <string name="calendar_backup_error_unsupported">Can\'t save files in %1$s. Choose another folder.</string>
+    <string name="calendar_backup_choose_again">Choose again</string>
+    <string name="calendar_backup_pick_refused">KashCal can\'t use that folder. Choose another one.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal can\'t create files in that folder. Choose another one.</string>
+    <string name="calendar_backup_failed_title">Calendar backup failed</string>
+    <string name="calendar_backup_folder_unnamed">the backup folder</string>
+    <string name="calendar_backup_alert_unreachable">Can\'t reach %1$s. Tap to choose it again.</string>
+    <string name="calendar_backup_alert_unsupported">Can\'t save files in %1$s. Tap to choose another folder.</string>
+    <string name="calendar_backup_alert_file_retry">Couldn\'t save %1$s. KashCal will try again at the next backup.</string>
+    <string name="calendar_backup_every_hour">Every hour</string>
+    <string name="calendar_backup_every_day">Every day</string>
+    <!-- Used for counts other than exactly 1; "Every hour" covers 1. -->
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">Every %d hour</item>
+        <item quantity="other">Every %d hours</item>
+    </plurals>
+    <!-- Used for counts other than exactly 1; "Every day" covers 1. -->
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">Every %d day</item>
+        <item quantity="other">Every %d days</item>
+    </plurals>
+    <!-- %1$s is a number of hours ("6 hours"). -->
+    <string name="calendar_backup_every_day_hours">Every day %1$s</string>
+    <!-- %1$s is a number of days ("2 days"), %2$s a number of hours ("6 hours"). -->
+    <string name="calendar_backup_every_days_hours">Every %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">Choose at least 1 hour.</string>
+    <string name="calendar_backup_interval_too_long">Choose 30 days or less.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">Couldn\'t save %d calendar. KashCal will try again at the next backup.</item>
+        <item quantity="other">Couldn\'t save %d calendars. KashCal will try again at the next backup.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">Notifications are off for KashCal, so it can\'t notify you if a backup fails.</string>
+    <string name="calendar_backup_notifications_channel_off">Backup notifications are off, so KashCal can\'t notify you if a backup fails.</string>
+    <string name="calendar_backup_open_settings">Open settings</string>
+    <string name="calendar_backup_not_now">Not now</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">%d calendar failed</item>
+        <item quantity="other">%d calendars failed</item>
+    </plurals>
     <!-- Settings row: enables natural-language event entry ("Lunch with Sam Friday 1pm") -->
     <string name="settings_quick_event_add">Smart event add</string>
     <!-- Tooltip explaining the Smart event add toggle -->
@@ -1074,6 +1225,8 @@
     <string name="label_pattern">Pattern</string>
     <!-- Event form: when the event/recurrence ends -->
     <string name="label_ends">Ends</string>
+    <!-- Event form date and time sheet, all-day: shown after a start date is tapped; the next tap on a day sets the end (optional) -->
+    <string name="sheet_hint_change_end">Tap a day to change the end</string>
     <!-- Event form: timezone row label -->
     <string name="label_timezone">Time zone</string>
     <!-- Event form: shown in the timezone row when the event uses the device's default timezone -->
@@ -1085,7 +1238,7 @@
     <string name="label_recurrence_never">Never</string>
     <string name="label_tomorrow">Tomorrow</string>
     <string name="label_yesterday">Yesterday</string>
-    <string name="label_device_calendars">Device Calendars</string>
+    <string name="label_device_calendars">Device calendars</string>
     <string name="label_default_calendar_hint">New events will be created in this calendar</string>
     <!-- %1$d = truncated count, %2$d = total count, %3$d = max editable -->
     <string name="label_reminders_truncated">%1$d not shown (%2$d total, max %3$d editable)</string>
@@ -1105,14 +1258,15 @@
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
     <!-- "Device calendars" = calendars from other apps on this phone, not KashCal's own calendars -->
-    <string name="device_calendars_description">Show events from other calendar apps on your device (sync adapters, local calendars).</string>
-    <string name="device_calendars_permission_required">Calendar permission required. Tap Enable to grant access.</string>
-    <string name="device_calendars_read_only_access">Read-only access</string>
-    <string name="device_calendars_grant_write">Grant write permission to edit device calendar events</string>
-    <string name="device_calendars_grant">Grant</string>
-    <string name="device_calendars_none_found">No device calendars found.</string>
+    <!-- Description at the top of the Device calendars screen. "Sync apps" = apps that sync a calendar account into the phone's calendar storage; keep "Google" and "Outlook" untranslated. -->
+    <string name="device_calendars_intro">Show calendars from Google, Outlook, and sync apps on this device.</string>
+    <!-- Label of the switch that turns device calendars on or off -->
+    <string name="device_calendars_show_switch">Show device calendars</string>
+    <!-- Shown under the switch while it is on and no calendar is picked yet -->
+    <string name="device_calendars_pick_hint">Pick calendars to show.</string>
+    <!-- Shown when the phone returned no calendars: the app looked and found none -->
+    <string name="device_calendars_empty">No calendars found.</string>
     <string name="device_calendars_local">Local</string>
-    <string name="device_calendars_read_only_no_write">Read only (no write permission)</string>
     <string name="device_calendars_read_only_calendar">Read only (calendar is read-only)</string>
 
     <string name="settings_sync_frequency">Sync frequency</string>
@@ -1852,6 +2006,11 @@
     <string name="ics_fetch_error_http">Server returned an error (%1$d). Please check the URL.</string>
     <string name="ics_fetch_error_empty">The calendar feed is empty.</string>
     <string name="ics_fetch_error_not_calendar">That URL doesn\'t look like a calendar feed.</string>
+    <!-- ICS feed refresh errors (shown on the feed's row in Calendar Feeds) -->
+    <string name="ics_feed_error_empty_response">The server didn\'t send a valid feed.</string>
+    <string name="ics_feed_error_access_denied">This feed\'s server refused access.</string>
+    <string name="ics_feed_error_too_large">This calendar feed is too large to download.</string>
+    <string name="ics_feed_error_unreadable">This feed\'s events couldn\'t be shown.</string>
     <!-- Insights -->
     <string name="insights_title">Insights</string>
     <string name="insights_period_this_week">Week</string>
@@ -1995,7 +2154,7 @@
     <string name="menu_invites">Invites</string>
     <!-- Right rail item label that opens a date picker to navigate to a specific day -->
     <string name="jump_to_date">Go to date</string>
-    <!-- Right rail item label that opens the app information dialog (version, links, credits) -->
+    <!-- Account hub row that opens the About sheet (help, source code, support, version) -->
     <string name="menu_about">About</string>
     <!-- Content description for the AppBar rail toggle when there are no pending invites -->
     <string name="menu_more">More menu</string>
@@ -2049,7 +2208,7 @@
     <!-- Per-day line. %1$s = day-of-week + short date, %2$s = comma-separated time ranges. -->
     <string name="share_availability_day_line">%1$s: %2$s</string>
     <!-- Separator joining multiple time ranges on the same day -->
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <!-- Time range within a day line. %1$s = start time, %2$s = end time. -->
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <!-- Empty-state message shown when no qualifying free block was found -->
@@ -2092,5 +2251,52 @@
     <string name="share_as_card_chooser_title">Share event</string>
     <!-- Toast shown when sharing the card fails (no app to handle, render error) -->
     <string name="share_as_card_share_failed">Could not share card</string>
+
+    <!-- Print your week: account hub row that opens the print options sheet -->
+    <string name="print_your_week">Print your week</string>
+    <!-- Title of the full-height sheet where the user picks the week, pages and calendars to print -->
+    <string name="print_options_title">Choose print options</string>
+    <!-- Section heading above the two page choices in the print sheet -->
+    <string name="print_pages_header">Pages</string>
+    <!-- Page choice: the week drawn as a time grid, one page -->
+    <string name="print_page_week">Week calendar</string>
+    <!-- Second line under the Week calendar page choice -->
+    <string name="print_page_week_detail">The week as a grid</string>
+    <!-- Page choice: every event of the week listed in full; also the heading of that printed page -->
+    <string name="print_page_details">Details</string>
+    <!-- Second line under the Details page choice -->
+    <string name="print_page_details_detail">Every event in full</string>
+    <!-- Button that hands the chosen pages to the system print dialog -->
+    <string name="print_action">Print</string>
+    <!-- Accessibility label of the button that moves the print sheet to the previous week -->
+    <string name="cd_print_previous_week">Previous week</string>
+    <!-- Accessibility label of the button that moves the print sheet to the next week -->
+    <string name="cd_print_next_week">Next week</string>
+    <!-- Print sheet summary: how many pages are ticked -->
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d page</item>
+        <item quantity="other">%d pages</item>
+    </plurals>
+    <!-- How many of the listed calendars are ticked: %1$d ticked, %2$d listed; the quantity is %2$d. Also printed under the printout's title -->
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d of %2$d calendar</item>
+        <item quantity="other">%1$d of %2$d calendars</item>
+    </plurals>
+    <!-- Joins the page count and the calendar count in the print sheet summary, e.g. "2 pages · 4 of 7 calendars" -->
+    <string name="print_summary">%1$s · %2$s</string>
+    <!-- Print job name, also the saved PDF's file name: %1$s is the app name, %2$s the week's first day (e.g. "Oct 25") -->
+    <string name="print_job_name">%1$s – Week of %2$s</string>
+    <!-- Snackbar when printing can't start or stops with an error -->
+    <string name="print_failed">Couldn\'t print. Try again.</string>
+    <!-- Printed page: label before the calendar count under the week grid's title -->
+    <string name="print_doc_week">Week</string>
+    <!-- Printed page footer: %1$s is today's date -->
+    <string name="print_doc_printed">Printed %1$s</string>
+    <!-- Printed page footer: %1$s is the page number, %2$s the number of pages; keep both placeholders -->
+    <string name="print_doc_page_of">Page %1$s of %2$s</string>
+    <!-- Printed under the week grid when the details page is printed too -->
+    <string name="print_doc_numbers_note">Numbers match the details, which list every event in full.</string>
+    <!-- Printed under the week grid: %1$s is the time zone name, e.g. "Eastern Time" -->
+    <string name="print_doc_times_in">Times shown in %1$s</string>
 
 </resources>

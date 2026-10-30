@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">予定への招待</string>
     <string name="channel_event_invitations_desc">新しいカレンダー招待を受け取ったときの通知</string>
     <string name="channel_calendar_updates">カレンダーの更新</string>
+    <string name="channel_calendar_backup">カレンダーの自動バックアップ</string>
+    <string name="channel_calendar_backup_description">カレンダーのバックアップに失敗したときに通知します</string>
     <string name="invite_notification_body">送信元: %1$s · タップして返信</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,34 @@
     <string name="backup_error_read_failed">ファイルを読み込めませんでした</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Appleカレンダーをお使いですか？</string>
-    <string name="onboarding_got_you">お任せください。</string>
-    <string name="onboarding_connect_prompt">iCloudに接続して予定を表示</string>
+    <string name="onboarding_title">どのカレンダーを使っていますか？</string>
+    <string name="onboarding_subtitle">接続するものを1つ選んでください。</string>
+    <string name="onboarding_icloud_detail">Apple IDとApp用パスワード</string>
+    <string name="onboarding_caldav_title">CalDAVサーバー</string>
+    <string name="onboarding_caldav_detail">Nextcloud、Fastmail、Radicaleなど</string>
+    <string name="onboarding_device_title">このデバイス</string>
+    <string name="onboarding_phone_detail">Google、Outlook、同期アプリ</string>
+    <string name="onboarding_use_offline">オフラインカレンダーを使う</string>
+    <string name="onboarding_trust">オープンソース。広告なし。トラッキングなし。</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">リマインダーがオフです</string>
+    <plurals name="reminders_off_body">
+        <item quantity="other">今週%d件の予定にリマインダーがあります。</item>
+    </plurals>
+    <string name="reminders_off_not_now">後で</string>
+    <string name="reminders_off_turn_on">オンにする</string>
+    <string name="reminders_on_snackbar">リマインダーをオンにしました</string>
+    <string name="about_tagline">すべてのカレンダーを、ひとつのプライベートなアプリで。</string>
+    <string name="about_help_title">ヘルプとガイド</string>
+    <string name="about_help_detail">設定、同期、よくある質問</string>
+    <string name="about_source_title">ソースコード</string>
+    <string name="about_source_detail">Apache 2.0、GitHub で公開</string>
+    <string name="about_support_title">KashCal を支援</string>
+    <string name="about_support_detail">すでに支援してくださっている皆さま、ありがとうございます</string>
+    <string name="about_link_failed">このリンクを開けるアプリがありません。</string>
+    <string name="about_built_in_austin">Austin で ❤️ を込めて開発</string>
+    <string name="about_version">バージョン%1$s</string>
     <string name="whats_new_skip">スキップ</string>
     <string name="whats_new_next">次へ</string>
     <string name="whats_new_page_of">%2$dページ中%1$dページ目</string>
@@ -275,10 +300,21 @@
     <string name="whats_new_v772_changes_title">変更内容を確認</string>
     <string name="whats_new_v772_changes_body">iCloud と CalDAV のカレンダーで追加、編集、削除された予定は、7 日間「最近の変更」に表示されます。タップすると開きます。</string>
     <string name="whats_new_v772_notifications_body">バックグラウンド同期で iCloud または CalDAV の予定の変更が見つかったときに通知を受け取れます。オンにするまではオフのままです。</string>
+    <string name="whats_new_v803_offline_title">スマホの中だけのカレンダー</string>
+    <string name="whats_new_v803_offline_body">サーバーに置かなくていい予定もあります。そんな予定のために、オフラインカレンダーをいくつでも作れます。</string>
+    <string name="whats_new_v803_backup_title">バックアップはおまかせ</string>
+    <string name="whats_new_v803_backup_body">フォルダを一度選ぶだけで、KashCalがオフラインカレンダーの最新のコピーをそこに保存し続けます。</string>
+    <string name="whats_new_v803_print_title">1週間を紙で</string>
+    <string name="whats_new_v803_print_body">表示中の週をそのまま印刷できます。どの冷蔵庫に貼るかは、あなた次第です。</string>
     <string name="whats_new_hero_sample_lunch">チームランチ</string>
     <string name="whats_new_hero_sample_review">デザインレビュー</string>
     <string name="whats_new_hero_sample_book_club">読書会</string>
+    <string name="whats_new_hero_sample_dentist">歯医者</string>
+    <string name="whats_new_hero_sample_yoga">ヨガ</string>
     <string name="whats_new_hero_sample_calendar">仕事</string>
+    <string name="whats_new_hero_sample_family">家族</string>
+    <string name="whats_new_hero_sample_garden">ガーデニング</string>
+    <string name="whats_new_hero_sample_folder">カレンダーのバックアップ</string>
     <string name="whats_new_hero_now">今</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +430,6 @@
     <string name="error_device_calendar_title">カレンダーエラー</string>
     <string name="error_device_calendar_write_failed">デバイスカレンダーへの保存に失敗しました。もう一度お試しください。</string>
     <string name="error_device_calendar_permission">カレンダーの書き込み許可が必要です。設定で許可してください。</string>
-    <string name="error_device_calendar_permission_denied">書き込みアクセスを許可するには、設定でカレンダーの権限を一度オフにしてから再度オンにしてください</string>
     <string name="error_device_calendar_not_found">カレンダーが見つかりません。削除された可能性があります。</string>
     <string name="error_device_event_not_found">予定が見つかりません。削除された可能性があります。</string>
     <string name="error_device_calendar_read_only">このカレンダーは読み取り専用です。</string>
@@ -538,6 +573,7 @@
     <string name="subscriptions_section_add">追加</string>
     <string name="subscriptions_empty_ics">ICS購読はありません</string>
     <string name="subscriptions_empty_ics_hint">カレンダーフィードを追加して予定を表示</string>
+    <string name="subscriptions_swipe_hint">フィードをスワイプすると削除できます。</string>
     <string name="subscriptions_add_ics">ICSカレンダーを追加</string>
     <string name="qs_tile_label">予定を追加</string>
     <string name="holiday_catalog_add">祝日カレンダーを追加</string>
@@ -624,7 +660,7 @@
     <string name="settings_device_calendars_hint">他のアプリのカレンダー</string>
     <string name="offline_calendars_row_label">オフラインカレンダー</string>
     <string name="offline_calendars_row_hint">このスマートフォンだけに保存するカレンダー</string>
-    <string name="offline_calendars_manage_note">オフラインカレンダーの追加、名前の変更、色の変更、削除ができます。</string>
+    <string name="offline_calendars_manage_note">カレンダーをスワイプすると削除できます。</string>
     <string name="offline_calendars_info">このスマートフォンだけに保存され、同期されません。バックアップには予定が含まれないため、コピーを残すにはカレンダーをエクスポートしてください。</string>
     <string name="offline_calendars_info_cd">オフラインカレンダーについて</string>
     <string name="offline_calendar_default_state">デフォルト</string>
@@ -648,6 +684,72 @@
     </plurals>
     <string name="offline_calendar_deleted">%1$sを削除しました</string>
     <string name="offline_calendar_duplicate_name">「%1$s」という名前のオフラインカレンダーはすでにあります</string>
+    <string name="offline_calendar_similar_name">「%1$s」と似すぎています。別の名前を選択してください。</string>
+    <string name="calendar_backup_title">カレンダーの自動バックアップ</string>
+    <string name="calendar_backup_row_off">オフ</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">バックアップフォルダにアクセスできません</string>
+    <string name="calendar_backup_intro">オフラインカレンダーをそれぞれICSファイルとして、選択したフォルダに保存します。</string>
+    <string name="calendar_backup_choose_folder">フォルダを選択</string>
+    <string name="calendar_backup_choose_folder_hint">Documents内など、フォルダを選択または作成してください。Androidでは、ストレージの最上位やDownloadフォルダ自体は選択できません。</string>
+    <string name="calendar_backup_folder">フォルダ</string>
+    <string name="calendar_backup_change">変更</string>
+    <string name="calendar_backup_frequency">頻度</string>
+    <string name="calendar_backup_frequency_info">バックアップは遅れて実行されることがあります。スマートフォンがアイドル状態のときや、KashCalをしばらく開いていないときは、Androidがバックグラウンド処理を控えるためです。</string>
+    <string name="calendar_backup_copies">保持するコピー数</string>
+    <string name="calendar_backup_copies_explained">バックアップのたびに、前のファイルは日付付きのコピーとして保持されます。この数を超えると、古いものから削除されます。最新のファイルには常にカレンダー名が付きます。</string>
+    <string name="calendar_backup_copies_fewer">コピーを減らす</string>
+    <string name="calendar_backup_copies_more">コピーを増やす</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="other">%d件</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="other">古いコピーを%d件削除します。元に戻せません。</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">この数を超える古いコピーを削除します。元に戻せません。</string>
+    <string name="calendar_backup_calendars">オフラインカレンダー</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · 予定がないため保存されていません</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · 保存できませんでした。次回のバックアップで再試行します。</string>
+    <string name="calendar_backup_status">前回のバックアップ: %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="other">前回のバックアップ: %1$s · %2$d件のカレンダーが失敗</item>
+    </plurals>
+    <string name="calendar_backup_now">今すぐバックアップ</string>
+    <string name="calendar_backup_running">バックアップ中…</string>
+    <string name="calendar_backup_footer_overwrites">KashCalはバックアップのたびにこれらのファイルを上書きするため、他のアプリで加えた変更は残りません。カレンダーを復元するには、「ファイルから予定をインポート」を使用してください。</string>
+    <string name="calendar_backup_off_files_stay">既存のファイルは%1$sに残ります。</string>
+    <string name="calendar_backup_folder_unreachable">%1$sにアクセスできません。移動、削除、または接続が解除された可能性があります。</string>
+    <string name="calendar_backup_error_unsupported">%1$sにはファイルを保存できません。別のフォルダを選択してください。</string>
+    <string name="calendar_backup_choose_again">もう一度選択</string>
+    <string name="calendar_backup_pick_refused">KashCalはそのフォルダを使用できません。別のフォルダを選択してください。</string>
+    <string name="calendar_backup_pick_cannot_create">KashCalはそのフォルダにファイルを作成できません。別のフォルダを選択してください。</string>
+    <string name="calendar_backup_failed_title">カレンダーのバックアップに失敗しました</string>
+    <string name="calendar_backup_folder_unnamed">バックアップフォルダ</string>
+    <string name="calendar_backup_alert_unreachable">%1$sにアクセスできません。タップしてもう一度選択してください。</string>
+    <string name="calendar_backup_alert_unsupported">%1$sにはファイルを保存できません。タップして別のフォルダを選択してください。</string>
+    <string name="calendar_backup_alert_file_retry">%1$sを保存できませんでした。KashCalは次回のバックアップで再試行します。</string>
+    <string name="calendar_backup_every_hour">1時間ごと</string>
+    <string name="calendar_backup_every_day">毎日</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="other">%d時間ごと</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="other">%d日ごと</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">1日%1$sごと</string>
+    <string name="calendar_backup_every_days_hours">%1$s%2$sごと</string>
+    <string name="calendar_backup_interval_too_short">1時間以上で選択してください。</string>
+    <string name="calendar_backup_interval_too_long">30日以内で選択してください。</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="other">%d件のカレンダーを保存できませんでした。KashCalは次回のバックアップで再試行します。</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">KashCalの通知がオフになっているため、バックアップに失敗しても通知できません。</string>
+    <string name="calendar_backup_notifications_channel_off">バックアップの通知がオフになっているため、KashCalはバックアップに失敗しても通知できません。</string>
+    <string name="calendar_backup_open_settings">設定を開く</string>
+    <string name="calendar_backup_not_now">後で</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="other">%d件のカレンダーが失敗しました</item>
+    </plurals>
     <string name="settings_quick_event_add">スマート予定入力</string>
     <string name="settings_quick_event_add_info">自然な入力で予定を作成できます。「Sam と金曜日の午後1時にランチ」と入力すると、タイトル、日付、時刻が自動的に入力されます。</string>
     <string name="settings_suggest_titles">予定のタイトルを提案</string>
@@ -715,6 +817,7 @@
     <string name="label_on_days">曜日</string>
     <string name="label_pattern">パターン</string>
     <string name="label_ends">終了</string>
+    <string name="sheet_hint_change_end">日付をタップすると終了日を変更できます</string>
     <string name="label_timezone">タイムゾーン</string>
     <string name="label_alerts">アラート</string>
     <string name="label_add_alert">アラートを追加</string>
@@ -736,14 +839,11 @@
     <string name="status_hours_ago">%1$d時間前</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">デバイス上の他のカレンダーアプリの予定を表示します（同期アダプター、ローカルカレンダー）。</string>
-    <string name="device_calendars_permission_required">カレンダーのアクセス許可が必要です。有効をタップして許可してください。</string>
-    <string name="device_calendars_read_only_access">読み取り専用アクセス</string>
-    <string name="device_calendars_grant_write">デバイスカレンダーの予定を編集するには書き込み許可が必要です</string>
-    <string name="device_calendars_grant">許可</string>
-    <string name="device_calendars_none_found">デバイスカレンダーが見つかりません。</string>
+    <string name="device_calendars_intro">このデバイスのGoogle、Outlook、同期アプリのカレンダーを表示します。</string>
+    <string name="device_calendars_show_switch">デバイスカレンダーを表示</string>
+    <string name="device_calendars_pick_hint">表示するカレンダーを選んでください。</string>
+    <string name="device_calendars_empty">カレンダーが見つかりませんでした。</string>
     <string name="device_calendars_local">ローカル</string>
-    <string name="device_calendars_read_only_no_write">読み取り専用（書き込み許可なし）</string>
     <string name="device_calendars_read_only_calendar">読み取り専用（カレンダーが読み取り専用）</string>
     <string name="settings_sync_frequency">同期頻度</string>
     <string name="settings_sync_frequency_hint">バックグラウンドで同期する頻度</string>
@@ -1233,6 +1333,10 @@
     <string name="ics_fetch_error_http">サーバーがエラー（%1$d）を返しました。URLを確認してください。</string>
     <string name="ics_fetch_error_empty">カレンダーフィードが空です。</string>
     <string name="ics_fetch_error_not_calendar">そのURLはカレンダーフィードではないようです。</string>
+    <string name="ics_feed_error_empty_response">サーバーから有効なフィードが届きませんでした。</string>
+    <string name="ics_feed_error_access_denied">このフィードのサーバーがアクセスを拒否しました。</string>
+    <string name="ics_feed_error_too_large">このカレンダーフィードは大きすぎてダウンロードできません。</string>
+    <string name="ics_feed_error_unreadable">このフィードの予定を表示できませんでした。</string>
     <string name="insights_title">インサイト</string>
     <string name="insights_period_this_week">週</string>
     <string name="insights_period_last_week">先週</string>
@@ -1355,7 +1459,7 @@
         <item quantity="other">次の %1$d 日間（%2$s – %3$s）の空き時間：</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">選択した範囲に1時間以上の空きブロックがありません。</string>
     <string name="share_from_kashcal_footer">KashCalから共有</string>
@@ -1376,5 +1480,29 @@
     <string name="share_as_card_all_day">終日</string>
     <string name="share_as_card_chooser_title">予定を共有</string>
     <string name="share_as_card_share_failed">カードを共有できませんでした</string>
+    <string name="print_your_week">1週間の予定を印刷</string>
+    <string name="print_options_title">印刷オプションを選択</string>
+    <string name="print_pages_header">ページ</string>
+    <string name="print_page_week">週間カレンダー</string>
+    <string name="print_page_week_detail">1週間をグリッドで表示</string>
+    <string name="print_page_details">詳細</string>
+    <string name="print_page_details_detail">すべての予定を詳しく表示</string>
+    <string name="print_action">印刷</string>
+    <string name="cd_print_previous_week">前の週</string>
+    <string name="cd_print_next_week">次の週</string>
+    <plurals name="print_summary_pages">
+        <item quantity="other">%d ページ</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="other">カレンダー %1$d/%2$d</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – %2$sの週</string>
+    <string name="print_failed">印刷できませんでした。もう一度お試しください。</string>
+    <string name="print_doc_week">週</string>
+    <string name="print_doc_printed">印刷日: %1$s</string>
+    <string name="print_doc_page_of">%1$s / %2$s ページ</string>
+    <string name="print_doc_numbers_note">番号は、すべての予定を詳しく記載した詳細ページに対応しています。</string>
+    <string name="print_doc_times_in">時刻は%1$sで表示しています</string>
 
 </resources>

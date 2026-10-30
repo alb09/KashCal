@@ -96,6 +96,20 @@ class NewOfflineCalendarSheetTest {
     }
 
     @Test
+    fun `a name too similar to another shows which calendar`() {
+        render(
+            onCreate = { _, _ ->
+                Result.failure(LocalCalendarException(LocalCalendarRefusal.SIMILAR_NAME, conflictingName = "Work"))
+            },
+        )
+        composeTestRule.onNodeWithText("Name").performTextInput("Work!")
+        composeTestRule.onNodeWithText("Create").performClick()
+
+        composeTestRule.onNodeWithText("Too similar to \"Work\". Choose a different name.").assertIsDisplayed()
+        composeTestRule.onNodeWithText("New calendar").assertIsDisplayed()
+    }
+
+    @Test
     fun `any other failure shows the general error`() {
         render(onCreate = { _, _ -> Result.failure(IllegalStateException("disk full")) })
         composeTestRule.onNodeWithText("Name").performTextInput("Work")

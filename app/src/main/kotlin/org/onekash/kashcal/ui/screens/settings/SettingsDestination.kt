@@ -17,6 +17,12 @@ enum class SettingsDestination(val depth: Int) {
     /** True when navigating from this destination to [target] moves deeper (root -> detail). */
     fun isForwardTo(target: SettingsDestination): Boolean = target.depth > depth
 
+    /**
+     * True when backing out of this destination finishes the activity: Settings was launched
+     * straight onto it ([launchedOn]), so the root behind it was never opened.
+     */
+    fun closesActivity(launchedOn: SettingsDestination?): Boolean = this == launchedOn
+
     companion object {
         /**
          * Resolves the active destination from the individual navigation flags. A detail flag

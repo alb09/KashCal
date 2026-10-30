@@ -9,6 +9,7 @@ import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -307,7 +308,9 @@ class AccountSettingsViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun createViewModel(): AccountSettingsViewModel {
+    private fun createViewModel(
+        savedStateHandle: androidx.lifecycle.SavedStateHandle = androidx.lifecycle.SavedStateHandle(),
+    ): AccountSettingsViewModel {
         // Stubs context.getString for the strings tests assert on, so messages are stable under
         // the relaxed mock.
         val stubContext: android.content.Context = io.mockk.mockk(relaxed = true) {
@@ -345,6 +348,7 @@ class AccountSettingsViewModelTest {
             ),
             context = stubContext,
             applicationScope = applicationScope,
+            savedStateHandle = savedStateHandle,
         )
     }
 
@@ -2367,7 +2371,7 @@ class AccountSettingsViewModelTest {
     }
 
     @Test
-    fun `onSignIn skips success sheet in initial setup mode`() = runTest {
+    fun `onSignIn skips success sheet on the onboarding iCloud route`() = runTest {
         coEvery { discoveryService.discoverAndCreateAccount(any(), any()) } returns DiscoveryResult.Success(
             account = testDbAccount,
             calendars = testCalendars
@@ -2377,7 +2381,7 @@ class AccountSettingsViewModelTest {
         val viewModel = createViewModel()
         advanceUntilIdle()
 
-        viewModel.setInitialSetupMode(true)
+        viewModel.applyOnboardingRoute(OnboardingRoute.ICLOUD)
         viewModel.onAppleIdChange("test@icloud.com")
         viewModel.onPasswordChange("xxxx-xxxx-xxxx-xxxx")
         advanceUntilIdle()
@@ -2388,6 +2392,259 @@ class AccountSettingsViewModelTest {
         val state = viewModel.uiState.value
         assertEquals(false, state.showAccountConnectedSheet)
         assertTrue(state.pendingFinishActivity)
+    }
+
+    // ==================== Onboarding routes ====================
+
+    @Test
+    fun `the onboarding iCloud route opens the sign-in and Cancel returns to the calendar`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.applyOnboardingRoute(OnboardingRoute.ICLOUD)
+        assertTrue(viewModel.uiState.value.showICloudSignInSheet)
+
+        viewModel.hideICloudSignInSheet()
+
+        assertFalse(viewModel.uiState.value.showICloudSignInSheet)
+        assertTrue(viewModel.uiState.value.pendingFinishActivity)
+    }
+
+    @Test
+    fun `the onboarding CalDAV route opens the sign-in and Cancel returns to the calendar`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.applyOnboardingRoute(OnboardingRoute.CALDAV)
+        assertTrue(viewModel.uiState.value.showCalDavSignInSheet)
+
+        viewModel.hideCalDavSignInSheet()
+
+        assertFalse(viewModel.uiState.value.showCalDavSignInSheet)
+        assertTrue(viewModel.uiState.value.pendingFinishActivity)
+    }
+
+    @Test
+    fun `cancelling a sign-in opened from Settings stays in Settings`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.showICloudSignInSheet()
+        viewModel.hideICloudSignInSheet()
+        viewModel.showCalDavSignInSheet()
+        viewModel.hideCalDavSignInSheet()
+
+        assertFalse(viewModel.uiState.value.pendingFinishActivity)
+    }
+
+    @Test
+    fun `an onboarding route is applied once per view model, so a rotation does not reopen it`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.applyOnboardingRoute(OnboardingRoute.CALDAV)
+        viewModel.hideAccountConnectedSheet()
+        viewModel.hideCalDavSignInSheet()
+        // The activity is recreated with the same intent; the view model is kept.
+        viewModel.applyOnboardingRoute(OnboardingRoute.CALDAV)
+
+        assertFalse(viewModel.uiState.value.showCalDavSignInSheet)
+        assertFalse(viewModel.uiState.value.pendingFinishActivity)
+    }
+
+    @Test
+    fun `Add another on the connected sheet ends the onboarding route`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.applyOnboardingRoute(OnboardingRoute.CALDAV)
+        viewModel.hideAccountConnectedSheet()
+        viewModel.applyOnboardingRoute(OnboardingRoute.CALDAV)
+        viewModel.showCalDavSignInSheet()
+        viewModel.hideCalDavSignInSheet()
+
+        assertFalse(viewModel.uiState.value.pendingFinishActivity)
+    }
+
+    @Test
+    fun `after Add another an iCloud success shows the connected sheet`() = runTest {
+        coEvery { discoveryService.discoverAndCreateAccount(any(), any()) } returns DiscoveryResult.Success(
+            account = testDbAccount,
+            calendars = testCalendars
+        )
+        coEvery { accountRepository.saveCredentials(any(), any()) } returns true
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.applyOnboardingRoute(OnboardingRoute.CALDAV)
+        viewModel.hideAccountConnectedSheet()
+        viewModel.onAppleIdChange("test@icloud.com")
+        viewModel.onPasswordChange("xxxx-xxxx-xxxx-xxxx")
+        viewModel.onSignIn()
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.showAccountConnectedSheet)
+        assertFalse(viewModel.uiState.value.pendingFinishActivity)
+    }
+
+    @Test
+    fun `a new view model after process death applies the route again`() = runTest {
+        val first = createViewModel()
+        advanceUntilIdle()
+        first.applyOnboardingRoute(OnboardingRoute.ICLOUD)
+
+        val afterProcessDeath = createViewModel()
+        advanceUntilIdle()
+        afterProcessDeath.applyOnboardingRoute(OnboardingRoute.ICLOUD)
+
+        assertTrue(afterProcessDeath.uiState.value.showICloudSignInSheet)
+    }
+
+    @Test
+    fun `closing the iCloud sheet while it connects on the onboarding route lets the sign-in finish`() = runTest {
+        coEvery { discoveryService.discoverAndCreateAccount(any(), any()) } coAnswers { awaitCancellation() }
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.applyOnboardingRoute(OnboardingRoute.ICLOUD)
+        viewModel.onAppleIdChange("test@icloud.com")
+        viewModel.onPasswordChange("xxxx-xxxx-xxxx-xxxx")
+        viewModel.onSignIn()
+        // runCurrent, not advanceUntilIdle: skipping virtual time would hit the discovery timeout.
+        runCurrent()
+        assertEquals(ICloudConnectionState.Connecting, viewModel.uiState.value.iCloudState)
+
+        viewModel.hideICloudSignInSheet()
+
+        // Finishing now would clear the view model and cancel the sign-in mid-write.
+        assertFalse(viewModel.uiState.value.pendingFinishActivity)
+    }
+
+    @Test
+    fun `closing the CalDAV sheet while it discovers on the onboarding route lets discovery finish`() = runTest {
+        coEvery { calDavDiscoveryService.isDisplayNameAvailable(any()) } returns true
+        coEvery { calDavDiscoveryService.discoverCalendars(any(), any(), any(), any()) } coAnswers {
+            awaitCancellation()
+        }
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.applyOnboardingRoute(OnboardingRoute.CALDAV)
+        viewModel.onCalDavServerUrlChange("https://nextcloud.example.com")
+        viewModel.onCalDavUsernameChange("user")
+        viewModel.onCalDavPasswordChange("password123")
+        advanceUntilIdle()
+        viewModel.onCalDavDiscover()
+        // runCurrent, not advanceUntilIdle: skipping virtual time would hit the discovery timeout.
+        runCurrent()
+        assertTrue(viewModel.uiState.value.calDavState is CalDavConnectionState.Discovering)
+
+        viewModel.hideCalDavSignInSheet()
+
+        assertFalse(viewModel.uiState.value.pendingFinishActivity)
+    }
+
+    @Test
+    fun `a CalDAV sign-in on the onboarding route shows the connected sheet and Done returns`() = runTest {
+        coEvery { calDavDiscoveryService.isDisplayNameAvailable(any()) } returns true
+        coEvery { calDavDiscoveryService.discoverCalendars(any(), any(), any(), any()) } returns
+            DiscoveryResult.CalendarsFound(
+                serverUrl = "https://nextcloud.example.com",
+                username = "user",
+                calendarHomeUrl = "https://nextcloud.example.com/remote.php/dav/calendars/user/",
+                principalUrl = "https://nextcloud.example.com/remote.php/dav/principals/users/user/",
+                calendars = listOf(
+                    DiscoveredCalendar(href = "/remote.php/dav/calendars/user/personal/", displayName = "Personal", color = 0)
+                )
+            )
+        coEvery {
+            calDavDiscoveryService.createAccountWithSelectedCalendars(any(), any(), any(), any(), any(), any(), any(), any(), any())
+        } returns DiscoveryResult.Success(
+            account = Account(id = 42L, provider = AccountProvider.CALDAV, email = "user"),
+            calendars = emptyList()
+        )
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.applyOnboardingRoute(OnboardingRoute.CALDAV)
+        viewModel.onCalDavServerUrlChange("https://nextcloud.example.com")
+        viewModel.onCalDavUsernameChange("user")
+        viewModel.onCalDavPasswordChange("password123")
+        advanceUntilIdle()
+        viewModel.onCalDavDiscover()
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.showAccountConnectedSheet)
+        assertFalse(viewModel.uiState.value.pendingFinishActivity)
+
+        viewModel.onAccountConnectedDone()
+        assertTrue(viewModel.uiState.value.pendingFinishActivity)
+    }
+
+    @Test
+    fun `a route the user left stays left after process death`() = runTest {
+        val handle = androidx.lifecycle.SavedStateHandle()
+        val first = createViewModel(handle)
+        advanceUntilIdle()
+        first.applyOnboardingRoute(OnboardingRoute.CALDAV)
+        first.hideAccountConnectedSheet()
+
+        val afterProcessDeath = createViewModel(handle)
+        advanceUntilIdle()
+        afterProcessDeath.applyOnboardingRoute(OnboardingRoute.CALDAV)
+
+        assertFalse(afterProcessDeath.uiState.value.showCalDavSignInSheet)
+    }
+
+    // ==================== Device calendars after Android settings ====================
+
+    @Test
+    fun `coming back from Android settings with access turns device calendars on once`() = runTest {
+        permissionChecker.calendarRead = false
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.markDeviceCalendarsPendingSettings()
+        // The resume right after the refused request, before the user reaches Android settings.
+        viewModel.refreshCalendarPermission()
+        advanceUntilIdle()
+        coVerify(exactly = 0) { dataStore.setDeviceCalendarsEnabled(true) }
+
+        permissionChecker.calendarRead = true
+        viewModel.refreshCalendarPermission()
+        advanceUntilIdle()
+        viewModel.refreshCalendarPermission()
+        advanceUntilIdle()
+
+        coVerify(exactly = 1) { dataStore.setDeviceCalendarsEnabled(true) }
+        verify(exactly = 1) { calendarProviderManager.onEnabled() }
+    }
+
+    @Test
+    fun `without a pending return a granted refresh does not turn device calendars on`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.refreshCalendarPermission()
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { dataStore.setDeviceCalendarsEnabled(true) }
+    }
+
+    @Test
+    fun `the pending return survives process death`() = runTest {
+        permissionChecker.calendarRead = false
+        val handle = androidx.lifecycle.SavedStateHandle()
+        createViewModel(handle).markDeviceCalendarsPendingSettings()
+        advanceUntilIdle()
+
+        permissionChecker.calendarRead = true
+        val afterProcessDeath = createViewModel(handle)
+        advanceUntilIdle()
+        afterProcessDeath.refreshCalendarPermission()
+        advanceUntilIdle()
+
+        coVerify(exactly = 1) { dataStore.setDeviceCalendarsEnabled(true) }
     }
 
     // ==================== Edge Cases ====================
@@ -3858,6 +4115,18 @@ class AccountSettingsViewModelTest {
             org.onekash.kashcal.ui.permission.ChangeNotificationsStep.RequestPermission,
             viewModel.calendarNotificationsStep()
         )
+    }
+
+    @Test
+    fun `a Settings notification permission answer records that the app asked`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.onCalendarNotificationsPermissionResult(granted = false)
+        viewModel.onChangeNotificationsPermissionResult(granted = true)
+        advanceUntilIdle()
+
+        coVerify(exactly = 2) { userPreferences.setNotificationAskDone() }
     }
 
     @Test

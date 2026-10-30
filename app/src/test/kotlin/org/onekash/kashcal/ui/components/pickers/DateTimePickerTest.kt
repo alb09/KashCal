@@ -7,7 +7,7 @@ import org.junit.Test
 import java.util.Calendar as JavaCalendar
 
 /**
- * Unit tests for the DateTimePicker.kt helpers [isMidnightCrossing], [dayCellStyle],
+ * Unit tests for the date picker helpers [isMidnightCrossing], [dayCellStyle], [rangePart],
  * [isOnWheelGrid] and [isSameCalendarDay], and the members of the enums [DateSelectionMode]
  * and [ActiveDateTimeSheet].
  */
@@ -97,6 +97,39 @@ class DateTimePickerTest {
     fun `dayCellStyle selected fill wins when today is also selected`() {
         // The selected fill already marks the cell, so today's fill and ring are dropped.
         assertEquals(DayCellStyle.SELECTED, dayCellStyle(isToday = true, isSelected = true))
+    }
+
+    // ==================== rangePart Tests ====================
+
+    private val oct27 = java.time.LocalDate.of(2026, 10, 27)
+    private val oct31 = java.time.LocalDate.of(2026, 10, 31)
+
+    @Test
+    fun `rangePart names the start, the days between and the end`() {
+        val range = oct27..oct31
+        assertEquals(RangePart.START, rangePart(oct27, range))
+        assertEquals(RangePart.MIDDLE, rangePart(oct27.plusDays(2), range))
+        assertEquals(RangePart.END, rangePart(oct31, range))
+    }
+
+    @Test
+    fun `rangePart is NONE outside the range and without one`() {
+        assertEquals(RangePart.NONE, rangePart(oct27.minusDays(1), oct27..oct31))
+        assertEquals(RangePart.NONE, rangePart(oct31.plusDays(1), oct27..oct31))
+        assertEquals(RangePart.NONE, rangePart(oct27, null))
+    }
+
+    @Test
+    fun `a one-day range is not shaded`() {
+        assertEquals(RangePart.NONE, rangePart(oct27, oct27..oct27))
+    }
+
+    @Test
+    fun `a range across a month boundary shades both months`() {
+        val range = java.time.LocalDate.of(2026, 10, 30)..java.time.LocalDate.of(2026, 11, 2)
+        assertEquals(RangePart.MIDDLE, rangePart(java.time.LocalDate.of(2026, 10, 31), range))
+        assertEquals(RangePart.MIDDLE, rangePart(java.time.LocalDate.of(2026, 11, 1), range))
+        assertEquals(RangePart.END, rangePart(java.time.LocalDate.of(2026, 11, 2), range))
     }
 
     // ==================== isOnWheelGrid Tests ====================

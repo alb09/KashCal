@@ -101,7 +101,7 @@ class HomeViewModelDeviceCalendarWriteTest {
         coEvery { dataStore.defaultEventDuration } returns MutableStateFlow(20)
         coEvery { dataStore.timeFormat } returns MutableStateFlow("system")
         coEvery { dataStore.showEventEmojis } returns MutableStateFlow(true)
-        coEvery { dataStore.onboardingDismissed } returns MutableStateFlow(true)
+        coEvery { dataStore.onboardingCompleted } returns MutableStateFlow(true)
 
         // Event coordinator / reader defaults
         every { eventCoordinator.getAllCalendars() } returns MutableStateFlow(emptyList())

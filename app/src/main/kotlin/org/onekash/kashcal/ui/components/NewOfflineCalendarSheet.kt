@@ -48,15 +48,19 @@ import org.onekash.kashcal.ui.shared.EventColorPalette
 
 /**
  * Returns the message to show under an offline calendar's name field for [result]: null on
- * success, the duplicate message for [LocalCalendarRefusal.DUPLICATE_NAME], and the general
- * error for any other failure. [typedName] is the trimmed name the user entered.
+ * success, the duplicate message for [LocalCalendarRefusal.DUPLICATE_NAME], the message naming
+ * the other calendar for [LocalCalendarRefusal.SIMILAR_NAME], and the general error for any other
+ * failure. [typedName] is the trimmed name the user entered.
  */
 internal fun offlineCalendarNameError(result: Result<*>, typedName: String, resources: Resources): String? {
     val failure = result.exceptionOrNull() ?: return null
-    return if ((failure as? LocalCalendarException)?.refusal == LocalCalendarRefusal.DUPLICATE_NAME) {
-        resources.getString(R.string.offline_calendar_duplicate_name, typedName)
-    } else {
-        resources.getString(R.string.error_unknown)
+    val refused = failure as? LocalCalendarException
+    return when {
+        refused?.refusal == LocalCalendarRefusal.DUPLICATE_NAME ->
+            resources.getString(R.string.offline_calendar_duplicate_name, typedName)
+        refused?.refusal == LocalCalendarRefusal.SIMILAR_NAME && refused.conflictingName != null ->
+            resources.getString(R.string.offline_calendar_similar_name, refused.conflictingName)
+        else -> resources.getString(R.string.error_unknown)
     }
 }
 

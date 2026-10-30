@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Оқиға шақырулары</string>
     <string name="channel_event_invitations_desc">Жаңа күнтізбе шақыруын алған кездегі хабарламалар</string>
     <string name="channel_calendar_updates">Күнтізбе өзгерістері</string>
+    <string name="channel_calendar_backup">Күнтізбенің автоматты сақтық көшірмесі</string>
+    <string name="channel_calendar_backup_description">Күнтізбенің сақтық көшірмесі жасалмай қалғанда хабарлайды</string>
     <string name="invite_notification_body">%1$s жіберген · Жауап беру үшін түртіңіз</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,35 @@
     <string name="backup_error_read_failed">Файлды оқу мүмкін болмады</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple Calendar?</string>
-    <string name="onboarding_got_you">Біз көмектесеміз.</string>
-    <string name="onboarding_connect_prompt">Оқиғаларыңызды мұнда көру үшін iCloud-қа қосылыңыз</string>
+    <string name="onboarding_title">Күнтізбелеріңіз қайда?</string>
+    <string name="onboarding_subtitle">Қосылу үшін біреуін таңдаңыз.</string>
+    <string name="onboarding_icloud_detail">Apple ID және қолданба құпия сөзі</string>
+    <string name="onboarding_caldav_title">CalDAV сервері</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale және басқалары</string>
+    <string name="onboarding_device_title">Осы құрылғыда</string>
+    <string name="onboarding_phone_detail">Google, Outlook және синхрондау қолданбалары</string>
+    <string name="onboarding_use_offline">Желіден тыс күнтізбені пайдалану</string>
+    <string name="onboarding_trust">Ашық бастапқы код. Жарнама жоқ. Бақылау жоқ.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Еске салулар өшірулі</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">Осы аптада %d оқиғада еске салу бар.</item>
+        <item quantity="other">Осы аптада %d оқиғада еске салулар бар.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Қазір емес</string>
+    <string name="reminders_off_turn_on">Қосу</string>
+    <string name="reminders_on_snackbar">Еске салулар қосулы</string>
+    <string name="about_tagline">Барлық күнтізбеңіз бір жеке қолданбада.</string>
+    <string name="about_help_title">Анықтама және нұсқаулықтар</string>
+    <string name="about_help_detail">Баптау, синхрондау және сұрақтар</string>
+    <string name="about_source_title">Бастапқы код</string>
+    <string name="about_source_detail">Apache 2.0, GitHub-та</string>
+    <string name="about_support_title">KashCal қолдау</string>
+    <string name="about_support_detail">Қолдап жүрген барлық адамға рахмет</string>
+    <string name="about_link_failed">Бұл сілтемені аша алатын қолданба жоқ.</string>
+    <string name="about_built_in_austin">Austin-да ❤️-пен жасалды</string>
+    <string name="about_version">Нұсқа %1$s</string>
     <string name="whats_new_skip">Өткізу</string>
     <string name="whats_new_next">Келесі</string>
     <string name="whats_new_page_of">%1$d-бет, барлығы %2$d</string>
@@ -275,10 +301,21 @@
     <string name="whats_new_v772_changes_title">Не өзгергенін көріңіз</string>
     <string name="whats_new_v772_changes_body">iCloud және CalDAV күнтізбелеріңіздегі жаңа, өңделген және жойылған оқиғалар «Соңғы өзгерістер» тізімінде 7 күн сақталады. Ашу үшін біреуін түртіңіз.</string>
     <string name="whats_new_v772_notifications_body">Фондық синхрондау iCloud немесе CalDAV оқиғаларыңыздан өзгерістер тапқанда хабарлама алыңыз. Оны өзіңіз қоспайынша өшірулі тұрады.</string>
+    <string name="whats_new_v803_offline_title">Телефоныңыздан шықпайтын күнтізбелер</string>
+    <string name="whats_new_v803_offline_body">Кейбір жоспарлардың серверде орны жоқ. Оларға қанша қаласаңыз да, жеке желіден тыс күнтізбелер беріңіз.</string>
+    <string name="whats_new_v803_backup_title">Ұмытып кетуге болатын сақтық көшірмелер</string>
+    <string name="whats_new_v803_backup_body">Қалтаны бір рет таңдаңыз, сонда KashCal желіден тыс күнтізбелеріңіздің жаңа көшірмесін сол жерде сақтап отырады.</string>
+    <string name="whats_new_v803_print_title">Аптаңыз қағаз бетінде</string>
+    <string name="whats_new_v803_print_body">Қарап отырған аптаңызды басып шығарыңыз. Оны қай тоңазытқышқа жапсыратыныңызды өзіңіз шешесіз.</string>
     <string name="whats_new_hero_sample_lunch">Командалық түскі ас</string>
     <string name="whats_new_hero_sample_review">Дизайнды талқылау</string>
     <string name="whats_new_hero_sample_book_club">Кітап клубы</string>
+    <string name="whats_new_hero_sample_dentist">Тіс дәрігері</string>
+    <string name="whats_new_hero_sample_yoga">Йога</string>
     <string name="whats_new_hero_sample_calendar">Жұмыс</string>
+    <string name="whats_new_hero_sample_family">Отбасы</string>
+    <string name="whats_new_hero_sample_garden">Бақша</string>
+    <string name="whats_new_hero_sample_folder">Күнтізбе сақтық көшірмелері</string>
     <string name="whats_new_hero_now">қазір</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +431,6 @@
     <string name="error_device_calendar_title">Күнтізбе қатесі</string>
     <string name="error_device_calendar_write_failed">Құрылғы күнтізбесіне сақтау сәтсіз болды. Қайта байқап көріңіз.</string>
     <string name="error_device_calendar_permission">Күнтізбеге жазу рұқсаты қажет. Параметрлерден рұқсат беріңіз.</string>
-    <string name="error_device_calendar_permission_denied">Жазу рұқсатын беру үшін Параметрлерден Күнтізбе рұқсатын өшіріп, қайта қосыңыз</string>
     <string name="error_device_calendar_not_found">Күнтізбе табылмады. Жойылған болуы мүмкін.</string>
     <string name="error_device_event_not_found">Оқиға табылмады. Жойылған болуы мүмкін.</string>
     <string name="error_device_calendar_read_only">Бұл күнтізбе тек оқуға арналған.</string>
@@ -538,6 +574,7 @@
     <string name="subscriptions_section_add">Қосу</string>
     <string name="subscriptions_empty_ics">ICS жазылымдар жоқ</string>
     <string name="subscriptions_empty_ics_hint">Оқиғаларды көру үшін күнтізбе арнасын қосыңыз</string>
+    <string name="subscriptions_swipe_hint">Жою үшін арнаны сырғытыңыз.</string>
     <string name="subscriptions_add_ics">ICS күнтізбе қосу</string>
     <string name="qs_tile_label">Қосу</string>
     <string name="holiday_catalog_add">Мереке күнтізбесін қосу</string>
@@ -624,7 +661,7 @@
     <string name="settings_device_calendars_hint">Басқа қолданбалардан күнтізбелер</string>
     <string name="offline_calendars_row_label">Желіден тыс күнтізбелер</string>
     <string name="offline_calendars_row_hint">Осы телефонда қалатын күнтізбелер</string>
-    <string name="offline_calendars_manage_note">Желіден тыс күнтізбелеріңізді қосыңыз, қайта атаңыз, түсін өзгертіңіз немесе жойыңыз.</string>
+    <string name="offline_calendars_manage_note">Жою үшін күнтізбені сырғытыңыз.</string>
     <string name="offline_calendars_info">Тек осы телефонда сақталады және ешқашан синхрондалмайды. Сақтық көшірмелерге оқиғалар кірмейді, сондықтан көшірмесін сақтау үшін күнтізбені экспорттаңыз.</string>
     <string name="offline_calendars_info_cd">Желіден тыс күнтізбелер туралы</string>
     <string name="offline_calendar_default_state">Әдепкі</string>
@@ -650,6 +687,79 @@
     </plurals>
     <string name="offline_calendar_deleted">%1$s жойылды</string>
     <string name="offline_calendar_duplicate_name">\"%1$s\" атты желіден тыс күнтізбе бұрыннан бар</string>
+    <string name="offline_calendar_similar_name">«%1$s» атауына тым ұқсас. Басқа атау таңдаңыз.</string>
+    <string name="calendar_backup_title">Күнтізбенің автоматты сақтық көшірмесі</string>
+    <string name="calendar_backup_row_off">Өшірулі</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Сақтық көшірме қалтасы қолжетімсіз</string>
+    <string name="calendar_backup_intro">Әр желіден тыс күнтізбені өзіңіз таңдаған қалтаға ICS файлы ретінде сақтайды.</string>
+    <string name="calendar_backup_choose_folder">Қалтаны таңдау</string>
+    <string name="calendar_backup_choose_folder_hint">Қалтаны таңдаңыз немесе жасаңыз, мысалы, Documents ішінде. Android жадтың түбірін немесе Download қалтасының өзін пайдалануға рұқсат бермейді.</string>
+    <string name="calendar_backup_folder">Қалта</string>
+    <string name="calendar_backup_change">Өзгерту</string>
+    <string name="calendar_backup_frequency">Жиілік</string>
+    <string name="calendar_backup_frequency_info">Сақтық көшірмелер кешігуі мүмкін: телефон бос тұрғанда немесе KashCal біраз уақыт ашылмағанда Android фондық жұмысты кейінге қалдырады.</string>
+    <string name="calendar_backup_copies">Сақталатын көшірмелер</string>
+    <string name="calendar_backup_copies_explained">Әр сақтық көшірме алдыңғы файлды күні көрсетілген көшірме ретінде сақтайды. Көшірмелер осы саннан асқанда, ең ескілері жойылады. Ең жаңа файл әрқашан күнтізбенің атымен аталады.</string>
+    <string name="calendar_backup_copies_fewer">Азырақ көшірме сақтау</string>
+    <string name="calendar_backup_copies_more">Көбірек көшірме сақтау</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d көшірме</item>
+        <item quantity="other">%d көшірме</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">%d ескі көшірмені жояды. Мұны қайтару мүмкін емес.</item>
+        <item quantity="other">%d ескі көшірмені жояды. Мұны қайтару мүмкін емес.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Осы саннан асатын ескі көшірмелерді жояды. Мұны қайтару мүмкін емес.</string>
+    <string name="calendar_backup_calendars">Желіден тыс күнтізбелер</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Оқиғалар жоқ, ештеңе сақталмады</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Сақтау мүмкін болмады. Келесі сақтық көшірме кезінде қайта әрекет жасалады.</string>
+    <string name="calendar_backup_status">Соңғы сақтық көшірме: %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Соңғы сақтық көшірме: %1$s · %2$d күнтізбе сәтсіз аяқталды</item>
+        <item quantity="other">Соңғы сақтық көшірме: %1$s · %2$d күнтізбе сәтсіз аяқталды</item>
+    </plurals>
+    <string name="calendar_backup_now">Қазір сақтық көшірме жасау</string>
+    <string name="calendar_backup_running">Сақтық көшірме жасалуда…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal әр сақтық көшірме кезінде бұл файлдарды қайта жазады, сондықтан басқа қолданбаларда оларға енгізілген өзгерістер сақталмайды. Күнтізбені қалпына келтіру үшін «Файлдан оқиғаларды импорттау» пәрменін пайдаланыңыз.</string>
+    <string name="calendar_backup_off_files_stay">Бар файлдар %1$s ішінде қалады.</string>
+    <string name="calendar_backup_folder_unreachable">%1$s қолжетімсіз. Ол жылжытылған, жойылған немесе ажыратылған болуы мүмкін.</string>
+    <string name="calendar_backup_error_unsupported">%1$s ішінде файлдарды сақтау мүмкін емес. Басқа қалта таңдаңыз.</string>
+    <string name="calendar_backup_choose_again">Қайта таңдау</string>
+    <string name="calendar_backup_pick_refused">KashCal бұл қалтаны пайдалана алмайды. Басқасын таңдаңыз.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal бұл қалтада файл жасай алмайды. Басқасын таңдаңыз.</string>
+    <string name="calendar_backup_failed_title">Күнтізбенің сақтық көшірмесі жасалмады</string>
+    <string name="calendar_backup_folder_unnamed">сақтық көшірме қалтасы</string>
+    <string name="calendar_backup_alert_unreachable">%1$s қолжетімсіз. Қайта таңдау үшін түртіңіз.</string>
+    <string name="calendar_backup_alert_unsupported">%1$s ішінде файлдарды сақтау мүмкін емес. Басқа қалта таңдау үшін түртіңіз.</string>
+    <string name="calendar_backup_alert_file_retry">%1$s сақталмады. KashCal келесі сақтық көшірме кезінде қайта әрекет жасайды.</string>
+    <string name="calendar_backup_every_hour">Сағат сайын</string>
+    <string name="calendar_backup_every_day">Күн сайын</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">%d сағат сайын</item>
+        <item quantity="other">%d сағат сайын</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">%d күн сайын</item>
+        <item quantity="other">%d күн сайын</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">1 күн %1$s сайын</string>
+    <string name="calendar_backup_every_days_hours">%1$s %2$s сайын</string>
+    <string name="calendar_backup_interval_too_short">Кемінде 1 сағат таңдаңыз.</string>
+    <string name="calendar_backup_interval_too_long">30 күн немесе одан аз таңдаңыз.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">%d күнтізбені сақтау мүмкін болмады. KashCal келесі сақтық көшірме кезінде қайта әрекет жасайды.</item>
+        <item quantity="other">%d күнтізбені сақтау мүмкін болмады. KashCal келесі сақтық көшірме кезінде қайта әрекет жасайды.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">KashCal үшін хабарламалар өшірулі, сондықтан сақтық көшірме жасалмаса, ол сізге хабарлай алмайды.</string>
+    <string name="calendar_backup_notifications_channel_off">Сақтық көшірме хабарламалары өшірулі, сондықтан сақтық көшірме жасалмаса, KashCal сізге хабарлай алмайды.</string>
+    <string name="calendar_backup_open_settings">Параметрлерді ашу</string>
+    <string name="calendar_backup_not_now">Қазір емес</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">%d күнтізбе сәтсіз аяқталды</item>
+        <item quantity="other">%d күнтізбе сәтсіз аяқталды</item>
+    </plurals>
     <string name="settings_quick_event_add">Ақылды оқиға қосу</string>
     <string name="settings_quick_event_add_info">Табиғи түрде теру арқылы оқиғалар жасаңыз. \"Sam-мен түскі ас жұма 13:00\" тақырыпты, күнді және уақытты сіз үшін толтырады.</string>
     <string name="settings_suggest_titles">Оқиға атауларын ұсыну</string>
@@ -718,6 +828,7 @@
     <string name="label_on_days">Күндері</string>
     <string name="label_pattern">Үлгі</string>
     <string name="label_ends">Аяқталуы</string>
+    <string name="sheet_hint_change_end">Аяқталуын өзгерту үшін күнді түртіңіз</string>
     <string name="label_timezone">Уақыт белдеуі</string>
     <string name="label_alerts">Ескертулер</string>
     <string name="label_add_alert">Ескерту қосу</string>
@@ -739,14 +850,11 @@
     <string name="status_hours_ago">%1$d сағ бұрын</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Құрылғыдағы басқа күнтізбе қолданбаларынан оқиғаларды көрсету (синхрондау адаптерлері, жергілікті күнтізбелер).</string>
-    <string name="device_calendars_permission_required">Күнтізбе рұқсаты қажет. Рұқсат беру үшін Қосу батырмасын түртіңіз.</string>
-    <string name="device_calendars_read_only_access">Тек оқуға арналған рұқсат</string>
-    <string name="device_calendars_grant_write">Құрылғы күнтізбесі оқиғаларын өңдеу үшін жазу рұқсатын беріңіз</string>
-    <string name="device_calendars_grant">Рұқсат беру</string>
-    <string name="device_calendars_none_found">Құрылғы күнтізбелері табылмады.</string>
+    <string name="device_calendars_intro">Осы құрылғыдағы Google, Outlook және синхрондау қолданбаларының күнтізбелерін көрсету.</string>
+    <string name="device_calendars_show_switch">Құрылғы күнтізбелерін көрсету</string>
+    <string name="device_calendars_pick_hint">Көрсетілетін күнтізбелерді таңдаңыз.</string>
+    <string name="device_calendars_empty">Күнтізбелер табылмады.</string>
     <string name="device_calendars_local">Жергілікті</string>
-    <string name="device_calendars_read_only_no_write">Тек оқу (жазу рұқсаты жоқ)</string>
     <string name="device_calendars_read_only_calendar">Тек оқу (күнтізбе тек оқуға арналған)</string>
     <string name="settings_sync_frequency">Синхрондау жиілігі</string>
     <string name="settings_sync_frequency_hint">Фондық режимде қаншалықты жиі синхрондау керектігі</string>
@@ -1292,6 +1400,10 @@
     <string name="ics_fetch_error_http">Сервер қате қайтарды (%1$d). URL мекенжайын тексеріңіз.</string>
     <string name="ics_fetch_error_empty">Күнтізбе арнасы бос.</string>
     <string name="ics_fetch_error_not_calendar">Бұл URL күнтізбе арнасына ұқсамайды.</string>
+    <string name="ics_feed_error_empty_response">Сервер жарамды арна жібермеді.</string>
+    <string name="ics_feed_error_access_denied">Бұл арнаның сервері кіруге рұқсат бермеді.</string>
+    <string name="ics_feed_error_too_large">Бұл күнтізбе арнасы жүктеп алу үшін тым үлкен.</string>
+    <string name="ics_feed_error_unreadable">Бұл арнаның оқиғаларын көрсету мүмкін болмады.</string>
     <string name="insights_title">Статистика</string>
     <string name="insights_period_this_week">Апта</string>
     <string name="insights_period_last_week">Өткен апта</string>
@@ -1419,7 +1531,7 @@
         <item quantity="other">Келесі %1$d күн бос (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Таңдалған аралықта кемінде бір сағаттық бос блоктар жоқ.</string>
     <string name="share_from_kashcal_footer">KashCal-дан бөлісілді</string>
@@ -1441,5 +1553,31 @@
     <string name="share_as_card_all_day">Күні бойы</string>
     <string name="share_as_card_chooser_title">Оқиғаны бөлісу</string>
     <string name="share_as_card_share_failed">Картамен бөлісу мүмкін болмады</string>
+    <string name="print_your_week">Аптаңызды басып шығару</string>
+    <string name="print_options_title">Басып шығару параметрлерін таңдаңыз</string>
+    <string name="print_pages_header">Беттер</string>
+    <string name="print_page_week">Апта күнтізбесі</string>
+    <string name="print_page_week_detail">Апта тор түрінде</string>
+    <string name="print_page_details">Мәліметтер</string>
+    <string name="print_page_details_detail">Әр оқиға толық</string>
+    <string name="print_action">Басып шығару</string>
+    <string name="cd_print_previous_week">Алдыңғы апта</string>
+    <string name="cd_print_next_week">Келесі апта</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d бет</item>
+        <item quantity="other">%d бет</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d / %2$d күнтізбе</item>
+        <item quantity="other">%1$d / %2$d күнтізбе</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – %2$s аптасы</string>
+    <string name="print_failed">Басып шығару мүмкін болмады. Қайта байқап көріңіз.</string>
+    <string name="print_doc_week">Апта</string>
+    <string name="print_doc_printed">Басып шығарылды: %1$s</string>
+    <string name="print_doc_page_of">Бет %1$s / %2$s</string>
+    <string name="print_doc_numbers_note">Нөмірлер мәліметтерге сәйкес келеді, онда әр оқиға толық көрсетілген.</string>
+    <string name="print_doc_times_in">Уақыт %1$s бойынша көрсетілген</string>
 
 </resources>

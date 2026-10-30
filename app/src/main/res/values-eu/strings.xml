@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Gertaeren gonbidapenak</string>
     <string name="channel_event_invitations_desc">Egutegiko gonbidapen berri bat jasotzean jakinarazpenak</string>
     <string name="channel_calendar_updates">Egutegiko aldaketak</string>
+    <string name="channel_calendar_backup">Egutegien babeskopia automatikoa</string>
+    <string name="channel_calendar_backup_description">Egutegien babeskopia batek huts egiten duenean jakinarazten dizu</string>
     <string name="invite_notification_body">%1$s erabiltzailearena · Sakatu erantzuteko</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,35 @@
     <string name="backup_error_read_failed">Ezin izan da fitxategia irakurri</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple Calendar?</string>
-    <string name="onboarding_got_you">Gu hemen gaude.</string>
-    <string name="onboarding_connect_prompt">Konektatu iCloud zure gertaerak hemen ikusteko</string>
+    <string name="onboarding_title">Non daude zure egutegiak?</string>
+    <string name="onboarding_subtitle">Aukeratu bat konektatzeko.</string>
+    <string name="onboarding_icloud_detail">Apple ID eta aplikazio-pasahitza</string>
+    <string name="onboarding_caldav_title">CalDAV zerbitzaria</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale eta beste batzuk</string>
+    <string name="onboarding_device_title">Gailu honetan</string>
+    <string name="onboarding_phone_detail">Google, Outlook eta sinkronizazio-aplikazioak</string>
+    <string name="onboarding_use_offline">Erabili lineaz kanpoko egutegia</string>
+    <string name="onboarding_trust">Kode irekia. Iragarkirik ez. Jarraipenik ez.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Oroigarriak desaktibatuta daude</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">Aste honetan %d gertaerak oroigarri bat du.</item>
+        <item quantity="other">Aste honetan %d gertaerak oroigarriak dituzte.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Orain ez</string>
+    <string name="reminders_off_turn_on">Aktibatu</string>
+    <string name="reminders_on_snackbar">Oroigarriak aktibatuta</string>
+    <string name="about_tagline">Zure egutegi guztiak aplikazio pribatu bakarrean.</string>
+    <string name="about_help_title">Laguntza eta gidak</string>
+    <string name="about_help_detail">Konfigurazioa, sinkronizazioa eta galderak</string>
+    <string name="about_source_title">Iturburu-kodea</string>
+    <string name="about_source_detail">Apache 2.0, GitHub-en</string>
+    <string name="about_support_title">Lagundu KashCal</string>
+    <string name="about_support_detail">Eskerrik asko dagoeneko laguntzen duzuen guztioi</string>
+    <string name="about_link_failed">Ez dago esteka hau ireki dezakeen aplikaziorik.</string>
+    <string name="about_built_in_austin">❤️-z egina Austinen</string>
+    <string name="about_version">%1$s bertsioa</string>
     <string name="whats_new_skip">Saltatu</string>
     <string name="whats_new_next">Hurrengoa</string>
     <string name="whats_new_page_of">%1$d. orria, %2$d guztira</string>
@@ -275,10 +301,21 @@
     <string name="whats_new_v772_changes_title">Ikusi zer aldatu den</string>
     <string name="whats_new_v772_changes_body">Zure iCloud eta CalDAV egutegietako gertaera berriak, editatuak eta kenduak Azken aldaketak atalean biltzen dira 7 egunez. Sakatu bat irekitzeko.</string>
     <string name="whats_new_v772_notifications_body">Jaso jakinarazpen bat atzeko planoko sinkronizazio batek zure iCloud edo CalDAV gertaeretan aldaketak aurkitzen dituenean. Desaktibatuta egongo da zuk aktibatu arte.</string>
+    <string name="whats_new_v803_offline_title">Telefonotik irteten ez diren egutegiak</string>
+    <string name="whats_new_v803_offline_body">Plan batzuk ez dira zerbitzari baterako. Eman haiei lineaz kanpoko egutegi propioak, nahi adina.</string>
+    <string name="whats_new_v803_backup_title">Babeskopiez ahaztu zaitezke</string>
+    <string name="whats_new_v803_backup_body">Aukeratu karpeta bat behin, eta KashCal-ek zure lineaz kanpoko egutegien kopia eguneratua gordeko du bertan.</string>
+    <string name="whats_new_v803_print_title">Zure astea, paperean</string>
+    <string name="whats_new_v803_print_body">Inprimatu ikusten ari zaren astea. Zein hozkailutan jarri, zuk erabaki.</string>
     <string name="whats_new_hero_sample_lunch">Taldeko bazkaria</string>
     <string name="whats_new_hero_sample_review">Diseinu-berrikuspena</string>
     <string name="whats_new_hero_sample_book_club">Irakurketa-kluba</string>
+    <string name="whats_new_hero_sample_dentist">Dentista</string>
+    <string name="whats_new_hero_sample_yoga">Yoga</string>
     <string name="whats_new_hero_sample_calendar">Lana</string>
+    <string name="whats_new_hero_sample_family">Familia</string>
+    <string name="whats_new_hero_sample_garden">Lorategia</string>
+    <string name="whats_new_hero_sample_folder">Egutegien babeskopiak</string>
     <string name="whats_new_hero_now">orain</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +431,6 @@
     <string name="error_device_calendar_title">Egutegi-errorea</string>
     <string name="error_device_calendar_write_failed">Gailuko egutegian gordetzeak huts egin du. Saiatu berriro.</string>
     <string name="error_device_calendar_permission">Egutegiaren idazte-baimena behar da. Eman baimena Ezarpenetan.</string>
-    <string name="error_device_calendar_permission_denied">Desaktibatu eta berraktibatu Egutegiaren baimena Ezarpenetan idazteko sarbidea emateko</string>
     <string name="error_device_calendar_not_found">Egutegia ez da aurkitu. Agian ezabatu egin da.</string>
     <string name="error_device_event_not_found">Gertaera ez da aurkitu. Agian ezabatu egin da.</string>
     <string name="error_device_calendar_read_only">Egutegi hau irakurtzeko soilik da.</string>
@@ -538,6 +574,7 @@
     <string name="subscriptions_section_add">Gehitu</string>
     <string name="subscriptions_empty_ics">ICS harpidetzarik ez</string>
     <string name="subscriptions_empty_ics_hint">Gehitu egutegi-jario bat gertaerak ikusteko</string>
+    <string name="subscriptions_swipe_hint">Irristatu jario bat ezabatzeko.</string>
     <string name="subscriptions_add_ics">ICS egutegia gehitu</string>
     <string name="qs_tile_label">Gehitu</string>
     <string name="holiday_catalog_add">Gehitu jaiegunen egutegia</string>
@@ -624,7 +661,7 @@
     <string name="settings_device_calendars_hint">Beste aplikazioetako egutegiak</string>
     <string name="offline_calendars_row_label">Lineaz kanpoko egutegiak</string>
     <string name="offline_calendars_row_hint">Telefono honetan geratzen diren egutegiak</string>
-    <string name="offline_calendars_manage_note">Gehitu, aldatu izena edo kolorea, edo ezabatu lineaz kanpoko egutegiak.</string>
+    <string name="offline_calendars_manage_note">Irristatu egutegi bat ezabatzeko.</string>
     <string name="offline_calendars_info">Telefono honetan bakarrik gordetzen dira eta ez dira inoiz sinkronizatzen. Babeskopiek ez dituzte gertaerak barne hartzen; beraz, esportatu egutegi bat kopia bat gordetzeko.</string>
     <string name="offline_calendars_info_cd">Lineaz kanpoko egutegiei buruz</string>
     <string name="offline_calendar_default_state">Lehenetsia</string>
@@ -650,6 +687,79 @@
     </plurals>
     <string name="offline_calendar_deleted">%1$s ezabatu da</string>
     <string name="offline_calendar_duplicate_name">Badago \"%1$s\" izeneko lineaz kanpoko egutegi bat</string>
+    <string name="offline_calendar_similar_name">Antzekoegia \"%1$s\" izenarekin. Aukeratu beste izen bat.</string>
+    <string name="calendar_backup_title">Egutegien babeskopia automatikoa</string>
+    <string name="calendar_backup_row_off">Desaktibatuta</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Ezin da babeskopien karpeta atzitu</string>
+    <string name="calendar_backup_intro">Lineaz kanpoko egutegi bakoitza ICS fitxategi gisa gordetzen du zuk aukeratutako karpeta batean.</string>
+    <string name="calendar_backup_choose_folder">Aukeratu karpeta</string>
+    <string name="calendar_backup_choose_folder_hint">Aukeratu edo sortu karpeta bat, adibidez Documents karpetan. Android-ek ez du onartzen biltegiaren erroa, ezta Download karpeta bera ere.</string>
+    <string name="calendar_backup_folder">Karpeta</string>
+    <string name="calendar_backup_change">Aldatu</string>
+    <string name="calendar_backup_frequency">Maiztasuna</string>
+    <string name="calendar_backup_frequency_info">Babeskopiak berandu egin daitezke: Android-ek atzeko planoko lana atzeratzen du telefonoa inaktibo dagoenean edo KashCal aspaldian ireki ez denean.</string>
+    <string name="calendar_backup_copies">Gorde beharreko kopiak</string>
+    <string name="calendar_backup_copies_explained">Babeskopia bakoitzak aurreko fitxategia datadun kopia gisa gordetzen du. Kopuru hori gainditzen denean, zaharrenak ezabatzen dira. Fitxategi berrienak egutegiaren izena du beti.</string>
+    <string name="calendar_backup_copies_fewer">Gorde kopia gutxiago</string>
+    <string name="calendar_backup_copies_more">Gorde kopia gehiago</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">kopia %d</item>
+        <item quantity="other">%d kopia</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">Kopia zahar %d ezabatzen du. Ezin da desegin.</item>
+        <item quantity="other">%d kopia zahar ezabatzen ditu. Ezin da desegin.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Kopuru hori gainditzen duten kopia zaharrak ezabatzen ditu. Ezin da desegin.</string>
+    <string name="calendar_backup_calendars">Lineaz kanpoko egutegiak</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Ez dago gertaerarik, ez da ezer gorde</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Ezin izan da gorde. Hurrengo babeskopian saiatuko da berriro.</string>
+    <string name="calendar_backup_status">Azken babeskopia: %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Azken babeskopia: %1$s · egutegi %2$d-k huts egin du</item>
+        <item quantity="other">Azken babeskopia: %1$s · %2$d egutegik huts egin dute</item>
+    </plurals>
+    <string name="calendar_backup_now">Egin babeskopia orain</string>
+    <string name="calendar_backup_running">Babeskopia egiten…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal-ek fitxategi hauek gainidazten ditu babeskopia bakoitzean; beraz, beste aplikazioetan egindako aldaketak ez dira mantentzen. Egutegi bat leheneratzeko, erabili Inportatu ekitaldiak fitxategitik.</string>
+    <string name="calendar_backup_off_files_stay">Lehendik dauden fitxategiak hemen geratzen dira: %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Ezin da atzitu: %1$s. Baliteke lekuz aldatu, ezabatu edo deskonektatu izana.</string>
+    <string name="calendar_backup_error_unsupported">Ezin da fitxategirik gorde hemen: %1$s. Aukeratu beste karpeta bat.</string>
+    <string name="calendar_backup_choose_again">Aukeratu berriro</string>
+    <string name="calendar_backup_pick_refused">KashCal-ek ezin du karpeta hori erabili. Aukeratu beste bat.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal-ek ezin du fitxategirik sortu karpeta horretan. Aukeratu beste bat.</string>
+    <string name="calendar_backup_failed_title">Egutegien babeskopiak huts egin du</string>
+    <string name="calendar_backup_folder_unnamed">babeskopien karpeta</string>
+    <string name="calendar_backup_alert_unreachable">Ezin da atzitu: %1$s. Sakatu berriro aukeratzeko.</string>
+    <string name="calendar_backup_alert_unsupported">Ezin da fitxategirik gorde hemen: %1$s. Sakatu beste karpeta bat aukeratzeko.</string>
+    <string name="calendar_backup_alert_file_retry">Ezin izan da gorde: %1$s. KashCal hurrengo babeskopian saiatuko da berriro.</string>
+    <string name="calendar_backup_every_hour">Orduro</string>
+    <string name="calendar_backup_every_day">Egunero</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">%d orduro</item>
+        <item quantity="other">%d orduro</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">%d egunero</item>
+        <item quantity="other">%d egunero</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Maiztasuna: egun 1 eta %1$s</string>
+    <string name="calendar_backup_every_days_hours">Maiztasuna: %1$s eta %2$s</string>
+    <string name="calendar_backup_interval_too_short">Aukeratu ordu 1 gutxienez.</string>
+    <string name="calendar_backup_interval_too_long">Aukeratu 30 egun edo gutxiago.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">Ezin izan da egutegi %d gorde. KashCal hurrengo babeskopian saiatuko da berriro.</item>
+        <item quantity="other">Ezin izan dira %d egutegi gorde. KashCal hurrengo babeskopian saiatuko da berriro.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">KashCal-en jakinarazpenak desaktibatuta daude; beraz, ezin dizu jakinarazi babeskopia batek huts egiten badu.</string>
+    <string name="calendar_backup_notifications_channel_off">Babeskopien jakinarazpenak desaktibatuta daude; beraz, KashCal-ek ezin dizu jakinarazi babeskopia batek huts egiten badu.</string>
+    <string name="calendar_backup_open_settings">Ireki ezarpenak</string>
+    <string name="calendar_backup_not_now">Orain ez</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">Egutegi %d-k huts egin du</item>
+        <item quantity="other">%d egutegik huts egin dute</item>
+    </plurals>
     <string name="settings_quick_event_add">Gertaerak modu adimendunean gehitu</string>
     <string name="settings_quick_event_add_info">Sortu gertaerak modu naturalean idatziz. \"Bazkaria Sam-ekin ostirala eguerdiko 1ean\" izenburua, data eta ordua betetzen ditu zuretzat.</string>
     <string name="settings_suggest_titles">Iradoki gertaeren izenburuak</string>
@@ -718,6 +828,7 @@
     <string name="label_on_days">Egunetan</string>
     <string name="label_pattern">Eredua</string>
     <string name="label_ends">Amaiera</string>
+    <string name="sheet_hint_change_end">Ukitu egun bat amaiera aldatzeko</string>
     <string name="label_timezone">Ordu-zona</string>
     <string name="label_alerts">Alertak</string>
     <string name="label_add_alert">Alerta gehitu</string>
@@ -739,14 +850,11 @@
     <string name="status_hours_ago">Duela %1$dh</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Erakutsi gailuko beste egutegi-aplikazioetako gertaerak (sinkronizazio-moldagailuak, tokiko egutegiak).</string>
-    <string name="device_calendars_permission_required">Egutegi-baimena behar da. Sakatu Gaitu sarbidea emateko.</string>
-    <string name="device_calendars_read_only_access">Irakurtzeko soilik sarbidea</string>
-    <string name="device_calendars_grant_write">Eman idazte-baimena gailuko egutegiko gertaerak editatzeko</string>
-    <string name="device_calendars_grant">Eman</string>
-    <string name="device_calendars_none_found">Ez da gailuko egutegirik aurkitu.</string>
+    <string name="device_calendars_intro">Erakutsi gailu honetako egutegiak: Google, Outlook eta sinkronizazio-aplikazioak.</string>
+    <string name="device_calendars_show_switch">Erakutsi gailuko egutegiak</string>
+    <string name="device_calendars_pick_hint">Aukeratu erakutsi nahi dituzun egutegiak.</string>
+    <string name="device_calendars_empty">Ez da egutegirik aurkitu.</string>
     <string name="device_calendars_local">Lokala</string>
-    <string name="device_calendars_read_only_no_write">Irakurtzeko soilik (idazte-baimenik gabe)</string>
     <string name="device_calendars_read_only_calendar">Irakurtzeko soilik (egutegia irakurtzeko soilik da)</string>
     <string name="settings_sync_frequency">Sinkronizazio-maiztasuna</string>
     <string name="settings_sync_frequency_hint">Zenbatero sinkronizatu bigarren planoan</string>
@@ -1292,6 +1400,10 @@
     <string name="ics_fetch_error_http">Zerbitzariak errore bat itzuli du (%1$d). Egiaztatu URLa.</string>
     <string name="ics_fetch_error_empty">Egutegiaren jarioa hutsik dago.</string>
     <string name="ics_fetch_error_not_calendar">URL horrek ez dirudi egutegi-jario bat.</string>
+    <string name="ics_feed_error_empty_response">Zerbitzariak ez du jario baliozkorik bidali.</string>
+    <string name="ics_feed_error_access_denied">Jario honen zerbitzariak sarbidea ukatu du.</string>
+    <string name="ics_feed_error_too_large">Egutegi-jario hau handiegia da deskargatzeko.</string>
+    <string name="ics_feed_error_unreadable">Ezin izan dira jario honetako gertaerak erakutsi.</string>
     <string name="insights_title">Ikuspegiak</string>
     <string name="insights_period_this_week">Astea</string>
     <string name="insights_period_last_week">Aurreko astea</string>
@@ -1419,7 +1531,7 @@
         <item quantity="other">Aske hurrengo %1$d egunetan (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Hautatutako tartean ez dago gutxienez ordubeteko bloke libreak.</string>
     <string name="share_from_kashcal_footer">KashCal-etik partekatua</string>
@@ -1441,5 +1553,31 @@
     <string name="share_as_card_all_day">Egun osoa</string>
     <string name="share_as_card_chooser_title">Partekatu gertaera</string>
     <string name="share_as_card_share_failed">Ezin izan da txartela partekatu</string>
+    <string name="print_your_week">Inprimatu zure astea</string>
+    <string name="print_options_title">Hautatu inprimatze-aukerak</string>
+    <string name="print_pages_header">Orriak</string>
+    <string name="print_page_week">Asteko egutegia</string>
+    <string name="print_page_week_detail">Astea sareta gisa</string>
+    <string name="print_page_details">Xehetasunak</string>
+    <string name="print_page_details_detail">Gertaera bakoitza osorik</string>
+    <string name="print_action">Inprimatu</string>
+    <string name="cd_print_previous_week">Aurreko astea</string>
+    <string name="cd_print_next_week">Hurrengo astea</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d orri</item>
+        <item quantity="other">%d orri</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%2$d egutegitik %1$d</item>
+        <item quantity="other">%2$d egutegietatik %1$d</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – Astea: %2$s</string>
+    <string name="print_failed">Ezin izan da inprimatu. Saiatu berriro.</string>
+    <string name="print_doc_week">Astea</string>
+    <string name="print_doc_printed">Inprimatua: %1$s</string>
+    <string name="print_doc_page_of">%1$s. orria, %2$s guztira</string>
+    <string name="print_doc_numbers_note">Zenbakiak xehetasunekin bat datoz; han gertaera guztiak osorik ageri dira.</string>
+    <string name="print_doc_times_in">Orduak %1$s ordu-zonan</string>
 
 </resources>

@@ -2,6 +2,7 @@ package org.onekash.kashcal.ui.shared
 
 import android.content.res.Resources
 import org.onekash.kashcal.R
+import org.onekash.kashcal.calendarbackup.CalendarBackupInterval
 import org.onekash.kashcal.data.preferences.KashCalDataStore
 
 /*
@@ -299,6 +300,12 @@ data class DurationOption(
 /** Lists the default-duration choices for new events offered in Settings. */
 val EVENT_DURATION_MINUTES = listOf(15, 30, 60, 120)
 
+/** Lengths, in minutes, offered as chips in the event form's date and time sheet. */
+val TIMED_LENGTH_CHIPS_MINUTES = listOf(30, 60, 120)
+
+/** Lengths, in days, offered as chips for an all-day event in the date and time sheet. */
+val ALL_DAY_LENGTH_CHIPS_DAYS = listOf(2, 5, 7)
+
 fun getEventDurationOptions(resources: Resources): List<DurationOption> =
     EVENT_DURATION_MINUTES.map { DurationOption(formatDuration(it, resources), it) }
 
@@ -318,6 +325,28 @@ fun formatDuration(minutes: Int, resources: Resources): String {
             val mins = minutes % 60
             resources.getString(R.string.duration_compact, hours, mins)
         }
+    }
+}
+
+/**
+ * Returns how often automatic calendar backup runs for [hours] (1 to 720): "Every 12 hours",
+ * "Every day", "Every 7 days", or days and hours together ("Every 2 days 6 hours", "Every day 1
+ * hour"). Exactly one hour or day has its own string, so no plural form has to drop its number.
+ */
+fun formatBackupInterval(hours: Int, resources: Resources): String {
+    val (days, rest) = CalendarBackupInterval.split(hours)
+    val hoursPart = { resources.getQuantityString(R.plurals.time_hours, rest, rest) }
+    return when {
+        days == 0 && rest == 1 -> resources.getString(R.string.calendar_backup_every_hour)
+        days == 0 -> resources.getQuantityString(R.plurals.calendar_backup_every_hours, rest, rest)
+        rest == 0 && days == 1 -> resources.getString(R.string.calendar_backup_every_day)
+        rest == 0 -> resources.getQuantityString(R.plurals.calendar_backup_every_days, days, days)
+        days == 1 -> resources.getString(R.string.calendar_backup_every_day_hours, hoursPart())
+        else -> resources.getString(
+            R.string.calendar_backup_every_days_hours,
+            resources.getQuantityString(R.plurals.time_days, days, days),
+            hoursPart(),
+        )
     }
 }
 

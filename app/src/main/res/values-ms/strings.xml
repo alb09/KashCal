@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Jemputan Acara</string>
     <string name="channel_event_invitations_desc">Pemberitahuan apabila anda menerima jemputan kalendar baharu</string>
     <string name="channel_calendar_updates">Kemas Kini Kalendar</string>
+    <string name="channel_calendar_backup">Sandaran kalendar automatik</string>
+    <string name="channel_calendar_backup_description">Memberitahu anda apabila sandaran kalendar gagal</string>
     <string name="invite_notification_body">Daripada %1$s · Ketik untuk membalas</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,34 @@
     <string name="backup_error_read_failed">Tidak dapat membaca fail</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Guna Apple Calendar?</string>
-    <string name="onboarding_got_you">Kami boleh bantu.</string>
-    <string name="onboarding_connect_prompt">Sambungkan iCloud untuk lihat acara anda di sini</string>
+    <string name="onboarding_title">Di manakah kalendar anda?</string>
+    <string name="onboarding_subtitle">Pilih satu untuk disambungkan.</string>
+    <string name="onboarding_icloud_detail">Apple ID dan kata laluan aplikasi</string>
+    <string name="onboarding_caldav_title">Pelayan CalDAV</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale dan lain-lain</string>
+    <string name="onboarding_device_title">Pada peranti ini</string>
+    <string name="onboarding_phone_detail">Google, Outlook dan aplikasi penyegerakan</string>
+    <string name="onboarding_use_offline">Guna kalendar luar talian</string>
+    <string name="onboarding_trust">Sumber terbuka. Tiada iklan. Tiada penjejakan.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Peringatan dimatikan</string>
+    <plurals name="reminders_off_body">
+        <item quantity="other">%d acara minggu ini mempunyai peringatan.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Bukan Sekarang</string>
+    <string name="reminders_off_turn_on">Hidupkan</string>
+    <string name="reminders_on_snackbar">Peringatan dihidupkan</string>
+    <string name="about_tagline">Semua kalendar anda dalam satu apl peribadi.</string>
+    <string name="about_help_title">Bantuan dan panduan</string>
+    <string name="about_help_detail">Persediaan, penyegerakan dan soalan</string>
+    <string name="about_source_title">Kod sumber</string>
+    <string name="about_source_detail">Apache 2.0, di GitHub</string>
+    <string name="about_support_title">Sokong KashCal</string>
+    <string name="about_support_detail">Terima kasih kepada semua yang sudah menyokong</string>
+    <string name="about_link_failed">Tiada apl yang boleh membuka pautan ini.</string>
+    <string name="about_built_in_austin">Dibina dengan ❤️ di Austin</string>
+    <string name="about_version">Versi %1$s</string>
     <string name="whats_new_skip">Langkau</string>
     <string name="whats_new_next">Seterusnya</string>
     <string name="whats_new_page_of">Halaman %1$d daripada %2$d</string>
@@ -275,10 +300,21 @@
     <string name="whats_new_v772_changes_title">Lihat apa yang berubah</string>
     <string name="whats_new_v772_changes_body">Acara baharu, disunting dan dialih keluar daripada kalendar iCloud dan CalDAV anda dikumpulkan dalam Perubahan terkini selama 7 hari. Ketik satu untuk membukanya.</string>
     <string name="whats_new_v772_notifications_body">Dapatkan pemberitahuan apabila penyegerakan latar belakang menemui perubahan pada acara iCloud atau CalDAV anda. Ia kekal dimatikan sehingga anda menghidupkannya.</string>
+    <string name="whats_new_v803_offline_title">Kalendar yang kekal di telefon</string>
+    <string name="whats_new_v803_offline_body">Ada rancangan yang tidak perlu disimpan di pelayan. Berikan kalendar luar talian tersendiri untuknya, seberapa banyak yang anda mahu.</string>
+    <string name="whats_new_v803_backup_title">Sandaran tanpa perlu difikirkan</string>
+    <string name="whats_new_v803_backup_body">Pilih folder sekali sahaja, dan KashCal akan sentiasa menyimpan salinan terkini kalendar luar talian anda di situ.</string>
+    <string name="whats_new_v803_print_title">Minggu anda, di atas kertas</string>
+    <string name="whats_new_v803_print_body">Cetak minggu yang sedang anda lihat. Mahu ditampal pada peti sejuk yang mana, terpulang kepada anda.</string>
     <string name="whats_new_hero_sample_lunch">Makan tengah hari pasukan</string>
     <string name="whats_new_hero_sample_review">Semakan reka bentuk</string>
     <string name="whats_new_hero_sample_book_club">Kelab buku</string>
+    <string name="whats_new_hero_sample_dentist">Doktor gigi</string>
+    <string name="whats_new_hero_sample_yoga">Yoga</string>
     <string name="whats_new_hero_sample_calendar">Kerja</string>
+    <string name="whats_new_hero_sample_family">Keluarga</string>
+    <string name="whats_new_hero_sample_garden">Taman</string>
+    <string name="whats_new_hero_sample_folder">Sandaran kalendar</string>
     <string name="whats_new_hero_now">sekarang</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +430,6 @@
     <string name="error_device_calendar_title">Ralat Kalendar</string>
     <string name="error_device_calendar_write_failed">Gagal menyimpan ke kalendar peranti. Sila cuba lagi.</string>
     <string name="error_device_calendar_permission">Kebenaran tulis kalendar diperlukan. Sila beri kebenaran dalam Tetapan.</string>
-    <string name="error_device_calendar_permission_denied">Untuk memberi akses tulis, matikan dan hidupkan semula kebenaran Kalendar dalam Tetapan</string>
     <string name="error_device_calendar_not_found">Kalendar tidak dijumpai. Mungkin telah dibuang.</string>
     <string name="error_device_event_not_found">Acara tidak dijumpai. Mungkin telah dipadam.</string>
     <string name="error_device_calendar_read_only">Kalendar ini baca sahaja.</string>
@@ -538,6 +573,7 @@
     <string name="subscriptions_section_add">Tambah</string>
     <string name="subscriptions_empty_ics">Tiada langganan ICS</string>
     <string name="subscriptions_empty_ics_hint">Tambah suapan kalendar untuk melihat acara</string>
+    <string name="subscriptions_swipe_hint">Leret suapan untuk memadamkannya.</string>
     <string name="subscriptions_add_ics">Tambah Kalendar ICS</string>
     <string name="qs_tile_label">Tambah acara</string>
     <string name="holiday_catalog_add">Tambah kalendar cuti</string>
@@ -624,7 +660,7 @@
     <string name="settings_device_calendars_hint">Kalendar dari aplikasi lain</string>
     <string name="offline_calendars_row_label">Kalendar luar talian</string>
     <string name="offline_calendars_row_hint">Kalendar yang kekal pada telefon ini</string>
-    <string name="offline_calendars_manage_note">Tambah, namakan semula, tukar warna atau padam kalendar luar talian anda.</string>
+    <string name="offline_calendars_manage_note">Leret kalendar untuk memadamkannya.</string>
     <string name="offline_calendars_info">Disimpan hanya pada telefon ini dan tidak pernah disegerakkan. Sandaran tidak termasuk acara, jadi eksport kalendar untuk menyimpan salinan.</string>
     <string name="offline_calendars_info_cd">Perihal kalendar luar talian</string>
     <string name="offline_calendar_default_state">Lalai</string>
@@ -648,6 +684,72 @@
     </plurals>
     <string name="offline_calendar_deleted">%1$s dipadam</string>
     <string name="offline_calendar_duplicate_name">Kalendar luar talian bernama \"%1$s\" sudah wujud</string>
+    <string name="offline_calendar_similar_name">Terlalu serupa dengan \"%1$s\". Pilih nama lain.</string>
+    <string name="calendar_backup_title">Sandaran kalendar automatik</string>
+    <string name="calendar_backup_row_off">Mati</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Tidak dapat mencapai folder sandaran</string>
+    <string name="calendar_backup_intro">Menyimpan setiap kalendar luar talian sebagai fail ICS dalam folder pilihan anda.</string>
+    <string name="calendar_backup_choose_folder">Pilih folder</string>
+    <string name="calendar_backup_choose_folder_hint">Pilih atau cipta folder, contohnya dalam Documents. Android tidak membenarkan bahagian atas storan atau folder Download itu sendiri.</string>
+    <string name="calendar_backup_folder">Folder</string>
+    <string name="calendar_backup_change">Tukar</string>
+    <string name="calendar_backup_frequency">Kekerapan</string>
+    <string name="calendar_backup_frequency_info">Sandaran mungkin berjalan lewat: Android menahan kerja latar belakang apabila telefon melahu atau KashCal tidak dibuka untuk seketika.</string>
+    <string name="calendar_backup_copies">Salinan untuk disimpan</string>
+    <string name="calendar_backup_copies_explained">Setiap sandaran menyimpan fail sebelumnya sebagai salinan bertarikh. Apabila terdapat lebih daripada bilangan ini, salinan yang paling lama dipadam. Fail terbaharu sentiasa menggunakan nama kalendar.</string>
+    <string name="calendar_backup_copies_fewer">Simpan kurang salinan</string>
+    <string name="calendar_backup_copies_more">Simpan lebih banyak salinan</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="other">%d salinan</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="other">Memadam %d salinan lama. Tindakan ini tidak boleh dibuat asal.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Memadam salinan lama yang melebihi bilangan ini. Tindakan ini tidak boleh dibuat asal.</string>
+    <string name="calendar_backup_calendars">Kalendar luar talian</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Tiada acara, tiada apa-apa disimpan</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Tidak dapat menyimpan. Akan cuba lagi pada sandaran seterusnya.</string>
+    <string name="calendar_backup_status">Sandaran terakhir %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="other">Sandaran terakhir %1$s · %2$d kalendar gagal</item>
+    </plurals>
+    <string name="calendar_backup_now">Sandarkan sekarang</string>
+    <string name="calendar_backup_running">Menyandarkan…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal menulis ganti fail ini pada setiap sandaran, jadi perubahan yang dibuat dalam apl lain tidak kekal. Untuk memulihkan kalendar, gunakan "Import acara dari fail".</string>
+    <string name="calendar_backup_off_files_stay">Fail sedia ada kekal dalam %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Tidak dapat mencapai %1$s. Folder itu mungkin telah dialihkan, dipadam atau diputuskan sambungan.</string>
+    <string name="calendar_backup_error_unsupported">Tidak dapat menyimpan fail dalam %1$s. Pilih folder lain.</string>
+    <string name="calendar_backup_choose_again">Pilih semula</string>
+    <string name="calendar_backup_pick_refused">KashCal tidak dapat menggunakan folder itu. Pilih folder lain.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal tidak dapat mencipta fail dalam folder itu. Pilih folder lain.</string>
+    <string name="calendar_backup_failed_title">Sandaran kalendar gagal</string>
+    <string name="calendar_backup_folder_unnamed">folder sandaran</string>
+    <string name="calendar_backup_alert_unreachable">Tidak dapat mencapai %1$s. Ketik untuk memilihnya semula.</string>
+    <string name="calendar_backup_alert_unsupported">Tidak dapat menyimpan fail dalam %1$s. Ketik untuk memilih folder lain.</string>
+    <string name="calendar_backup_alert_file_retry">Tidak dapat menyimpan %1$s. KashCal akan cuba lagi pada sandaran seterusnya.</string>
+    <string name="calendar_backup_every_hour">Setiap jam</string>
+    <string name="calendar_backup_every_day">Setiap hari</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="other">Setiap %d jam</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="other">Setiap %d hari</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Setiap 1 hari %1$s</string>
+    <string name="calendar_backup_every_days_hours">Setiap %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">Pilih sekurang-kurangnya 1 jam.</string>
+    <string name="calendar_backup_interval_too_long">Pilih 30 hari atau kurang.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="other">Tidak dapat menyimpan %d kalendar. KashCal akan cuba lagi pada sandaran seterusnya.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">Pemberitahuan dimatikan untuk KashCal, jadi apl tidak dapat memberitahu anda jika sandaran gagal.</string>
+    <string name="calendar_backup_notifications_channel_off">Pemberitahuan sandaran dimatikan, jadi KashCal tidak dapat memberitahu anda jika sandaran gagal.</string>
+    <string name="calendar_backup_open_settings">Buka tetapan</string>
+    <string name="calendar_backup_not_now">Bukan sekarang</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="other">%d kalendar gagal</item>
+    </plurals>
     <string name="settings_quick_event_add">Tambah acara pintar</string>
     <string name="settings_quick_event_add_info">Cipta acara dengan menaip secara semula jadi. \"Makan tengah hari dengan Sam Jumaat 1petang\" akan mengisi tajuk, tarikh dan masa untuk anda.</string>
     <string name="settings_suggest_titles">Cadangkan tajuk acara</string>
@@ -715,6 +817,7 @@
     <string name="label_on_days">Pada hari</string>
     <string name="label_pattern">Corak</string>
     <string name="label_ends">Tamat</string>
+    <string name="sheet_hint_change_end">Ketik hari untuk menukar penghujung</string>
     <string name="label_timezone">Zon waktu</string>
     <string name="label_alerts">Peringatan</string>
     <string name="label_add_alert">Tambah Peringatan</string>
@@ -736,14 +839,11 @@
     <string name="status_hours_ago">%1$d jam lalu</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Papar acara daripada aplikasi kalendar lain pada peranti anda (penyegerak, kalendar tempatan).</string>
-    <string name="device_calendars_permission_required">Kebenaran kalendar diperlukan. Ketik Dayakan untuk memberi akses.</string>
-    <string name="device_calendars_read_only_access">Baca sahaja</string>
-    <string name="device_calendars_grant_write">Beri kebenaran tulis untuk mengedit acara kalendar peranti</string>
-    <string name="device_calendars_grant">Beri</string>
-    <string name="device_calendars_none_found">Tiada kalendar peranti dijumpai.</string>
+    <string name="device_calendars_intro">Tunjukkan kalendar daripada Google, Outlook dan aplikasi penyegerakan pada peranti ini.</string>
+    <string name="device_calendars_show_switch">Tunjukkan kalendar peranti</string>
+    <string name="device_calendars_pick_hint">Pilih kalendar untuk ditunjukkan.</string>
+    <string name="device_calendars_empty">Tiada kalendar ditemui.</string>
     <string name="device_calendars_local">Tempatan</string>
-    <string name="device_calendars_read_only_no_write">Baca sahaja (tiada kebenaran tulis)</string>
     <string name="device_calendars_read_only_calendar">Baca sahaja (kalendar baca sahaja)</string>
     <string name="settings_sync_frequency">Kekerapan Segerak</string>
     <string name="settings_sync_frequency_hint">Kekerapan penyegerakan di latar belakang</string>
@@ -1233,6 +1333,10 @@
     <string name="ics_fetch_error_http">Pelayan mengembalikan ralat (%1$d). Sila semak URL.</string>
     <string name="ics_fetch_error_empty">Suapan kalendar kosong.</string>
     <string name="ics_fetch_error_not_calendar">URL itu nampaknya bukan suapan kalendar.</string>
+    <string name="ics_feed_error_empty_response">Pelayan tidak menghantar suapan yang sah.</string>
+    <string name="ics_feed_error_access_denied">Pelayan suapan ini menolak akses.</string>
+    <string name="ics_feed_error_too_large">Suapan kalendar ini terlalu besar untuk dimuat turun.</string>
+    <string name="ics_feed_error_unreadable">Acara suapan ini tidak dapat ditunjukkan.</string>
     <string name="insights_title">Cerapan</string>
     <string name="insights_period_this_week">Minggu</string>
     <string name="insights_period_last_week">Minggu lepas</string>
@@ -1356,7 +1460,7 @@
         <item quantity="other">Lapang dalam %1$d hari akan datang (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Tiada blok lapang sekurang-kurangnya satu jam dalam julat yang dipilih.</string>
     <string name="share_from_kashcal_footer">Dikongsi dari KashCal</string>
@@ -1377,5 +1481,29 @@
     <string name="share_as_card_all_day">Sepanjang hari</string>
     <string name="share_as_card_chooser_title">Kongsi acara</string>
     <string name="share_as_card_share_failed">Tidak dapat berkongsi kad</string>
+    <string name="print_your_week">Cetak minggu anda</string>
+    <string name="print_options_title">Pilih pilihan cetakan</string>
+    <string name="print_pages_header">Halaman</string>
+    <string name="print_page_week">Kalendar mingguan</string>
+    <string name="print_page_week_detail">Minggu dalam bentuk grid</string>
+    <string name="print_page_details">Butiran</string>
+    <string name="print_page_details_detail">Setiap acara secara penuh</string>
+    <string name="print_action">Cetak</string>
+    <string name="cd_print_previous_week">Minggu sebelumnya</string>
+    <string name="cd_print_next_week">Minggu seterusnya</string>
+    <plurals name="print_summary_pages">
+        <item quantity="other">%d halaman</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="other">%1$d daripada %2$d kalendar</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – Minggu %2$s</string>
+    <string name="print_failed">Tidak dapat mencetak. Cuba lagi.</string>
+    <string name="print_doc_week">Minggu</string>
+    <string name="print_doc_printed">Dicetak %1$s</string>
+    <string name="print_doc_page_of">Halaman %1$s daripada %2$s</string>
+    <string name="print_doc_numbers_note">Nombor sepadan dengan butiran, yang menyenaraikan setiap acara secara penuh.</string>
+    <string name="print_doc_times_in">Masa dipaparkan dalam %1$s</string>
 
 </resources>

@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.EventBusy
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Link
@@ -36,6 +37,7 @@ import androidx.compose.material.icons.filled.Widgets
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -46,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
@@ -135,8 +138,8 @@ data class AccountSettingsUiState(
      */
     val pendingSubscriptionDeletionId: Long? = null,
     /**
-     * Asks the host to finish the Activity: after iCloud sign-in during initial setup, or on
-     * Done in the connected sheet.
+     * Asks the host to finish the Activity: closing a sign-in sheet on an onboarding route, a
+     * successful iCloud sign-in there, or Done in the connected sheet.
      */
     val pendingFinishActivity: Boolean = false,
     /** Shows the success sheet after an account connects. */
@@ -230,6 +233,9 @@ fun AccountSettingsScreen(
     // ICS Import/Export
     onImportCalendarFile: () -> Unit = {},
     onOpenExportCalendars: () -> Unit = {},
+    onOpenCalendarBackup: () -> Unit = {},
+    calendarBackupSubtitle: String? = null,
+    calendarBackupProblem: Boolean = false,
     // Settings backup/restore
     onBackupSettings: () -> Unit = {},
     onRestoreSettings: () -> Unit = {},
@@ -247,13 +253,8 @@ fun AccountSettingsScreen(
     anniversaryCount: Int = 0,
     // Device calendars
     deviceCalendarsEnabled: Boolean = false,
-    hasReadCalendarPermission: Boolean = false,
-    hasWriteCalendarPermission: Boolean = false,
     deviceCalendars: List<DeviceCalendar> = emptyList(),
     enabledDeviceCalendarIds: Set<Long> = emptySet(),
-    onToggleDeviceCalendars: (Boolean) -> Unit = {},
-    onToggleDeviceCalendar: (Long, Boolean) -> Unit = { _, _ -> },
-    onRequestWriteCalendarPermission: () -> Unit = {},
     showDeclinedEvents: Boolean = false,
     onToggleShowDeclinedEvents: (Boolean) -> Unit = {},
     deviceCalendarRemindersEnabled: Boolean = true,
@@ -812,6 +813,19 @@ fun AccountSettingsScreen(
                                 label = stringResource(R.string.settings_export_calendars),
                                 subtitle = stringResource(R.string.settings_export_calendars_subtitle),
                                 onClick = onOpenExportCalendars,
+                                showChevron = false,
+                                showDivider = false,
+                                searchQuery = searchQuery
+                            )
+                        }
+                        val backupSubtitle = calendarBackupSubtitle ?: stringResource(R.string.calendar_backup_row_off)
+                        row(label = stringResource(R.string.calendar_backup_title), subtitle = backupSubtitle, id = "calendar_backup") {
+                            SettingsRow(
+                                icon = Icons.Default.CloudSync,
+                                label = stringResource(R.string.calendar_backup_title),
+                                subtitle = backupSubtitle,
+                                subtitleColor = if (calendarBackupProblem) MaterialTheme.colorScheme.error else Color.Unspecified,
+                                onClick = onOpenCalendarBackup,
                                 showChevron = false,
                                 showDivider = false,
                                 searchQuery = searchQuery

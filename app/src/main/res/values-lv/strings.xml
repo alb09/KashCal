@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Notikumu ielūgumi</string>
     <string name="channel_event_invitations_desc">Paziņojumi par jauniem kalendāra ielūgumiem</string>
     <string name="channel_calendar_updates">Kalendāra izmaiņas</string>
+    <string name="channel_calendar_backup">Automātiska kalendāru dublēšana</string>
+    <string name="channel_calendar_backup_description">Paziņo, ja kalendāra dublēšana neizdodas</string>
     <string name="invite_notification_body">No %1$s · Pieskarieties, lai atbildētu</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,36 @@
     <string name="backup_error_read_failed">Neizdevās nolasīt failu</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple Calendar?</string>
-    <string name="onboarding_got_you">Mēs tev palīdzēsim.</string>
-    <string name="onboarding_connect_prompt">Savienojiet iCloud, lai šeit redzētu savus notikumus</string>
+    <string name="onboarding_title">Kur ir tavi kalendāri?</string>
+    <string name="onboarding_subtitle">Izvēlies, ko pievienot.</string>
+    <string name="onboarding_icloud_detail">Apple ID un lietotnes parole</string>
+    <string name="onboarding_caldav_title">CalDAV serveris</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale un citi</string>
+    <string name="onboarding_device_title">Šajā ierīcē</string>
+    <string name="onboarding_phone_detail">Google, Outlook un sinhronizācijas lietotnes</string>
+    <string name="onboarding_use_offline">Lietot bezsaistes kalendāru</string>
+    <string name="onboarding_trust">Atvērtais kods. Bez reklāmām. Bez izsekošanas.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Atgādinājumi ir izslēgti</string>
+    <plurals name="reminders_off_body">
+        <item quantity="zero">Šonedēļ %d notikumiem ir atgādinājumi.</item>
+        <item quantity="one">Šonedēļ %d notikumam ir atgādinājums.</item>
+        <item quantity="other">Šonedēļ %d notikumiem ir atgādinājumi.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Ne tagad</string>
+    <string name="reminders_off_turn_on">Ieslēgt</string>
+    <string name="reminders_on_snackbar">Atgādinājumi ieslēgti</string>
+    <string name="about_tagline">Visi tavi kalendāri vienā privātā lietotnē.</string>
+    <string name="about_help_title">Palīdzība un ceļveži</string>
+    <string name="about_help_detail">Iestatīšana, sinhronizācija un jautājumi</string>
+    <string name="about_source_title">Pirmkods</string>
+    <string name="about_source_detail">Apache 2.0, vietnē GitHub</string>
+    <string name="about_support_title">Atbalstīt KashCal</string>
+    <string name="about_support_detail">Paldies visiem, kas jau atbalsta</string>
+    <string name="about_link_failed">Neviena lietotne nevar atvērt šo saiti.</string>
+    <string name="about_built_in_austin">Veidots ar ❤️ pilsētā Austin</string>
+    <string name="about_version">Versija %1$s</string>
     <string name="whats_new_skip">Izlaist</string>
     <string name="whats_new_next">Tālāk</string>
     <string name="whats_new_page_of">Lapa %1$d no %2$d</string>
@@ -275,10 +302,21 @@
     <string name="whats_new_v772_changes_title">Apskati, kas mainījies</string>
     <string name="whats_new_v772_changes_body">Jauni, rediģēti un noņemti notikumi no taviem iCloud un CalDAV kalendāriem 7 dienas tiek apkopoti sadaļā “Nesenās izmaiņas”. Pieskaries notikumam, lai to atvērtu.</string>
     <string name="whats_new_v772_notifications_body">Saņem paziņojumu, kad fona sinhronizācija atrod izmaiņas tavos iCloud vai CalDAV notikumos. Funkcija ir izslēgta, līdz tu to ieslēgsi.</string>
+    <string name="whats_new_v803_offline_title">Kalendāri, kas paliek tālrunī</string>
+    <string name="whats_new_v803_offline_body">Dažiem plāniem serverī nav vietas. Izveido tiem atsevišķus bezsaistes kalendārus, cik vien vēlies.</string>
+    <string name="whats_new_v803_backup_title">Dublējumi, par kuriem vari aizmirst</string>
+    <string name="whats_new_v803_backup_body">Vienreiz izvēlies mapi, un KashCal tur glabās svaigu tavu bezsaistes kalendāru dublējumu.</string>
+    <string name="whats_new_v803_print_title">Tava nedēļa uz papīra</string>
+    <string name="whats_new_v803_print_body">Izdrukā nedēļu, ko redzi ekrānā. Pie kura ledusskapja to piekārt, tā ir tava izvēle.</string>
     <string name="whats_new_hero_sample_lunch">Komandas pusdienas</string>
     <string name="whats_new_hero_sample_review">Dizaina apskate</string>
     <string name="whats_new_hero_sample_book_club">Grāmatu klubs</string>
+    <string name="whats_new_hero_sample_dentist">Zobārsts</string>
+    <string name="whats_new_hero_sample_yoga">Joga</string>
     <string name="whats_new_hero_sample_calendar">Darbs</string>
+    <string name="whats_new_hero_sample_family">Ģimene</string>
+    <string name="whats_new_hero_sample_garden">Dārzs</string>
+    <string name="whats_new_hero_sample_folder">Kalendāru dublējumi</string>
     <string name="whats_new_hero_now">tagad</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +432,6 @@
     <string name="error_device_calendar_title">Kalendāra kļūda</string>
     <string name="error_device_calendar_write_failed">Neizdevās saglabāt ierīces kalendārā. Lūdzu, mēģiniet vēlreiz.</string>
     <string name="error_device_calendar_permission">Nepieciešama kalendāra rakstīšanas atļauja. Lūdzu, piešķiriet atļauju iestatījumos.</string>
-    <string name="error_device_calendar_permission_denied">Iestatījumos izslēdz un atkal ieslēdz kalendāra atļauju, lai piešķirtu rakstīšanas piekļuvi</string>
     <string name="error_device_calendar_not_found">Kalendārs nav atrasts. Iespējams, tas tika noņemts.</string>
     <string name="error_device_event_not_found">Notikums nav atrasts. Iespējams, tas tika dzēsts.</string>
     <string name="error_device_calendar_read_only">Šis kalendārs ir tikai lasāms.</string>
@@ -538,6 +575,7 @@
     <string name="subscriptions_section_add">Pievienot</string>
     <string name="subscriptions_empty_ics">Nav ICS abonementu</string>
     <string name="subscriptions_empty_ics_hint">Pievienojiet kalendāra plūsmu, lai redzētu notikumus</string>
+    <string name="subscriptions_swipe_hint">Pavelc plūsmu, lai to dzēstu.</string>
     <string name="subscriptions_add_ics">Pievienot ICS kalendāru</string>
     <string name="qs_tile_label">Notikums</string>
     <string name="holiday_catalog_add">Pievienot svētku kalendāru</string>
@@ -624,7 +662,7 @@
     <string name="settings_device_calendars_hint">Kalendāri no citām lietotnēm</string>
     <string name="offline_calendars_row_label">Bezsaistes kalendāri</string>
     <string name="offline_calendars_row_hint">Kalendāri, kas paliek šajā tālrunī</string>
-    <string name="offline_calendars_manage_note">Pievieno, pārdēvē, maini krāsu vai dzēs savus bezsaistes kalendārus.</string>
+    <string name="offline_calendars_manage_note">Pavelc kalendāru, lai to dzēstu.</string>
     <string name="offline_calendars_info">Tiek glabāti tikai šajā tālrunī un nekad netiek sinhronizēti. Dublējumos nav iekļauti notikumi, tāpēc eksportē kalendāru, lai saglabātu kopiju.</string>
     <string name="offline_calendars_info_cd">Par bezsaistes kalendāriem</string>
     <string name="offline_calendar_default_state">Noklusējuma</string>
@@ -652,6 +690,86 @@
     </plurals>
     <string name="offline_calendar_deleted">Kalendārs %1$s izdzēsts</string>
     <string name="offline_calendar_duplicate_name">Bezsaistes kalendārs ar nosaukumu \"%1$s\" jau pastāv</string>
+    <string name="offline_calendar_similar_name">Pārāk līdzīgs \"%1$s\". Izvēlies citu nosaukumu.</string>
+    <string name="calendar_backup_title">Automātiska kalendāru dublēšana</string>
+    <string name="calendar_backup_row_off">Izslēgts</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Nav piekļuves dublējumu mapei</string>
+    <string name="calendar_backup_intro">Saglabā katru bezsaistes kalendāru kā ICS failu tevis izvēlētā mapē.</string>
+    <string name="calendar_backup_choose_folder">Izvēlēties mapi</string>
+    <string name="calendar_backup_choose_folder_hint">Izvēlies vai izveido mapi, piemēram, mapē Documents. Android neļauj izmantot krātuves saknes mapi vai pašu mapi Download.</string>
+    <string name="calendar_backup_folder">Mape</string>
+    <string name="calendar_backup_change">Mainīt</string>
+    <string name="calendar_backup_frequency">Biežums</string>
+    <string name="calendar_backup_frequency_info">Dublēšana var kavēties: Android aiztur fona darbības, kad tālrunis netiek lietots vai KashCal ilgi nav atvērts.</string>
+    <string name="calendar_backup_copies">Glabājamās kopijas</string>
+    <string name="calendar_backup_copies_explained">Katrā dublēšanā iepriekšējais fails tiek saglabāts kā kopija ar datumu. Ja kopiju ir vairāk par šo skaitu, vecākās tiek dzēstas. Jaunākajam failam vienmēr ir kalendāra nosaukums.</string>
+    <string name="calendar_backup_copies_fewer">Glabāt mazāk kopiju</string>
+    <string name="calendar_backup_copies_more">Glabāt vairāk kopiju</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="zero">%d kopiju</item>
+        <item quantity="one">%d kopija</item>
+        <item quantity="other">%d kopijas</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="zero">Dzēš %d vecākas kopijas. To nevar atsaukt.</item>
+        <item quantity="one">Dzēš %d vecāku kopiju. To nevar atsaukt.</item>
+        <item quantity="other">Dzēš %d vecākas kopijas. To nevar atsaukt.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Dzēš vecākās kopijas, kas pārsniedz šo skaitu. To nevar atsaukt.</string>
+    <string name="calendar_backup_calendars">Bezsaistes kalendāri</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Nav notikumu, nekas nav saglabāts</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Neizdevās saglabāt. Tiks mēģināts vēlreiz nākamajā dublēšanā.</string>
+    <string name="calendar_backup_status">Pēdējais dublējums: %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="zero">Pēdējais dublējums: %1$s · neizdevās %2$d kalendāros</item>
+        <item quantity="one">Pēdējais dublējums: %1$s · neizdevās %2$d kalendārā</item>
+        <item quantity="other">Pēdējais dublējums: %1$s · neizdevās %2$d kalendāros</item>
+    </plurals>
+    <string name="calendar_backup_now">Dublēt tagad</string>
+    <string name="calendar_backup_running">Notiek dublēšana…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal katrā dublēšanā pārraksta šos failus, tāpēc citās lietotnēs veiktās izmaiņas nesaglabājas. Lai atjaunotu kalendāru, izmanto “Importēt notikumus no faila”.</string>
+    <string name="calendar_backup_off_files_stay">Esošie faili paliek šeit: %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Nav piekļuves: %1$s. Iespējams, mape ir pārvietota, izdzēsta vai atvienota.</string>
+    <string name="calendar_backup_error_unsupported">Nevar saglabāt failus: %1$s. Izvēlies citu mapi.</string>
+    <string name="calendar_backup_choose_again">Izvēlēties vēlreiz</string>
+    <string name="calendar_backup_pick_refused">KashCal nevar izmantot šo mapi. Izvēlies citu.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal nevar izveidot failus šajā mapē. Izvēlies citu.</string>
+    <string name="calendar_backup_failed_title">Kalendāra dublēšana neizdevās</string>
+    <string name="calendar_backup_folder_unnamed">dublējumu mape</string>
+    <string name="calendar_backup_alert_unreachable">Nav piekļuves: %1$s. Pieskaries, lai izvēlētos vēlreiz.</string>
+    <string name="calendar_backup_alert_unsupported">Nevar saglabāt failus: %1$s. Pieskaries, lai izvēlētos citu mapi.</string>
+    <string name="calendar_backup_alert_file_retry">Neizdevās saglabāt %1$s. KashCal mēģinās vēlreiz nākamajā dublēšanā.</string>
+    <string name="calendar_backup_every_hour">Katru stundu</string>
+    <string name="calendar_backup_every_day">Katru dienu</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="zero">Ik pēc %d stundām</item>
+        <item quantity="one">Ik pēc %d stundas</item>
+        <item quantity="other">Ik pēc %d stundām</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="zero">Ik pēc %d dienām</item>
+        <item quantity="one">Ik pēc %d dienas</item>
+        <item quantity="other">Ik pēc %d dienām</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Intervāls: 1 diena %1$s</string>
+    <string name="calendar_backup_every_days_hours">Intervāls: %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">Izvēlies vismaz 1 stundu.</string>
+    <string name="calendar_backup_interval_too_long">Izvēlies ne vairāk kā 30 dienas.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="zero">Neizdevās saglabāt %d kalendārus. KashCal mēģinās vēlreiz nākamajā dublēšanā.</item>
+        <item quantity="one">Neizdevās saglabāt %d kalendāru. KashCal mēģinās vēlreiz nākamajā dublēšanā.</item>
+        <item quantity="other">Neizdevās saglabāt %d kalendārus. KashCal mēģinās vēlreiz nākamajā dublēšanā.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">KashCal paziņojumi ir izslēgti, tāpēc lietotne nevarēs tev paziņot, ja dublēšana neizdosies.</string>
+    <string name="calendar_backup_notifications_channel_off">Dublēšanas paziņojumi ir izslēgti, tāpēc KashCal nevarēs tev paziņot, ja dublēšana neizdosies.</string>
+    <string name="calendar_backup_open_settings">Atvērt iestatījumus</string>
+    <string name="calendar_backup_not_now">Ne tagad</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="zero">Neizdevās %d kalendāros</item>
+        <item quantity="one">Neizdevās %d kalendārā</item>
+        <item quantity="other">Neizdevās %d kalendāros</item>
+    </plurals>
     <string name="settings_quick_event_add">Vieda notikumu pievienošana</string>
     <string name="settings_quick_event_add_info">Veidojiet notikumus, rakstot dabiskā valodā. \"Pusdienas ar Sam piektdien plkst. 13:00\" aizpilda nosaukumu, datumu un laiku jūsu vietā.</string>
     <string name="settings_suggest_titles">Ieteikt notikumu nosaukumus</string>
@@ -721,6 +839,7 @@
     <string name="label_on_days">Dienās</string>
     <string name="label_pattern">Modelis</string>
     <string name="label_ends">Beidzas</string>
+    <string name="sheet_hint_change_end">Pieskaries dienai, lai mainītu beigas</string>
     <string name="label_timezone">Laika josla</string>
     <string name="label_alerts">Atgādinājumi</string>
     <string name="label_add_alert">Pievienot atgādinājumu</string>
@@ -742,14 +861,11 @@
     <string name="status_hours_ago">pirms %1$d st</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Rādīt notikumus no citām kalendāra lietotnēm jūsu ierīcē (sinhronizācijas adapteri, lokālie kalendāri).</string>
-    <string name="device_calendars_permission_required">Nepieciešama kalendāra atļauja. Pieskarieties Iespējot, lai piešķirtu piekļuvi.</string>
-    <string name="device_calendars_read_only_access">Tikai lasīšanas piekļuve</string>
-    <string name="device_calendars_grant_write">Piešķiriet rakstīšanas atļauju, lai rediģētu ierīces kalendāra notikumus</string>
-    <string name="device_calendars_grant">Piešķirt</string>
-    <string name="device_calendars_none_found">Ierīces kalendāri nav atrasti.</string>
+    <string name="device_calendars_intro">Rādi Google, Outlook un sinhronizācijas lietotņu kalendārus šajā ierīcē.</string>
+    <string name="device_calendars_show_switch">Rādīt ierīces kalendārus</string>
+    <string name="device_calendars_pick_hint">Izvēlies, kurus kalendārus rādīt.</string>
+    <string name="device_calendars_empty">Kalendāri netika atrasti.</string>
     <string name="device_calendars_local">Lokāls</string>
-    <string name="device_calendars_read_only_no_write">Tikai lasāms (nav rakstīšanas atļaujas)</string>
     <string name="device_calendars_read_only_calendar">Tikai lasāms (kalendārs ir tikai lasāms)</string>
     <string name="settings_sync_frequency">Sinhronizācijas biežums</string>
     <string name="settings_sync_frequency_hint">Cik bieži sinhronizēt fonā</string>
@@ -1351,6 +1467,10 @@
     <string name="ics_fetch_error_http">Serveris atgrieza kļūdu (%1$d). Pārbaudi URL.</string>
     <string name="ics_fetch_error_empty">Kalendāra plūsma ir tukša.</string>
     <string name="ics_fetch_error_not_calendar">Šis URL neizskatās pēc kalendāra plūsmas.</string>
+    <string name="ics_feed_error_empty_response">Serveris neatsūtīja derīgu plūsmu.</string>
+    <string name="ics_feed_error_access_denied">Šīs plūsmas serveris atteica piekļuvi.</string>
+    <string name="ics_feed_error_too_large">Šī kalendāra plūsma ir pārāk liela, lai to lejupielādētu.</string>
+    <string name="ics_feed_error_unreadable">Neizdevās parādīt šīs plūsmas notikumus.</string>
     <string name="insights_title">Statistika</string>
     <string name="insights_period_this_week">Nedēļa</string>
     <string name="insights_period_last_week">Iepr. nedēļa</string>
@@ -1482,7 +1602,7 @@
         <item quantity="other">Brīvs nākamās %1$d dienas (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Izvēlētajā diapazonā nav brīvu vismaz stundas garu bloku.</string>
     <string name="share_from_kashcal_footer">Kopīgots no KashCal</string>
@@ -1505,5 +1625,33 @@
     <string name="share_as_card_all_day">Visu dienu</string>
     <string name="share_as_card_chooser_title">Kopīgot notikumu</string>
     <string name="share_as_card_share_failed">Neizdevās kopīgot kartīti</string>
+    <string name="print_your_week">Izdrukā savu nedēļu</string>
+    <string name="print_options_title">Drukas opcijas</string>
+    <string name="print_pages_header">Lapas</string>
+    <string name="print_page_week">Nedēļas kalendārs</string>
+    <string name="print_page_week_detail">Nedēļa režģa veidā</string>
+    <string name="print_page_details">Detaļas</string>
+    <string name="print_page_details_detail">Visi notikumi pilnībā</string>
+    <string name="print_action">Drukāt</string>
+    <string name="cd_print_previous_week">Iepriekšējā nedēļa</string>
+    <string name="cd_print_next_week">Nākamā nedēļa</string>
+    <plurals name="print_summary_pages">
+        <item quantity="zero">%d lapas</item>
+        <item quantity="one">%d lapa</item>
+        <item quantity="other">%d lapas</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="zero">%1$d no %2$d kalendāriem</item>
+        <item quantity="one">%1$d no %2$d kalendāra</item>
+        <item quantity="other">%1$d no %2$d kalendāriem</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – nedēļa no %2$s</string>
+    <string name="print_failed">Neizdevās izdrukāt. Mēģini vēlreiz.</string>
+    <string name="print_doc_week">Nedēļa</string>
+    <string name="print_doc_printed">Izdrukāts %1$s</string>
+    <string name="print_doc_page_of">Lapa %1$s no %2$s</string>
+    <string name="print_doc_numbers_note">Numuri atbilst detaļām, kurās visi notikumi norādīti pilnībā.</string>
+    <string name="print_doc_times_in">Laika josla: %1$s</string>
 
 </resources>

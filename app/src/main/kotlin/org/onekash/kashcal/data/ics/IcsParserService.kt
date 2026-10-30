@@ -21,14 +21,16 @@ object IcsParserService {
     private val parser = ICalParser()
 
     /**
-     * Returns true if [content] has a VCALENDAR wrapper and at least one VEVENT or VTODO.
+     * Returns true if [content] has a VCALENDAR wrapper, whatever components it holds.
      *
-     * A substring check only; it doesn't parse.
+     * A substring check only; it doesn't parse. A feed whose server removed every event sends a
+     * calendar with no components or only a VTIMEZONE (RFC 5545 §3.6 accepts any component), and
+     * the refresh must read that as no events, or the removed events stay. A body without both
+     * markers fails, such as most HTML pages or a download cut off before END:VCALENDAR.
      */
     fun isValidIcs(content: String): Boolean {
         return content.contains("BEGIN:VCALENDAR") &&
-            content.contains("END:VCALENDAR") &&
-            (content.contains("BEGIN:VEVENT") || content.contains("BEGIN:VTODO"))
+            content.contains("END:VCALENDAR")
     }
 
     /**

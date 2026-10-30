@@ -155,6 +155,50 @@ class LocalCalendarManagementTest {
         assertTrue(coordinator.createLocalCalendar("Local", 0, builtInName = "Lokal").isSuccess)
     }
 
+    private fun conflictOf(result: Result<*>) = fixture.conflictOf(result)
+
+    @Test
+    fun `create refuses a name whose file would match another calendar's and names it`() = runBlocking {
+        coordinator.createLocalCalendar("Work", 0, "Local").getOrThrow()
+        coordinator.createLocalCalendar("Team 1", 0, "Local").getOrThrow()
+        val before = calendarNames()
+
+        val work = coordinator.createLocalCalendar("Work!", 0, "Local")
+        assertEquals(LocalCalendarRefusal.SIMILAR_NAME, refusalOf(work))
+        assertEquals("Work", conflictOf(work))
+        val team = coordinator.createLocalCalendar("team-1", 0, "Local")
+        assertEquals(LocalCalendarRefusal.SIMILAR_NAME, refusalOf(team))
+        assertEquals("Team 1", conflictOf(team))
+        assertEquals(before, calendarNames())
+    }
+
+    @Test
+    fun `an exact duplicate is still refused as a duplicate`() = runBlocking {
+        coordinator.createLocalCalendar("Work", 0, "Local").getOrThrow()
+
+        assertEquals(LocalCalendarRefusal.DUPLICATE_NAME, refusalOf(coordinator.createLocalCalendar("work", 0, "Local")))
+    }
+
+    @Test
+    fun `the built-in is compared by its translated label`() = runBlocking {
+        coordinator.ensureLocalCalendarExists()
+
+        val english = coordinator.createLocalCalendar("Local!", 0, builtInName = "Local")
+        assertEquals(LocalCalendarRefusal.SIMILAR_NAME, refusalOf(english))
+        assertEquals("Local", conflictOf(english))
+        val german = coordinator.createLocalCalendar("Lokal!", 0, builtInName = "Lokal")
+        assertEquals(LocalCalendarRefusal.SIMILAR_NAME, refusalOf(german))
+        assertEquals("Lokal", conflictOf(german))
+        // The built-in's file stays Local.ics; a German user's "Local" gets an id in its file name.
+        assertTrue(coordinator.createLocalCalendar("Local", 0, builtInName = "Lokal").isSuccess)
+    }
+
+    @Test
+    fun `names that clean to nothing are not refused as similar`() = runBlocking {
+        assertTrue(coordinator.createLocalCalendar("🎂", 0, "Local").isSuccess)
+        assertTrue(coordinator.createLocalCalendar("🎉", 0, "Local").isSuccess)
+    }
+
     @Test
     fun `create allows the name of a synced calendar`() = runBlocking {
         fixture.insertCalendarUnder(AccountProvider.CALDAV, "https://dav.example.test/cal/personal/", "Personal")
@@ -228,6 +272,25 @@ class LocalCalendarManagementTest {
         assertEquals(LocalCalendarRefusal.BLANK_NAME, refusalOf(coordinator.renameLocalCalendar(id, "  ", "Local")))
         assertEquals(LocalCalendarRefusal.DUPLICATE_NAME, refusalOf(coordinator.renameLocalCalendar(id, "HOME", "Local")))
         assertEquals(LocalCalendarRefusal.DUPLICATE_NAME, refusalOf(coordinator.renameLocalCalendar(id, "lokal", "Lokal")))
+        assertEquals("Work", nameOf(id))
+    }
+
+    @Test
+    fun `rename to a variant of its own name is allowed`() = runBlocking {
+        val id = coordinator.createLocalCalendar("Work", 0, "Local").getOrThrow()
+
+        assertTrue(coordinator.renameLocalCalendar(id, "Work!", "Local").isSuccess)
+        assertEquals("Work!", nameOf(id))
+    }
+
+    @Test
+    fun `rename refuses a name whose file would match another calendar's`() = runBlocking {
+        coordinator.createLocalCalendar("Home", 0, "Local").getOrThrow()
+        val id = coordinator.createLocalCalendar("Work", 0, "Local").getOrThrow()
+
+        val result = coordinator.renameLocalCalendar(id, "Home!", "Local")
+        assertEquals(LocalCalendarRefusal.SIMILAR_NAME, refusalOf(result))
+        assertEquals("Home", conflictOf(result))
         assertEquals("Work", nameOf(id))
     }
 

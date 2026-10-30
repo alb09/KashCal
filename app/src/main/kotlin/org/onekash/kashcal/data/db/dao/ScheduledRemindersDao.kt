@@ -245,6 +245,23 @@ interface ScheduledRemindersDao {
     """)
     suspend fun dismissIfCalendarMuted(ids: List<Long>)
 
+    /**
+     * Returns how many occurrences have a PENDING reminder triggering in [fromTime]..[toTime],
+     * counting an occurrence with several reminders once. Muted calendars are left out here:
+     * muting keeps their rows PENDING so an unmute can re-arm them.
+     */
+    @Query("""
+        SELECT COUNT(*) FROM (
+            SELECT DISTINCT sr.event_id, sr.occurrence_time FROM scheduled_reminders sr
+            INNER JOIN events e ON sr.event_id = e.id
+            INNER JOIN calendars c ON e.calendar_id = c.id
+            WHERE sr.status = 'PENDING'
+            AND sr.trigger_time BETWEEN :fromTime AND :toTime
+            AND c.is_notification_muted = 0
+        )
+    """)
+    suspend fun countOccurrencesWithPendingReminders(fromTime: Long, toTime: Long): Int
+
     // ========== Statistics ==========
 
     /** Returns the number of PENDING and SNOOZED reminders. */

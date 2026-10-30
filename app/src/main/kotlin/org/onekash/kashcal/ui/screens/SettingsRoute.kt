@@ -71,6 +71,8 @@ import org.onekash.kashcal.ui.screens.settings.toAccountUiModel
 import org.onekash.kashcal.ui.screens.settings.ICloudConnectionState
 import org.onekash.kashcal.ui.screens.settings.RestoreConfirmationDialog
 import org.onekash.kashcal.ui.screens.settings.SettingsDestination
+import org.onekash.kashcal.ui.permission.DeviceCalendarsPermissionOutcome
+import org.onekash.kashcal.ui.permission.deviceCalendarsPermissionOutcome
 import org.onekash.kashcal.ui.screens.settings.RestoreErrorDialog
 import org.onekash.kashcal.ui.screens.settings.RestoreSuccessDialog
 import org.onekash.kashcal.ui.screens.settings.SubscriptionsScreen
@@ -78,9 +80,12 @@ import org.onekash.kashcal.ui.screens.settings.TagsScreen
 import org.onekash.kashcal.ui.theme.ColorSource
 import org.onekash.kashcal.ui.theme.KashCalTheme
 import org.onekash.kashcal.ui.theme.ThemeMode
+import org.onekash.kashcal.ui.screens.settings.CalendarBackupRoute
 import org.onekash.kashcal.ui.screens.settings.ExportCalendarsRoute
+import org.onekash.kashcal.ui.screens.settings.calendarBackupRowSubtitle
 import org.onekash.kashcal.ui.viewmodels.AccountSettingsViewModel
 import org.onekash.kashcal.ui.viewmodels.CalendarExportOrigin
+import org.onekash.kashcal.ui.viewmodels.CalendarBackupViewModel
 import org.onekash.kashcal.ui.viewmodels.CalendarExportViewModel
 import org.onekash.kashcal.ui.viewmodels.TagsViewModel
 import org.onekash.kashcal.util.isLanHost
@@ -117,10 +122,14 @@ fun SettingsRoute(
     // Tags screen, and backing out of it finishes the activity to the hub instead of revealing
     // the Settings root the user never chose.
     openTagsInitially: Boolean = false,
+    // True when the onboarding sheet launched straight into Device calendars: the route opens
+    // there, and backing out finishes the activity to HomeScreen.
+    openDeviceCalendarsInitially: Boolean = false,
     onFinish: () -> Unit = {},
     // Calendar export (the Export calendars sheet and an offline calendar's Export). Null, as in
     // tests and previews, leaves both inert.
     calendarExportViewModel: CalendarExportViewModel? = null,
+    calendarBackupViewModel: CalendarBackupViewModel? = null,
     // The five I/O lambdas below have no defaults: a no-op default would silently write an
     // empty backup or import zero events while showing a success message. A caller that
     // forgets one must fail to compile, not ship silent data loss. The other lambdas stay
@@ -138,6 +147,11 @@ fun SettingsRoute(
     isNotificationPermissionPermanentlyDenied: suspend () -> Boolean = { false },
     openNotificationSettings: (channelId: String?) -> Unit = {},
     onExportDebugReport: () -> Unit = {},
+    // Device calendars switch: whether Android would still explain the calendar permission
+    // (needs the activity), and opening the app's settings page, returning whether it opened.
+    // The defaults read as "can ask again" and "no settings screen", which leave the switch off.
+    shouldShowCalendarRationale: () -> Boolean = { true },
+    openAppDetailsSettings: () -> Boolean = { false },
 ) {
     val themeMode by viewModel.themeMode.collectAsStateWithLifecycle(initialValue = initialThemeMode)
     val colorSource by viewModel.colorSource.collectAsStateWithLifecycle(initialValue = initialColorSource)
@@ -300,20 +314,25 @@ fun SettingsRoute(
             viewModel.updateLocalNetworkPermissionState(resolveLanPermissionState())
         }
 
-        // Calendar permission launcher for device calendars. Requests READ and WRITE up front so
-        // users can also create and edit device calendar events.
+        // Calendar permission launcher for the Device calendars switch. Requests READ and WRITE
+        // together so users can also create and edit device events; with READ already held,
+        // Android grants WRITE from the same group without a dialog.
         val calendarPermissionLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
             viewModel.refreshCalendarPermission()
-            // Enable if at least READ was granted; WRITE is optional
-            val readGranted = permissions[android.Manifest.permission.READ_CALENDAR] == true
-            if (readGranted) {
-                viewModel.onToggleDeviceCalendars(true)
+            val outcome = deviceCalendarsPermissionOutcome(
+                readGranted = permissions[android.Manifest.permission.READ_CALENDAR] == true,
+                rationaleAfter = shouldShowCalendarRationale(),
+            )
+            when (outcome) {
+                DeviceCalendarsPermissionOutcome.ENABLE -> viewModel.onToggleDeviceCalendars(true)
+                DeviceCalendarsPermissionOutcome.OPEN_SETTINGS ->
+                    if (openAppDetailsSettings()) viewModel.markDeviceCalendarsPendingSettings()
+                DeviceCalendarsPermissionOutcome.NONE -> Unit
             }
         }
 
-        // Snackbar state, declared before the write-permission launcher that uses it
         val coroutineScope = rememberCoroutineScope()
         val snackbarHostState = remember { SnackbarHostState() }
 
@@ -372,25 +391,6 @@ fun SettingsRoute(
             )
         }
 
-        // Resolved at composable scope for the launcher/callback coroutines below.
-        val calendarPermissionDeniedMessage =
-            stringResource(R.string.error_device_calendar_permission_denied)
-
-        // WRITE_CALENDAR permission launcher for device calendars
-        val writeCalendarPermissionLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
-            viewModel.refreshCalendarPermission()
-            if (!isGranted) {
-                // Denied: tell the user to toggle the Calendar permission in system Settings
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = calendarPermissionDeniedMessage
-                    )
-                }
-            }
-        }
-
         // Debug log sheet state
         var showDebugLogSheet by remember { mutableStateOf(false) }
 
@@ -398,11 +398,24 @@ fun SettingsRoute(
         var showAccountsScreen by rememberSaveable { mutableStateOf(false) }
         var showSubscriptionsScreen by rememberSaveable { mutableStateOf(false) }
         var showExportCalendarsSheet by rememberSaveable { mutableStateOf(false) }
+        var showCalendarBackupSheet by rememberSaveable { mutableStateOf(false) }
+        // The backup failure notification asks through the view model, at launch or while
+        // Settings is open.
+        val calendarBackupSheetRequested =
+            calendarBackupViewModel?.sheetRequested?.collectAsStateWithLifecycle()?.value == true
+        LaunchedEffect(calendarBackupSheetRequested) {
+            if (calendarBackupSheetRequested) {
+                showCalendarBackupSheet = true
+                calendarBackupViewModel?.consumeSheetRequest()
+            }
+        }
+        val calendarBackupModel = calendarBackupViewModel?.model?.collectAsStateWithLifecycle()?.value
+        val backupRow = calendarBackupRowSubtitle(calendarBackupModel)
         var showBirthdaysAnniversariesScreen by rememberSaveable { mutableStateOf(false) }
         // Seeded from the launch intent so a hub-initiated open lands on Tags at once;
         // rememberSaveable keeps the choice across rotation.
         var showTagsScreen by rememberSaveable { mutableStateOf(openTagsInitially) }
-        var showDeviceCalendarsScreen by rememberSaveable { mutableStateOf(false) }
+        var showDeviceCalendarsScreen by rememberSaveable { mutableStateOf(openDeviceCalendarsInitially) }
         var showOfflineCalendarsScreen by rememberSaveable { mutableStateOf(false) }
 
         // ICS import state
@@ -448,10 +461,11 @@ fun SettingsRoute(
             }
         }
 
-        // Finish on request: after initial iCloud setup, or on Done in the connected sheet
+        // Finish on request: closing a sign-in on an onboarding route, an iCloud sign-in there,
+        // or Done in the connected sheet
         LaunchedEffect(uiState.pendingFinishActivity) {
             if (uiState.pendingFinishActivity) {
-                Log.d(TAG, "Auto-navigating back to HomeScreen after iCloud setup")
+                Log.d(TAG, "Returning to HomeScreen")
                 onFinish()
             }
         }
@@ -520,11 +534,27 @@ fun SettingsRoute(
 
         val backupRestoreState by viewModel.backupRestoreState.collectAsStateWithLifecycle()
 
-        // Backing out of Tags finishes the activity when Tags was the launch destination
-        // (opened from the hub), so the Settings root the user never opened stays hidden.
-        // Otherwise it closes the detail screen.
+        // Backing out of the screen Settings was launched on (Tags from the hub, Device calendars
+        // from onboarding) finishes the activity, so the Settings root the user never opened
+        // stays hidden. Otherwise it closes the detail screen.
+        val launchedOn = when {
+            openTagsInitially -> SettingsDestination.Tags
+            openDeviceCalendarsInitially -> SettingsDestination.DeviceCalendars
+            else -> null
+        }
         val closeTags = {
-            if (openTagsInitially) onFinish() else showTagsScreen = false
+            if (SettingsDestination.Tags.closesActivity(launchedOn)) {
+                onFinish()
+            } else {
+                showTagsScreen = false
+            }
+        }
+        val closeDeviceCalendars = {
+            if (SettingsDestination.DeviceCalendars.closesActivity(launchedOn)) {
+                onFinish()
+            } else {
+                showDeviceCalendarsScreen = false
+            }
         }
 
         BackHandler(
@@ -539,10 +569,13 @@ fun SettingsRoute(
                 closeTags()
                 return@BackHandler
             }
+            if (showDeviceCalendarsScreen) {
+                closeDeviceCalendars()
+                return@BackHandler
+            }
             showAccountsScreen = false
             showBirthdaysAnniversariesScreen = false
             showSubscriptionsScreen = false
-            showDeviceCalendarsScreen = false
             showOfflineCalendarsScreen = false
         }
 
@@ -693,12 +726,11 @@ fun SettingsRoute(
                         DeviceCalendarsScreen(
                             isEnabled = deviceCalendarsEnabled,
                             hasReadPermission = hasReadCalendarPermission,
-                            hasWritePermission = hasWriteCalendarPermission,
                             deviceCalendars = deviceCalendars,
                             enabledCalendarIds = enabledDeviceCalendarIds,
-                            onNavigateBack = { showDeviceCalendarsScreen = false },
+                            onNavigateBack = closeDeviceCalendars,
                             onToggle = { enabled ->
-                                if (enabled && !hasReadCalendarPermission) {
+                                if (enabled && !(hasReadCalendarPermission && hasWriteCalendarPermission)) {
                                     calendarPermissionLauncher.launch(arrayOf(
                                         android.Manifest.permission.READ_CALENDAR,
                                         android.Manifest.permission.WRITE_CALENDAR
@@ -708,9 +740,6 @@ fun SettingsRoute(
                                 }
                             },
                             onToggleCalendar = viewModel::onToggleDeviceCalendar,
-                            onRequestWritePermission = {
-                                writeCalendarPermissionLauncher.launch(android.Manifest.permission.WRITE_CALENDAR)
-                            },
                             onRefresh = viewModel::refreshDeviceCalendars
                         )
                     }
@@ -816,6 +845,9 @@ fun SettingsRoute(
                             },
                             // ICS Export
                             onOpenExportCalendars = { showExportCalendarsSheet = true },
+                            onOpenCalendarBackup = { showCalendarBackupSheet = true },
+                            calendarBackupSubtitle = backupRow.first,
+                            calendarBackupProblem = backupRow.second,
                             // Navigate to Subscriptions detail screen
                             onNavigateToSubscriptions = { viewModel.onSearchClose(); showSubscriptionsScreen = true },
                             // Navigate to Birthdays & Anniversaries detail screen
@@ -825,25 +857,8 @@ fun SettingsRoute(
                             anniversaryCount = anniversaryCount,
                             // Device calendars
                             deviceCalendarsEnabled = deviceCalendarsEnabled,
-                            hasReadCalendarPermission = hasReadCalendarPermission,
-                            hasWriteCalendarPermission = hasWriteCalendarPermission,
                             deviceCalendars = deviceCalendars,
                             enabledDeviceCalendarIds = enabledDeviceCalendarIds,
-                            onToggleDeviceCalendars = { enabled ->
-                                if (enabled && !hasReadCalendarPermission) {
-                                    // Request READ and WRITE up front
-                                    calendarPermissionLauncher.launch(arrayOf(
-                                        android.Manifest.permission.READ_CALENDAR,
-                                        android.Manifest.permission.WRITE_CALENDAR
-                                    ))
-                                } else {
-                                    viewModel.onToggleDeviceCalendars(enabled)
-                                }
-                            },
-                            onToggleDeviceCalendar = viewModel::onToggleDeviceCalendar,
-                            onRequestWriteCalendarPermission = {
-                                writeCalendarPermissionLauncher.launch(android.Manifest.permission.WRITE_CALENDAR)
-                            },
                             showDeclinedEvents = showDeclinedEvents,
                             onToggleShowDeclinedEvents = viewModel::onToggleShowDeclinedEvents,
                             deviceCalendarRemindersEnabled = deviceCalendarRemindersEnabled,
@@ -902,6 +917,14 @@ fun SettingsRoute(
                     .align(Alignment.BottomCenter)
                     .padding(16.dp)
             )
+
+            if (showCalendarBackupSheet && calendarBackupViewModel != null) {
+                CalendarBackupRoute(
+                    viewModel = calendarBackupViewModel,
+                    onOpenNotificationSettings = openNotificationSettings,
+                    onDismiss = { showCalendarBackupSheet = false },
+                )
+            }
 
             if (showExportCalendarsSheet && calendarExportViewModel != null) {
                 ExportCalendarsRoute(

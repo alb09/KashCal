@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Eseménymeghívók</string>
     <string name="channel_event_invitations_desc">Értesítések, amikor új naptármeghívót kap</string>
     <string name="channel_calendar_updates">Naptárváltozások</string>
+    <string name="channel_calendar_backup">Automatikus naptármentés</string>
+    <string name="channel_calendar_backup_description">Értesít, ha egy naptármentés sikertelen</string>
     <string name="invite_notification_body">Feladó: %1$s · Koppintson a válaszhoz</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,35 @@
     <string name="backup_error_read_failed">A fájl olvasása nem sikerült</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple Naptárad van?</string>
-    <string name="onboarding_got_you">Segítünk.</string>
-    <string name="onboarding_connect_prompt">Csatlakozz az iCloud-hoz, hogy itt lásd az eseményeidet</string>
+    <string name="onboarding_title">Hol vannak a naptáraid?</string>
+    <string name="onboarding_subtitle">Válassz egyet a csatlakozáshoz.</string>
+    <string name="onboarding_icloud_detail">Apple ID és alkalmazásjelszó</string>
+    <string name="onboarding_caldav_title">CalDAV-szerver</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale és mások</string>
+    <string name="onboarding_device_title">Ezen az eszközön</string>
+    <string name="onboarding_phone_detail">Google, Outlook és szinkronizáló alkalmazások</string>
+    <string name="onboarding_use_offline">Offline naptár használata</string>
+    <string name="onboarding_trust">Nyílt forráskód. Nincs reklám. Nincs követés.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Az emlékeztetők ki vannak kapcsolva</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">Ezen a héten %d eseményhez tartozik emlékeztető.</item>
+        <item quantity="other">Ezen a héten %d eseményhez tartoznak emlékeztetők.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Most nem</string>
+    <string name="reminders_off_turn_on">Bekapcsolás</string>
+    <string name="reminders_on_snackbar">Emlékeztetők bekapcsolva</string>
+    <string name="about_tagline">Az összes naptárad egyetlen privát alkalmazásban.</string>
+    <string name="about_help_title">Súgó és útmutatók</string>
+    <string name="about_help_detail">Beállítás, szinkronizálás és kérdések</string>
+    <string name="about_source_title">Forráskód</string>
+    <string name="about_source_detail">Apache 2.0, a GitHubon</string>
+    <string name="about_support_title">KashCal támogatása</string>
+    <string name="about_support_detail">Köszönjük mindenkinek, aki már támogat</string>
+    <string name="about_link_failed">Egyetlen alkalmazás sem tudja megnyitni ezt a linket.</string>
+    <string name="about_built_in_austin">❤️-vel készült Austinban</string>
+    <string name="about_version">Verzió %1$s</string>
     <string name="whats_new_skip">Kihagyás</string>
     <string name="whats_new_next">Tovább</string>
     <string name="whats_new_page_of">%1$d. oldal / %2$d</string>
@@ -275,10 +301,21 @@
     <string name="whats_new_v772_changes_title">Nézd meg, mi változott</string>
     <string name="whats_new_v772_changes_body">Az iCloud- és CalDAV-naptáraid új, szerkesztett és törölt eseményei 7 napig a Legutóbbi változások listában gyűlnek. Koppints egyre a megnyitásához.</string>
     <string name="whats_new_v772_notifications_body">Kapj értesítést, ha a háttérben futó szinkronizálás változásokat talál az iCloud- vagy CalDAV-eseményeidben. Kikapcsolva marad, amíg be nem kapcsolod.</string>
+    <string name="whats_new_v803_offline_title">Naptárak, amelyek ki sem mozdulnak a telefonodról</string>
+    <string name="whats_new_v803_offline_body">Néhány tervnek nincs helye a szerveren. Adj nekik saját offline naptárakat, annyit, amennyit csak szeretnél.</string>
+    <string name="whats_new_v803_backup_title">Mentések, amikre nem kell gondolnod</string>
+    <string name="whats_new_v803_backup_body">Válassz ki egyszer egy mappát, és a KashCal mindig friss másolatot tart ott az offline naptáraidról.</string>
+    <string name="whats_new_v803_print_title">A heted papíron</string>
+    <string name="whats_new_v803_print_body">Nyomtasd ki az épp látott hetet. Hogy melyik hűtőre kerül, rajtad múlik.</string>
     <string name="whats_new_hero_sample_lunch">Csapatebéd</string>
     <string name="whats_new_hero_sample_review">Tervezési áttekintés</string>
     <string name="whats_new_hero_sample_book_club">Könyvklub</string>
+    <string name="whats_new_hero_sample_dentist">Fogorvos</string>
+    <string name="whats_new_hero_sample_yoga">Jóga</string>
     <string name="whats_new_hero_sample_calendar">Munka</string>
+    <string name="whats_new_hero_sample_family">Család</string>
+    <string name="whats_new_hero_sample_garden">Kert</string>
+    <string name="whats_new_hero_sample_folder">Naptármentések</string>
     <string name="whats_new_hero_now">most</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +431,6 @@
     <string name="error_device_calendar_title">Naptárhiba</string>
     <string name="error_device_calendar_write_failed">Nem sikerült menteni az eszköz naptárába. Próbáld újra.</string>
     <string name="error_device_calendar_permission">Naptár írási engedély szükséges. Adj engedélyt a Beállításokban.</string>
-    <string name="error_device_calendar_permission_denied">Az írási hozzáférés megadásához kapcsold ki, majd be a Naptár engedélyt a Beállításokban</string>
     <string name="error_device_calendar_not_found">Naptár nem található. Lehet, hogy eltávolították.</string>
     <string name="error_device_event_not_found">Esemény nem található. Lehet, hogy törölték.</string>
     <string name="error_device_calendar_read_only">Ez a naptár csak olvasható.</string>
@@ -538,6 +574,7 @@
     <string name="subscriptions_section_add">Hozzáadás</string>
     <string name="subscriptions_empty_ics">Nincs ICS feliratkozás</string>
     <string name="subscriptions_empty_ics_hint">Adj hozzá naptárhírcsatornát az események megtekintéséhez</string>
+    <string name="subscriptions_swipe_hint">Húzd el a hírcsatornát a törléséhez.</string>
     <string name="subscriptions_add_ics">ICS naptár hozzáadása</string>
     <string name="qs_tile_label">Esemény</string>
     <string name="holiday_catalog_add">Ünnepnaptár hozzáadása</string>
@@ -624,7 +661,7 @@
     <string name="settings_device_calendars_hint">Naptárak más alkalmazásokból</string>
     <string name="offline_calendars_row_label">Offline naptárak</string>
     <string name="offline_calendars_row_hint">A telefonon maradó naptárak</string>
-    <string name="offline_calendars_manage_note">Offline naptáraid hozzáadása, átnevezése, átszínezése vagy eltávolítása.</string>
+    <string name="offline_calendars_manage_note">Húzd el a naptárt a törléséhez.</string>
     <string name="offline_calendars_info">Csak ezen a telefonon tárolódik, és soha nem szinkronizálódik. A biztonsági mentések nem tartalmazzák az eseményeket, ezért exportáld a naptárat, ha másolatot szeretnél.</string>
     <string name="offline_calendars_info_cd">Az offline naptárakról</string>
     <string name="offline_calendar_default_state">Alapértelmezett</string>
@@ -650,6 +687,79 @@
     </plurals>
     <string name="offline_calendar_deleted">%1$s törölve</string>
     <string name="offline_calendar_duplicate_name">Már létezik \"%1$s\" nevű offline naptár</string>
+    <string name="offline_calendar_similar_name">Túl hasonló ehhez: „%1$s”. Válassz másik nevet.</string>
+    <string name="calendar_backup_title">Automatikus naptármentés</string>
+    <string name="calendar_backup_row_off">Ki</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">A mentési mappa nem érhető el</string>
+    <string name="calendar_backup_intro">Minden offline naptárat ICS fájlként ment egy általad választott mappába.</string>
+    <string name="calendar_backup_choose_folder">Mappa kiválasztása</string>
+    <string name="calendar_backup_choose_folder_hint">Válassz vagy hozz létre egy mappát, például a Documents mappában. Az Android nem engedi a tárhely legfelső szintjét vagy magát a Download mappát.</string>
+    <string name="calendar_backup_folder">Mappa</string>
+    <string name="calendar_backup_change">Módosítás</string>
+    <string name="calendar_backup_frequency">Gyakoriság</string>
+    <string name="calendar_backup_frequency_info">A mentések késhetnek: az Android visszatartja a háttérfeladatokat, ha a telefon tétlen, vagy ha a KashCalt egy ideje nem nyitottad meg.</string>
+    <string name="calendar_backup_copies">Megtartott másolatok</string>
+    <string name="calendar_backup_copies_explained">Minden mentés dátummal ellátott másolatként megőrzi az előző fájlt. Ha ennél több van, a legrégebbiek törlődnek. A legújabb fájl neve mindig a naptár neve.</string>
+    <string name="calendar_backup_copies_fewer">Kevesebb másolat megtartása</string>
+    <string name="calendar_backup_copies_more">Több másolat megtartása</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d másolat</item>
+        <item quantity="other">%d másolat</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">%d régebbi másolatot töröl. Ez nem vonható vissza.</item>
+        <item quantity="other">%d régebbi másolatot töröl. Ez nem vonható vissza.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Törli az ezen a számon felüli régebbi másolatokat. Ez nem vonható vissza.</string>
+    <string name="calendar_backup_calendars">Offline naptárak</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Nincs esemény, semmi sem lett mentve</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Nem sikerült menteni. A következő mentéskor újra próbálkozik.</string>
+    <string name="calendar_backup_status">Utolsó mentés: %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Utolsó mentés: %1$s · %2$d naptár sikertelen</item>
+        <item quantity="other">Utolsó mentés: %1$s · %2$d naptár sikertelen</item>
+    </plurals>
+    <string name="calendar_backup_now">Mentés most</string>
+    <string name="calendar_backup_running">Mentés…</string>
+    <string name="calendar_backup_footer_overwrites">A KashCal minden mentéskor felülírja ezeket a fájlokat, így a más alkalmazásokban végzett módosítások nem maradnak meg. Naptár visszaállításához használd az „Események importálása fájlból” lehetőséget.</string>
+    <string name="calendar_backup_off_files_stay">A meglévő fájlok itt maradnak: %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Nem érhető el: %1$s. Lehet, hogy áthelyezték, törölték vagy leválasztották.</string>
+    <string name="calendar_backup_error_unsupported">Ide nem menthetők fájlok: %1$s. Válassz másik mappát.</string>
+    <string name="calendar_backup_choose_again">Újraválasztás</string>
+    <string name="calendar_backup_pick_refused">A KashCal nem tudja használni ezt a mappát. Válassz másikat.</string>
+    <string name="calendar_backup_pick_cannot_create">A KashCal nem tud fájlokat létrehozni abban a mappában. Válassz másikat.</string>
+    <string name="calendar_backup_failed_title">Sikertelen naptármentés</string>
+    <string name="calendar_backup_folder_unnamed">a mentési mappa</string>
+    <string name="calendar_backup_alert_unreachable">Nem érhető el: %1$s. Koppints, és válaszd ki újra.</string>
+    <string name="calendar_backup_alert_unsupported">Ide nem menthetők fájlok: %1$s. Koppints, és válassz másik mappát.</string>
+    <string name="calendar_backup_alert_file_retry">Nem sikerült menteni: %1$s. A KashCal a következő mentéskor újra próbálkozik.</string>
+    <string name="calendar_backup_every_hour">Óránként</string>
+    <string name="calendar_backup_every_day">Naponta</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">%d óránként</item>
+        <item quantity="other">%d óránként</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">%d naponta</item>
+        <item quantity="other">%d naponta</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">1 nap %1$s időközönként</string>
+    <string name="calendar_backup_every_days_hours">%1$s %2$s időközönként</string>
+    <string name="calendar_backup_interval_too_short">Legalább 1 órát válassz.</string>
+    <string name="calendar_backup_interval_too_long">Legfeljebb 30 napot válassz.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">%d naptárat nem sikerült menteni. A KashCal a következő mentéskor újra próbálkozik.</item>
+        <item quantity="other">%d naptárat nem sikerült menteni. A KashCal a következő mentéskor újra próbálkozik.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">A KashCal értesítései ki vannak kapcsolva, így nem tud szólni, ha egy mentés sikertelen.</string>
+    <string name="calendar_backup_notifications_channel_off">A mentési értesítések ki vannak kapcsolva, így a KashCal nem tud szólni, ha egy mentés sikertelen.</string>
+    <string name="calendar_backup_open_settings">Beállítások megnyitása</string>
+    <string name="calendar_backup_not_now">Most nem</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">%d naptár sikertelen</item>
+        <item quantity="other">%d naptár sikertelen</item>
+    </plurals>
     <string name="settings_quick_event_add">Okos eseményhozzáadás</string>
     <string name="settings_quick_event_add_info">Hozz létre eseményeket természetes gépeléssel. Az \"Ebéd Sammel péntek 13:00\" kitölti helyetted a címet, a dátumot és az időpontot.</string>
     <string name="settings_suggest_titles">Eseménycímek javaslata</string>
@@ -718,6 +828,7 @@
     <string name="label_on_days">Napokon</string>
     <string name="label_pattern">Minta</string>
     <string name="label_ends">Befejezés</string>
+    <string name="sheet_hint_change_end">Koppints egy napra a vég módosításához</string>
     <string name="label_timezone">Időzóna</string>
     <string name="label_alerts">Figyelmeztetések</string>
     <string name="label_add_alert">Figyelmeztetés hozzáadása</string>
@@ -739,14 +850,11 @@
     <string name="status_hours_ago">%1$d órája</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Események megjelenítése az eszközön lévő más naptáralkalmazásokból (szinkronizálási adapterek, helyi naptárak).</string>
-    <string name="device_calendars_permission_required">Naptár engedély szükséges. Koppints az Engedélyezés-re a hozzáférés megadásához.</string>
-    <string name="device_calendars_read_only_access">Csak olvasási hozzáférés</string>
-    <string name="device_calendars_grant_write">Írási engedély megadása az eszköz naptáreseményeinek szerkesztéséhez</string>
-    <string name="device_calendars_grant">Megadás</string>
-    <string name="device_calendars_none_found">Nem található eszköz naptár.</string>
+    <string name="device_calendars_intro">Jelenítsd meg az eszköz naptárait: Google, Outlook és szinkronizáló alkalmazások.</string>
+    <string name="device_calendars_show_switch">Eszköz naptárak megjelenítése</string>
+    <string name="device_calendars_pick_hint">Válaszd ki a megjelenítendő naptárakat.</string>
+    <string name="device_calendars_empty">Nem található naptár.</string>
     <string name="device_calendars_local">Helyi</string>
-    <string name="device_calendars_read_only_no_write">Csak olvasható (nincs írási engedély)</string>
     <string name="device_calendars_read_only_calendar">Csak olvasható (a naptár csak olvasható)</string>
     <string name="settings_sync_frequency">Szinkronizálási gyakoriság</string>
     <string name="settings_sync_frequency_hint">Milyen gyakran szinkronizáljon a háttérben</string>
@@ -1292,6 +1400,10 @@
     <string name="ics_fetch_error_http">A kiszolgáló hibát adott vissza (%1$d). Ellenőrizd az URL-t.</string>
     <string name="ics_fetch_error_empty">A naptárcsatorna üres.</string>
     <string name="ics_fetch_error_not_calendar">Ez az URL nem tűnik naptárcsatornának.</string>
+    <string name="ics_feed_error_empty_response">A kiszolgáló nem küldött érvényes csatornát.</string>
+    <string name="ics_feed_error_access_denied">A csatorna kiszolgálója megtagadta a hozzáférést.</string>
+    <string name="ics_feed_error_too_large">Ez a naptárcsatorna túl nagy a letöltéshez.</string>
+    <string name="ics_feed_error_unreadable">Nem sikerült megjeleníteni a csatorna eseményeit.</string>
     <string name="insights_title">Áttekintés</string>
     <string name="insights_period_this_week">Hét</string>
     <string name="insights_period_last_week">Múlt hét</string>
@@ -1418,7 +1530,7 @@
         <item quantity="other">Szabad a következő %1$d napban (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">A kiválasztott tartományban nincsenek legalább egy órás szabad blokkok.</string>
     <string name="share_from_kashcal_footer">Megosztva a KashCal alkalmazásból</string>
@@ -1440,5 +1552,31 @@
     <string name="share_as_card_all_day">Egész nap</string>
     <string name="share_as_card_chooser_title">Esemény megosztása</string>
     <string name="share_as_card_share_failed">A kártyát nem sikerült megosztani</string>
+    <string name="print_your_week">A heted nyomtatása</string>
+    <string name="print_options_title">Nyomtatási beállítások</string>
+    <string name="print_pages_header">Oldalak</string>
+    <string name="print_page_week">Heti naptár</string>
+    <string name="print_page_week_detail">A hét táblázatos nézetben</string>
+    <string name="print_page_details">Részletek</string>
+    <string name="print_page_details_detail">Minden esemény teljes egészében</string>
+    <string name="print_action">Nyomtatás</string>
+    <string name="cd_print_previous_week">Előző hét</string>
+    <string name="cd_print_next_week">Következő hét</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d oldal</item>
+        <item quantity="other">%d oldal</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d/%2$d naptár</item>
+        <item quantity="other">%1$d/%2$d naptár</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – Hét: %2$s</string>
+    <string name="print_failed">Nem sikerült nyomtatni. Próbáld újra.</string>
+    <string name="print_doc_week">Hét</string>
+    <string name="print_doc_printed">Nyomtatva: %1$s</string>
+    <string name="print_doc_page_of">Oldal: %1$s/%2$s</string>
+    <string name="print_doc_numbers_note">A számok a részletekben szereplő tételekhez tartoznak, ahol minden esemény teljes egészében szerepel.</string>
+    <string name="print_doc_times_in">Időzóna: %1$s</string>
 
 </resources>

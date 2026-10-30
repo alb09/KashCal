@@ -24,23 +24,36 @@ object TagTokenizer {
 
     /**
      * Pulls the `#tag` tokens out of [input], returning the text with the accepted tokens
-     * removed (whitespace collapsed) and the de-duplicated tag names. Names are validated through
-     * [CategoryNameValidator]; casing is first-seen, so a later differently cased duplicate
-     * collapses onto the first. A token the validator rejects (e.g. over-length) stays in the
-     * text as a literal `#word`: nothing is stripped that wasn't accepted.
+     * removed (whitespace collapsed) and the de-duplicated tag names, as [extractRanges] finds
+     * them.
      */
     fun extract(input: String): Extraction {
+        val ranged = extractRanges(input)
+        val cleaned = StringBuilder(input)
+        for (range in ranged.ranges.asReversed()) {
+            cleaned.replace(range.first, range.last + 1, " ")
+        }
+        return Extraction(cleaned.toString().replace(WHITESPACE, " ").trim(), ranged.tags)
+    }
+
+    /**
+     * Finds the accepted `#tag` tokens in [input]: their character ranges, in order, and the
+     * de-duplicated tag names. Names are validated through [CategoryNameValidator]; casing is
+     * first-seen, so a later differently cased duplicate collapses onto the first but its range
+     * is still returned. A token the validator rejects (e.g. over-length) has no range: it stays
+     * in the text as a literal `#word`, so nothing is stripped that wasn't accepted.
+     */
+    fun extractRanges(input: String): RangedExtraction {
         val names = LinkedHashMap<String, String>() // lowercase key -> first-seen value
-        val cleaned = TAG.replace(input) { match ->
-            when (val outcome = CategoryNameValidator.validate(match.groupValues[1], names.values.toSet())) {
-                is CategoryName.Valid -> {
-                    names.putIfAbsent(outcome.value.lowercase(), outcome.value)
-                    " " // strip the accepted tag from the title
-                }
-                is CategoryName.Invalid -> match.value // leave the rejected #token in place
+        val ranges = mutableListOf<IntRange>()
+        for (match in TAG.findAll(input)) {
+            val outcome = CategoryNameValidator.validate(match.groupValues[1], names.values.toSet())
+            if (outcome is CategoryName.Valid) {
+                names.putIfAbsent(outcome.value.lowercase(), outcome.value)
+                ranges += match.range
             }
-        }.replace(WHITESPACE, " ").trim()
-        return Extraction(cleaned, names.values.toList())
+        }
+        return RangedExtraction(ranges, names.values.toList())
     }
 
     /**
@@ -61,4 +74,6 @@ object TagTokenizer {
     }
 
     data class Extraction(val text: String, val tags: List<String>)
+
+    data class RangedExtraction(val ranges: List<IntRange>, val tags: List<String>)
 }

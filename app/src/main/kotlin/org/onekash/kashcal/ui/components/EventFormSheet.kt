@@ -114,6 +114,7 @@ import org.onekash.kashcal.domain.model.toEventForDuplicate
 import org.onekash.kashcal.ui.components.pickers.ActiveDateTimeSheet
 import org.onekash.kashcal.ui.components.pickers.CalendarPickerRow
 import org.onekash.kashcal.ui.components.pickers.DateTimeDisplayRow
+import org.onekash.kashcal.ui.components.pickers.DateSelectionMode
 import org.onekash.kashcal.ui.components.pickers.DateTimeSheet
 import org.onekash.kashcal.ui.components.pickers.EventColorPalettePanel
 import org.onekash.kashcal.ui.components.pickers.EventFormRow
@@ -456,14 +457,14 @@ private fun resolveFormTime(dateMillis: Long, hour: Int, minute: Int, zone: Zone
 }
 
 /** The calendar date [millis] falls on in the device's zone. */
-private fun deviceLocalDate(millis: Long): LocalDate =
+internal fun deviceLocalDate(millis: Long): LocalDate =
     Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).toLocalDate()
 
 /** True when two form dates fall on one device-local day; producers encode dates differently. */
 private fun sameDeviceDay(a: Long, b: Long): Boolean = deviceLocalDate(a) == deviceLocalDate(b)
 
 /** [date]'s midnight in the device's zone: how the form stores a date. */
-private fun deviceMidnight(date: LocalDate): Long =
+internal fun deviceMidnight(date: LocalDate): Long =
     date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
 /** The timed form fields that describe a start and end instant. */
@@ -515,6 +516,18 @@ internal fun allDayFormDateFields(startUtcMidnight: Long, endUtc: Long): FormDat
         endOffsetHintTs = null,
     )
 }
+
+/** Returns the form's start and end fields; [withDateFields] puts them back. */
+internal fun EventFormState.dateFields(): FormDateFields = FormDateFields(
+    dateMillis = dateMillis,
+    endDateMillis = endDateMillis,
+    startHour = startHour,
+    startMinute = startMinute,
+    endHour = endHour,
+    endMinute = endMinute,
+    startOffsetHintTs = startOffsetHintTs,
+    endOffsetHintTs = endOffsetHintTs,
+)
 
 internal fun EventFormState.withDateFields(fields: FormDateFields): EventFormState = copy(
     dateMillis = fields.dateMillis,
@@ -602,15 +615,76 @@ internal fun EventFormState.withTimedStart(
         startHour = hour,
         startMinute = minute,
     )
-    val newEnd = moved.toStartEndTs().first + durationMs
-    val end = Instant.ofEpochMilli(newEnd).atZone(TimezoneUtils.resolveZone(timezone))
-    return moved.copy(
+    return moved.withTimedEndAt(moved.toStartEndTs().first + durationMs)
+}
+
+/**
+ * Sets a timed form's end to the instant [endTs], as the date and clock time it falls on in the
+ * form's zone. The offset hint keeps a clock time that a daylight saving change repeats on the
+ * instant meant.
+ */
+private fun EventFormState.withTimedEndAt(endTs: Long): EventFormState {
+    val end = Instant.ofEpochMilli(endTs).atZone(TimezoneUtils.resolveZone(timezone))
+    return copy(
         endDateMillis = deviceMidnight(end.toLocalDate()),
         endHour = end.hour,
         endMinute = end.minute,
-        endOffsetHintTs = newEnd,
+        endOffsetHintTs = endTs,
     )
 }
+
+/** Sets a timed form's end [minutes] of real elapsed time after its start. */
+internal fun EventFormState.withTimedLength(minutes: Int): EventFormState =
+    withTimedEndAt(toStartEndTs().first + minutes * 60_000L)
+
+/** Returns a timed form's length in minutes, from the instants [toStartEndTs] would store. */
+internal fun EventFormState.lengthMinutes(): Int {
+    val (start, end) = toStartEndTs()
+    return ((end - start) / 60_000L).toInt()
+}
+
+/**
+ * Moves an all-day form's start to the day of [dateMillis], keeping the number of days. Both
+ * dates are stored as device-local midnights. The days are counted in calendar days: a span
+ * between midnights is 23 or 25 hours long across a daylight saving change, and adding it to
+ * another midnight can land an hour before midnight, on the previous day.
+ */
+internal fun EventFormState.withAllDayStart(dateMillis: Long): EventFormState {
+    val newStart = deviceLocalDate(dateMillis)
+    val days = ChronoUnit.DAYS.between(deviceLocalDate(this.dateMillis), deviceLocalDate(endDateMillis))
+        .coerceAtLeast(0)
+    return copy(
+        dateMillis = deviceMidnight(newStart),
+        endDateMillis = deviceMidnight(newStart.plusDays(days))
+    )
+}
+
+/**
+ * Sets an all-day form's inclusive end to the day of [dateMillis]. An end before the start swaps
+ * them: the start moves to the picked day and the end takes the old start. [hour] and [minute]
+ * are kept on the end for a later switch back to a timed event.
+ */
+internal fun EventFormState.withAllDayEnd(dateMillis: Long, hour: Int, minute: Int): EventFormState {
+    val normalizedDateMillis = normalizeToLocalMidnight(dateMillis)
+    return if (normalizedDateMillis < this.dateMillis) {
+        copy(
+            dateMillis = normalizedDateMillis,
+            endDateMillis = this.dateMillis,
+            endHour = hour,
+            endMinute = minute
+        )
+    } else {
+        copy(endDateMillis = normalizedDateMillis, endHour = hour, endMinute = minute)
+    }
+}
+
+/** Sets an all-day form's inclusive end [days] calendar days from its start, counting the start. */
+internal fun EventFormState.withAllDayLength(days: Int): EventFormState =
+    copy(endDateMillis = deviceMidnight(deviceLocalDate(dateMillis).plusDays((days - 1).toLong())))
+
+/** Returns an all-day form's length in calendar days, counting both the start and end day. */
+internal fun EventFormState.allDayLengthDays(): Int =
+    ChronoUnit.DAYS.between(deviceLocalDate(dateMillis), deviceLocalDate(endDateMillis)).toInt() + 1
 
 /**
  * Sets a timed form's end to the date of [dateMillis] at [hour]:[minute]. An end
@@ -2838,67 +2912,19 @@ fun EventFormContent(
     }
 
 
-    if (activeSheet == ActiveDateTimeSheet.START) {
+    if (activeSheet != ActiveDateTimeSheet.NONE) {
         DateTimeSheet(
-            label = stringResource(R.string.label_starts),
-            selectedDateMillis = state.dateMillis,
-            selectedHour = state.startHour,
-            selectedMinute = state.startMinute,
-            selectedTimezone = state.timezone,
-            isAllDay = state.isAllDay,
-            use24Hour = use24Hour,
-            firstDayOfWeek = firstDayOfWeek,
-            onConfirm = { dateMillis, hour, minute ->
-                if (state.isAllDay) {
-                    // Keep the day span when the start date moves.
-                    val normalizedDateMillis = normalizeToLocalMidnight(dateMillis)
-                    val normalizedOldStart = normalizeToLocalMidnight(state.dateMillis)
-                    val normalizedOldEnd = normalizeToLocalMidnight(state.endDateMillis)
-                    val daySpanMs = (normalizedOldEnd - normalizedOldStart).coerceAtLeast(0)
-                    val newEndDateMillis = normalizedDateMillis + daySpanMs
-                    state = state.copy(
-                        dateMillis = normalizedDateMillis,
-                        endDateMillis = newEndDateMillis
-                    )
-                } else {
-                    state = state.withTimedStart(dateMillis, hour, minute, defaultEventDuration)
-                }
+            initial = state,
+            openingSide = if (activeSheet == ActiveDateTimeSheet.START) DateSelectionMode.START else DateSelectionMode.END,
+            defaultDurationMinutes = defaultEventDuration,
+            // Only the start and end come back, so the calendar lists and default calendar the
+            // form updates while the sheet is open are kept.
+            onCommit = { fields ->
+                state = state.withDateFields(fields)
                 activeSheet = ActiveDateTimeSheet.NONE
             },
-            onDismiss = { activeSheet = ActiveDateTimeSheet.NONE }
-        )
-    }
-
-    if (activeSheet == ActiveDateTimeSheet.END) {
-        DateTimeSheet(
-            label = stringResource(R.string.label_ends),
-            selectedDateMillis = state.endDateMillis,
-            selectedHour = state.endHour,
-            selectedMinute = state.endMinute,
-            selectedTimezone = state.timezone,
-            isAllDay = state.isAllDay,
             use24Hour = use24Hour,
             firstDayOfWeek = firstDayOfWeek,
-            onConfirm = { dateMillis, hour, minute ->
-                if (state.isAllDay) {
-                    val normalizedDateMillis = normalizeToLocalMidnight(dateMillis)
-                    // An end date before the start date swaps them.
-                    state = if (normalizedDateMillis < state.dateMillis) {
-                        state.copy(
-                            dateMillis = normalizedDateMillis,
-                            endDateMillis = state.dateMillis,
-                            endHour = hour,
-                            endMinute = minute
-                        )
-                    } else {
-                        state.copy(endDateMillis = normalizedDateMillis, endHour = hour, endMinute = minute)
-                    }
-                } else {
-                    state = state.withTimedEnd(dateMillis, hour, minute)
-                }
-                activeSheet = ActiveDateTimeSheet.NONE
-            },
-            onDismiss = { activeSheet = ActiveDateTimeSheet.NONE }
         )
     }
 }

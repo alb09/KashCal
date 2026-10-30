@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Etkinlik Davetleri</string>
     <string name="channel_event_invitations_desc">Yeni bir takvim daveti aldığınızda bildirimler</string>
     <string name="channel_calendar_updates">Takvim değişiklikleri</string>
+    <string name="channel_calendar_backup">Otomatik takvim yedeklemesi</string>
+    <string name="channel_calendar_backup_description">Takvim yedeklemesi başarısız olduğunda haber verir</string>
     <string name="invite_notification_body">Gönderen: %1$s · Yanıtlamak için dokunun</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,35 @@
     <string name="backup_error_read_failed">Dosya okunamadı</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple Takvim mi?</string>
-    <string name="onboarding_got_you">Yanındayız.</string>
-    <string name="onboarding_connect_prompt">Etkinliklerini burada görmek için iCloud\'a bağlan</string>
+    <string name="onboarding_title">Takvimlerin nerede?</string>
+    <string name="onboarding_subtitle">Bağlamak için birini seç.</string>
+    <string name="onboarding_icloud_detail">Apple ID ve uygulama parolası</string>
+    <string name="onboarding_caldav_title">CalDAV sunucusu</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale ve diğerleri</string>
+    <string name="onboarding_device_title">Bu cihazda</string>
+    <string name="onboarding_phone_detail">Google, Outlook ve eşitleme uygulamaları</string>
+    <string name="onboarding_use_offline">Çevrimdışı takvim kullan</string>
+    <string name="onboarding_trust">Açık kaynak. Reklam yok. İzleme yok.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Hatırlatıcılar kapalı</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">Bu hafta %d etkinliğin hatırlatıcısı var.</item>
+        <item quantity="other">Bu hafta %d etkinliğin hatırlatıcısı var.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Şimdi Değil</string>
+    <string name="reminders_off_turn_on">Aç</string>
+    <string name="reminders_on_snackbar">Hatırlatıcılar açık</string>
+    <string name="about_tagline">Tüm takvimlerin, gizlilik odaklı tek bir uygulamada.</string>
+    <string name="about_help_title">Yardım ve kılavuzlar</string>
+    <string name="about_help_detail">Kurulum, eşitleme ve sorular</string>
+    <string name="about_source_title">Kaynak kodu</string>
+    <string name="about_source_detail">Apache 2.0, GitHub\'da</string>
+    <string name="about_support_title">KashCal\'ı Destekle</string>
+    <string name="about_support_detail">Zaten destekleyen herkese teşekkürler</string>
+    <string name="about_link_failed">Bu bağlantıyı açabilecek bir uygulama yok.</string>
+    <string name="about_built_in_austin">Austin\'de ❤️ ile yapıldı</string>
+    <string name="about_version">Sürüm %1$s</string>
     <string name="whats_new_skip">Atla</string>
     <string name="whats_new_next">İleri</string>
     <string name="whats_new_page_of">Sayfa %1$d / %2$d</string>
@@ -275,10 +301,21 @@
     <string name="whats_new_v772_changes_title">Neler değiştiğini gör</string>
     <string name="whats_new_v772_changes_body">iCloud ve CalDAV takvimlerindeki yeni, düzenlenen ve silinen etkinlikler 7 gün boyunca Son değişiklikler listesinde toplanır. Açmak için birine dokun.</string>
     <string name="whats_new_v772_notifications_body">Arka plan eşitlemesi iCloud veya CalDAV etkinliklerinde değişiklik bulduğunda bildirim al. Sen açana kadar kapalı kalır.</string>
+    <string name="whats_new_v803_offline_title">Telefonundan çıkmayan takvimler</string>
+    <string name="whats_new_v803_offline_body">Bazı planların sunucuda işi yok. Onlar için istediğin kadar çevrimdışı takvim oluştur.</string>
+    <string name="whats_new_v803_backup_title">Aklında tutman gerekmeyen yedekler</string>
+    <string name="whats_new_v803_backup_body">Bir kez klasör seç, KashCal çevrimdışı takvimlerinin güncel bir kopyasını orada tutsun.</string>
+    <string name="whats_new_v803_print_title">Haftan kâğıtta</string>
+    <string name="whats_new_v803_print_body">Baktığın haftayı yazdır. Hangi buzdolabına asacağın sana kalmış.</string>
     <string name="whats_new_hero_sample_lunch">Ekip yemeği</string>
     <string name="whats_new_hero_sample_review">Tasarım incelemesi</string>
     <string name="whats_new_hero_sample_book_club">Kitap kulübü</string>
+    <string name="whats_new_hero_sample_dentist">Diş hekimi</string>
+    <string name="whats_new_hero_sample_yoga">Yoga</string>
     <string name="whats_new_hero_sample_calendar">İş</string>
+    <string name="whats_new_hero_sample_family">Aile</string>
+    <string name="whats_new_hero_sample_garden">Bahçe</string>
+    <string name="whats_new_hero_sample_folder">Takvim yedekleri</string>
     <string name="whats_new_hero_now">şimdi</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +431,6 @@
     <string name="error_device_calendar_title">Takvim Hatası</string>
     <string name="error_device_calendar_write_failed">Cihaz takvimine kaydedilemedi. Tekrar dene.</string>
     <string name="error_device_calendar_permission">Takvim yazma izni gerekli. Ayarlardan izin ver.</string>
-    <string name="error_device_calendar_permission_denied">Yazma erişimi vermek için Ayarlar\'da Takvim iznini kapatıp yeniden aç</string>
     <string name="error_device_calendar_not_found">Takvim bulunamadı. Kaldırılmış olabilir.</string>
     <string name="error_device_event_not_found">Etkinlik bulunamadı. Silinmiş olabilir.</string>
     <string name="error_device_calendar_read_only">Bu takvim salt okunur.</string>
@@ -538,6 +574,7 @@
     <string name="subscriptions_section_add">Ekle</string>
     <string name="subscriptions_empty_ics">ICS aboneliği yok</string>
     <string name="subscriptions_empty_ics_hint">Etkinlikleri görmek için takvim akışı ekle</string>
+    <string name="subscriptions_swipe_hint">Silmek için bir akışı kaydır.</string>
     <string name="subscriptions_add_ics">ICS Takvimi Ekle</string>
     <string name="qs_tile_label">Etkinlik ekle</string>
     <string name="holiday_catalog_add">Tatil takvimi ekle</string>
@@ -624,7 +661,7 @@
     <string name="settings_device_calendars_hint">Diğer uygulamalardaki takvimler</string>
     <string name="offline_calendars_row_label">Çevrimdışı takvimler</string>
     <string name="offline_calendars_row_hint">Bu telefonda kalan takvimler</string>
-    <string name="offline_calendars_manage_note">Çevrimdışı takvimlerini ekle, yeniden adlandır, rengini değiştir veya kaldır.</string>
+    <string name="offline_calendars_manage_note">Silmek için bir takvimi kaydır.</string>
     <string name="offline_calendars_info">Yalnızca bu telefonda tutulur ve asla eşitlenmez. Yedeklemeler etkinlikleri içermez; bir kopya saklamak için takvimi dışa aktar.</string>
     <string name="offline_calendars_info_cd">Çevrimdışı takvimler hakkında</string>
     <string name="offline_calendar_default_state">Varsayılan</string>
@@ -650,6 +687,79 @@
     </plurals>
     <string name="offline_calendar_deleted">%1$s silindi</string>
     <string name="offline_calendar_duplicate_name">\"%1$s\" adlı bir çevrimdışı takvim zaten var</string>
+    <string name="offline_calendar_similar_name">\"%1$s\" adına çok benzer. Farklı bir ad seç.</string>
+    <string name="calendar_backup_title">Otomatik takvim yedeklemesi</string>
+    <string name="calendar_backup_row_off">Kapalı</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Yedekleme klasörüne ulaşılamıyor</string>
+    <string name="calendar_backup_intro">Her çevrimdışı takvimi, seçtiğin bir klasöre ICS dosyası olarak kaydeder.</string>
+    <string name="calendar_backup_choose_folder">Klasör seç</string>
+    <string name="calendar_backup_choose_folder_hint">Bir klasör seç veya oluştur, örneğin Documents içinde. Android, depolama alanının en üst düzeyine veya Download klasörünün kendisine izin vermez.</string>
+    <string name="calendar_backup_folder">Klasör</string>
+    <string name="calendar_backup_change">Değiştir</string>
+    <string name="calendar_backup_frequency">Sıklık</string>
+    <string name="calendar_backup_frequency_info">Yedeklemeler gecikebilir: Telefon boştayken veya KashCal bir süredir açılmadıysa Android arka plan işlerini erteler.</string>
+    <string name="calendar_backup_copies">Saklanacak kopyalar</string>
+    <string name="calendar_backup_copies_explained">Her yedekleme, önceki dosyayı tarihli bir kopya olarak saklar. Kopya sayısı bu sayıyı aşınca en eskiler silinir. En yeni dosya her zaman takvimin adını taşır.</string>
+    <string name="calendar_backup_copies_fewer">Daha az kopya sakla</string>
+    <string name="calendar_backup_copies_more">Daha fazla kopya sakla</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d kopya</item>
+        <item quantity="other">%d kopya</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">%d eski kopyayı siler. Bu işlem geri alınamaz.</item>
+        <item quantity="other">%d eski kopyayı siler. Bu işlem geri alınamaz.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Bu sayının üzerindeki eski kopyaları siler. Bu işlem geri alınamaz.</string>
+    <string name="calendar_backup_calendars">Çevrimdışı takvimler</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Etkinlik yok, hiçbir şey kaydedilmedi</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Kaydedilemedi. Sonraki yedeklemede yeniden denenecek.</string>
+    <string name="calendar_backup_status">Son yedekleme: %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Son yedekleme: %1$s · %2$d takvim başarısız oldu</item>
+        <item quantity="other">Son yedekleme: %1$s · %2$d takvim başarısız oldu</item>
+    </plurals>
+    <string name="calendar_backup_now">Şimdi yedekle</string>
+    <string name="calendar_backup_running">Yedekleniyor…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal her yedeklemede bu dosyaların üzerine yazar, bu yüzden başka uygulamalarda yapılan değişiklikler kalıcı olmaz. Bir takvimi geri yüklemek için “Etkinlikleri dosyadan içe aktar” seçeneğini kullan.</string>
+    <string name="calendar_backup_off_files_stay">Mevcut dosyalar şurada kalır: %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Ulaşılamıyor: %1$s. Taşınmış, silinmiş veya bağlantısı kesilmiş olabilir.</string>
+    <string name="calendar_backup_error_unsupported">Dosyalar buraya kaydedilemiyor: %1$s. Başka bir klasör seç.</string>
+    <string name="calendar_backup_choose_again">Yeniden seç</string>
+    <string name="calendar_backup_pick_refused">KashCal bu klasörü kullanamıyor. Başka bir klasör seç.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal bu klasörde dosya oluşturamıyor. Başka bir klasör seç.</string>
+    <string name="calendar_backup_failed_title">Takvim yedeklemesi başarısız oldu</string>
+    <string name="calendar_backup_folder_unnamed">yedekleme klasörü</string>
+    <string name="calendar_backup_alert_unreachable">Ulaşılamıyor: %1$s. Yeniden seçmek için dokun.</string>
+    <string name="calendar_backup_alert_unsupported">Dosyalar buraya kaydedilemiyor: %1$s. Başka bir klasör seçmek için dokun.</string>
+    <string name="calendar_backup_alert_file_retry">Kaydedilemedi: %1$s. KashCal sonraki yedeklemede yeniden deneyecek.</string>
+    <string name="calendar_backup_every_hour">Her saat</string>
+    <string name="calendar_backup_every_day">Her gün</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">Her %d saatte bir</item>
+        <item quantity="other">Her %d saatte bir</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">Her %d günde bir</item>
+        <item quantity="other">Her %d günde bir</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Her 1 gün %1$s</string>
+    <string name="calendar_backup_every_days_hours">Her %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">En az 1 saat seç.</string>
+    <string name="calendar_backup_interval_too_long">30 gün veya daha kısa bir süre seç.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">%d takvim kaydedilemedi. KashCal sonraki yedeklemede yeniden deneyecek.</item>
+        <item quantity="other">%d takvim kaydedilemedi. KashCal sonraki yedeklemede yeniden deneyecek.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">KashCal için bildirimler kapalı, bu yüzden yedekleme başarısız olursa sana haber veremez.</string>
+    <string name="calendar_backup_notifications_channel_off">Yedekleme bildirimleri kapalı, bu yüzden KashCal yedekleme başarısız olursa sana haber veremez.</string>
+    <string name="calendar_backup_open_settings">Ayarları aç</string>
+    <string name="calendar_backup_not_now">Şimdi değil</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">%d takvim başarısız oldu</item>
+        <item quantity="other">%d takvim başarısız oldu</item>
+    </plurals>
     <string name="settings_quick_event_add">Akıllı etkinlik ekleme</string>
     <string name="settings_quick_event_add_info">Doğal yazarak etkinlik oluştur. \"Cuma 13.00 Sam ile öğle yemeği\" senin için başlığı, tarihi ve saati doldurur.</string>
     <string name="settings_suggest_titles">Etkinlik başlıklarını öner</string>
@@ -718,6 +828,7 @@
     <string name="label_on_days">Günlerde</string>
     <string name="label_pattern">Desen</string>
     <string name="label_ends">Bitiş</string>
+    <string name="sheet_hint_change_end">Bitişi değiştirmek için bir güne dokun</string>
     <string name="label_timezone">Saat dilimi</string>
     <string name="label_alerts">Uyarılar</string>
     <string name="label_add_alert">Uyarı Ekle</string>
@@ -739,14 +850,11 @@
     <string name="status_hours_ago">%1$ds önce</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Cihazdaki diğer takvim uygulamalarındaki etkinlikleri göster (eşitleme bağdaştırıcıları, yerel takvimler).</string>
-    <string name="device_calendars_permission_required">Takvim izni gerekli. Erişim vermek için Etkinleştir\'e dokun.</string>
-    <string name="device_calendars_read_only_access">Salt okunur erişim</string>
-    <string name="device_calendars_grant_write">Cihaz takvimi etkinliklerini düzenlemek için yazma izni ver</string>
-    <string name="device_calendars_grant">İzin Ver</string>
-    <string name="device_calendars_none_found">Cihaz takvimi bulunamadı.</string>
+    <string name="device_calendars_intro">Bu cihazdaki Google, Outlook ve eşitleme uygulamalarının takvimlerini göster.</string>
+    <string name="device_calendars_show_switch">Cihaz takvimlerini göster</string>
+    <string name="device_calendars_pick_hint">Gösterilecek takvimleri seç.</string>
+    <string name="device_calendars_empty">Takvim bulunamadı.</string>
     <string name="device_calendars_local">Yerel</string>
-    <string name="device_calendars_read_only_no_write">Salt okunur (yazma izni yok)</string>
     <string name="device_calendars_read_only_calendar">Salt okunur (takvim salt okunur)</string>
     <string name="settings_sync_frequency">Eşitleme Sıklığı</string>
     <string name="settings_sync_frequency_hint">Arka planda ne sıklıkla eşitleneceği</string>
@@ -1292,6 +1400,10 @@
     <string name="ics_fetch_error_http">Sunucu bir hata döndürdü (%1$d). Lütfen URL\'yi kontrol et.</string>
     <string name="ics_fetch_error_empty">Takvim akışı boş.</string>
     <string name="ics_fetch_error_not_calendar">Bu URL bir takvim akışı gibi görünmüyor.</string>
+    <string name="ics_feed_error_empty_response">Sunucu geçerli bir akış göndermedi.</string>
+    <string name="ics_feed_error_access_denied">Bu akışın sunucusu erişimi reddetti.</string>
+    <string name="ics_feed_error_too_large">Bu takvim akışı indirilemeyecek kadar büyük.</string>
+    <string name="ics_feed_error_unreadable">Bu akışın etkinlikleri gösterilemedi.</string>
     <string name="insights_title">İstatistikler</string>
     <string name="insights_period_this_week">Hafta</string>
     <string name="insights_period_last_week">Geçen hafta</string>
@@ -1418,7 +1530,7 @@
         <item quantity="other">Sonraki %1$d günde boş (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Seçilen aralıkta en az bir saatlik boş blok yok.</string>
     <string name="share_from_kashcal_footer">KashCal\'dan paylaşıldı</string>
@@ -1440,5 +1552,31 @@
     <string name="share_as_card_all_day">Tüm gün</string>
     <string name="share_as_card_chooser_title">Etkinliği paylaş</string>
     <string name="share_as_card_share_failed">Kart paylaşılamadı</string>
+    <string name="print_your_week">Haftanı yazdır</string>
+    <string name="print_options_title">Yazdırma seçeneklerini belirle</string>
+    <string name="print_pages_header">Sayfalar</string>
+    <string name="print_page_week">Haftalık takvim</string>
+    <string name="print_page_week_detail">Haftanın tablo görünümü</string>
+    <string name="print_page_details">Ayrıntılar</string>
+    <string name="print_page_details_detail">Her etkinlik tüm ayrıntılarıyla</string>
+    <string name="print_action">Yazdır</string>
+    <string name="cd_print_previous_week">Önceki hafta</string>
+    <string name="cd_print_next_week">Sonraki hafta</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d sayfa</item>
+        <item quantity="other">%d sayfa</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d / %2$d takvim</item>
+        <item quantity="other">%1$d / %2$d takvim</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – %2$s haftası</string>
+    <string name="print_failed">Yazdırılamadı. Tekrar dene.</string>
+    <string name="print_doc_week">Hafta</string>
+    <string name="print_doc_printed">Yazdırma tarihi: %1$s</string>
+    <string name="print_doc_page_of">Sayfa %1$s / %2$s</string>
+    <string name="print_doc_numbers_note">Numaralar, her etkinliğin eksiksiz listelendiği ayrıntılarla eşleşir.</string>
+    <string name="print_doc_times_in">Saat dilimi: %1$s</string>
 
 </resources>

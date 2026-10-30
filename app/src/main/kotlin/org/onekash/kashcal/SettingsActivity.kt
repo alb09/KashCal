@@ -1,5 +1,6 @@
 package org.onekash.kashcal
 
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -24,14 +26,17 @@ import org.onekash.kashcal.sync.session.SyncSessionStore
 import org.onekash.kashcal.ui.permission.LocalNetworkPermissionManager
 import org.onekash.kashcal.ui.permission.NotificationPermissionManager
 import org.onekash.kashcal.ui.screens.SettingsRoute
+import org.onekash.kashcal.ui.screens.settings.SettingsDestination
 import org.onekash.kashcal.ui.theme.ColorSource
 import org.onekash.kashcal.ui.theme.ThemeMode
 import org.onekash.kashcal.ui.viewmodels.AccountSettingsViewModel
 import org.onekash.kashcal.ui.viewmodels.CalendarExportEvent
 import org.onekash.kashcal.ui.viewmodels.CalendarExportFailure
+import org.onekash.kashcal.ui.viewmodels.CalendarBackupViewModel
 import org.onekash.kashcal.ui.viewmodels.CalendarExportViewModel
 import org.onekash.kashcal.ui.viewmodels.DebugReportEvent
 import org.onekash.kashcal.ui.viewmodels.DebugReportViewModel
+import org.onekash.kashcal.ui.viewmodels.OnboardingRoute
 import org.onekash.kashcal.util.IcsFileReader
 import org.onekash.kashcal.util.ShareChooser
 import javax.inject.Inject
@@ -44,22 +49,32 @@ private const val TAG = "SettingsActivity"
  *
  * The activity keeps only work that needs an injected collaborator, the content resolver or the
  * activity itself. It passes narrow lambdas down for the ICS export share intent, ICS file reads
- * and imports, the backup stream I/O, the local-network and notification permission reads and
- * the notification settings screens, and does the cold-start theme seed reads, the `onResume`
- * permission refresh and the intent-extra bootstrap itself.
+ * and imports, the backup stream I/O, the local-network, notification and calendar permission
+ * reads, the notification settings screens and the app's settings page, and does the cold-start
+ * theme seed reads, the `onResume` permission refresh and the intent-extra bootstrap itself.
  */
 @AndroidEntryPoint
 class SettingsActivity : FragmentActivity() {
 
     companion object {
+        // The onboarding sheet's routes: each opens one screen, and closing it returns to
+        // HomeScreen ([AccountSettingsViewModel.applyOnboardingRoute] for the sign-ins,
+        // [SettingsDestination.closesActivity] for Device calendars).
         const val EXTRA_OPEN_ICLOUD_SIGNIN = "open_icloud_signin"
+        const val EXTRA_OPEN_CALDAV_SIGNIN = "open_caldav_signin"
+        const val EXTRA_OPEN_DEVICE_CALENDARS = "open_device_calendars"
+
         const val EXTRA_SUBSCRIPTION_URL = "subscription_url"
         const val EXTRA_OPEN_TAGS = "open_tags"
+
+        /** Opens the Automatic calendar backup sheet, as the backup failure notification does. */
+        const val EXTRA_OPEN_CALENDAR_BACKUP = "open_calendar_backup"
     }
 
     private val viewModel: AccountSettingsViewModel by viewModels()
     private val debugReportViewModel: DebugReportViewModel by viewModels()
     private val calendarExportViewModel: CalendarExportViewModel by viewModels()
+    private val calendarBackupViewModel: CalendarBackupViewModel by viewModels()
 
     private val localNetworkPermissionManager by lazy {
         LocalNetworkPermissionManager(applicationContext)
@@ -100,6 +115,12 @@ class SettingsActivity : FragmentActivity() {
         // open on that screen and let its back finish the activity to the hub instead of
         // dropping onto the Settings root.
         val openTags = intent.getBooleanExtra(EXTRA_OPEN_TAGS, false)
+        // Read on every create, like Tags, so Back still finishes the activity after a rotation.
+        val route = onboardingRoute()
+        // Only on a fresh start: after rotation the sheet's own saved state decides.
+        if (savedInstanceState == null && intent.getBooleanExtra(EXTRA_OPEN_CALENDAR_BACKUP, false)) {
+            calendarBackupViewModel.requestSheet()
+        }
 
         setContent {
             SettingsRoute(
@@ -109,8 +130,10 @@ class SettingsActivity : FragmentActivity() {
                 initialAccentSeed = initialAccentSeed,
                 syncSessionStore = syncSessionStore,
                 openTagsInitially = openTags,
+                openDeviceCalendarsInitially = route == OnboardingRoute.DEVICE_CALENDARS,
                 onFinish = { finish() },
                 calendarExportViewModel = calendarExportViewModel,
+                calendarBackupViewModel = calendarBackupViewModel,
                 readIcsContent = { uri -> icsFileReader.readIcsContent(uri) },
                 importIcsToRoom = { file, calendarId -> eventCoordinator.importIcsFile(file, calendarId) },
                 previewIcsInRoom = { file, calendarId -> eventCoordinator.previewIcsImport(file, calendarId) },
@@ -128,6 +151,12 @@ class SettingsActivity : FragmentActivity() {
                 },
                 openNotificationSettings = ::openNotificationSettings,
                 onExportDebugReport = debugReportViewModel::export,
+                shouldShowCalendarRationale = {
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        this@SettingsActivity, Manifest.permission.READ_CALENDAR
+                    )
+                },
+                openAppDetailsSettings = ::openAppDetailsSettings,
             )
         }
 
@@ -144,16 +173,29 @@ class SettingsActivity : FragmentActivity() {
             }
         }
 
-        // Auto-open iCloud sign-in sheet if launched from onboarding
-        if (intent.getBooleanExtra(EXTRA_OPEN_ICLOUD_SIGNIN, false)) {
-            viewModel.setInitialSetupMode(true)  // Auto-navigate back after sign-in
-            viewModel.showICloudSignInSheet()
-        }
+        route?.let(viewModel::applyOnboardingRoute)
 
         // Auto-open subscription dialog if launched from webcal:// link
         intent.getStringExtra(EXTRA_SUBSCRIPTION_URL)?.let { url ->
             viewModel.openAddSubscriptionWithUrl(url)
         }
+    }
+
+    // The backup failure notification can reach a Settings screen that is already running.
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        if (intent.getBooleanExtra(EXTRA_OPEN_CALENDAR_BACKUP, false)) {
+            calendarBackupViewModel.requestSheet()
+        }
+    }
+
+    /** Returns the onboarding route this activity was launched with, or null. */
+    private fun onboardingRoute(): OnboardingRoute? = when {
+        intent.getBooleanExtra(EXTRA_OPEN_ICLOUD_SIGNIN, false) -> OnboardingRoute.ICLOUD
+        intent.getBooleanExtra(EXTRA_OPEN_CALDAV_SIGNIN, false) -> OnboardingRoute.CALDAV
+        intent.getBooleanExtra(EXTRA_OPEN_DEVICE_CALENDARS, false) -> OnboardingRoute.DEVICE_CALENDARS
+        else -> null
     }
 
     override fun onResume() {
@@ -168,6 +210,7 @@ class SettingsActivity : FragmentActivity() {
             localNetworkPermissionManager.resolveState(this)
         )
         viewModel.refreshChangeNotifications()
+        calendarBackupViewModel.refreshNotifications()
     }
 
     private fun showDebugReportEvent(event: DebugReportEvent) {
@@ -179,6 +222,17 @@ class SettingsActivity : FragmentActivity() {
             )
             DebugReportEvent.Failed -> viewModel.showSnackbar(getString(R.string.debug_report_failed))
         }
+    }
+
+    /** Opens this app's page in Android settings; returns false when no screen can show it. */
+    private fun openAppDetailsSettings(): Boolean = try {
+        startActivity(
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null))
+        )
+        true
+    } catch (e: android.content.ActivityNotFoundException) {
+        Log.e(TAG, "No app settings screen", e)
+        false
     }
 
     /** Opens the system notification settings for [channelId]'s channel, or the app's when null. */

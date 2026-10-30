@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.onekash.kashcal.R
 import org.onekash.kashcal.ui.components.SwipeRevealRow
+import org.onekash.kashcal.ui.util.asString
 
 /**
  * Shows one subscription row: color dot, name, status line, refresh button and enable switch.
@@ -141,8 +142,8 @@ fun SwipeableSubscriptionItem(
 }
 
 /**
- * Shows the subscription's status line: the error in red, "Sync paused" when disabled, else
- * "Not synced" or the time since the last sync.
+ * Shows the subscription's status line: the last error in red ([icsFeedErrorMessage]), "Sync
+ * paused" when disabled, else "Not synced" or the time since the last sync.
  */
 @Composable
 private fun SubscriptionStatusText(
@@ -151,7 +152,8 @@ private fun SubscriptionStatusText(
 ) {
     if (hasError) {
         Text(
-            subscription.lastError ?: stringResource(R.string.status_sync_error),
+            subscription.lastError?.let { icsFeedErrorMessage(it).asString() }
+                ?: stringResource(R.string.status_sync_error),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.error,
             maxLines = 1,

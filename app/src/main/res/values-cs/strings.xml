@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Pozvánky na události</string>
     <string name="channel_event_invitations_desc">Upozornění při obdržení nové pozvánky do kalendáře</string>
     <string name="channel_calendar_updates">Změny v kalendáři</string>
+    <string name="channel_calendar_backup">Automatická záloha kalendářů</string>
+    <string name="channel_calendar_backup_description">Upozorní vás, když se záloha kalendářů nezdaří</string>
     <string name="invite_notification_body">Od %1$s · Klepněte pro odpověď</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,37 @@
     <string name="backup_error_read_failed">Soubor nelze přečíst</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple Calendar?</string>
-    <string name="onboarding_got_you">Poradíme si.</string>
-    <string name="onboarding_connect_prompt">Připojte iCloud a uvidíte své události</string>
+    <string name="onboarding_title">Kde máte kalendáře?</string>
+    <string name="onboarding_subtitle">Vyberte jeden a připojte ho.</string>
+    <string name="onboarding_icloud_detail">Apple ID a heslo pro aplikaci</string>
+    <string name="onboarding_caldav_title">Server CalDAV</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale a další</string>
+    <string name="onboarding_device_title">V tomto zařízení</string>
+    <string name="onboarding_phone_detail">Google, Outlook a synchronizační aplikace</string>
+    <string name="onboarding_use_offline">Použít offline kalendář</string>
+    <string name="onboarding_trust">Open source. Bez reklam. Bez sledování.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Připomínky jsou vypnuté</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">%d událost tento týden má připomínku.</item>
+        <item quantity="few">%d události tento týden mají připomínky.</item>
+        <item quantity="many">%d událostí tento týden má připomínky.</item>
+        <item quantity="other">%d událostí tento týden má připomínky.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Teď ne</string>
+    <string name="reminders_off_turn_on">Zapnout</string>
+    <string name="reminders_on_snackbar">Připomínky zapnuty</string>
+    <string name="about_tagline">Všechny vaše kalendáře v jedné soukromé aplikaci.</string>
+    <string name="about_help_title">Nápověda a návody</string>
+    <string name="about_help_detail">Nastavení, synchronizace a dotazy</string>
+    <string name="about_source_title">Zdrojový kód</string>
+    <string name="about_source_detail">Apache 2.0, na GitHubu</string>
+    <string name="about_support_title">Podpořit KashCal</string>
+    <string name="about_support_detail">Děkujeme všem, kdo nás už podporují</string>
+    <string name="about_link_failed">Tento odkaz nemůže otevřít žádná aplikace.</string>
+    <string name="about_built_in_austin">Vytvořeno s ❤️ v Austinu</string>
+    <string name="about_version">Verze %1$s</string>
     <string name="whats_new_skip">Přeskočit</string>
     <string name="whats_new_next">Další</string>
     <string name="whats_new_page_of">Stránka %1$d z %2$d</string>
@@ -275,10 +303,21 @@
     <string name="whats_new_v772_changes_title">Podívejte se, co se změnilo</string>
     <string name="whats_new_v772_changes_body">Nové, upravené a odstraněné události z vašich kalendářů iCloud a CalDAV se po dobu 7 dní shromažďují v seznamu \"Nedávné změny\". Klepnutím na událost ji otevřete.</string>
     <string name="whats_new_v772_notifications_body">Dostávejte oznámení, když synchronizace na pozadí najde změny ve vašich událostech iCloud nebo CalDAV. Funkce zůstane vypnutá, dokud ji nezapnete.</string>
+    <string name="whats_new_v803_offline_title">Kalendáře, které zůstanou v telefonu</string>
+    <string name="whats_new_v803_offline_body">Některé plány na server nepatří. Dejte jim vlastní offline kalendáře, kolik jen chcete.</string>
+    <string name="whats_new_v803_backup_title">Zálohy, na které můžete zapomenout</string>
+    <string name="whats_new_v803_backup_body">Jednou vyberte složku a KashCal v ní bude udržovat aktuální kopii vašich offline kalendářů.</string>
+    <string name="whats_new_v803_print_title">Váš týden na papíře</string>
+    <string name="whats_new_v803_print_body">Vytiskněte si týden, který máte před sebou. Na kterou lednici ho pověsíte, je na vás.</string>
     <string name="whats_new_hero_sample_lunch">Týmový oběd</string>
     <string name="whats_new_hero_sample_review">Kontrola návrhu</string>
     <string name="whats_new_hero_sample_book_club">Čtenářský klub</string>
+    <string name="whats_new_hero_sample_dentist">Zubař</string>
+    <string name="whats_new_hero_sample_yoga">Jóga</string>
     <string name="whats_new_hero_sample_calendar">Práce</string>
+    <string name="whats_new_hero_sample_family">Rodina</string>
+    <string name="whats_new_hero_sample_garden">Zahrada</string>
+    <string name="whats_new_hero_sample_folder">Zálohy kalendářů</string>
     <string name="whats_new_hero_now">nyní</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +433,6 @@
     <string name="error_device_calendar_title">Chyba kalendáře</string>
     <string name="error_device_calendar_write_failed">Uložení do kalendáře zařízení selhalo. Zkuste to znovu.</string>
     <string name="error_device_calendar_permission">Je vyžadováno oprávnění k zápisu do kalendáře. Udělte oprávnění v Nastavení.</string>
-    <string name="error_device_calendar_permission_denied">Vypněte a znovu zapněte oprávnění Kalendář v Nastavení, abyste udělili přístup pro zápis</string>
     <string name="error_device_calendar_not_found">Kalendář nenalezen. Mohl být odstraněn.</string>
     <string name="error_device_event_not_found">Událost nenalezena. Mohla být smazána.</string>
     <string name="error_device_calendar_read_only">Tento kalendář je pouze pro čtení.</string>
@@ -538,6 +576,7 @@
     <string name="subscriptions_section_add">Přidat</string>
     <string name="subscriptions_empty_ics">Žádné odběry ICS</string>
     <string name="subscriptions_empty_ics_hint">Přidejte kanál kalendáře pro zobrazení událostí</string>
+    <string name="subscriptions_swipe_hint">Přejetím po kanálu ho smažete.</string>
     <string name="subscriptions_add_ics">Přidat kalendář ICS</string>
     <string name="qs_tile_label">Přidat</string>
     <string name="holiday_catalog_add">Přidat kalendář svátků</string>
@@ -624,7 +663,7 @@
     <string name="settings_device_calendars_hint">Kalendáře z jiných aplikací</string>
     <string name="offline_calendars_row_label">Offline kalendáře</string>
     <string name="offline_calendars_row_hint">Kalendáře, které zůstávají v tomto telefonu</string>
-    <string name="offline_calendars_manage_note">Přidejte, přejmenujte, změňte barvu nebo smažte své offline kalendáře.</string>
+    <string name="offline_calendars_manage_note">Přejetím po kalendáři ho smažete.</string>
     <string name="offline_calendars_info">Uloženo jen v tomto telefonu a nikdy se nesynchronizuje. Zálohy nezahrnují události, proto kalendář exportujte, abyste si uchovali kopii.</string>
     <string name="offline_calendars_info_cd">O offline kalendářích</string>
     <string name="offline_calendar_default_state">Výchozí</string>
@@ -654,6 +693,93 @@
     </plurals>
     <string name="offline_calendar_deleted">Smazáno: %1$s</string>
     <string name="offline_calendar_duplicate_name">Offline kalendář s názvem \"%1$s\" už existuje</string>
+    <string name="offline_calendar_similar_name">Příliš podobné názvu „%1$s“. Zvolte jiný název.</string>
+    <string name="calendar_backup_title">Automatická záloha kalendářů</string>
+    <string name="calendar_backup_row_off">Vypnuto</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Složka záloh je nedostupná</string>
+    <string name="calendar_backup_intro">Uloží každý offline kalendář jako soubor ICS do složky, kterou vyberete.</string>
+    <string name="calendar_backup_choose_folder">Vybrat složku</string>
+    <string name="calendar_backup_choose_folder_hint">Vyberte nebo vytvořte složku, například v Documents. Android nepovoluje kořen úložiště ani samotnou složku Download.</string>
+    <string name="calendar_backup_folder">Složka</string>
+    <string name="calendar_backup_change">Změnit</string>
+    <string name="calendar_backup_frequency">Frekvence</string>
+    <string name="calendar_backup_frequency_info">Zálohy se mohou zpozdit: Android omezuje práci na pozadí, když je telefon nečinný nebo když jste KashCal delší dobu neotevřeli.</string>
+    <string name="calendar_backup_copies">Počet kopií</string>
+    <string name="calendar_backup_copies_explained">Každá záloha uchová předchozí soubor jako kopii s datem. Když je jich víc než tento počet, nejstarší se smažou. Nejnovější soubor má vždy název kalendáře.</string>
+    <string name="calendar_backup_copies_fewer">Uchovat méně kopií</string>
+    <string name="calendar_backup_copies_more">Uchovat více kopií</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d kopie</item>
+        <item quantity="few">%d kopie</item>
+        <item quantity="many">%d kopií</item>
+        <item quantity="other">%d kopií</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">Smaže %d starší kopii. Tuto akci nelze vrátit.</item>
+        <item quantity="few">Smaže %d starší kopie. Tuto akci nelze vrátit.</item>
+        <item quantity="many">Smaže %d starší kopie. Tuto akci nelze vrátit.</item>
+        <item quantity="other">Smaže %d starších kopií. Tuto akci nelze vrátit.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Smaže starší kopie nad tento počet. Tuto akci nelze vrátit.</string>
+    <string name="calendar_backup_calendars">Offline kalendáře</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Žádné události, nic se neuložilo</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Nepodařilo se uložit. Zkusí se to znovu při další záloze.</string>
+    <string name="calendar_backup_status">Poslední záloha %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Poslední záloha %1$s · %2$d kalendář selhal</item>
+        <item quantity="few">Poslední záloha %1$s · %2$d kalendáře selhaly</item>
+        <item quantity="many">Poslední záloha %1$s · %2$d kalendářů selhalo</item>
+        <item quantity="other">Poslední záloha %1$s · %2$d kalendářů selhalo</item>
+    </plurals>
+    <string name="calendar_backup_now">Zálohovat nyní</string>
+    <string name="calendar_backup_running">Zálohování…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal tyto soubory při každé záloze přepíše, takže změny provedené v jiných aplikacích nevydrží. Kalendář obnovíte pomocí Importovat události ze souboru.</string>
+    <string name="calendar_backup_off_files_stay">Stávající soubory zůstanou ve složce %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Složka %1$s je nedostupná. Mohla být přesunuta, smazána nebo odpojena.</string>
+    <string name="calendar_backup_error_unsupported">Sem nelze ukládat soubory: %1$s. Vyberte jinou složku.</string>
+    <string name="calendar_backup_choose_again">Vybrat znovu</string>
+    <string name="calendar_backup_pick_refused">KashCal tuto složku nemůže použít. Vyberte jinou.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal v této složce nemůže vytvářet soubory. Vyberte jinou.</string>
+    <string name="calendar_backup_failed_title">Záloha kalendářů selhala</string>
+    <string name="calendar_backup_folder_unnamed">složka záloh</string>
+    <string name="calendar_backup_alert_unreachable">Nedostupné: %1$s. Klepnutím vyberte znovu.</string>
+    <string name="calendar_backup_alert_unsupported">Sem nelze ukládat soubory: %1$s. Klepnutím vyberte jinou složku.</string>
+    <string name="calendar_backup_alert_file_retry">Soubor %1$s se nepodařilo uložit. KashCal to zkusí znovu při další záloze.</string>
+    <string name="calendar_backup_every_hour">Každou hodinu</string>
+    <string name="calendar_backup_every_day">Každý den</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">Každou %d hodinu</item>
+        <item quantity="few">Každé %d hodiny</item>
+        <item quantity="many">Každých %d hodin</item>
+        <item quantity="other">Každých %d hodin</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">Každý %d den</item>
+        <item quantity="few">Každé %d dny</item>
+        <item quantity="many">Každých %d dní</item>
+        <item quantity="other">Každých %d dní</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Každý den a %1$s</string>
+    <string name="calendar_backup_every_days_hours">Jednou za %1$s a %2$s</string>
+    <string name="calendar_backup_interval_too_short">Vyberte alespoň 1 hodinu.</string>
+    <string name="calendar_backup_interval_too_long">Vyberte nejvýše 30 dní.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">Nepodařilo se uložit %d kalendář. KashCal to zkusí znovu při další záloze.</item>
+        <item quantity="few">Nepodařilo se uložit %d kalendáře. KashCal to zkusí znovu při další záloze.</item>
+        <item quantity="many">Nepodařilo se uložit %d kalendáře. KashCal to zkusí znovu při další záloze.</item>
+        <item quantity="other">Nepodařilo se uložit %d kalendářů. KashCal to zkusí znovu při další záloze.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">Oznámení pro KashCal jsou vypnutá, takže vás neupozorní, když záloha selže.</string>
+    <string name="calendar_backup_notifications_channel_off">Oznámení o zálohách jsou vypnutá, takže vás KashCal neupozorní, když záloha selže.</string>
+    <string name="calendar_backup_open_settings">Otevřít nastavení</string>
+    <string name="calendar_backup_not_now">Teď ne</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">%d kalendář selhal</item>
+        <item quantity="few">%d kalendáře selhaly</item>
+        <item quantity="many">%d kalendáře selhalo</item>
+        <item quantity="other">%d kalendářů selhalo</item>
+    </plurals>
     <string name="settings_quick_event_add">Chytré přidávání událostí</string>
     <string name="settings_quick_event_add_info">Vytvářejte události přirozeným psaním. \"Oběd se Sam v pátek 13:00\" za vás vyplní název, datum a čas.</string>
     <string name="settings_suggest_titles">Navrhovat názvy událostí</string>
@@ -724,6 +850,7 @@
     <string name="label_on_days">Ve dnech</string>
     <string name="label_pattern">Vzor</string>
     <string name="label_ends">Končí</string>
+    <string name="sheet_hint_change_end">Klepnutím na den změníte konec</string>
     <string name="label_timezone">Časové pásmo</string>
     <string name="label_alerts">Upozornění</string>
     <string name="label_add_alert">Přidat upozornění</string>
@@ -745,14 +872,11 @@
     <string name="status_hours_ago">před %1$d hod</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Zobrazit události z jiných kalendářových aplikací na vašem zařízení (adaptéry synchronizace, místní kalendáře).</string>
-    <string name="device_calendars_permission_required">Vyžadováno oprávnění ke kalendáři. Klepněte na Povolit pro udělení přístupu.</string>
-    <string name="device_calendars_read_only_access">Přístup pouze pro čtení</string>
-    <string name="device_calendars_grant_write">Udělte oprávnění k zápisu pro úpravu událostí kalendáře zařízení</string>
-    <string name="device_calendars_grant">Udělit</string>
-    <string name="device_calendars_none_found">Žádné kalendáře zařízení nenalezeny.</string>
+    <string name="device_calendars_intro">Zobrazit kalendáře v tomto zařízení: Google, Outlook a synchronizační aplikace.</string>
+    <string name="device_calendars_show_switch">Zobrazit kalendáře zařízení</string>
+    <string name="device_calendars_pick_hint">Vyberte kalendáře k zobrazení.</string>
+    <string name="device_calendars_empty">Nebyly nalezeny žádné kalendáře.</string>
     <string name="device_calendars_local">Místní</string>
-    <string name="device_calendars_read_only_no_write">Pouze pro čtení (bez oprávnění k zápisu)</string>
     <string name="device_calendars_read_only_calendar">Pouze pro čtení (kalendář je pouze pro čtení)</string>
     <string name="settings_sync_frequency">Četnost synchronizace</string>
     <string name="settings_sync_frequency_hint">Jak často synchronizovat na pozadí</string>
@@ -1410,6 +1534,10 @@
     <string name="ics_fetch_error_http">Server vrátil chybu (%1$d). Zkontrolujte URL.</string>
     <string name="ics_fetch_error_empty">Kanál kalendáře je prázdný.</string>
     <string name="ics_fetch_error_not_calendar">Tento URL nevypadá jako kanál kalendáře.</string>
+    <string name="ics_feed_error_empty_response">Server neposlal platný kanál.</string>
+    <string name="ics_feed_error_access_denied">Server tohoto kanálu odepřel přístup.</string>
+    <string name="ics_feed_error_too_large">Tento kanál kalendáře je příliš velký na stažení.</string>
+    <string name="ics_feed_error_unreadable">Události z tohoto kanálu se nepodařilo zobrazit.</string>
     <string name="insights_title">Přehledy</string>
     <string name="insights_period_this_week">Týden</string>
     <string name="insights_period_last_week">Min. týden</string>
@@ -1545,7 +1673,7 @@
         <item quantity="other">Volno v dalších %1$d dnech (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Ve vybraném rozsahu nejsou žádné volné bloky alespoň hodinové.</string>
     <string name="share_from_kashcal_footer">Sdíleno z KashCal</string>
@@ -1569,5 +1697,35 @@
     <string name="share_as_card_all_day">Celý den</string>
     <string name="share_as_card_chooser_title">Sdílet událost</string>
     <string name="share_as_card_share_failed">Kartu se nepodařilo sdílet</string>
+    <string name="print_your_week">Vytisknout svůj týden</string>
+    <string name="print_options_title">Zvolit možnosti tisku</string>
+    <string name="print_pages_header">Stránky</string>
+    <string name="print_page_week">Týdenní kalendář</string>
+    <string name="print_page_week_detail">Týden jako mřížka</string>
+    <string name="print_page_details">Podrobnosti</string>
+    <string name="print_page_details_detail">Každá událost v plném rozsahu</string>
+    <string name="print_action">Tisk</string>
+    <string name="cd_print_previous_week">Předchozí týden</string>
+    <string name="cd_print_next_week">Další týden</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d stránka</item>
+        <item quantity="few">%d stránky</item>
+        <item quantity="many">%d stránek</item>
+        <item quantity="other">%d stránek</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d z %2$d kalendáře</item>
+        <item quantity="few">%1$d z %2$d kalendářů</item>
+        <item quantity="many">%1$d z %2$d kalendářů</item>
+        <item quantity="other">%1$d z %2$d kalendářů</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – Týden od %2$s</string>
+    <string name="print_failed">Tisk se nezdařil. Zkuste to znovu.</string>
+    <string name="print_doc_week">Týden</string>
+    <string name="print_doc_printed">Vytištěno %1$s</string>
+    <string name="print_doc_page_of">Strana %1$s z %2$s</string>
+    <string name="print_doc_numbers_note">Čísla odpovídají podrobnostem, kde je každá událost uvedena celá.</string>
+    <string name="print_doc_times_in">Časy v pásmu %1$s</string>
 
 </resources>

@@ -5,6 +5,7 @@ import org.onekash.kashcal.data.db.KashCalDatabase
 import org.onekash.kashcal.data.db.entity.Account
 import org.onekash.kashcal.data.db.entity.Calendar
 import org.onekash.kashcal.domain.model.AccountProvider
+import org.onekash.kashcal.util.exportNameKey
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -113,7 +114,7 @@ class LocalCalendarInitializer @Inject constructor(
      * @param builtInName the built-in calendar's translated label, which the name is checked
      *   against instead of its stored English name
      * @throws LocalCalendarException with [LocalCalendarRefusal.BLANK_NAME] or
-     *   [LocalCalendarRefusal.DUPLICATE_NAME]
+     *   [LocalCalendarRefusal.DUPLICATE_NAME] or [LocalCalendarRefusal.SIMILAR_NAME]
      */
     suspend fun createCalendar(name: String, color: Int, builtInName: String): Long {
         return database.withTransaction {
@@ -143,8 +144,8 @@ class LocalCalendarInitializer @Inject constructor(
      *
      * @throws LocalCalendarException with [LocalCalendarRefusal.NOT_FOUND],
      *   [LocalCalendarRefusal.NOT_LOCAL], [LocalCalendarRefusal.BUILT_IN] (the built-in keeps its
-     *   translated name), [LocalCalendarRefusal.BLANK_NAME] or
-     *   [LocalCalendarRefusal.DUPLICATE_NAME]
+     *   translated name), [LocalCalendarRefusal.BLANK_NAME],
+     *   [LocalCalendarRefusal.DUPLICATE_NAME] or [LocalCalendarRefusal.SIMILAR_NAME]
      */
     suspend fun renameCalendar(calendarId: Long, name: String, builtInName: String) {
         database.withTransaction {
@@ -218,10 +219,13 @@ class LocalCalendarInitializer @Inject constructor(
     }
 
     /**
-     * Returns [name] trimmed, or throws if it is blank or matches, ignoring case, the name of
-     * another calendar of account [accountId]. The built-in is matched by [builtInName]. The
-     * calendar [renamingId] is left out of the comparison, so a calendar can keep its name in
-     * another case. Call inside the transaction that writes the name.
+     * Returns [name] trimmed, or throws if it is blank, matches the name of another calendar of
+     * account [accountId] ignoring case ([LocalCalendarRefusal.DUPLICATE_NAME]), or would give the
+     * same backup file name as one ([LocalCalendarRefusal.SIMILAR_NAME]; names that clean to
+     * nothing are left to [org.onekash.kashcal.calendarbackup.CalendarBackupNames.planBaseNames]).
+     * The built-in is matched by [builtInName]. The calendar [renamingId] is left out of the
+     * comparison, so a calendar can keep its name in another case or punctuation. Call inside the
+     * transaction that writes the name.
      */
     private suspend fun checkName(
         name: String,
@@ -236,6 +240,12 @@ class LocalCalendarInitializer @Inject constructor(
             .map { if (it.caldavUrl == LOCAL_CALENDAR_URL) builtInName.trim() else it.displayName }
         if (taken.any { it.equals(trimmed, ignoreCase = true) }) {
             throw LocalCalendarException(LocalCalendarRefusal.DUPLICATE_NAME)
+        }
+        val key = exportNameKey(trimmed)
+        if (key.isNotEmpty()) {
+            taken.firstOrNull { exportNameKey(it) == key }?.let { similar ->
+                throw LocalCalendarException(LocalCalendarRefusal.SIMILAR_NAME, conflictingName = similar)
+            }
         }
         return trimmed
     }

@@ -13,19 +13,19 @@ import org.onekash.kashcal.ui.components.pickers.DateSelectionMode
 /**
  * Tests the event form's pure logic.
  *
- * Production functions called: [withTimedStart], [withTimedEnd], [withTimezone], [withAllDay],
- * [toStartEndTs], [endsBeforeStart], [toFormDateFields], [parseIso8601DurationToMinutes],
- * [canEditAttendees], [showSchedulingUnavailable], [eventFormHasUnsavedChanges],
- * [resolveFormDismiss] and [shouldRebaselineOnCalendarResolve].
+ * Production functions called: [withTimedStart], [withTimedEnd], [withAllDayStart],
+ * [withTimezone], [withAllDay], [toStartEndTs], [endsBeforeStart], [toFormDateFields],
+ * [parseIso8601DurationToMinutes], [canEditAttendees], [showSchedulingUnavailable],
+ * [eventFormHasUnsavedChanges], [resolveFormDismiss] and [shouldRebaselineOnCalendarResolve].
  *
  * Other sections run inline copies and don't call production. Copies of form code: the
- * delete-confirmation predicate, the save-button gate, the all-day start-date move and the
- * calendar-intent start and end in [EventFormContent], and the occurrence start in
- * [toFormDateFields]. The separate-pickers, midnight-crossing, end-time, date-range
- * selection, range-highlight and cross-month, date-label and multi-day end-time sections
- * model picker logic with no production counterpart in the form. The DateSelectionMode
- * tests assert only enum values, the date-format tests only a multi-day check, and the
- * edit-mode and all-day date-range sections build an [EventFormState] and read it back.
+ * delete-confirmation predicate, the save-button gate and the calendar-intent start and end in
+ * [EventFormContent], and the occurrence start in [toFormDateFields]. The separate-pickers,
+ * midnight-crossing, end-time, date-range selection, range-highlight and cross-month, date-label
+ * and multi-day end-time sections model picker logic with no production counterpart in the form.
+ * The DateSelectionMode tests assert only enum values, the date-format tests only a multi-day
+ * check, and the edit-mode and all-day date-range sections build an [EventFormState] and read it
+ * back.
  */
 class EventFormSheetTest {
 
@@ -1632,20 +1632,16 @@ class EventFormSheetTest {
         return cal.timeInMillis
     }
 
-    /**
-     * Copies the all-day branch of the Start sheet's onConfirm in [EventFormContent]: the old
-     * day span is applied to the new start date. Returns newEndDateMillis.
-     */
+    /** Moves an all-day form's start with [withAllDayStart]. Returns the new endDateMillis. */
     private fun simulateAllDayStartChangePreservingDaySpan(
         oldStartDateMillis: Long,
         oldEndDateMillis: Long,
         newStartDateMillis: Long
-    ): Long {
-        val normalizedOldStart = normalizeToLocalMidnightTest(oldStartDateMillis)
-        val normalizedOldEnd = normalizeToLocalMidnightTest(oldEndDateMillis)
-        val daySpanMs = (normalizedOldEnd - normalizedOldStart).coerceAtLeast(0)
-        return normalizeToLocalMidnightTest(newStartDateMillis) + daySpanMs
-    }
+    ): Long = EventFormState(
+        isAllDay = true,
+        dateMillis = oldStartDateMillis,
+        endDateMillis = oldEndDateMillis,
+    ).withAllDayStart(newStartDateMillis).endDateMillis
 
     @Test
     fun `start time change preserves actual 2h duration`() {

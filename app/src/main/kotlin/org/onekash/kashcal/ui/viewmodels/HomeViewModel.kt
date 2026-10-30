@@ -4,6 +4,7 @@ import org.onekash.kashcal.data.ics.IcsImportFile
 import org.onekash.kashcal.domain.ics.GroupPlan
 import org.onekash.kashcal.domain.ics.IcsImportResult
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -50,6 +51,8 @@ import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.onekash.kashcal.R
+import org.onekash.kashcal.domain.reminders.shouldShowRemindersOffBanner
+import org.onekash.kashcal.reminder.scheduler.ReminderScheduler
 import org.onekash.kashcal.data.db.entity.Event
 import org.onekash.kashcal.data.db.entity.Occurrence
 import org.onekash.kashcal.data.preferences.DefaultCalendar
@@ -69,9 +72,11 @@ import org.onekash.kashcal.domain.rrule.RruleShift
 import org.onekash.kashcal.domain.model.DisplayEvent
 import org.onekash.kashcal.domain.model.isStripItem
 import org.onekash.kashcal.domain.planner.PlannerWeekState
-import org.onekash.kashcal.domain.planner.isChangedOccurrence
+import org.onekash.kashcal.domain.planner.lookUpRoomSeriesAllDay
 import org.onekash.kashcal.domain.monthfull.clampMonthFullZoom
 import org.onekash.kashcal.domain.planner.clampPlannerZoom
+import org.onekash.kashcal.domain.onboarding.shouldShowOnboarding
+import org.onekash.kashcal.domain.model.AccountProvider
 import org.onekash.kashcal.ui.util.plannerPageForDate
 import org.onekash.kashcal.ui.util.plannerWeekStart
 import org.onekash.kashcal.domain.model.SearchResult
@@ -730,7 +735,7 @@ class HomeViewModel(
                                 eventsByDayCode = byDay,
                                 rangeStartDayCode = rangeStart,
                                 rangeEndDayCode = rangeEnd,
-                                roomSeriesAllDayById = lookUpRoomSeriesAllDay(byDay),
+                                roomSeriesAllDayById = eventReader.lookUpRoomSeriesAllDay(byDay.values.flatten()),
                             )
                         }
                         .catch { e ->
@@ -745,32 +750,6 @@ class HomeViewModel(
                 state?.copy(showMultiDayTimedInAllDayStrip = show)
             }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
-
-    /**
-     * Returns the all-day flag of each Room series with a changed occurrence in [byDay], for the
-     * Planner's "was" cue. One read for the whole range, none when there is no changed Room
-     * occurrence. A failed read is logged and returns an empty map, so the events still show and
-     * the cue falls back to what the occurrence alone says.
-     */
-    private suspend fun lookUpRoomSeriesAllDay(
-        byDay: Map<Int, List<DisplayEvent>>
-    ): ImmutableMap<Long, Boolean> {
-        val seriesIds = byDay.values.asSequence().flatten()
-            .filterIsInstance<DisplayEvent.Room>()
-            .filter { it.isChangedOccurrence() }
-            .map { it.occurrence.eventId }
-            .distinct()
-            .toList()
-        if (seriesIds.isEmpty()) return persistentMapOf()
-        return try {
-            eventReader.getEventsByIds(seriesIds).mapValues { (_, event) -> event.isAllDay }.toPersistentMap()
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            Log.w(TAG, "Planner series look-up failed: ${e.javaClass.simpleName}")
-            persistentMapOf()
-        }
-    }
 
     /**
      * Emits the attendee state of [eventId] for the quick view and the form.
@@ -858,6 +837,19 @@ class HomeViewModel(
     // Reads the Recent changes log while its sheet shows.
     private var recentChangesJob: Job? = null
 
+    // The "Reminders are off" banner: the permission facts the activity reported (null until it
+    // has), the running evaluation, and a latch set once the user answered, so an evaluation
+    // already running can't bring the banner back.
+    private var notificationPermissionFacts: NotificationPermissionFacts? = null
+    private var remindersOffJob: Job? = null
+    private var remindersOffAnswered = false
+
+    /**
+     * Whether the immediate sync is running, not just enqueued: an enqueued sync waits for a
+     * network that may not come, so it doesn't hold the banner back.
+     */
+    private var syncWorkRunning = false
+
     /** Checks which series scopes a staged cross-day drop may offer. */
     private var dragAvailabilityJob: Job? = null
 
@@ -933,13 +925,9 @@ class HomeViewModel(
 
             checkAccountStatus()
 
-            // Onboarding shows when no account is configured and it was never dismissed.
-            if (!_uiState.value.isConfigured) {
-                val dismissed = dataStore.onboardingDismissed.first()
-                if (!dismissed) {
-                    Log.d(TAG, "Showing onboarding sheet (first launch, no account configured)")
-                    _uiState.update { it.copy(showOnboardingSheet = true) }
-                }
+            if (readShouldShowOnboarding()) {
+                Log.d(TAG, "Showing onboarding sheet (nothing set up yet)")
+                _uiState.update { it.copy(showOnboardingSheet = true) }
             }
 
             // What's New: release notes the user hasn't acknowledged. MainActivity shows them only
@@ -1005,6 +993,144 @@ class HomeViewModel(
                 it.copy(syncMessage = "Initialization failed: ${e.message}")
             }
         }
+    }
+
+    /**
+     * Reads the facts for [shouldShowOnboarding]. A failed read hides the sheet, so startup
+     * carries on to What's New and today.
+     */
+    private suspend fun readShouldShowOnboarding(): Boolean = try {
+        shouldShowOnboarding(
+            isCompleted = { dataStore.onboardingCompleted.first() },
+            hasSignedInSyncAccount = { _uiState.value.isConfigured },
+            hasFeedOrBirthdaysAccount = {
+                withContext(ioDispatcher) { accountRepository.getAllAccounts() }.any {
+                    it.provider == AccountProvider.ICS || it.provider == AccountProvider.CONTACTS
+                }
+            },
+            deviceCalendarsEnabled = { dataStore.deviceCalendarsEnabled.first() },
+            eventCount = { withContext(ioDispatcher) { eventReader.getTotalEventCount() } },
+        )
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Log.e(TAG, "Onboarding check failed; not showing the sheet", e)
+        false
+    }
+
+    // ==================== Reminders are off ====================
+
+    /** What the activity read about the notification permission on its last resume. */
+    private data class NotificationPermissionFacts(
+        val granted: Boolean,
+        val rationaleDue: Boolean,
+        val sdkInt: Int,
+    )
+
+    /**
+     * Takes the notification permission state the activity read on resume and re-checks the
+     * "Reminders are off" banner. Below Android 13 the activity reports [granted] as true.
+     */
+    fun onNotificationPermissionChecked(
+        granted: Boolean,
+        rationaleDue: Boolean,
+        sdkInt: Int = Build.VERSION.SDK_INT,
+    ) {
+        notificationPermissionFacts = NotificationPermissionFacts(granted, rationaleDue, sdkInt)
+        evaluateRemindersOffBanner()
+    }
+
+    /**
+     * Hides the banner for good and records the ask: called for the banner's Not now and Turn on,
+     * and for every answer to Android's notification dialog. A dismissed dialog leaves no
+     * rationale, so without this the next resume could show the banner before the answer is
+     * written.
+     */
+    fun endRemindersOffBanner() {
+        remindersOffAnswered = true
+        remindersOffJob?.cancel()
+        _uiState.update { it.copy(remindersOffBannerCount = null) }
+        viewModelScope.launch {
+            try {
+                dataStore.setNotificationAskDone()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to record the notification ask", e)
+            }
+        }
+    }
+
+    /** Confirms a grant from the banner's Turn on with a snackbar. */
+    fun onRemindersOffPermissionResult(granted: Boolean) {
+        if (granted) showSnackbar(context.getString(R.string.reminders_on_snackbar))
+    }
+
+    /**
+     * Re-checks the banner once the permission facts are known, one check at a time; a failed
+     * read leaves it hidden.
+     */
+    private fun evaluateRemindersOffBanner() {
+        val facts = notificationPermissionFacts ?: return
+        if (remindersOffAnswered) return
+        remindersOffJob?.cancel()
+        remindersOffJob = viewModelScope.launch {
+            val count = try {
+                readRemindersOffCount(facts)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e(TAG, "Reminders-are-off check failed; not showing the banner", e)
+                null
+            }
+            if (remindersOffAnswered) return@launch
+            _uiState.update { it.copy(remindersOffBannerCount = count) }
+        }
+    }
+
+    /**
+     * Returns the banner's count when it should show, else null; see
+     * [shouldShowRemindersOffBanner].
+     */
+    private suspend fun readRemindersOffCount(facts: NotificationPermissionFacts): Int? {
+        val askDone = dataStore.notificationAskDone.first()
+        if (facts.granted) {
+            // Remembered, so a later switch-off in Android settings never shows the banner.
+            if (!askDone) dataStore.setNotificationAskDone()
+            return null
+        }
+        val deniedCount = dataStore.notificationPermissionDeniedCount.first()
+        val alreadyShown = _uiState.value.remindersOffBannerCount != null
+        // The cheap facts first: the counts are read only when nothing else rules it out.
+        if (!shouldShowRemindersOffBanner(
+                sdkInt = facts.sdkInt,
+                permissionGranted = false,
+                askDone = askDone,
+                deniedCount = deniedCount,
+                rationaleDue = facts.rationaleDue,
+                syncRunning = syncWorkRunning,
+                alreadyShown = alreadyShown,
+                eventsWithReminders = 1,
+            )
+        ) return null
+        val now = System.currentTimeMillis()
+        val windowEnd = now + ReminderScheduler.SCHEDULE_WINDOW_MS
+        val roomCount = withContext(ioDispatcher) {
+            eventReader.countOccurrencesWithPendingReminders(now, windowEnd)
+        }
+        val total = roomCount + deviceReminderCount(now, windowEnd)
+        return total.takeIf { it > 0 }
+    }
+
+    /**
+     * Counts device events with a reminder in [fromMs]..[toMs] in the calendars whose reminders
+     * KashCal shows: device calendars and their reminders on, enabled calendars minus muted ones.
+     */
+    private suspend fun deviceReminderCount(fromMs: Long, toMs: Long): Int {
+        if (!dataStore.deviceCalendarsEnabled.first()) return 0
+        if (!dataStore.deviceCalendarRemindersEnabled.first()) return 0
+        val ids = dataStore.enabledDeviceCalendarIds.first() - dataStore.mutedDeviceCalendarIds.first()
+        return withContext(ioDispatcher) { deviceEventReader.countInstancesWithReminders(ids, fromMs, toMs) }
     }
 
     // ==================== Account Status ====================
@@ -1095,6 +1221,7 @@ class HomeViewModel(
             syncScheduler.observeImmediateSyncStatus().collect { status ->
                 val showBanner = syncScheduler.showBannerForSync.value
                 Log.d(TAG, "Sync status changed: $status (showBanner=$showBanner)")
+                syncWorkRunning = status is SyncStatus.Running
                 when (status) {
                     is SyncStatus.Running, is SyncStatus.Enqueued -> {
                         // isSyncing is the duplicate-sync guard, true while work is live. It
@@ -1125,6 +1252,8 @@ class HomeViewModel(
                             )
                         }
                         reloadCurrentView()
+                        // The sync's reminders are armed now; re-checked before the banner's delay.
+                        evaluateRemindersOffBanner()
                         // Auto-dismiss.
                         if (showBanner || hasPartialError) {
                             delay(if (hasPartialError) 3000 else 2000)
@@ -1150,6 +1279,7 @@ class HomeViewModel(
                             // on another screen) can't leak a banner into the next silent sync.
                             syncScheduler.resetBannerFlag()
                             showError(CalendarError.Unknown(status.errorMessage ?: "Sync failed"))
+                            evaluateRemindersOffBanner()
                         } else {
                             // Banner only with the flag (force sync, first sync after setup); a
                             // silent sync's failure shows nothing on a normal app open.
@@ -1162,6 +1292,7 @@ class HomeViewModel(
                                     syncErrorDetail = status.errorMessage
                                 )
                             }
+                            evaluateRemindersOffBanner()
                             if (showBanner) {
                                 delay(3000)
                                 _uiState.update { it.copy(showSyncBanner = false) }
@@ -1178,6 +1309,7 @@ class HomeViewModel(
                                 syncBannerState = SyncBannerState.Syncing  // No stale Error flash
                             )
                         }
+                        evaluateRemindersOffBanner()
                     }
                 }
             }
@@ -2645,8 +2777,13 @@ class HomeViewModel(
 
     // ==================== UI Sheets/Dialogs ====================
 
-    fun toggleAppInfoSheet() {
-        _uiState.update { it.copy(showAppInfoSheet = !it.showAppInfoSheet) }
+    // Open and close are separate so a quick double tap on About can't open and close it again.
+    fun openAboutSheet() {
+        _uiState.update { it.copy(showAboutSheet = true) }
+    }
+
+    fun closeAboutSheet() {
+        _uiState.update { it.copy(showAboutSheet = false) }
     }
 
     fun openShareAvailabilitySheet() {
@@ -2665,20 +2802,17 @@ class HomeViewModel(
         _uiState.update { it.copy(isInvitationInboxOpen = false) }
     }
 
-    fun toggleOnboardingSheet() {
-        _uiState.update { it.copy(showOnboardingSheet = !it.showOnboardingSheet) }
-    }
-
-    fun dismissOnboardingSheet() {
+    /** Records the onboarding sheet as answered and closes it; called for every choice. */
+    fun completeOnboarding() {
         viewModelScope.launch {
             // Persist first, so a process death between the UI clear and the write can't
             // re-show the sheet on the next launch.
             try {
-                dataStore.setOnboardingDismissed(true)
+                dataStore.setOnboardingCompleted(true)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Throwable) {
-                Log.e(TAG, "Failed to persist onboarding dismissal", e)
+                Log.e(TAG, "Failed to persist onboarding completion", e)
             }
             _uiState.update { it.copy(showOnboardingSheet = false) }
         }

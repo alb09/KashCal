@@ -179,10 +179,15 @@ data class HomeUiState(
     // === UI DIALOGS/SHEETS ===
     /** Whether the first-run onboarding sheet shows. */
     val showOnboardingSheet: Boolean = false,
+    /**
+     * Events with a reminder in the coming week while the "Reminders are off" banner shows, or
+     * null when it is hidden ([org.onekash.kashcal.domain.reminders.shouldShowRemindersOffBanner]).
+     */
+    val remindersOffBannerCount: Int? = null,
     /** Release notes the upgraded user hasn't acknowledged yet, ascending by versionCode. */
     val whatsNewReleases: ImmutableList<org.onekash.kashcal.domain.whatsnew.ReleaseNote> = persistentListOf(),
-    /** Whether the app info sheet shows. */
-    val showAppInfoSheet: Boolean = false,
+    /** Whether the About sheet shows (the account hub's About row). */
+    val showAboutSheet: Boolean = false,
     /** Whether the share-availability sheet shows. */
     val showShareAvailabilitySheet: Boolean = false,
     /** Whether the invitation inbox sheet shows. */

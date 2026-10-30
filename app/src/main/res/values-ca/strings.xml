@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Invitacions a esdeveniments</string>
     <string name="channel_event_invitations_desc">Notificacions quan reps una nova invitació de calendari</string>
     <string name="channel_calendar_updates">Canvis al calendari</string>
+    <string name="channel_calendar_backup">Còpia de seguretat automàtica dels calendaris</string>
+    <string name="channel_calendar_backup_description">T\'avisa quan falla una còpia de seguretat dels calendaris</string>
     <string name="invite_notification_body">De %1$s · Toca per respondre</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,35 @@
     <string name="backup_error_read_failed">No s\'ha pogut llegir el fitxer</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple Calendar?</string>
-    <string name="onboarding_got_you">T\'ajudem.</string>
-    <string name="onboarding_connect_prompt">Connecta iCloud per veure els teus esdeveniments aquí</string>
+    <string name="onboarding_title">On tens els calendaris?</string>
+    <string name="onboarding_subtitle">Tria\'n un per connectar.</string>
+    <string name="onboarding_icloud_detail">Apple ID i contrasenya d\'aplicació</string>
+    <string name="onboarding_caldav_title">Servidor CalDAV</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale i altres</string>
+    <string name="onboarding_device_title">En aquest dispositiu</string>
+    <string name="onboarding_phone_detail">Google, Outlook i aplicacions de sincronització</string>
+    <string name="onboarding_use_offline">Usa el calendari fora de línia</string>
+    <string name="onboarding_trust">Codi obert. Sense anuncis. Sense seguiment.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Els recordatoris estan desactivats</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">%d esdeveniment d\'aquesta setmana té un recordatori.</item>
+        <item quantity="other">%d esdeveniments d\'aquesta setmana tenen recordatoris.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Ara no</string>
+    <string name="reminders_off_turn_on">Activa</string>
+    <string name="reminders_on_snackbar">Recordatoris activats</string>
+    <string name="about_tagline">Tots els teus calendaris en una aplicació privada.</string>
+    <string name="about_help_title">Ajuda i guies</string>
+    <string name="about_help_detail">Configuració, sincronització i preguntes</string>
+    <string name="about_source_title">Codi font</string>
+    <string name="about_source_detail">Apache 2.0, a GitHub</string>
+    <string name="about_support_title">Dona suport a KashCal</string>
+    <string name="about_support_detail">Gràcies a tothom que ja ho fa</string>
+    <string name="about_link_failed">Cap aplicació no pot obrir aquest enllaç.</string>
+    <string name="about_built_in_austin">Fet amb ❤️ a Austin</string>
+    <string name="about_version">Versió %1$s</string>
     <string name="whats_new_skip">Omet</string>
     <string name="whats_new_next">Següent</string>
     <string name="whats_new_page_of">Pàgina %1$d de %2$d</string>
@@ -275,10 +301,21 @@
     <string name="whats_new_v772_changes_title">Mira què ha canviat</string>
     <string name="whats_new_v772_changes_body">Els esdeveniments nous, editats i eliminats dels teus calendaris iCloud i CalDAV es recullen a Canvis recents durant 7 dies. Toca\'n un per obrir-lo.</string>
     <string name="whats_new_v772_notifications_body">Rep una notificació quan una sincronització en segon pla troba canvis als teus esdeveniments d\'iCloud o CalDAV. Està desactivada fins que l\'activis.</string>
+    <string name="whats_new_v803_offline_title">Calendaris que no surten del telèfon</string>
+    <string name="whats_new_v803_offline_body">Hi ha plans que no han de ser en cap servidor. Dona\'ls els seus propis calendaris fora de línia, tants com vulguis.</string>
+    <string name="whats_new_v803_backup_title">Còpies de seguretat sense pensar-hi</string>
+    <string name="whats_new_v803_backup_body">Tria una carpeta un cop i KashCal hi guardarà sempre una còpia recent dels teus calendaris fora de línia.</string>
+    <string name="whats_new_v803_print_title">La teva setmana, en paper</string>
+    <string name="whats_new_v803_print_body">Imprimeix la setmana que estàs veient. A quina nevera la penges ja és cosa teva.</string>
     <string name="whats_new_hero_sample_lunch">Dinar d\'equip</string>
     <string name="whats_new_hero_sample_review">Revisió de disseny</string>
     <string name="whats_new_hero_sample_book_club">Club de lectura</string>
+    <string name="whats_new_hero_sample_dentist">Dentista</string>
+    <string name="whats_new_hero_sample_yoga">Ioga</string>
     <string name="whats_new_hero_sample_calendar">Feina</string>
+    <string name="whats_new_hero_sample_family">Família</string>
+    <string name="whats_new_hero_sample_garden">Jardí</string>
+    <string name="whats_new_hero_sample_folder">Còpies de seguretat dels calendaris</string>
     <string name="whats_new_hero_now">ara</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +431,6 @@
     <string name="error_device_calendar_title">Error de calendari</string>
     <string name="error_device_calendar_write_failed">No s\'ha pogut desar al calendari del dispositiu. Torna a provar.</string>
     <string name="error_device_calendar_permission">Es requereix permís d\'escriptura del calendari. Concedeix el permís a Configuració.</string>
-    <string name="error_device_calendar_permission_denied">Desactiva i torna a activar el permís de Calendari a Configuració per concedir accés d\'escriptura</string>
     <string name="error_device_calendar_not_found">Calendari no trobat. Pot haver estat eliminat.</string>
     <string name="error_device_event_not_found">Esdeveniment no trobat. Pot haver estat eliminat.</string>
     <string name="error_device_calendar_read_only">Aquest calendari és de només lectura.</string>
@@ -538,6 +574,7 @@
     <string name="subscriptions_section_add">Afegir</string>
     <string name="subscriptions_empty_ics">Cap subscripció ICS</string>
     <string name="subscriptions_empty_ics_hint">Afegeix un flux de calendari per veure esdeveniments</string>
+    <string name="subscriptions_swipe_hint">Llisca un flux per eliminar-lo.</string>
     <string name="subscriptions_add_ics">Afegir calendari ICS</string>
     <string name="qs_tile_label">Afegeix</string>
     <string name="holiday_catalog_add">Afegeix un calendari de festius</string>
@@ -624,7 +661,7 @@
     <string name="settings_device_calendars_hint">Calendaris d\'altres aplicacions</string>
     <string name="offline_calendars_row_label">Calendaris fora de línia</string>
     <string name="offline_calendars_row_hint">Calendaris que es queden en aquest telèfon</string>
-    <string name="offline_calendars_manage_note">Afegeix, canvia el nom, canvia el color o elimina els teus calendaris fora de línia.</string>
+    <string name="offline_calendars_manage_note">Llisca un calendari per eliminar-lo.</string>
     <string name="offline_calendars_info">Només es desen en aquest telèfon i no se sincronitzen mai. Les còpies de seguretat no inclouen els esdeveniments, així que exporta un calendari per conservar-ne una còpia.</string>
     <string name="offline_calendars_info_cd">Quant als calendaris fora de línia</string>
     <string name="offline_calendar_default_state">Predeterminat</string>
@@ -650,6 +687,79 @@
     </plurals>
     <string name="offline_calendar_deleted">S\'ha eliminat %1$s</string>
     <string name="offline_calendar_duplicate_name">Ja existeix un calendari fora de línia anomenat \"%1$s\"</string>
+    <string name="offline_calendar_similar_name">Massa semblant a \"%1$s\". Tria un altre nom.</string>
+    <string name="calendar_backup_title">Còpia de seguretat automàtica dels calendaris</string>
+    <string name="calendar_backup_row_off">Desactivada</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">No es pot accedir a la carpeta de còpia de seguretat</string>
+    <string name="calendar_backup_intro">Desa cada calendari fora de línia com a fitxer ICS en una carpeta que triïs.</string>
+    <string name="calendar_backup_choose_folder">Tria una carpeta</string>
+    <string name="calendar_backup_choose_folder_hint">Tria o crea una carpeta, per exemple a Documents. Android no permet l\'arrel de l\'emmagatzematge ni la mateixa carpeta Download.</string>
+    <string name="calendar_backup_folder">Carpeta</string>
+    <string name="calendar_backup_change">Canvia</string>
+    <string name="calendar_backup_frequency">Freqüència</string>
+    <string name="calendar_backup_frequency_info">Les còpies de seguretat es poden endarrerir: Android frena la feina en segon pla quan el telèfon està inactiu o fa temps que no obres KashCal.</string>
+    <string name="calendar_backup_copies">Còpies que es conserven</string>
+    <string name="calendar_backup_copies_explained">Cada còpia de seguretat conserva el fitxer anterior com a còpia amb data. Quan n\'hi ha més d\'aquest nombre, s\'esborren les més antigues. El fitxer més recent sempre té el nom del calendari.</string>
+    <string name="calendar_backup_copies_fewer">Conserva menys còpies</string>
+    <string name="calendar_backup_copies_more">Conserva més còpies</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d còpia</item>
+        <item quantity="other">%d còpies</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">Esborra %d còpia antiga. No es pot desfer.</item>
+        <item quantity="other">Esborra %d còpies antigues. No es pot desfer.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Esborra les còpies antigues que superin aquest nombre. No es pot desfer.</string>
+    <string name="calendar_backup_calendars">Calendaris fora de línia</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Cap esdeveniment, no s\'ha desat res</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · No s\'ha pogut desar. Es tornarà a provar a la propera còpia de seguretat.</string>
+    <string name="calendar_backup_status">Darrera còpia de seguretat %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Darrera còpia de seguretat %1$s · ha fallat %2$d calendari</item>
+        <item quantity="other">Darrera còpia de seguretat %1$s · han fallat %2$d calendaris</item>
+    </plurals>
+    <string name="calendar_backup_now">Fes una còpia ara</string>
+    <string name="calendar_backup_running">S\'està fent la còpia de seguretat…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal sobreescriu aquests fitxers a cada còpia de seguretat, de manera que els canvis que hi facis en altres aplicacions no es mantenen. Per restaurar un calendari, fes servir Importa esdeveniments d\'un fitxer.</string>
+    <string name="calendar_backup_off_files_stay">Els fitxers existents es queden a %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">No es pot accedir a %1$s. Potser s\'ha mogut, esborrat o desconnectat.</string>
+    <string name="calendar_backup_error_unsupported">No es poden desar fitxers a %1$s. Tria una altra carpeta.</string>
+    <string name="calendar_backup_choose_again">Torna a triar</string>
+    <string name="calendar_backup_pick_refused">KashCal no pot fer servir aquesta carpeta. Tria\'n una altra.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal no pot crear fitxers en aquesta carpeta. Tria\'n una altra.</string>
+    <string name="calendar_backup_failed_title">Ha fallat la còpia de seguretat dels calendaris</string>
+    <string name="calendar_backup_folder_unnamed">la carpeta de còpia de seguretat</string>
+    <string name="calendar_backup_alert_unreachable">No es pot accedir a %1$s. Toca per tornar-la a triar.</string>
+    <string name="calendar_backup_alert_unsupported">No es poden desar fitxers a %1$s. Toca per triar una altra carpeta.</string>
+    <string name="calendar_backup_alert_file_retry">No s\'ha pogut desar %1$s. KashCal ho tornarà a provar a la propera còpia de seguretat.</string>
+    <string name="calendar_backup_every_hour">Cada hora</string>
+    <string name="calendar_backup_every_day">Cada dia</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">Cada %d hora</item>
+        <item quantity="other">Cada %d hores</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">Cada %d dia</item>
+        <item quantity="other">Cada %d dies</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Cada 1 dia i %1$s</string>
+    <string name="calendar_backup_every_days_hours">Cada %1$s i %2$s</string>
+    <string name="calendar_backup_interval_too_short">Tria almenys 1 hora.</string>
+    <string name="calendar_backup_interval_too_long">Tria 30 dies o menys.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">No s\'ha pogut desar %d calendari. KashCal ho tornarà a provar a la propera còpia de seguretat.</item>
+        <item quantity="other">No s\'han pogut desar %d calendaris. KashCal ho tornarà a provar a la propera còpia de seguretat.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">Les notificacions de KashCal estan desactivades, així que no et pot avisar si falla una còpia de seguretat.</string>
+    <string name="calendar_backup_notifications_channel_off">Les notificacions de còpia de seguretat estan desactivades, així que KashCal no et pot avisar si falla una còpia de seguretat.</string>
+    <string name="calendar_backup_open_settings">Obre la configuració</string>
+    <string name="calendar_backup_not_now">Ara no</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">Ha fallat %d calendari</item>
+        <item quantity="other">Han fallat %d calendaris</item>
+    </plurals>
     <string name="settings_quick_event_add">Afegir esdeveniments intel·ligent</string>
     <string name="settings_quick_event_add_info">Crea esdeveniments escrivint de manera natural. \"Dinar amb Sam divendres a la 1 del migdia\" omple el títol, la data i l\'hora per tu.</string>
     <string name="settings_suggest_titles">Suggereix títols d\'esdeveniments</string>
@@ -718,6 +828,7 @@
     <string name="label_on_days">Els dies</string>
     <string name="label_pattern">Patró</string>
     <string name="label_ends">Finalitza</string>
+    <string name="sheet_hint_change_end">Toca un dia per canviar el final</string>
     <string name="label_timezone">Zona horària</string>
     <string name="label_alerts">Alertes</string>
     <string name="label_add_alert">Afegir alerta</string>
@@ -739,14 +850,11 @@
     <string name="status_hours_ago">Fa %1$dh</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Mostra esdeveniments d\'altres aplicacions de calendari del dispositiu (adaptadors de sincronització, calendaris locals).</string>
-    <string name="device_calendars_permission_required">Es requereix permís de calendari. Toca Activar per concedir accés.</string>
-    <string name="device_calendars_read_only_access">Accés de només lectura</string>
-    <string name="device_calendars_grant_write">Concedeix permís d\'escriptura per editar esdeveniments del calendari del dispositiu</string>
-    <string name="device_calendars_grant">Concedir</string>
-    <string name="device_calendars_none_found">No s\'han trobat calendaris del dispositiu.</string>
+    <string name="device_calendars_intro">Mostra els calendaris de Google, Outlook i aplicacions de sincronització en aquest dispositiu.</string>
+    <string name="device_calendars_show_switch">Mostra els calendaris del dispositiu</string>
+    <string name="device_calendars_pick_hint">Tria els calendaris que vols mostrar.</string>
+    <string name="device_calendars_empty">No s\'ha trobat cap calendari.</string>
     <string name="device_calendars_local">Local</string>
-    <string name="device_calendars_read_only_no_write">Només lectura (sense permís d\'escriptura)</string>
     <string name="device_calendars_read_only_calendar">Només lectura (el calendari és de només lectura)</string>
     <string name="settings_sync_frequency">Freqüència de sincronització</string>
     <string name="settings_sync_frequency_hint">Cada quan sincronitzar en segon pla</string>
@@ -1292,6 +1400,10 @@
     <string name="ics_fetch_error_http">El servidor ha retornat un error (%1$d). Comproveu la URL.</string>
     <string name="ics_fetch_error_empty">El canal del calendari és buit.</string>
     <string name="ics_fetch_error_not_calendar">Aquesta URL no sembla un canal de calendari.</string>
+    <string name="ics_feed_error_empty_response">El servidor no ha enviat un canal vàlid.</string>
+    <string name="ics_feed_error_access_denied">El servidor d\'aquest canal ha denegat l\'accés.</string>
+    <string name="ics_feed_error_too_large">Aquest canal de calendari és massa gran per baixar-lo.</string>
+    <string name="ics_feed_error_unreadable">No s\'han pogut mostrar els esdeveniments d\'aquest canal.</string>
     <string name="insights_title">Perspectiva</string>
     <string name="insights_period_this_week">Setmana</string>
     <string name="insights_period_last_week">Setm. passada</string>
@@ -1419,7 +1531,7 @@
         <item quantity="other">Lliure els pròxims %1$d dies (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">No hi ha blocs lliures d\'almenys una hora en l\'interval seleccionat.</string>
     <string name="share_from_kashcal_footer">Compartit des de KashCal</string>
@@ -1441,5 +1553,31 @@
     <string name="share_as_card_all_day">Tot el dia</string>
     <string name="share_as_card_chooser_title">Compartir esdeveniment</string>
     <string name="share_as_card_share_failed">No s\'ha pogut compartir la targeta</string>
+    <string name="print_your_week">Imprimeix la teva setmana</string>
+    <string name="print_options_title">Tria les opcions d\'impressió</string>
+    <string name="print_pages_header">Pàgines</string>
+    <string name="print_page_week">Calendari setmanal</string>
+    <string name="print_page_week_detail">La setmana en una graella</string>
+    <string name="print_page_details">Detalls</string>
+    <string name="print_page_details_detail">Cada esdeveniment al complet</string>
+    <string name="print_action">Imprimeix</string>
+    <string name="cd_print_previous_week">Setmana anterior</string>
+    <string name="cd_print_next_week">Setmana següent</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d pàgina</item>
+        <item quantity="other">%d pàgines</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d de %2$d calendari</item>
+        <item quantity="other">%1$d de %2$d calendaris</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – Setmana del %2$s</string>
+    <string name="print_failed">No s\'ha pogut imprimir. Torna-ho a provar.</string>
+    <string name="print_doc_week">Setmana</string>
+    <string name="print_doc_printed">Imprès el %1$s</string>
+    <string name="print_doc_page_of">Pàgina %1$s de %2$s</string>
+    <string name="print_doc_numbers_note">Els números coincideixen amb els detalls, que mostren cada esdeveniment al complet.</string>
+    <string name="print_doc_times_in">Hores mostrades en %1$s</string>
 
 </resources>

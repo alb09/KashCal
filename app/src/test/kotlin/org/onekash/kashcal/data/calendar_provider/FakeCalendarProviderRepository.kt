@@ -882,6 +882,14 @@ class FakeCalendarProviderRepository : CalendarProviderRepository {
         )
     }
 
+    override suspend fun countReminderOccurrences(enabledCalendarIds: Set<Long>, fromMs: Long, toMs: Long): Int {
+        if (shouldThrowSecurityException) return 0
+        return upcomingReminders
+            .filter { it.calendarId in enabledCalendarIds && it.triggerTime in fromMs..toMs }
+            .distinctBy { it.eventId to it.occurrenceStartTs }
+            .size
+    }
+
     /**
      * Resets configuration and recorded calls for test isolation, except
      * [editedFutureSeries] and [deviceTitleRows], which it leaves as they are.

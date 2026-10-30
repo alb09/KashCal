@@ -114,7 +114,7 @@ class CalendarPickerSectionOrderTest {
             "Zoho" to top("Zoho"),
             "Projects" to top("Projects"),
             "device divider" to dividerTop(TAG_PICKER_DEVICE_DIVIDER),
-            "Device Calendars" to top("Device Calendars"),
+            "Device calendars" to top("Device calendars"),
             "Phone" to top("Phone"),
             "Family" to top("Family"),
             "offline divider" to dividerTop(TAG_PICKER_OFFLINE_DIVIDER),
@@ -131,7 +131,7 @@ class CalendarPickerSectionOrderTest {
 
         assertEquals(0, dividerCount(TAG_PICKER_DEVICE_DIVIDER))
         assertEquals(1, dividerCount(TAG_PICKER_OFFLINE_DIVIDER))
-        rule.onNodeWithText("Device Calendars").assertDoesNotExist()
+        rule.onNodeWithText("Device calendars").assertDoesNotExist()
         assertTopToBottom(
             "Zoho" to top("Zoho"),
             "Projects" to top("Projects"),

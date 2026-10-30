@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">ಈವೆಂಟ್ ಆಹ್ವಾನಗಳು</string>
     <string name="channel_event_invitations_desc">ನೀವು ಹೊಸ ಕ್ಯಾಲೆಂಡರ್ ಆಹ್ವಾನವನ್ನು ಸ್ವೀಕರಿಸಿದಾಗ ಅಧಿಸೂಚನೆಗಳು</string>
     <string name="channel_calendar_updates">ಕ್ಯಾಲೆಂಡರ್ ಬದಲಾವಣೆಗಳು</string>
+    <string name="channel_calendar_backup">ಸ್ವಯಂಚಾಲಿತ ಕ್ಯಾಲೆಂಡರ್ ಬ್ಯಾಕಪ್</string>
+    <string name="channel_calendar_backup_description">ಕ್ಯಾಲೆಂಡರ್ ಬ್ಯಾಕಪ್ ವಿಫಲವಾದಾಗ ನಿಮಗೆ ತಿಳಿಸುತ್ತದೆ</string>
     <string name="invite_notification_body">%1$s ಇಂದ · ಪ್ರತಿಕ್ರಿಯಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,35 @@
     <string name="backup_error_read_failed">ಫೈಲ್ ಓದಲಾಗಲಿಲ್ಲ</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple Calendar?</string>
-    <string name="onboarding_got_you">ನಾವು ನಿಮಗೆ ಸಹಾಯ ಮಾಡುತ್ತೇವೆ.</string>
-    <string name="onboarding_connect_prompt">ನಿಮ್ಮ ಈವೆಂಟ್‌ಗಳನ್ನು ಇಲ್ಲಿ ನೋಡಲು iCloud ಸಂಪರ್ಕಿಸಿ</string>
+    <string name="onboarding_title">ನಿಮ್ಮ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ಎಲ್ಲಿವೆ?</string>
+    <string name="onboarding_subtitle">ಸಂಪರ್ಕಿಸಲು ಒಂದನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="onboarding_icloud_detail">Apple ID ಮತ್ತು ಆ್ಯಪ್ ಪಾಸ್‌ವರ್ಡ್</string>
+    <string name="onboarding_caldav_title">CalDAV ಸರ್ವರ್</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale ಮತ್ತು ಇತರೆ</string>
+    <string name="onboarding_device_title">ಈ ಸಾಧನದಲ್ಲಿ</string>
+    <string name="onboarding_phone_detail">Google, Outlook ಮತ್ತು ಸಿಂಕ್ ಆ್ಯಪ್‌ಗಳು</string>
+    <string name="onboarding_use_offline">ಆಫ್‌ಲೈನ್ ಕ್ಯಾಲೆಂಡರ್ ಬಳಸಿ</string>
+    <string name="onboarding_trust">ಓಪನ್ ಸೋರ್ಸ್. ಜಾಹೀರಾತುಗಳಿಲ್ಲ. ಟ್ರ್ಯಾಕಿಂಗ್ ಇಲ್ಲ.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">ರಿಮೈಂಡರ್‌ಗಳು ಆಫ್ ಆಗಿವೆ</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">ಈ ವಾರ %d ಈವೆಂಟ್‌ಗೆ ರಿಮೈಂಡರ್ ಇದೆ.</item>
+        <item quantity="other">ಈ ವಾರ %d ಈವೆಂಟ್‌ಗಳಿಗೆ ರಿಮೈಂಡರ್‌ಗಳಿವೆ.</item>
+    </plurals>
+    <string name="reminders_off_not_now">ಈಗ ಬೇಡ</string>
+    <string name="reminders_off_turn_on">ಆನ್ ಮಾಡಿ</string>
+    <string name="reminders_on_snackbar">ರಿಮೈಂಡರ್‌ಗಳು ಆನ್ ಆಗಿವೆ</string>
+    <string name="about_tagline">ನಿಮ್ಮ ಎಲ್ಲಾ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ಒಂದೇ ಖಾಸಗಿ ಆ್ಯಪ್‌ನಲ್ಲಿ.</string>
+    <string name="about_help_title">ಸಹಾಯ ಮತ್ತು ಮಾರ್ಗದರ್ಶಿಗಳು</string>
+    <string name="about_help_detail">ಸೆಟಪ್, ಸಿಂಕ್ ಮತ್ತು ಪ್ರಶ್ನೆಗಳು</string>
+    <string name="about_source_title">ಸೋರ್ಸ್ ಕೋಡ್</string>
+    <string name="about_source_detail">Apache 2.0, GitHub ನಲ್ಲಿ</string>
+    <string name="about_support_title">KashCal ಅನ್ನು ಬೆಂಬಲಿಸಿ</string>
+    <string name="about_support_detail">ಈಗಾಗಲೇ ಬೆಂಬಲಿಸುತ್ತಿರುವ ಎಲ್ಲರಿಗೂ ಧನ್ಯವಾದಗಳು</string>
+    <string name="about_link_failed">ಈ ಲಿಂಕ್ ತೆರೆಯಲು ಯಾವುದೇ ಆ್ಯಪ್ ಇಲ್ಲ.</string>
+    <string name="about_built_in_austin">Austin ನಲ್ಲಿ ❤️ ನಿಂದ ನಿರ್ಮಿಸಲಾಗಿದೆ</string>
+    <string name="about_version">ಆವೃತ್ತಿ %1$s</string>
     <string name="whats_new_skip">ಬಿಟ್ಟುಬಿಡಿ</string>
     <string name="whats_new_next">ಮುಂದೆ</string>
     <string name="whats_new_page_of">%2$d ರಲ್ಲಿ ಪುಟ %1$d</string>
@@ -275,10 +301,21 @@
     <string name="whats_new_v772_changes_title">ಏನು ಬದಲಾಗಿದೆ ನೋಡಿ</string>
     <string name="whats_new_v772_changes_body">ನಿಮ್ಮ iCloud ಮತ್ತು CalDAV ಕ್ಯಾಲೆಂಡರ್‌ಗಳ ಹೊಸ, ಸಂಪಾದಿಸಿದ ಮತ್ತು ತೆಗೆದುಹಾಕಿದ ಈವೆಂಟ್‌ಗಳು 7 ದಿನಗಳವರೆಗೆ ಇತ್ತೀಚಿನ ಬದಲಾವಣೆಗಳು ಪಟ್ಟಿಯಲ್ಲಿ ಸಂಗ್ರಹವಾಗುತ್ತವೆ. ಒಂದನ್ನು ತೆರೆಯಲು ಅದರ ಮೇಲೆ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
     <string name="whats_new_v772_notifications_body">ಹಿನ್ನೆಲೆ ಸಿಂಕ್ ನಿಮ್ಮ iCloud ಅಥವಾ CalDAV ಈವೆಂಟ್‌ಗಳಲ್ಲಿ ಬದಲಾವಣೆಗಳನ್ನು ಕಂಡುಕೊಂಡಾಗ ಅಧಿಸೂಚನೆ ಪಡೆಯಿರಿ. ನೀವು ಆನ್ ಮಾಡುವವರೆಗೆ ಇದು ಆಫ್ ಆಗಿರುತ್ತದೆ.</string>
+    <string name="whats_new_v803_offline_title">ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲೇ ಉಳಿಯುವ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು</string>
+    <string name="whats_new_v803_offline_body">ಕೆಲವು ಯೋಜನೆಗಳು ಸರ್ವರ್‌ನಲ್ಲಿ ಇರಬೇಕಾದವಲ್ಲ. ಅವುಗಳಿಗೆ ಸ್ವಂತ ಆಫ್‌ಲೈನ್ ಕ್ಯಾಲೆಂಡರ್‌ಗಳನ್ನು ನೀಡಿ, ಎಷ್ಟು ಬೇಕಾದರೂ.</string>
+    <string name="whats_new_v803_backup_title">ಬ್ಯಾಕಪ್ ಬಗ್ಗೆ ಇನ್ನು ಚಿಂತೆ ಬೇಡ</string>
+    <string name="whats_new_v803_backup_body">ಒಮ್ಮೆ ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ, KashCal ಅಲ್ಲಿ ನಿಮ್ಮ ಆಫ್‌ಲೈನ್ ಕ್ಯಾಲೆಂಡರ್‌ಗಳ ಹೊಸ ಪ್ರತಿಯನ್ನು ಇರಿಸುತ್ತದೆ.</string>
+    <string name="whats_new_v803_print_title">ನಿಮ್ಮ ವಾರ, ಕಾಗದದ ಮೇಲೆ</string>
+    <string name="whats_new_v803_print_body">ನೀವು ನೋಡುತ್ತಿರುವ ವಾರವನ್ನು ಪ್ರಿಂಟ್ ಮಾಡಿ. ಯಾವ ಫ್ರಿಜ್‌ಗೆ ಅಂಟಿಸಬೇಕು ಎಂಬುದು ನಿಮ್ಮಿಷ್ಟ.</string>
     <string name="whats_new_hero_sample_lunch">ತಂಡದ ಊಟ</string>
     <string name="whats_new_hero_sample_review">ವಿನ್ಯಾಸ ಪರಿಶೀಲನೆ</string>
     <string name="whats_new_hero_sample_book_club">ಪುಸ್ತಕ ಕ್ಲಬ್</string>
+    <string name="whats_new_hero_sample_dentist">ದಂತವೈದ್ಯರು</string>
+    <string name="whats_new_hero_sample_yoga">ಯೋಗ</string>
     <string name="whats_new_hero_sample_calendar">ಕೆಲಸ</string>
+    <string name="whats_new_hero_sample_family">ಕುಟುಂಬ</string>
+    <string name="whats_new_hero_sample_garden">ತೋಟ</string>
+    <string name="whats_new_hero_sample_folder">ಕ್ಯಾಲೆಂಡರ್ ಬ್ಯಾಕಪ್‌ಗಳು</string>
     <string name="whats_new_hero_now">ಈಗ</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +431,6 @@
     <string name="error_device_calendar_title">ಕ್ಯಾಲೆಂಡರ್ ದೋಷ</string>
     <string name="error_device_calendar_write_failed">ಸಾಧನದ ಕ್ಯಾಲೆಂಡರ್‌ಗೆ ಉಳಿಸಲು ವಿಫಲವಾಯಿತು. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
     <string name="error_device_calendar_permission">ಕ್ಯಾಲೆಂಡರ್ ಬರೆಯುವ ಅನುಮತಿ ಅಗತ್ಯ. ದಯವಿಟ್ಟು ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಅನುಮತಿ ನೀಡಿ.</string>
-    <string name="error_device_calendar_permission_denied">ಬರೆಯುವ ಪ್ರವೇಶ ನೀಡಲು ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಕ್ಯಾಲೆಂಡರ್ ಅನುಮತಿಯನ್ನು ಆಫ್ ಮಾಡಿ ಮತ್ತೆ ಆನ್ ಮಾಡಿ</string>
     <string name="error_device_calendar_not_found">ಕ್ಯಾಲೆಂಡರ್ ಕಂಡುಬಂದಿಲ್ಲ. ಇದನ್ನು ತೆಗೆದುಹಾಕಿರಬಹುದು.</string>
     <string name="error_device_event_not_found">ಈವೆಂಟ್ ಕಂಡುಬಂದಿಲ್ಲ. ಇದನ್ನು ಅಳಿಸಿರಬಹುದು.</string>
     <string name="error_device_calendar_read_only">ಈ ಕ್ಯಾಲೆಂಡರ್ ಓದಲು-ಮಾತ್ರ.</string>
@@ -538,6 +574,7 @@
     <string name="subscriptions_section_add">ಸೇರಿಸಿ</string>
     <string name="subscriptions_empty_ics">ICS ಚಂದಾದಾರಿಕೆಗಳಿಲ್ಲ</string>
     <string name="subscriptions_empty_ics_hint">ಈವೆಂಟ್‌ಗಳನ್ನು ನೋಡಲು ಕ್ಯಾಲೆಂಡರ್ ಫೀಡ್ ಸೇರಿಸಿ</string>
+    <string name="subscriptions_swipe_hint">ಅಳಿಸಲು ಫೀಡ್ ಅನ್ನು ಸ್ವೈಪ್ ಮಾಡಿ.</string>
     <string name="subscriptions_add_ics">ICS ಕ್ಯಾಲೆಂಡರ್ ಸೇರಿಸಿ</string>
     <string name="qs_tile_label">ಈವೆಂಟ್ ಸೇರಿಸಿ</string>
     <string name="holiday_catalog_add">ರಜಾ ಕ್ಯಾಲೆಂಡರ್ ಸೇರಿಸಿ</string>
@@ -624,7 +661,7 @@
     <string name="settings_device_calendars_hint">ಇತರ ಆ್ಯಪ್‌ಗಳಿಂದ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು</string>
     <string name="offline_calendars_row_label">ಆಫ್‌ಲೈನ್ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು</string>
     <string name="offline_calendars_row_hint">ಈ ಫೋನ್‌ನಲ್ಲೇ ಉಳಿಯುವ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು</string>
-    <string name="offline_calendars_manage_note">ನಿಮ್ಮ ಆಫ್‌ಲೈನ್ ಕ್ಯಾಲೆಂಡರ್‌ಗಳನ್ನು ಸೇರಿಸಿ, ಹೆಸರು ಅಥವಾ ಬಣ್ಣ ಬದಲಾಯಿಸಿ, ಅಥವಾ ಅಳಿಸಿ.</string>
+    <string name="offline_calendars_manage_note">ಅಳಿಸಲು ಕ್ಯಾಲೆಂಡರ್ ಅನ್ನು ಸ್ವೈಪ್ ಮಾಡಿ.</string>
     <string name="offline_calendars_info">ಈ ಫೋನ್‌ನಲ್ಲಿ ಮಾತ್ರ ಇರಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಎಂದಿಗೂ ಸಿಂಕ್ ಆಗುವುದಿಲ್ಲ. ಬ್ಯಾಕಪ್‌ಗಳಲ್ಲಿ ಈವೆಂಟ್‌ಗಳು ಸೇರಿರುವುದಿಲ್ಲ, ಆದ್ದರಿಂದ ಪ್ರತಿಯನ್ನು ಇರಿಸಿಕೊಳ್ಳಲು ಕ್ಯಾಲೆಂಡರ್ ಅನ್ನು ರಫ್ತು ಮಾಡಿ.</string>
     <string name="offline_calendars_info_cd">ಆಫ್‌ಲೈನ್ ಕ್ಯಾಲೆಂಡರ್‌ಗಳ ಬಗ್ಗೆ</string>
     <string name="offline_calendar_default_state">ಡೀಫಾಲ್ಟ್</string>
@@ -650,6 +687,79 @@
     </plurals>
     <string name="offline_calendar_deleted">%1$s ಅಳಿಸಲಾಗಿದೆ</string>
     <string name="offline_calendar_duplicate_name">\"%1$s\" ಹೆಸರಿನ ಆಫ್‌ಲೈನ್ ಕ್ಯಾಲೆಂಡರ್ ಈಗಾಗಲೇ ಇದೆ</string>
+    <string name="offline_calendar_similar_name">\"%1$s\" ಗೆ ತುಂಬಾ ಹೋಲುತ್ತದೆ. ಬೇರೆ ಹೆಸರನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="calendar_backup_title">ಸ್ವಯಂಚಾಲಿತ ಕ್ಯಾಲೆಂಡರ್ ಬ್ಯಾಕಪ್</string>
+    <string name="calendar_backup_row_off">ಆಫ್</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">ಬ್ಯಾಕಪ್ ಫೋಲ್ಡರ್ ಪ್ರವೇಶಿಸಲಾಗುತ್ತಿಲ್ಲ</string>
+    <string name="calendar_backup_intro">ಪ್ರತಿ ಆಫ್‌ಲೈನ್ ಕ್ಯಾಲೆಂಡರ್ ಅನ್ನು ನೀವು ಆಯ್ಕೆಮಾಡುವ ಫೋಲ್ಡರ್‌ನಲ್ಲಿ ICS ಫೈಲ್ ಆಗಿ ಉಳಿಸುತ್ತದೆ.</string>
+    <string name="calendar_backup_choose_folder">ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="calendar_backup_choose_folder_hint">ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ರಚಿಸಿ, ಉದಾಹರಣೆಗೆ Documents ನಲ್ಲಿ. ಸಂಗ್ರಹಣೆಯ ಮೇಲ್ಮಟ್ಟವನ್ನು ಅಥವಾ ನೇರವಾಗಿ Download ಫೋಲ್ಡರ್ ಅನ್ನು Android ಅನುಮತಿಸುವುದಿಲ್ಲ.</string>
+    <string name="calendar_backup_folder">ಫೋಲ್ಡರ್</string>
+    <string name="calendar_backup_change">ಬದಲಾಯಿಸಿ</string>
+    <string name="calendar_backup_frequency">ಎಷ್ಟು ಬಾರಿ</string>
+    <string name="calendar_backup_frequency_info">ಬ್ಯಾಕಪ್‌ಗಳು ತಡವಾಗಿ ರನ್ ಆಗಬಹುದು: ಫೋನ್ ನಿಷ್ಕ್ರಿಯವಾಗಿರುವಾಗ ಅಥವಾ KashCal ಅನ್ನು ಸ್ವಲ್ಪ ಸಮಯದಿಂದ ತೆರೆಯದಿದ್ದಾಗ Android ಹಿನ್ನೆಲೆ ಕೆಲಸವನ್ನು ತಡೆಹಿಡಿಯುತ್ತದೆ.</string>
+    <string name="calendar_backup_copies">ಇರಿಸಬೇಕಾದ ಪ್ರತಿಗಳು</string>
+    <string name="calendar_backup_copies_explained">ಪ್ರತಿ ಬ್ಯಾಕಪ್ ಹಿಂದಿನ ಫೈಲ್ ಅನ್ನು ದಿನಾಂಕವಿರುವ ಪ್ರತಿಯಾಗಿ ಇರಿಸುತ್ತದೆ. ಪ್ರತಿಗಳು ಈ ಸಂಖ್ಯೆಗಿಂತ ಹೆಚ್ಚಾದಾಗ, ಅತ್ಯಂತ ಹಳೆಯವುಗಳನ್ನು ಅಳಿಸಲಾಗುತ್ತದೆ. ಅತ್ಯಂತ ಹೊಸ ಫೈಲ್‌ಗೆ ಯಾವಾಗಲೂ ಕ್ಯಾಲೆಂಡರ್‌ನ ಹೆಸರೇ ಇರುತ್ತದೆ.</string>
+    <string name="calendar_backup_copies_fewer">ಕಡಿಮೆ ಪ್ರತಿಗಳನ್ನು ಇರಿಸಿ</string>
+    <string name="calendar_backup_copies_more">ಹೆಚ್ಚು ಪ್ರತಿಗಳನ್ನು ಇರಿಸಿ</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d ಪ್ರತಿ</item>
+        <item quantity="other">%d ಪ್ರತಿಗಳು</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">%d ಹಳೆಯ ಪ್ರತಿಯನ್ನು ಅಳಿಸುತ್ತದೆ. ರದ್ದುಗೊಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</item>
+        <item quantity="other">%d ಹಳೆಯ ಪ್ರತಿಗಳನ್ನು ಅಳಿಸುತ್ತದೆ. ರದ್ದುಗೊಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">ಈ ಸಂಖ್ಯೆಯನ್ನು ಮೀರಿದ ಹಳೆಯ ಪ್ರತಿಗಳನ್ನು ಅಳಿಸುತ್ತದೆ. ರದ್ದುಗೊಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="calendar_backup_calendars">ಆಫ್‌ಲೈನ್ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · ಈವೆಂಟ್‌ಗಳಿಲ್ಲ, ಏನನ್ನೂ ಉಳಿಸಲಾಗಿಲ್ಲ</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮುಂದಿನ ಬ್ಯಾಕಪ್‌ನಲ್ಲಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಲಾಗುತ್ತದೆ.</string>
+    <string name="calendar_backup_status">ಕೊನೆಯ ಬ್ಯಾಕಪ್ %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">ಕೊನೆಯ ಬ್ಯಾಕಪ್ %1$s · %2$d ಕ್ಯಾಲೆಂಡರ್ ವಿಫಲವಾಗಿದೆ</item>
+        <item quantity="other">ಕೊನೆಯ ಬ್ಯಾಕಪ್ %1$s · %2$d ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ವಿಫಲವಾಗಿವೆ</item>
+    </plurals>
+    <string name="calendar_backup_now">ಈಗ ಬ್ಯಾಕಪ್ ಮಾಡಿ</string>
+    <string name="calendar_backup_running">ಬ್ಯಾಕಪ್ ಆಗುತ್ತಿದೆ…</string>
+    <string name="calendar_backup_footer_overwrites">ಪ್ರತಿ ಬ್ಯಾಕಪ್‌ನಲ್ಲಿ KashCal ಈ ಫೈಲ್‌ಗಳನ್ನು ಓವರ್‌ರೈಟ್ ಮಾಡುತ್ತದೆ, ಆದ್ದರಿಂದ ಇತರ ಆ್ಯಪ್‌ಗಳಲ್ಲಿ ಇವುಗಳಿಗೆ ಮಾಡಿದ ಬದಲಾವಣೆಗಳು ಉಳಿಯುವುದಿಲ್ಲ. ಕ್ಯಾಲೆಂಡರ್ ಅನ್ನು ಮರುಸ್ಥಾಪಿಸಲು \"ಫೈಲ್‌ನಿಂದ ಈವೆಂಟ್‌ಗಳನ್ನು ಆಮದು ಮಾಡಿ\" ಬಳಸಿ.</string>
+    <string name="calendar_backup_off_files_stay">ಈಗಿರುವ ಫೈಲ್‌ಗಳು %1$s ನಲ್ಲಿಯೇ ಉಳಿಯುತ್ತವೆ.</string>
+    <string name="calendar_backup_folder_unreachable">%1$s ಪ್ರವೇಶಿಸಲಾಗುತ್ತಿಲ್ಲ. ಅದನ್ನು ಸರಿಸಿರಬಹುದು, ಅಳಿಸಿರಬಹುದು ಅಥವಾ ಸಂಪರ್ಕ ಕಡಿತಗೊಳಿಸಿರಬಹುದು.</string>
+    <string name="calendar_backup_error_unsupported">%1$s ನಲ್ಲಿ ಫೈಲ್‌ಗಳನ್ನು ಉಳಿಸಲಾಗುವುದಿಲ್ಲ. ಬೇರೆ ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="calendar_backup_choose_again">ಮತ್ತೆ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="calendar_backup_pick_refused">KashCal ಆ ಫೋಲ್ಡರ್ ಬಳಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ಬೇರೊಂದನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal ಆ ಫೋಲ್ಡರ್‌ನಲ್ಲಿ ಫೈಲ್‌ಗಳನ್ನು ರಚಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ಬೇರೊಂದನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="calendar_backup_failed_title">ಕ್ಯಾಲೆಂಡರ್ ಬ್ಯಾಕಪ್ ವಿಫಲವಾಗಿದೆ</string>
+    <string name="calendar_backup_folder_unnamed">ಬ್ಯಾಕಪ್ ಫೋಲ್ಡರ್</string>
+    <string name="calendar_backup_alert_unreachable">%1$s ಪ್ರವೇಶಿಸಲಾಗುತ್ತಿಲ್ಲ. ಮತ್ತೆ ಆಯ್ಕೆಮಾಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
+    <string name="calendar_backup_alert_unsupported">%1$s ನಲ್ಲಿ ಫೈಲ್‌ಗಳನ್ನು ಉಳಿಸಲಾಗುವುದಿಲ್ಲ. ಬೇರೆ ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
+    <string name="calendar_backup_alert_file_retry">%1$s ಅನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. KashCal ಮುಂದಿನ ಬ್ಯಾಕಪ್‌ನಲ್ಲಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸುತ್ತದೆ.</string>
+    <string name="calendar_backup_every_hour">ಪ್ರತಿ ಗಂಟೆಗೆ</string>
+    <string name="calendar_backup_every_day">ಪ್ರತಿದಿನ</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">ಪ್ರತಿ %d ಗಂಟೆಗೆ</item>
+        <item quantity="other">ಪ್ರತಿ %d ಗಂಟೆಗಳಿಗೊಮ್ಮೆ</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">ಪ್ರತಿ %d ದಿನಕ್ಕೆ</item>
+        <item quantity="other">ಪ್ರತಿ %d ದಿನಗಳಿಗೊಮ್ಮೆ</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">ಪ್ರತಿ 1 ದಿನ %1$s</string>
+    <string name="calendar_backup_every_days_hours">ಪ್ರತಿ %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">ಕನಿಷ್ಠ 1 ಗಂಟೆ ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="calendar_backup_interval_too_long">30 ದಿನಗಳು ಅಥವಾ ಅದಕ್ಕಿಂತ ಕಡಿಮೆ ಆಯ್ಕೆಮಾಡಿ.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">%d ಕ್ಯಾಲೆಂಡರ್ ಅನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. KashCal ಮುಂದಿನ ಬ್ಯಾಕಪ್‌ನಲ್ಲಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸುತ್ತದೆ.</item>
+        <item quantity="other">%d ಕ್ಯಾಲೆಂಡರ್‌ಗಳನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. KashCal ಮುಂದಿನ ಬ್ಯಾಕಪ್‌ನಲ್ಲಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸುತ್ತದೆ.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">KashCal ಗೆ ಅಧಿಸೂಚನೆಗಳು ಆಫ್ ಆಗಿವೆ, ಆದ್ದರಿಂದ ಬ್ಯಾಕಪ್ ವಿಫಲವಾದರೆ ಅದು ನಿಮಗೆ ತಿಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="calendar_backup_notifications_channel_off">ಬ್ಯಾಕಪ್ ಅಧಿಸೂಚನೆಗಳು ಆಫ್ ಆಗಿವೆ, ಆದ್ದರಿಂದ ಬ್ಯಾಕಪ್ ವಿಫಲವಾದರೆ KashCal ನಿಮಗೆ ತಿಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="calendar_backup_open_settings">ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</string>
+    <string name="calendar_backup_not_now">ಈಗ ಬೇಡ</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">%d ಕ್ಯಾಲೆಂಡರ್ ವಿಫಲವಾಗಿದೆ</item>
+        <item quantity="other">%d ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ವಿಫಲವಾಗಿವೆ</item>
+    </plurals>
     <string name="settings_quick_event_add">ಸ್ಮಾರ್ಟ್ ಈವೆಂಟ್ ಸೇರ್ಪಡೆ</string>
     <string name="settings_quick_event_add_info">ಸಹಜವಾಗಿ ಟೈಪ್ ಮಾಡಿ ಈವೆಂಟ್‌ಗಳನ್ನು ರಚಿಸಿ. \"ಶುಕ್ರವಾರ ಮಧ್ಯಾಹ್ನ 1 ಗಂಟೆಗೆ Sam ಜೊತೆ ಊಟ\" ನಿಮಗಾಗಿ ಶೀರ್ಷಿಕೆ, ದಿನಾಂಕ ಮತ್ತು ಸಮಯವನ್ನು ಭರ್ತಿ ಮಾಡುತ್ತದೆ.</string>
     <string name="settings_suggest_titles">ಈವೆಂಟ್ ಶೀರ್ಷಿಕೆಗಳನ್ನು ಸೂಚಿಸಿ</string>
@@ -718,6 +828,7 @@
     <string name="label_on_days">ದಿನಗಳಲ್ಲಿ</string>
     <string name="label_pattern">ಮಾದರಿ</string>
     <string name="label_ends">ಮುಕ್ತಾಯ</string>
+    <string name="sheet_hint_change_end">ಅಂತ್ಯವನ್ನು ಬದಲಾಯಿಸಲು ಒಂದು ದಿನವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ</string>
     <string name="label_timezone">ಸಮಯ ವಲಯ</string>
     <string name="label_alerts">ಎಚ್ಚರಿಕೆಗಳು</string>
     <string name="label_add_alert">ಎಚ್ಚರಿಕೆ ಸೇರಿಸಿ</string>
@@ -739,14 +850,11 @@
     <string name="status_hours_ago">%1$d ಗಂ. ಹಿಂದೆ</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿನ ಇತರ ಕ್ಯಾಲೆಂಡರ್ ಆ್ಯಪ್‌ಗಳಿಂದ ಈವೆಂಟ್‌ಗಳನ್ನು ತೋರಿಸಿ (ಸಿಂಕ್ ಅಡಾಪ್ಟರ್‌ಗಳು, ಸ್ಥಳೀಯ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು).</string>
-    <string name="device_calendars_permission_required">ಕ್ಯಾಲೆಂಡರ್ ಅನುಮತಿ ಅಗತ್ಯ. ಪ್ರವೇಶ ನೀಡಲು ಆನ್ ಮಾಡಿ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
-    <string name="device_calendars_read_only_access">ಓದಲು-ಮಾತ್ರ ಪ್ರವೇಶ</string>
-    <string name="device_calendars_grant_write">ಸಾಧನ ಕ್ಯಾಲೆಂಡರ್ ಈವೆಂಟ್‌ಗಳನ್ನು ಬದಲಾಯಿಸಲು ಬರೆಯುವ ಅನುಮತಿ ನೀಡಿ</string>
-    <string name="device_calendars_grant">ಅನುಮತಿಸಿ</string>
-    <string name="device_calendars_none_found">ಸಾಧನ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ಕಂಡುಬಂದಿಲ್ಲ.</string>
+    <string name="device_calendars_intro">ಈ ಸಾಧನದಲ್ಲಿರುವ Google, Outlook ಮತ್ತು ಸಿಂಕ್ ಆ್ಯಪ್‌ಗಳ ಕ್ಯಾಲೆಂಡರ್‌ಗಳನ್ನು ತೋರಿಸಿ.</string>
+    <string name="device_calendars_show_switch">ಸಾಧನ ಕ್ಯಾಲೆಂಡರ್‌ಗಳನ್ನು ತೋರಿಸಿ</string>
+    <string name="device_calendars_pick_hint">ತೋರಿಸಬೇಕಾದ ಕ್ಯಾಲೆಂಡರ್‌ಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="device_calendars_empty">ಯಾವುದೇ ಕ್ಯಾಲೆಂಡರ್‌ಗಳು ಕಂಡುಬಂದಿಲ್ಲ.</string>
     <string name="device_calendars_local">ಸ್ಥಳೀಯ</string>
-    <string name="device_calendars_read_only_no_write">ಓದಲು ಮಾತ್ರ (ಬರೆಯುವ ಅನುಮತಿ ಇಲ್ಲ)</string>
     <string name="device_calendars_read_only_calendar">ಓದಲು ಮಾತ್ರ (ಕ್ಯಾಲೆಂಡರ್ ಓದಲು-ಮಾತ್ರ)</string>
     <string name="settings_sync_frequency">ಸಿಂಕ್ ಆವರ್ತನ</string>
     <string name="settings_sync_frequency_hint">ಹಿನ್ನೆಲೆಯಲ್ಲಿ ಎಷ್ಟು ಬಾರಿ ಸಿಂಕ್ ಮಾಡಬೇಕು</string>
@@ -1292,6 +1400,10 @@
     <string name="ics_fetch_error_http">ಸರ್ವರ್ ಒಂದು ದೋಷವನ್ನು ಹಿಂತಿರುಗಿಸಿದೆ (%1$d). ದಯವಿಟ್ಟು URL ಪರಿಶೀಲಿಸಿ.</string>
     <string name="ics_fetch_error_empty">ಕ್ಯಾಲೆಂಡರ್ ಫೀಡ್ ಖಾಲಿಯಾಗಿದೆ.</string>
     <string name="ics_fetch_error_not_calendar">ಆ URL ಕ್ಯಾಲೆಂಡರ್ ಫೀಡ್‌ನಂತೆ ಕಾಣುತ್ತಿಲ್ಲ.</string>
+    <string name="ics_feed_error_empty_response">ಸರ್ವರ್ ಮಾನ್ಯವಾದ ಫೀಡ್ ಕಳುಹಿಸಲಿಲ್ಲ.</string>
+    <string name="ics_feed_error_access_denied">ಈ ಫೀಡ್‌ನ ಸರ್ವರ್ ಪ್ರವೇಶವನ್ನು ನಿರಾಕರಿಸಿದೆ.</string>
+    <string name="ics_feed_error_too_large">ಈ ಕ್ಯಾಲೆಂಡರ್ ಫೀಡ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ತುಂಬಾ ದೊಡ್ಡದಾಗಿದೆ.</string>
+    <string name="ics_feed_error_unreadable">ಈ ಫೀಡ್‌ನ ಈವೆಂಟ್‌ಗಳನ್ನು ತೋರಿಸಲಾಗಲಿಲ್ಲ.</string>
     <string name="insights_title">ಇನ್‌ಸೈಟ್ಸ್</string>
     <string name="insights_period_this_week">ವಾರ</string>
     <string name="insights_period_last_week">ಕಳೆದ ವಾರ</string>
@@ -1419,7 +1531,7 @@
         <item quantity="other">ಮುಂದಿನ %1$d ದಿನಗಳಲ್ಲಿ ಮುಕ್ತ (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">ಆಯ್ಕೆಮಾಡಿದ ಶ್ರೇಣಿಯಲ್ಲಿ ಕನಿಷ್ಠ ಒಂದು ಗಂಟೆಯ ಯಾವುದೇ ಮುಕ್ತ ಬ್ಲಾಕ್‌ಗಳಿಲ್ಲ.</string>
     <string name="share_from_kashcal_footer">KashCal ನಿಂದ ಹಂಚಲಾಗಿದೆ</string>
@@ -1441,5 +1553,31 @@
     <string name="share_as_card_all_day">ದಿನವಿಡೀ</string>
     <string name="share_as_card_chooser_title">ಈವೆಂಟ್ ಹಂಚಿಕೊಳ್ಳಿ</string>
     <string name="share_as_card_share_failed">ಕಾರ್ಡ್ ಹಂಚಿಕೊಳ್ಳಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
+    <string name="print_your_week">ನಿಮ್ಮ ವಾರವನ್ನು ಪ್ರಿಂಟ್ ಮಾಡಿ</string>
+    <string name="print_options_title">ಪ್ರಿಂಟ್ ಆಯ್ಕೆಗಳನ್ನು ಆರಿಸಿ</string>
+    <string name="print_pages_header">ಪುಟಗಳು</string>
+    <string name="print_page_week">ವಾರದ ಕ್ಯಾಲೆಂಡರ್</string>
+    <string name="print_page_week_detail">ಗ್ರಿಡ್ ರೂಪದಲ್ಲಿ ವಾರ</string>
+    <string name="print_page_details">ವಿವರಗಳು</string>
+    <string name="print_page_details_detail">ಪ್ರತಿ ಈವೆಂಟ್ ಪೂರ್ಣವಾಗಿ</string>
+    <string name="print_action">ಪ್ರಿಂಟ್ ಮಾಡಿ</string>
+    <string name="cd_print_previous_week">ಹಿಂದಿನ ವಾರ</string>
+    <string name="cd_print_next_week">ಮುಂದಿನ ವಾರ</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d ಪುಟ</item>
+        <item quantity="other">%d ಪುಟಗಳು</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%2$d ರಲ್ಲಿ %1$d ಕ್ಯಾಲೆಂಡರ್</item>
+        <item quantity="other">%2$d ರಲ್ಲಿ %1$d ಕ್ಯಾಲೆಂಡರ್‌ಗಳು</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – %2$s ವಾರ</string>
+    <string name="print_failed">ಪ್ರಿಂಟ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="print_doc_week">ವಾರ</string>
+    <string name="print_doc_printed">%1$s ರಂದು ಪ್ರಿಂಟ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="print_doc_page_of">%2$s ರಲ್ಲಿ ಪುಟ %1$s</string>
+    <string name="print_doc_numbers_note">ಸಂಖ್ಯೆಗಳು ವಿವರಗಳ ಪುಟಕ್ಕೆ ಹೊಂದಿಕೆಯಾಗುತ್ತವೆ, ಅಲ್ಲಿ ಪ್ರತಿ ಈವೆಂಟ್ ಪೂರ್ಣವಾಗಿ ಇದೆ.</string>
+    <string name="print_doc_times_in">ಸಮಯಗಳನ್ನು %1$s ನಲ್ಲಿ ತೋರಿಸಲಾಗಿದೆ</string>
 
 </resources>

@@ -114,4 +114,23 @@ class SettingsDestinationTest {
             )
         )
     }
+
+    @Test
+    fun `backing out of the screen Settings was launched on finishes the activity`() {
+        assertTrue(SettingsDestination.Tags.closesActivity(launchedOn = SettingsDestination.Tags))
+        assertTrue(
+            SettingsDestination.DeviceCalendars.closesActivity(
+                launchedOn = SettingsDestination.DeviceCalendars
+            )
+        )
+    }
+
+    @Test
+    fun `backing out of any other screen returns within Settings`() {
+        assertFalse(SettingsDestination.DeviceCalendars.closesActivity(launchedOn = null))
+        assertFalse(SettingsDestination.Tags.closesActivity(launchedOn = null))
+        assertFalse(
+            SettingsDestination.DeviceCalendars.closesActivity(launchedOn = SettingsDestination.Tags)
+        )
+    }
 }

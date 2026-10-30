@@ -134,6 +134,10 @@ class OfflineCalendarFixture(private val context: Context) {
     fun refusalOf(result: Result<*>): LocalCalendarRefusal? =
         (result.exceptionOrNull() as? LocalCalendarException)?.refusal
 
+    /** Returns the other calendar's name a [LocalCalendarRefusal.SIMILAR_NAME] carries, or null. */
+    fun conflictOf(result: Result<*>): String? =
+        (result.exceptionOrNull() as? LocalCalendarException)?.conflictingName
+
     fun close() {
         db.close()
         dataStoreScope.cancel()

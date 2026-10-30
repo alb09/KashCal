@@ -100,6 +100,18 @@ class SubscriptionsScreenSwipeTest {
     private val deleteButton get() = hasText(str(R.string.action_delete)) and hasClickAction()
 
     @Test
+    fun `the list names the swipe while it has feeds`() {
+        show(feed(1, "Feed A"))
+        rule.onNodeWithText(str(R.string.subscriptions_swipe_hint)).assertExists()
+
+        swipe("Feed A")
+        rule.onNode(deleteButton).performClick()
+        rule.waitForIdle()
+
+        rule.onNodeWithText(str(R.string.subscriptions_swipe_hint)).assertDoesNotExist()
+    }
+
+    @Test
     fun `a full swipe reveals Delete and doesn't delete`() {
         show(feed(1, "Feed A"), feed(2, "Feed B"))
         val closedLeft = left("Feed A")

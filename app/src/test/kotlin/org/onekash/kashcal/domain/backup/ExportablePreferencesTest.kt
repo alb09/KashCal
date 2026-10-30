@@ -171,8 +171,8 @@ class ExportablePreferencesTest {
             PreferencesKeys.PARSER_VERSION,
             PreferencesKeys.ICLOUD_URL_MIGRATION_COMPLETED,
             PreferencesKeys.ONBOARDING_COMPLETED,
+            PreferencesKeys.NOTIFICATION_ASK_DONE,
             PreferencesKeys.SHOWN_LOCAL_CALENDAR_INTRO,
-            PreferencesKeys.ONBOARDING_DISMISSED,
         )
         mustBeExcluded.forEach { key ->
             assertTrue(

@@ -2110,6 +2110,26 @@ class AndroidCalendarProviderRepository @Inject constructor(
         }
     }
 
+    override suspend fun countReminderOccurrences(
+        enabledCalendarIds: Set<Long>,
+        fromMs: Long,
+        toMs: Long,
+    ): Int = withContext(Dispatchers.IO) {
+        if (enabledCalendarIds.isEmpty()) return@withContext 0
+        try {
+            reminderCandidates(enabledCalendarIds, fromMs, toMs + REMINDER_WINDOW_MS)
+                .filter { it.triggerTime in fromMs..toMs }
+                .distinctBy { it.eventId to it.occurrenceStartTs }
+                .size
+        } catch (e: SecurityException) {
+            Log.w(TAG, "Calendar permission revoked", e)
+            0
+        } catch (e: Exception) {
+            Log.e(TAG, "Error counting device reminders", e)
+            0
+        }
+    }
+
     /**
      * Returns every reminder of [enabledCalendarIds]' occurrences with alarms in [fromMs]..[toMs],
      * declined ones skipped ([buildUpcomingReminderSelection]); the caller filters and orders.

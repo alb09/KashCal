@@ -145,7 +145,7 @@ class IcsExporter @Inject constructor() {
             if (events.isEmpty()) {
                 return Result.failure(IllegalArgumentException("No events to export"))
             }
-            val icsContent = buildCalendarIcs(events, calendarName)
+            val icsContent = buildCalendarText(events, calendarName)
             val fileName = generateFileName(calendarName)
             val uri = writeToCache(context, fileName, icsContent)
             Log.i(TAG, "Exported ${events.size} events to: $uri")
@@ -157,12 +157,13 @@ class IcsExporter @Inject constructor() {
     }
 
     /**
-     * Builds one VCALENDAR of every master and exception, each series written as [exportEvent]
-     * writes it ([IcsPatcher.toICalEvents]), with a VTIMEZONE for each distinct non-UTC timezone
-     * referenced across the bundle. A series whose stored copy can't be patched (an unparseable
-     * stored rule) is built from its fields instead, so one row can't fail the whole export.
+     * Returns the text [exportCalendar] writes: one VCALENDAR named [calendarName] of every master
+     * and exception, each series written as [exportEvent] writes it ([IcsPatcher.toICalEvents]),
+     * with a VTIMEZONE for each distinct non-UTC timezone referenced across the bundle. A series
+     * whose stored copy can't be patched (an unparseable stored rule) is built from its fields
+     * instead, so one row can't fail the whole export. Automatic backup writes the same text.
      */
-    private fun buildCalendarIcs(
+    fun buildCalendarText(
         events: List<EventExport>,
         calendarName: String
     ): String {

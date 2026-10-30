@@ -23,6 +23,7 @@ import org.onekash.kashcal.data.db.entity.Calendar
 import org.onekash.kashcal.data.preferences.KashCalDataStore
 import org.onekash.kashcal.domain.model.DisplayEvent
 import org.onekash.kashcal.domain.model.SearchResult
+import org.onekash.kashcal.domain.model.overlapsWindow
 import org.onekash.kashcal.ui.util.DayPagerUtils
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -201,6 +202,53 @@ class DisplayEventRepository @Inject constructor(
     }
 
     /**
+     * Returns the events of the calendars ticked for printing, once, sorted by start: the Room
+     * calendars in [roomCalendarIds] whether visible or hidden, and the device calendars in
+     * [deviceCalendarIds] that are enabled while device calendars are on, hidden or not. The
+     * show-declined setting applies as on screen ([applyDeclinedPolicy]); cancelled occurrences
+     * are left out as [EventReader.getOccurrencesWithEventsInRange] leaves them out.
+     *
+     * Only events with time in the half-open window [startMs]..[endMs] are returned
+     * ([overlapsWindow]). The Room range query includes events that only touch the window and
+     * the device query widens it by a day on each side, so both are trimmed here.
+     */
+    suspend fun getDisplayEventsForPrint(
+        startMs: Long,
+        endMs: Long,
+        roomCalendarIds: Set<Long>,
+        deviceCalendarIds: Set<Long>,
+    ): List<DisplayEvent> {
+        val firstDayCode = DayPagerUtils.msToDayCode(startMs)
+        val lastDayCode = DayPagerUtils.msToDayCode(endMs - 1)
+        val showDeclined = dataStore.getShowDeclinedEvents()
+
+        val roomEvents = if (roomCalendarIds.isEmpty()) {
+            emptyList()
+        } else {
+            val rows = eventReader.getOccurrencesWithEventsInRange(startMs, endMs)
+                .filter { it.occurrence.calendarId in roomCalendarIds }
+            applyDeclinedPolicy(rows, showDeclined)
+        }
+        // Ticked device calendars count only while device calendars are on and they are enabled.
+        val deviceEvents = deviceInstances(
+            firstDayCode,
+            lastDayCode,
+            calendarIds = {
+                if (deviceCalendarIds.isEmpty() || !dataStore.getDeviceCalendarsEnabled()) {
+                    emptySet()
+                } else {
+                    deviceCalendarIds intersect dataStore.getEnabledDeviceCalendarIds()
+                }
+            },
+            hideDeclined = { !showDeclined },
+        )
+
+        return (roomEvents + deviceEvents)
+            .filter { it.overlapsWindow(startMs, endMs, firstDayCode, lastDayCode) }
+            .sortedBy { it.startTs }
+    }
+
+    /**
      * Suggests event titles from Room and device-calendar history that match [prefix], for the
      * event-form autocomplete. Empty for a prefix shorter than [TITLE_SUGGESTION_MIN_PREFIX].
      *
@@ -298,21 +346,34 @@ class DisplayEventRepository @Inject constructor(
     private suspend fun queryDeviceEvents(
         startDayCode: Int,
         endDayCode: Int
-    ): List<DisplayEvent> {
-        return try {
-            val visibleIds = getVisibleDeviceCalendarIds()
-            if (visibleIds.isNotEmpty()) {
-                val hideDeclined = !dataStore.getShowDeclinedEvents()
-                calendarProviderRepository.getInstancesForDayRange(
-                    startDayCode, endDayCode, visibleIds, hideDeclined
-                ).map { DisplayEvent.Device(it) }
-            } else {
-                emptyList()
-            }
-        } catch (e: SecurityException) {
-            Log.w(TAG, "Calendar permission revoked, falling back to Room-only", e)
+    ): List<DisplayEvent> = deviceInstances(
+        startDayCode,
+        endDayCode,
+        calendarIds = { getVisibleDeviceCalendarIds() },
+        hideDeclined = { !dataStore.getShowDeclinedEvents() },
+    )
+
+    /**
+     * Returns the instances of [calendarIds] for a day code range, asking [hideDeclined] only
+     * when there is a calendar to read; empty when there is none or on a [SecurityException],
+     * so the Room events still show.
+     */
+    private suspend fun deviceInstances(
+        startDayCode: Int,
+        endDayCode: Int,
+        calendarIds: suspend () -> Set<Long>,
+        hideDeclined: suspend () -> Boolean,
+    ): List<DisplayEvent> = try {
+        val ids = calendarIds()
+        if (ids.isEmpty()) {
             emptyList()
+        } else {
+            calendarProviderRepository.getInstancesForDayRange(startDayCode, endDayCode, ids, hideDeclined())
+                .map { DisplayEvent.Device(it) }
         }
+    } catch (e: SecurityException) {
+        Log.w(TAG, "Calendar permission revoked, falling back to Room-only", e)
+        emptyList()
     }
 
     /** Returns the enabled, not hidden device calendar IDs; empty when the feature is off. */

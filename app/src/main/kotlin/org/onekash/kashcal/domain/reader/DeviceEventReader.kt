@@ -62,6 +62,13 @@ class DeviceEventReader @Inject constructor(
     }
 
     /**
+     * Returns how many occurrences of [calendarIds] have a reminder triggering in [fromMs]..[toMs];
+     * see [CalendarProviderRepository.countReminderOccurrences].
+     */
+    suspend fun countInstancesWithReminders(calendarIds: Set<Long>, fromMs: Long, toMs: Long): Int =
+        repository.countReminderOccurrences(calendarIds, fromMs, toMs)
+
+    /**
      * Day code (YYYYMMDD) of an event's start, honouring all-day events so they
      * resolve to the right local day in negative UTC offsets. Null when the
      * event is missing or can't be read.

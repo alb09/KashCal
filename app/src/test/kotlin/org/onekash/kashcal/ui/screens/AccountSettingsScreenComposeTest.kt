@@ -118,6 +118,7 @@ class AccountSettingsScreenComposeTest {
         var forceFullSync = 0
         var exportDebugReport = 0
         var exportCalendars = 0
+        var calendarBackup = 0
     }
 
     /**
@@ -125,7 +126,13 @@ class AccountSettingsScreenComposeTest {
      * defaults. Seed values are chosen so each row's picker offers a sentinel option distinct from
      * the seed (see the per-row tests).
      */
-    private fun render(rec: Rec = Rec(), searchQuery: String = "", offlineCalendarCount: Int = 1) {
+    private fun render(
+        rec: Rec = Rec(),
+        searchQuery: String = "",
+        offlineCalendarCount: Int = 1,
+        backupSubtitle: String? = null,
+        backupProblem: Boolean = false,
+    ) {
         composeTestRule.setContent {
             KashCalTheme {
                 AccountSettingsScreen(
@@ -173,6 +180,9 @@ class AccountSettingsScreenComposeTest {
                     onForceFullSync = { rec.forceFullSync++ },
                     onExportDebugReport = { rec.exportDebugReport++ },
                     onOpenExportCalendars = { rec.exportCalendars++ },
+                    onOpenCalendarBackup = { rec.calendarBackup++ },
+                    calendarBackupSubtitle = backupSubtitle,
+                    calendarBackupProblem = backupProblem,
                     isSearchActive = searchQuery.isNotEmpty(),
                     searchQuery = searchQuery,
                     versionName = "1.0.0",
@@ -581,6 +591,46 @@ class AccountSettingsScreenComposeTest {
     @Test
     fun `a settings search for calendar finds Export calendars`() = assertSearchFindsExportCalendars("calendar")
 
+    // ==================== Automatic calendar backup ====================
+
+    @Test
+    fun `automatic calendar backup sits between Export calendars and Back up settings`() {
+        render()
+        val export = top("Export calendars")
+        val backup = top("Automatic calendar backup")
+        val settings = top("Back up settings")
+        assertTrue("after Export calendars", backup > export)
+        assertTrue("before Back up settings", backup < settings)
+    }
+
+    @Test
+    fun `automatic calendar backup reads Off until it is set up`() {
+        render()
+        composeTestRule.onNodeWithText("Off").assertExists()
+    }
+
+    @Test
+    fun `automatic calendar backup shows its state and opens on tap`() {
+        val rec = Rec()
+        render(rec, backupSubtitle = "Every 12 hours · KashCal backups")
+        composeTestRule.onNodeWithText("Every 12 hours · KashCal backups").assertExists()
+        composeTestRule.onNodeWithText("Automatic calendar backup").performClick()
+        assertEquals(1, rec.calendarBackup)
+    }
+
+    private fun assertSearchFindsCalendarBackup(query: String) {
+        val rec = Rec()
+        render(rec, searchQuery = query)
+        composeTestRule.onNodeWithText("Automatic calendar backup", substring = true).performClick()
+        assertEquals("query '$query'", 1, rec.calendarBackup)
+    }
+
+    @Test
+    fun `a settings search for backup finds automatic calendar backup`() = assertSearchFindsCalendarBackup("backup")
+
+    @Test
+    fun `a settings search for automatic finds automatic calendar backup`() = assertSearchFindsCalendarBackup("automatic")
+
     // ==================== Troubleshooting ====================
 
     private fun top(text: String): Float =
@@ -740,7 +790,6 @@ class AccountSettingsScreenComposeTest {
                         icsLabel = "Calendar Feeds",
                     ),
                     deviceCalendarsEnabled = true,
-                    hasReadCalendarPermission = true,
                     deviceCalendars = devices,
                     enabledDeviceCalendarIds = devices.mapTo(mutableSetOf()) { it.id },
                     mutedDeviceCalendarIds = mutedDevice,

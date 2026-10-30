@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">ਘਟਨਾ ਸੱਦੇ</string>
     <string name="channel_event_invitations_desc">ਜਦੋਂ ਤੁਹਾਨੂੰ ਨਵਾਂ ਕੈਲੰਡਰ ਸੱਦਾ ਮਿਲਦਾ ਹੈ ਤਾਂ ਸੂਚਨਾਵਾਂ</string>
     <string name="channel_calendar_updates">ਕੈਲੰਡਰ ਤਬਦੀਲੀਆਂ</string>
+    <string name="channel_calendar_backup">ਸਵੈਚਲਿਤ ਕੈਲੰਡਰ ਬੈਕਅੱਪ</string>
+    <string name="channel_calendar_backup_description">ਜਦੋਂ ਕੈਲੰਡਰ ਬੈਕਅੱਪ ਅਸਫਲ ਹੁੰਦਾ ਹੈ ਤਾਂ ਤੁਹਾਨੂੰ ਦੱਸਦਾ ਹੈ</string>
     <string name="invite_notification_body">%1$s ਤੋਂ · ਜਵਾਬ ਦੇਣ ਲਈ ਟੈਪ ਕਰੋ</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,35 @@
     <string name="backup_error_read_failed">ਫਾਈਲ ਨਹੀਂ ਪੜ੍ਹ ਸਕੇ</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple Calendar?</string>
-    <string name="onboarding_got_you">ਅਸੀਂ ਤੁਹਾਡੀ ਮਦਦ ਕਰਾਂਗੇ।</string>
-    <string name="onboarding_connect_prompt">ਆਪਣੀਆਂ ਘਟਨਾਵਾਂ ਇੱਥੇ ਦੇਖਣ ਲਈ iCloud ਨਾਲ ਜੋੜੋ</string>
+    <string name="onboarding_title">ਤੁਹਾਡੇ ਕੈਲੰਡਰ ਕਿੱਥੇ ਹਨ?</string>
+    <string name="onboarding_subtitle">ਜੋੜਨ ਲਈ ਇੱਕ ਚੁਣੋ।</string>
+    <string name="onboarding_icloud_detail">Apple ID ਅਤੇ ਐਪ ਪਾਸਵਰਡ</string>
+    <string name="onboarding_caldav_title">CalDAV ਸਰਵਰ</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale ਅਤੇ ਹੋਰ</string>
+    <string name="onboarding_device_title">ਇਸ ਡਿਵਾਈਸ ਉੱਤੇ</string>
+    <string name="onboarding_phone_detail">Google, Outlook ਅਤੇ ਸਿੰਕ ਐਪਾਂ</string>
+    <string name="onboarding_use_offline">ਆਫ਼ਲਾਈਨ ਕੈਲੰਡਰ ਵਰਤੋ</string>
+    <string name="onboarding_trust">ਓਪਨ ਸੋਰਸ। ਕੋਈ ਇਸ਼ਤਿਹਾਰ ਨਹੀਂ। ਕੋਈ ਟਰੈਕਿੰਗ ਨਹੀਂ।</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">ਯਾਦ-ਦਹਾਨੀਆਂ ਬੰਦ ਹਨ</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">ਇਸ ਹਫ਼ਤੇ %d ਘਟਨਾ ਦੀ ਯਾਦ-ਦਹਾਨੀ ਹੈ।</item>
+        <item quantity="other">ਇਸ ਹਫ਼ਤੇ %d ਘਟਨਾਵਾਂ ਦੀਆਂ ਯਾਦ-ਦਹਾਨੀਆਂ ਹਨ।</item>
+    </plurals>
+    <string name="reminders_off_not_now">ਹੁਣੇ ਨਹੀਂ</string>
+    <string name="reminders_off_turn_on">ਚਾਲੂ ਕਰੋ</string>
+    <string name="reminders_on_snackbar">ਯਾਦ-ਦਹਾਨੀਆਂ ਚਾਲੂ ਹਨ</string>
+    <string name="about_tagline">ਤੁਹਾਡੇ ਸਾਰੇ ਕੈਲੰਡਰ ਇੱਕ ਨਿੱਜੀ ਐਪ ਵਿੱਚ।</string>
+    <string name="about_help_title">ਮਦਦ ਅਤੇ ਗਾਈਡਾਂ</string>
+    <string name="about_help_detail">ਸੈੱਟਅੱਪ, ਸਿੰਕ ਅਤੇ ਸਵਾਲ</string>
+    <string name="about_source_title">ਸਰੋਤ ਕੋਡ</string>
+    <string name="about_source_detail">Apache 2.0, GitHub ਉੱਤੇ</string>
+    <string name="about_support_title">KashCal ਦਾ ਸਮਰਥਨ ਕਰੋ</string>
+    <string name="about_support_detail">ਪਹਿਲਾਂ ਤੋਂ ਸਮਰਥਨ ਕਰਨ ਵਾਲੇ ਸਾਰਿਆਂ ਦਾ ਧੰਨਵਾਦ</string>
+    <string name="about_link_failed">ਕੋਈ ਵੀ ਐਪ ਇਹ ਲਿੰਕ ਨਹੀਂ ਖੋਲ੍ਹ ਸਕਦੀ।</string>
+    <string name="about_built_in_austin">Austin ਵਿੱਚ ❤️ ਨਾਲ ਬਣਾਇਆ</string>
+    <string name="about_version">ਵਰਜਨ %1$s</string>
     <string name="whats_new_skip">ਛੱਡੋ</string>
     <string name="whats_new_next">ਅੱਗੇ</string>
     <string name="whats_new_page_of">%2$d ਵਿੱਚੋਂ ਪੰਨਾ %1$d</string>
@@ -275,10 +301,21 @@
     <string name="whats_new_v772_changes_title">ਦੇਖੋ ਕੀ ਬਦਲਿਆ</string>
     <string name="whats_new_v772_changes_body">ਤੁਹਾਡੇ iCloud ਅਤੇ CalDAV ਕੈਲੰਡਰਾਂ ਦੀਆਂ ਨਵੀਆਂ, ਸੋਧੀਆਂ ਅਤੇ ਹਟਾਈਆਂ ਗਈਆਂ ਘਟਨਾਵਾਂ 7 ਦਿਨਾਂ ਲਈ ਹਾਲੀਆ ਤਬਦੀਲੀਆਂ ਵਿੱਚ ਇਕੱਠੀਆਂ ਹੁੰਦੀਆਂ ਹਨ। ਕਿਸੇ ਇੱਕ ਨੂੰ ਖੋਲ੍ਹਣ ਲਈ ਟੈਪ ਕਰੋ।</string>
     <string name="whats_new_v772_notifications_body">ਜਦੋਂ ਬੈਕਗ੍ਰਾਊਂਡ ਸਿੰਕ ਨੂੰ ਤੁਹਾਡੀਆਂ iCloud ਜਾਂ CalDAV ਘਟਨਾਵਾਂ ਵਿੱਚ ਤਬਦੀਲੀਆਂ ਮਿਲਣ ਤਾਂ ਸੂਚਨਾ ਪ੍ਰਾਪਤ ਕਰੋ। ਇਹ ਉਦੋਂ ਤੱਕ ਬੰਦ ਰਹਿੰਦਾ ਹੈ ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਇਸਨੂੰ ਚਾਲੂ ਨਹੀਂ ਕਰਦੇ।</string>
+    <string name="whats_new_v803_offline_title">ਫ਼ੋਨ \'ਤੇ ਹੀ ਰਹਿਣ ਵਾਲੇ ਕੈਲੰਡਰ</string>
+    <string name="whats_new_v803_offline_body">ਕੁਝ ਯੋਜਨਾਵਾਂ ਸਰਵਰ \'ਤੇ ਰੱਖਣ ਵਾਲੀਆਂ ਨਹੀਂ ਹੁੰਦੀਆਂ। ਉਨ੍ਹਾਂ ਲਈ ਆਪਣੇ ਆਫ਼ਲਾਈਨ ਕੈਲੰਡਰ ਬਣਾਓ, ਜਿੰਨੇ ਮਰਜ਼ੀ।</string>
+    <string name="whats_new_v803_backup_title">ਬੈਕਅੱਪ ਦੀ ਕੋਈ ਫ਼ਿਕਰ ਨਹੀਂ</string>
+    <string name="whats_new_v803_backup_body">ਇੱਕ ਵਾਰ ਫ਼ੋਲਡਰ ਚੁਣੋ, ਅਤੇ KashCal ਉੱਥੇ ਤੁਹਾਡੇ ਆਫ਼ਲਾਈਨ ਕੈਲੰਡਰਾਂ ਦੀ ਤਾਜ਼ਾ ਕਾਪੀ ਰੱਖਦਾ ਰਹਿੰਦਾ ਹੈ।</string>
+    <string name="whats_new_v803_print_title">ਤੁਹਾਡਾ ਹਫ਼ਤਾ, ਕਾਗਜ਼ \'ਤੇ</string>
+    <string name="whats_new_v803_print_body">ਜੋ ਹਫ਼ਤਾ ਤੁਸੀਂ ਦੇਖ ਰਹੇ ਹੋ, ਉਸਨੂੰ ਪ੍ਰਿੰਟ ਕਰੋ। ਕਿਹੜੇ ਫ਼ਰਿੱਜ \'ਤੇ ਲਾਉਣਾ ਹੈ, ਇਹ ਤੁਹਾਡੀ ਮਰਜ਼ੀ।</string>
     <string name="whats_new_hero_sample_lunch">ਟੀਮ ਦਾ ਦੁਪਹਿਰ ਦਾ ਖਾਣਾ</string>
     <string name="whats_new_hero_sample_review">ਡਿਜ਼ਾਈਨ ਸਮੀਖਿਆ</string>
     <string name="whats_new_hero_sample_book_club">ਕਿਤਾਬ ਕਲੱਬ</string>
+    <string name="whats_new_hero_sample_dentist">ਦੰਦਾਂ ਦਾ ਡਾਕਟਰ</string>
+    <string name="whats_new_hero_sample_yoga">ਯੋਗ</string>
     <string name="whats_new_hero_sample_calendar">ਕੰਮ</string>
+    <string name="whats_new_hero_sample_family">ਪਰਿਵਾਰ</string>
+    <string name="whats_new_hero_sample_garden">ਬਗ਼ੀਚਾ</string>
+    <string name="whats_new_hero_sample_folder">ਕੈਲੰਡਰ ਬੈਕਅੱਪ</string>
     <string name="whats_new_hero_now">ਹੁਣੇ</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +431,6 @@
     <string name="error_device_calendar_title">ਕੈਲੰਡਰ ਗਲਤੀ</string>
     <string name="error_device_calendar_write_failed">ਡਿਵਾਈਸ ਕੈਲੰਡਰ ਵਿੱਚ ਸੇਵ ਕਰਨ ਵਿੱਚ ਅਸਫ਼ਲ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
     <string name="error_device_calendar_permission">ਕੈਲੰਡਰ ਲਿਖਣ ਇਜਾਜ਼ਤ ਲੋੜੀਂਦੀ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਇਜਾਜ਼ਤ ਦਿਓ।</string>
-    <string name="error_device_calendar_permission_denied">ਲਿਖਣ ਪਹੁੰਚ ਦੇਣ ਲਈ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਕੈਲੰਡਰ ਇਜਾਜ਼ਤ ਬੰਦ ਕਰਕੇ ਦੁਬਾਰਾ ਚਾਲੂ ਕਰੋ</string>
     <string name="error_device_calendar_not_found">ਕੈਲੰਡਰ ਨਹੀਂ ਮਿਲਿਆ। ਹਟਾਇਆ ਗਿਆ ਹੋ ਸਕਦਾ ਹੈ।</string>
     <string name="error_device_event_not_found">ਘਟਨਾ ਨਹੀਂ ਮਿਲੀ। ਮਿਟਾਈ ਗਈ ਹੋ ਸਕਦੀ ਹੈ।</string>
     <string name="error_device_calendar_read_only">ਇਹ ਕੈਲੰਡਰ ਸਿਰਫ਼-ਪੜ੍ਹਨਯੋਗ ਹੈ।</string>
@@ -538,6 +574,7 @@
     <string name="subscriptions_section_add">ਜੋੜੋ</string>
     <string name="subscriptions_empty_ics">ਕੋਈ ICS ਸਬਸਕ੍ਰਿਪਸ਼ਨ ਨਹੀਂ</string>
     <string name="subscriptions_empty_ics_hint">ਘਟਨਾਵਾਂ ਦੇਖਣ ਲਈ ਕੈਲੰਡਰ ਫ਼ੀਡ ਜੋੜੋ</string>
+    <string name="subscriptions_swipe_hint">ਮਿਟਾਉਣ ਲਈ ਫ਼ੀਡ ਨੂੰ ਸਵਾਈਪ ਕਰੋ।</string>
     <string name="subscriptions_add_ics">ICS ਕੈਲੰਡਰ ਜੋੜੋ</string>
     <string name="qs_tile_label">ਇਵੈਂਟ ਜੋੜੋ</string>
     <string name="holiday_catalog_add">ਛੁੱਟੀ ਕੈਲੰਡਰ ਜੋੜੋ</string>
@@ -624,7 +661,7 @@
     <string name="settings_device_calendars_hint">ਹੋਰ ਐਪਾਂ ਦੇ ਕੈਲੰਡਰ</string>
     <string name="offline_calendars_row_label">ਆਫ਼ਲਾਈਨ ਕੈਲੰਡਰ</string>
     <string name="offline_calendars_row_hint">ਕੈਲੰਡਰ ਜੋ ਇਸ ਫ਼ੋਨ \'ਤੇ ਹੀ ਰਹਿੰਦੇ ਹਨ</string>
-    <string name="offline_calendars_manage_note">ਆਪਣੇ ਆਫ਼ਲਾਈਨ ਕੈਲੰਡਰ ਜੋੜੋ, ਨਾਂ ਬਦਲੋ, ਰੰਗ ਬਦਲੋ ਜਾਂ ਹਟਾਓ।</string>
+    <string name="offline_calendars_manage_note">ਮਿਟਾਉਣ ਲਈ ਕੈਲੰਡਰ ਨੂੰ ਸਵਾਈਪ ਕਰੋ।</string>
     <string name="offline_calendars_info">ਸਿਰਫ਼ ਇਸ ਫ਼ੋਨ \'ਤੇ ਰੱਖੇ ਜਾਂਦੇ ਹਨ ਅਤੇ ਕਦੇ ਸਿੰਕ ਨਹੀਂ ਹੁੰਦੇ। ਬੈਕਅੱਪ ਵਿੱਚ ਘਟਨਾਵਾਂ ਸ਼ਾਮਲ ਨਹੀਂ ਹੁੰਦੀਆਂ, ਇਸ ਲਈ ਕਾਪੀ ਰੱਖਣ ਲਈ ਕੈਲੰਡਰ ਐਕਸਪੋਰਟ ਕਰੋ।</string>
     <string name="offline_calendars_info_cd">ਆਫ਼ਲਾਈਨ ਕੈਲੰਡਰਾਂ ਬਾਰੇ</string>
     <string name="offline_calendar_default_state">ਡਿਫ਼ੌਲਟ</string>
@@ -650,6 +687,79 @@
     </plurals>
     <string name="offline_calendar_deleted">%1$s ਮਿਟਾਇਆ ਗਿਆ</string>
     <string name="offline_calendar_duplicate_name">\"%1$s\" ਨਾਂ ਦਾ ਆਫ਼ਲਾਈਨ ਕੈਲੰਡਰ ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ</string>
+    <string name="offline_calendar_similar_name">\"%1$s\" ਨਾਲ ਬਹੁਤ ਮਿਲਦਾ-ਜੁਲਦਾ ਹੈ। ਕੋਈ ਵੱਖਰਾ ਨਾਂ ਚੁਣੋ।</string>
+    <string name="calendar_backup_title">ਸਵੈਚਲਿਤ ਕੈਲੰਡਰ ਬੈਕਅੱਪ</string>
+    <string name="calendar_backup_row_off">ਬੰਦ</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">ਬੈਕਅੱਪ ਫ਼ੋਲਡਰ ਤੱਕ ਪਹੁੰਚ ਨਹੀਂ ਹੋ ਸਕੀ</string>
+    <string name="calendar_backup_intro">ਹਰ ਆਫ਼ਲਾਈਨ ਕੈਲੰਡਰ ਨੂੰ ਤੁਹਾਡੇ ਚੁਣੇ ਫ਼ੋਲਡਰ ਵਿੱਚ ICS ਫ਼ਾਈਲ ਵਜੋਂ ਸੁਰੱਖਿਅਤ ਕਰਦਾ ਹੈ।</string>
+    <string name="calendar_backup_choose_folder">ਫ਼ੋਲਡਰ ਚੁਣੋ</string>
+    <string name="calendar_backup_choose_folder_hint">ਕੋਈ ਫ਼ੋਲਡਰ ਚੁਣੋ ਜਾਂ ਬਣਾਓ, ਜਿਵੇਂ Documents ਵਿੱਚ। Android ਸਟੋਰੇਜ ਦੇ ਸਭ ਤੋਂ ਉੱਪਰਲੇ ਪੱਧਰ ਜਾਂ ਖੁਦ Download ਫ਼ੋਲਡਰ ਦੀ ਇਜਾਜ਼ਤ ਨਹੀਂ ਦਿੰਦਾ।</string>
+    <string name="calendar_backup_folder">ਫ਼ੋਲਡਰ</string>
+    <string name="calendar_backup_change">ਬਦਲੋ</string>
+    <string name="calendar_backup_frequency">ਵਾਰਵਾਰਤਾ</string>
+    <string name="calendar_backup_frequency_info">ਬੈਕਅੱਪ ਦੇਰ ਨਾਲ ਚੱਲ ਸਕਦੇ ਹਨ: ਜਦੋਂ ਫ਼ੋਨ ਵਿਹਲਾ ਹੋਵੇ ਜਾਂ KashCal ਕੁਝ ਸਮੇਂ ਤੋਂ ਖੋਲ੍ਹਿਆ ਨਾ ਗਿਆ ਹੋਵੇ, ਤਾਂ Android ਬੈਕਗ੍ਰਾਊਂਡ ਕੰਮ ਨੂੰ ਰੋਕ ਕੇ ਰੱਖਦਾ ਹੈ।</string>
+    <string name="calendar_backup_copies">ਰੱਖਣ ਲਈ ਕਾਪੀਆਂ</string>
+    <string name="calendar_backup_copies_explained">ਹਰ ਬੈਕਅੱਪ ਪਿਛਲੀ ਫ਼ਾਈਲ ਨੂੰ ਮਿਤੀ ਵਾਲੀ ਕਾਪੀ ਵਜੋਂ ਰੱਖਦਾ ਹੈ। ਜਦੋਂ ਕਾਪੀਆਂ ਇਸ ਗਿਣਤੀ ਤੋਂ ਵੱਧ ਹੋ ਜਾਣ, ਤਾਂ ਸਭ ਤੋਂ ਪੁਰਾਣੀਆਂ ਮਿਟਾ ਦਿੱਤੀਆਂ ਜਾਂਦੀਆਂ ਹਨ। ਸਭ ਤੋਂ ਨਵੀਂ ਫ਼ਾਈਲ ਦਾ ਨਾਮ ਹਮੇਸ਼ਾ ਕੈਲੰਡਰ ਵਾਲਾ ਹੁੰਦਾ ਹੈ।</string>
+    <string name="calendar_backup_copies_fewer">ਘੱਟ ਕਾਪੀਆਂ ਰੱਖੋ</string>
+    <string name="calendar_backup_copies_more">ਵੱਧ ਕਾਪੀਆਂ ਰੱਖੋ</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d ਕਾਪੀ</item>
+        <item quantity="other">%d ਕਾਪੀਆਂ</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">%d ਪੁਰਾਣੀ ਕਾਪੀ ਮਿਟਾਉਂਦਾ ਹੈ। ਇਹ ਵਾਪਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।</item>
+        <item quantity="other">%d ਪੁਰਾਣੀਆਂ ਕਾਪੀਆਂ ਮਿਟਾਉਂਦਾ ਹੈ। ਇਹ ਵਾਪਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">ਇਸ ਗਿਣਤੀ ਤੋਂ ਵੱਧ ਪੁਰਾਣੀਆਂ ਕਾਪੀਆਂ ਮਿਟਾਉਂਦਾ ਹੈ। ਇਹ ਵਾਪਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।</string>
+    <string name="calendar_backup_calendars">ਆਫ਼ਲਾਈਨ ਕੈਲੰਡਰ</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · ਕੋਈ ਘਟਨਾ ਨਹੀਂ, ਕੁਝ ਵੀ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤਾ ਗਿਆ</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ। ਅਗਲੇ ਬੈਕਅੱਪ ਵੇਲੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕੀਤੀ ਜਾਵੇਗੀ।</string>
+    <string name="calendar_backup_status">ਆਖਰੀ ਬੈਕਅੱਪ %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">ਆਖਰੀ ਬੈਕਅੱਪ %1$s · %2$d ਕੈਲੰਡਰ ਅਸਫਲ ਰਿਹਾ</item>
+        <item quantity="other">ਆਖਰੀ ਬੈਕਅੱਪ %1$s · %2$d ਕੈਲੰਡਰ ਅਸਫਲ ਰਹੇ</item>
+    </plurals>
+    <string name="calendar_backup_now">ਹੁਣੇ ਬੈਕਅੱਪ ਲਓ</string>
+    <string name="calendar_backup_running">ਬੈਕਅੱਪ ਲਿਆ ਜਾ ਰਿਹਾ ਹੈ…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal ਹਰ ਬੈਕਅੱਪ ਵੇਲੇ ਇਹਨਾਂ ਫ਼ਾਈਲਾਂ ਨੂੰ ਓਵਰਰਾਈਟ ਕਰਦਾ ਹੈ, ਇਸ ਲਈ ਹੋਰ ਐਪਾਂ ਵਿੱਚ ਇਹਨਾਂ ਵਿੱਚ ਕੀਤੀਆਂ ਤਬਦੀਲੀਆਂ ਟਿਕਦੀਆਂ ਨਹੀਂ। ਕੈਲੰਡਰ ਨੂੰ ਬਹਾਲ ਕਰਨ ਲਈ, ਫ਼ਾਈਲ ਤੋਂ ਘਟਨਾਵਾਂ ਇੰਪੋਰਟ ਵਰਤੋ।</string>
+    <string name="calendar_backup_off_files_stay">ਮੌਜੂਦਾ ਫ਼ਾਈਲਾਂ %1$s ਵਿੱਚ ਹੀ ਰਹਿੰਦੀਆਂ ਹਨ।</string>
+    <string name="calendar_backup_folder_unreachable">%1$s ਤੱਕ ਪਹੁੰਚ ਨਹੀਂ ਹੋ ਸਕਦੀ। ਹੋ ਸਕਦਾ ਹੈ ਇਸਨੂੰ ਕਿਤੇ ਹੋਰ ਲਿਜਾਇਆ, ਮਿਟਾਇਆ ਜਾਂ ਡਿਸਕਨੈਕਟ ਕੀਤਾ ਗਿਆ ਹੋਵੇ।</string>
+    <string name="calendar_backup_error_unsupported">%1$s ਵਿੱਚ ਫ਼ਾਈਲਾਂ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤੀਆਂ ਜਾ ਸਕਦੀਆਂ। ਕੋਈ ਹੋਰ ਫ਼ੋਲਡਰ ਚੁਣੋ।</string>
+    <string name="calendar_backup_choose_again">ਦੁਬਾਰਾ ਚੁਣੋ</string>
+    <string name="calendar_backup_pick_refused">KashCal ਉਸ ਫ਼ੋਲਡਰ ਨੂੰ ਵਰਤ ਨਹੀਂ ਸਕਦਾ। ਕੋਈ ਹੋਰ ਚੁਣੋ।</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal ਉਸ ਫ਼ੋਲਡਰ ਵਿੱਚ ਫ਼ਾਈਲਾਂ ਨਹੀਂ ਬਣਾ ਸਕਦਾ। ਕੋਈ ਹੋਰ ਚੁਣੋ।</string>
+    <string name="calendar_backup_failed_title">ਕੈਲੰਡਰ ਬੈਕਅੱਪ ਅਸਫਲ ਰਿਹਾ</string>
+    <string name="calendar_backup_folder_unnamed">ਬੈਕਅੱਪ ਫ਼ੋਲਡਰ</string>
+    <string name="calendar_backup_alert_unreachable">%1$s ਤੱਕ ਪਹੁੰਚ ਨਹੀਂ ਹੋ ਸਕੀ। ਇਸਨੂੰ ਦੁਬਾਰਾ ਚੁਣਨ ਲਈ ਟੈਪ ਕਰੋ।</string>
+    <string name="calendar_backup_alert_unsupported">%1$s ਵਿੱਚ ਫ਼ਾਈਲਾਂ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤੀਆਂ ਜਾ ਸਕਦੀਆਂ। ਕੋਈ ਹੋਰ ਫ਼ੋਲਡਰ ਚੁਣਨ ਲਈ ਟੈਪ ਕਰੋ।</string>
+    <string name="calendar_backup_alert_file_retry">%1$s ਨੂੰ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ। KashCal ਅਗਲੇ ਬੈਕਅੱਪ ਵੇਲੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੇਗਾ।</string>
+    <string name="calendar_backup_every_hour">ਹਰ ਘੰਟੇ</string>
+    <string name="calendar_backup_every_day">ਹਰ ਦਿਨ</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">ਹਰ %d ਘੰਟੇ</item>
+        <item quantity="other">ਹਰ %d ਘੰਟੇ</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">ਹਰ %d ਦਿਨ</item>
+        <item quantity="other">ਹਰ %d ਦਿਨ</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">ਹਰ 1 ਦਿਨ %1$s</string>
+    <string name="calendar_backup_every_days_hours">ਹਰ %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">ਘੱਟੋ-ਘੱਟ 1 ਘੰਟਾ ਚੁਣੋ।</string>
+    <string name="calendar_backup_interval_too_long">30 ਦਿਨ ਜਾਂ ਘੱਟ ਚੁਣੋ।</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">%d ਕੈਲੰਡਰ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ। KashCal ਅਗਲੇ ਬੈਕਅੱਪ ਵੇਲੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੇਗਾ।</item>
+        <item quantity="other">%d ਕੈਲੰਡਰ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤੇ ਜਾ ਸਕੇ। KashCal ਅਗਲੇ ਬੈਕਅੱਪ ਵੇਲੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੇਗਾ।</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">KashCal ਲਈ ਸੂਚਨਾਵਾਂ ਬੰਦ ਹਨ, ਇਸ ਲਈ ਜੇ ਬੈਕਅੱਪ ਅਸਫਲ ਹੁੰਦਾ ਹੈ ਤਾਂ ਇਹ ਤੁਹਾਨੂੰ ਸੂਚਿਤ ਨਹੀਂ ਕਰ ਸਕਦਾ।</string>
+    <string name="calendar_backup_notifications_channel_off">ਬੈਕਅੱਪ ਸੂਚਨਾਵਾਂ ਬੰਦ ਹਨ, ਇਸ ਲਈ ਜੇ ਬੈਕਅੱਪ ਅਸਫਲ ਹੁੰਦਾ ਹੈ ਤਾਂ KashCal ਤੁਹਾਨੂੰ ਸੂਚਿਤ ਨਹੀਂ ਕਰ ਸਕਦਾ।</string>
+    <string name="calendar_backup_open_settings">ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ</string>
+    <string name="calendar_backup_not_now">ਹੁਣੇ ਨਹੀਂ</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">%d ਕੈਲੰਡਰ ਅਸਫਲ ਰਿਹਾ</item>
+        <item quantity="other">%d ਕੈਲੰਡਰ ਅਸਫਲ ਰਹੇ</item>
+    </plurals>
     <string name="settings_quick_event_add">ਸਮਾਰਟ ਘਟਨਾ ਜੋੜੋ</string>
     <string name="settings_quick_event_add_info">ਕੁਦਰਤੀ ਤੌਰ \'ਤੇ ਟਾਈਪ ਕਰਕੇ ਸਮਾਗਮ ਬਣਾਓ। \"Sam ਨਾਲ ਸ਼ੁੱਕਰਵਾਰ ਦੁਪਹਿਰ 1 ਵਜੇ ਦੁਪਹਿਰ ਦਾ ਖਾਣਾ\" ਤੁਹਾਡੇ ਲਈ ਸਿਰਲੇਖ, ਤਾਰੀਖ ਅਤੇ ਸਮਾਂ ਭਰ ਦਿੰਦਾ ਹੈ।</string>
     <string name="settings_suggest_titles">ਘਟਨਾ ਟਾਇਟਲ ਸੁਝਾਓ</string>
@@ -718,6 +828,7 @@
     <string name="label_on_days">ਦਿਨਾਂ \'ਤੇ</string>
     <string name="label_pattern">ਪੈਟਰਨ</string>
     <string name="label_ends">ਖ਼ਤਮ ਹੁੰਦਾ ਹੈ</string>
+    <string name="sheet_hint_change_end">ਅੰਤ ਬਦਲਣ ਲਈ ਕਿਸੇ ਦਿਨ \'ਤੇ ਟੈਪ ਕਰੋ</string>
     <string name="label_timezone">ਸਮਾਂ ਖੇਤਰ</string>
     <string name="label_alerts">ਚੇਤਾਵਨੀਆਂ</string>
     <string name="label_add_alert">ਚੇਤਾਵਨੀ ਜੋੜੋ</string>
@@ -739,14 +850,11 @@
     <string name="status_hours_ago">%1$d ਘੰਟੇ ਪਹਿਲਾਂ</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">ਤੁਹਾਡੀ ਡਿਵਾਈਸ \'ਤੇ ਹੋਰ ਕੈਲੰਡਰ ਐਪਾਂ ਤੋਂ ਘਟਨਾਵਾਂ ਦਿਖਾਓ (ਸਿੰਕ ਅਡੈਪਟਰ, ਸਥਾਨਕ ਕੈਲੰਡਰ)।</string>
-    <string name="device_calendars_permission_required">ਕੈਲੰਡਰ ਇਜਾਜ਼ਤ ਲੋੜੀਂਦੀ ਹੈ। ਪਹੁੰਚ ਦੇਣ ਲਈ ਸਮਰੱਥ ਟੈਪ ਕਰੋ।</string>
-    <string name="device_calendars_read_only_access">ਸਿਰਫ਼-ਪੜ੍ਹਨਯੋਗ ਪਹੁੰਚ</string>
-    <string name="device_calendars_grant_write">ਡਿਵਾਈਸ ਕੈਲੰਡਰ ਘਟਨਾਵਾਂ ਸੰਪਾਦਨ ਕਰਨ ਲਈ ਲਿਖਣ ਇਜਾਜ਼ਤ ਦਿਓ</string>
-    <string name="device_calendars_grant">ਦਿਓ</string>
-    <string name="device_calendars_none_found">ਕੋਈ ਡਿਵਾਈਸ ਕੈਲੰਡਰ ਨਹੀਂ ਮਿਲੇ।</string>
+    <string name="device_calendars_intro">ਇਸ ਡਿਵਾਈਸ ਉੱਤੇ Google, Outlook ਅਤੇ ਸਿੰਕ ਐਪਾਂ ਦੇ ਕੈਲੰਡਰ ਦਿਖਾਓ।</string>
+    <string name="device_calendars_show_switch">ਡਿਵਾਈਸ ਕੈਲੰਡਰ ਦਿਖਾਓ</string>
+    <string name="device_calendars_pick_hint">ਦਿਖਾਉਣ ਲਈ ਕੈਲੰਡਰ ਚੁਣੋ।</string>
+    <string name="device_calendars_empty">ਕੋਈ ਕੈਲੰਡਰ ਨਹੀਂ ਮਿਲਿਆ।</string>
     <string name="device_calendars_local">ਸਥਾਨਕ</string>
-    <string name="device_calendars_read_only_no_write">ਸਿਰਫ਼ ਪੜ੍ਹਨ (ਲਿਖਣ ਇਜਾਜ਼ਤ ਨਹੀਂ)</string>
     <string name="device_calendars_read_only_calendar">ਸਿਰਫ਼ ਪੜ੍ਹਨ (ਸਿਰਫ਼-ਪੜ੍ਹਨਯੋਗ ਕੈਲੰਡਰ)</string>
     <string name="settings_sync_frequency">ਸਿੰਕ ਵਾਰਵਾਰਤਾ</string>
     <string name="settings_sync_frequency_hint">ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ ਕਿੰਨੀ ਵਾਰ ਸਿੰਕ ਕਰਨਾ ਹੈ</string>
@@ -1292,6 +1400,10 @@
     <string name="ics_fetch_error_http">ਸਰਵਰ ਨੇ ਇੱਕ ਗਲਤੀ ਵਾਪਸ ਕੀਤੀ (%1$d)। ਕਿਰਪਾ ਕਰਕੇ URL ਦੀ ਜਾਂਚ ਕਰੋ।</string>
     <string name="ics_fetch_error_empty">ਕੈਲੰਡਰ ਫੀਡ ਖਾਲੀ ਹੈ।</string>
     <string name="ics_fetch_error_not_calendar">ਉਹ URL ਕੈਲੰਡਰ ਫੀਡ ਵਰਗਾ ਨਹੀਂ ਲੱਗਦਾ।</string>
+    <string name="ics_feed_error_empty_response">ਸਰਵਰ ਨੇ ਕੋਈ ਵੈਧ ਫੀਡ ਨਹੀਂ ਭੇਜੀ।</string>
+    <string name="ics_feed_error_access_denied">ਇਸ ਫੀਡ ਦੇ ਸਰਵਰ ਨੇ ਪਹੁੰਚ ਤੋਂ ਇਨਕਾਰ ਕਰ ਦਿੱਤਾ।</string>
+    <string name="ics_feed_error_too_large">ਇਹ ਕੈਲੰਡਰ ਫੀਡ ਡਾਊਨਲੋਡ ਕਰਨ ਲਈ ਬਹੁਤ ਵੱਡੀ ਹੈ।</string>
+    <string name="ics_feed_error_unreadable">ਇਸ ਫੀਡ ਦੀਆਂ ਘਟਨਾਵਾਂ ਦਿਖਾਈਆਂ ਨਹੀਂ ਜਾ ਸਕੀਆਂ।</string>
     <string name="insights_title">ਸੂਝ</string>
     <string name="insights_period_this_week">ਹਫ਼ਤਾ</string>
     <string name="insights_period_last_week">ਪਿਛਲਾ ਹਫ਼ਤਾ</string>
@@ -1419,7 +1531,7 @@
         <item quantity="other">ਅਗਲੇ %1$d ਦਿਨਾਂ ਵਿੱਚ ਖਾਲੀ (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">ਚੁਣੀ ਗਈ ਰੇਂਜ ਵਿੱਚ ਘੱਟੋ ਘੱਟ ਇੱਕ ਘੰਟੇ ਦੇ ਕੋਈ ਖਾਲੀ ਬਲਾਕ ਨਹੀਂ ਹਨ।</string>
     <string name="share_from_kashcal_footer">KashCal ਤੋਂ ਸਾਂਝਾ ਕੀਤਾ</string>
@@ -1441,5 +1553,31 @@
     <string name="share_as_card_all_day">ਸਾਰਾ ਦਿਨ</string>
     <string name="share_as_card_chooser_title">ਸਮਾਗਮ ਸਾਂਝਾ ਕਰੋ</string>
     <string name="share_as_card_share_failed">ਕਾਰਡ ਸਾਂਝਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ</string>
+    <string name="print_your_week">ਆਪਣਾ ਹਫ਼ਤਾ ਪ੍ਰਿੰਟ ਕਰੋ</string>
+    <string name="print_options_title">ਪ੍ਰਿੰਟ ਵਿਕਲਪ ਚੁਣੋ</string>
+    <string name="print_pages_header">ਪੰਨੇ</string>
+    <string name="print_page_week">ਹਫ਼ਤੇ ਦਾ ਕੈਲੰਡਰ</string>
+    <string name="print_page_week_detail">ਗਰਿੱਡ ਵਜੋਂ ਹਫ਼ਤਾ</string>
+    <string name="print_page_details">ਵੇਰਵੇ</string>
+    <string name="print_page_details_detail">ਹਰ ਘਟਨਾ ਪੂਰੀ ਤਰ੍ਹਾਂ</string>
+    <string name="print_action">ਪ੍ਰਿੰਟ ਕਰੋ</string>
+    <string name="cd_print_previous_week">ਪਿਛਲਾ ਹਫ਼ਤਾ</string>
+    <string name="cd_print_next_week">ਅਗਲਾ ਹਫ਼ਤਾ</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d ਪੰਨਾ</item>
+        <item quantity="other">%d ਪੰਨੇ</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%2$d ਵਿੱਚੋਂ %1$d ਕੈਲੰਡਰ</item>
+        <item quantity="other">%2$d ਵਿੱਚੋਂ %1$d ਕੈਲੰਡਰ</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – %2$s ਦਾ ਹਫ਼ਤਾ</string>
+    <string name="print_failed">ਪ੍ਰਿੰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="print_doc_week">ਹਫ਼ਤਾ</string>
+    <string name="print_doc_printed">ਪ੍ਰਿੰਟ ਕੀਤਾ: %1$s</string>
+    <string name="print_doc_page_of">%2$s ਵਿੱਚੋਂ ਪੰਨਾ %1$s</string>
+    <string name="print_doc_numbers_note">ਨੰਬਰ ਵੇਰਵਿਆਂ ਨਾਲ ਮੇਲ ਖਾਂਦੇ ਹਨ, ਜਿਨ੍ਹਾਂ ਵਿੱਚ ਹਰ ਘਟਨਾ ਪੂਰੀ ਤਰ੍ਹਾਂ ਦਿੱਤੀ ਗਈ ਹੈ।</string>
+    <string name="print_doc_times_in">ਸਮਾਂ %1$s ਵਿੱਚ ਦਿਖਾਇਆ ਗਿਆ ਹੈ</string>
 
 </resources>

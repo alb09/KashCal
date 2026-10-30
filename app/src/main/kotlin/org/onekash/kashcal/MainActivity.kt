@@ -2,12 +2,14 @@ package org.onekash.kashcal
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.os.SystemClock
 import android.view.WindowManager
+import androidx.compose.material3.SnackbarHostState
 import androidx.core.app.ActivityCompat
 import android.text.format.DateFormat
 import android.util.Log
@@ -62,7 +64,7 @@ import org.onekash.kashcal.domain.model.toEventForShareCard
 import org.onekash.kashcal.reminder.device.DeviceCalendarReminderNotificationManager
 import org.onekash.kashcal.reminder.notification.ReminderNotificationManager
 import org.onekash.kashcal.sync.notification.ChangeNotifier
-import org.onekash.kashcal.ui.components.AppInfoSheet
+import org.onekash.kashcal.ui.components.AboutSheet
 import org.onekash.kashcal.ui.components.category.LocalTagColors
 import org.onekash.kashcal.ui.components.DeviceEventQuickViewSheet
 import org.onekash.kashcal.ui.components.EventFormSheet
@@ -70,12 +72,13 @@ import org.onekash.kashcal.ui.components.EventQuickViewSheet
 import org.onekash.kashcal.ui.components.IcsImportSheet
 import org.onekash.kashcal.ui.components.importSummary
 import org.onekash.kashcal.ui.components.NotificationPermissionDialog
-import org.onekash.kashcal.ui.components.OnboardingBanner
+import org.onekash.kashcal.ui.components.OnboardingSheet
 import org.onekash.kashcal.ui.components.WhatsNewBanner
 import org.onekash.kashcal.ui.components.QuickAddDialog
 import org.onekash.kashcal.ui.components.ShareAvailabilitySheet
 import org.onekash.kashcal.ui.components.RecentChangesSheet
 import org.onekash.kashcal.ui.permission.AppPermissionKind
+import org.onekash.kashcal.ui.permission.allowRequestNeedsSettingsFallback
 import org.onekash.kashcal.ui.permission.NotificationPermissionManager
 import org.onekash.kashcal.ui.permission.NotificationPermissionManager.PermissionState
 import org.onekash.kashcal.ui.lock.AppLockDisableAction
@@ -85,6 +88,9 @@ import org.onekash.kashcal.ui.lock.decideDisableAction
 import org.onekash.kashcal.ui.lock.decideEnrollmentAction
 import org.onekash.kashcal.ui.model.localizedDisplayName
 import org.onekash.kashcal.ui.model.offlineCalendarIds
+import org.onekash.kashcal.ui.print.PrintOptionsSheet
+import org.onekash.kashcal.ui.print.WebViewPrintLauncher
+import org.onekash.kashcal.ui.print.buildPrintCalendarSections
 import org.onekash.kashcal.ui.screens.HomeScreen
 import org.onekash.kashcal.ui.theme.ColorSource
 import org.onekash.kashcal.ui.theme.KashCalTheme
@@ -93,6 +99,8 @@ import org.onekash.kashcal.ui.viewmodels.AppLockViewModel
 import org.onekash.kashcal.ui.viewmodels.DeviceCalendarException
 import org.onekash.kashcal.ui.viewmodels.HomeViewModel
 import org.onekash.kashcal.ui.viewmodels.PendingAction
+import org.onekash.kashcal.ui.viewmodels.PrintEvent
+import org.onekash.kashcal.ui.viewmodels.PrintWeekViewModel
 import org.onekash.kashcal.ui.viewmodels.QuickAddViewModel
 import org.onekash.kashcal.ui.viewmodels.ShareAvailabilityViewModel
 import org.onekash.kashcal.util.CalendarContractAction
@@ -116,6 +124,11 @@ class MainActivity : FragmentActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val appLockViewModel: AppLockViewModel by viewModels()
+    private val printViewModel: PrintWeekViewModel by viewModels()
+    // The last print job's launcher, which holds the WebView until the print system is done.
+    private var printLauncher: WebViewPrintLauncher? = null
+    // True from a print request until its launcher reports Started or Failed.
+    private var printPending = false
     private var isFirstResume = true
     // Guards against stacking two biometric sheets (auto-fire + manual Unlock).
     private var isUnlockPromptShowing = false
@@ -196,16 +209,23 @@ class MainActivity : FragmentActivity() {
                 var pendingPermissionCallback by remember { mutableStateOf<((Boolean) -> Unit)?>(null) }
                 var showNotificationRationale by remember { mutableStateOf(false) }
 
-                val notificationPermissionLauncher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.RequestPermission()
-                ) { isGranted ->
+                // Every answer to Android's notification dialog, from any screen, counts as asked
+                // and ends the "Reminders are off" banner.
+                val recordNotificationAnswer: (Boolean) -> Unit = { granted ->
+                    homeViewModel.endRemindersOffBanner()
                     coroutineScope.launch {
-                        if (isGranted) {
+                        if (granted) {
                             notificationPermissionManager.onPermissionGranted()
                         } else {
                             notificationPermissionManager.onPermissionDenied()
                         }
                     }
+                }
+
+                val notificationPermissionLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.RequestPermission()
+                ) { isGranted ->
+                    recordNotificationAnswer(isGranted)
                     pendingPermissionCallback?.invoke(isGranted)
                     pendingPermissionCallback = null
                 }
@@ -644,14 +664,51 @@ class MainActivity : FragmentActivity() {
                     onToggleAppLock = ::onToggleAppLock,
                     // The app-permissions screen deep-links to system settings.
                     onOpenPermissionSettings = ::openPermissionSettings,
+                    onNotificationPermissionResult = recordNotificationAnswer,
+                    // The banner's Turn on ends the banner and goes straight to Android's dialog;
+                    // when Android won't ask again it opens the app's notification settings
+                    // ([allowRequestNeedsSettingsFallback]). A rotation while the dialog is up
+                    // drops this callback, so the snackbar and the fallback don't run.
+                    onRemindersOffTurnOn = {
+                        homeViewModel.endRemindersOffBanner()
+                        pendingPermissionCallback = { granted ->
+                            homeViewModel.onRemindersOffPermissionResult(granted)
+                            val rationaleAfter = ActivityCompat.shouldShowRequestPermissionRationale(
+                                this@MainActivity, Manifest.permission.POST_NOTIFICATIONS,
+                            )
+                            if (allowRequestNeedsSettingsFallback(granted, rationaleAfter)) {
+                                openPermissionSettings(AppPermissionKind.NOTIFICATIONS)
+                            }
+                        }
+                        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    },
+                    onRemindersOffNotNow = homeViewModel::endRemindersOffBanner,
                     // Drawer
                     drawerState = drawerState,
                     onDrawerToggleCalendar = { calendarId -> homeViewModel.toggleCalendarVisibility(calendarId) },
                     onDrawerToggleDeviceCalendarVisibility = { calendarId -> homeViewModel.toggleDeviceCalendarVisibility(calendarId) },
                     // Share availability
                     onShareAvailabilityClick = { homeViewModel.openShareAvailabilitySheet() },
+                    // Print your week: the sheet opens on the week holding the date on screen
+                    onPrintWeekClick = { anchor ->
+                        printViewModel.open(
+                            anchor = anchor,
+                            firstDayOfWeek = uiState.firstDayOfWeek,
+                            sections = buildPrintCalendarSections(
+                                calendarGroups = uiState.calendarGroups,
+                                deviceCalendarsEnabled = uiState.deviceCalendarsEnabled,
+                                enabledDeviceCalendars = uiState.enabledDeviceCalendars,
+                                hiddenDeviceIds = uiState.hiddenDeviceCalendarIds,
+                                contactsHeader = getString(R.string.drawer_contacts),
+                                deviceHeader = getString(R.string.drawer_device_calendars),
+                                deviceLocalLabel = getString(R.string.device_calendars_local),
+                                birthdaysName = getString(R.string.birthdays_section_title),
+                                anniversariesName = getString(R.string.anniversaries_section_title),
+                            ),
+                        )
+                    },
                     // Info callbacks
-                    onInfoClick = { homeViewModel.toggleAppInfoSheet() },
+                    onInfoClick = { homeViewModel.openAboutSheet() },
                     // Avatar hub: persist edited initials
                     onInitialsChange = { homeViewModel.setUserInitials(it) },
                     // View picker callback
@@ -1557,10 +1614,11 @@ class MainActivity : FragmentActivity() {
                     )
                 }
 
-                // App Info Sheet
-                if (uiState.showAppInfoSheet) {
-                    AppInfoSheet(
-                        onDismiss = { homeViewModel.toggleAppInfoSheet() }
+                // About, from the account hub; the Settings version footer opens AppInfoSheet.
+                if (uiState.showAboutSheet) {
+                    AboutSheet(
+                        versionName = BuildConfig.VERSION_NAME,
+                        onDismiss = { homeViewModel.closeAboutSheet() },
                     )
                 }
 
@@ -1593,22 +1651,61 @@ class MainActivity : FragmentActivity() {
                     )
                 }
 
-                if (uiState.showOnboardingSheet) {
-                    OnboardingBanner(
-                        onConnect = {
-                            homeViewModel.dismissOnboardingSheet()
-                            // Open Settings on the iCloud sign-in sheet.
-                            launchInternalActivity(Intent(this@MainActivity, SettingsActivity::class.java).apply {
-                                putExtra(SettingsActivity.EXTRA_OPEN_ICLOUD_SIGNIN, true)
-                            })
-                        },
-                        onDismiss = {
-                            homeViewModel.dismissOnboardingSheet()
+                // Print your week sheet. Events are collected for the Activity's life: a print
+                // that fails after the sheet closed still reaches the home screen.
+                val printState by printViewModel.uiState.collectAsStateWithLifecycle()
+                val printSnackbarHostState = remember { SnackbarHostState() }
+                LaunchedEffect(Unit) {
+                    printViewModel.events.collect { event ->
+                        when (event) {
+                            is PrintEvent.Request -> startPrint(event)
+                            is PrintEvent.SheetError -> coroutineScope.launch {
+                                printSnackbarHostState.showSnackbar(event.message)
+                            }
+                            is PrintEvent.HomeError -> homeViewModel.showSnackbar(event.message)
                         }
+                    }
+                }
+                if (printState.isOpen) {
+                    PrintOptionsSheet(
+                        state = printState,
+                        snackbarHostState = printSnackbarHostState,
+                        onPreviousWeek = { printViewModel.previousWeek() },
+                        onNextWeek = { printViewModel.nextWeek() },
+                        onToggleGrid = { printViewModel.toggleGrid() },
+                        onToggleDetails = { printViewModel.toggleDetails() },
+                        onToggleCalendar = { printViewModel.toggleCalendar(it) },
+                        onPrint = { printViewModel.print() },
+                        onDismiss = {
+                            cancelPendingPrint()
+                            printViewModel.dismiss()
+                            // The host outlives the sheet, so a snackbar left showing would
+                            // come back on the next open.
+                            printSnackbarHostState.currentSnackbarData?.dismiss()
+                        },
+                    )
+                }
+
+                if (uiState.showOnboardingSheet) {
+                    // Each row opens its Settings screen; closing it returns here.
+                    val openSettingsRoute: (String) -> Unit = { extra ->
+                        homeViewModel.completeOnboarding()
+                        launchInternalActivity(
+                            Intent(this@MainActivity, SettingsActivity::class.java).putExtra(extra, true)
+                        )
+                    }
+                    OnboardingSheet(
+                        onICloud = { openSettingsRoute(SettingsActivity.EXTRA_OPEN_ICLOUD_SIGNIN) },
+                        onCalDav = { openSettingsRoute(SettingsActivity.EXTRA_OPEN_CALDAV_SIGNIN) },
+                        onDeviceCalendars = {
+                            openSettingsRoute(SettingsActivity.EXTRA_OPEN_DEVICE_CALENDARS)
+                        },
+                        onUseOffline = homeViewModel::completeOnboarding,
+                        onDismiss = homeViewModel::completeOnboarding,
                     )
                 } else if (uiState.whatsNewReleases.isNotEmpty()) {
                     // What's New shows only once onboarding is gone, so first-launch users
-                    // see the iCloud prompt first.
+                    // see the calendars sheet first.
                     val is24Hour = android.text.format.DateFormat.is24HourFormat(this@MainActivity)
                     val whatsNewTimePattern = remember(uiState.timeFormat, is24Hour) {
                         DateTimeUtils.getTimePattern(uiState.timeFormat, is24Hour)
@@ -1926,6 +2023,42 @@ class MainActivity : FragmentActivity() {
         }
     }
 
+    /**
+     * Hands [request] to a new launcher, with this Activity for the print system. Ignored while a
+     * request is still loading; the ViewModel already blocks a second Print until it hears back.
+     */
+    private fun startPrint(request: PrintEvent.Request) {
+        if (printPending) return
+        printLauncher?.cancel()
+        printPending = true
+        printLauncher = WebViewPrintLauncher(this).also { launcher ->
+            launcher.print(request.html, request.jobName) { result ->
+                printPending = false
+                when (result) {
+                    WebViewPrintLauncher.Result.Started -> printViewModel.onPrintStarted()
+                    WebViewPrintLauncher.Result.Failed -> printViewModel.onPrintFailed()
+                }
+            }
+        }
+    }
+
+    /** Drops a print that hasn't reached the print system yet, so Print works again. */
+    private fun cancelPendingPrint() {
+        if (!printPending) return
+        printLauncher?.cancel()
+        printLauncher = null
+        printPending = false
+        printViewModel.onPrintCancelled()
+    }
+
+    override fun onDestroy() {
+        // The ViewModel outlives a recreated Activity, so it hears that this print is gone.
+        cancelPendingPrint()
+        printLauncher?.cancel()
+        printLauncher = null
+        super.onDestroy()
+    }
+
     override fun onStart() {
         super.onStart()
         // onStart runs before onResume resets returningFromInternalActivity, so the flag still
@@ -1964,6 +2097,21 @@ class MainActivity : FragmentActivity() {
         }
         isFirstResume = false
         returningFromInternalActivity = false
+        reportNotificationPermission()
+    }
+
+    /**
+     * Reports the notification permission state to the view model on every resume, including the
+     * first, for the "Reminders are off" banner. Below Android 13 there is no permission to ask
+     * for, so it reports granted.
+     */
+    private fun reportNotificationPermission() {
+        val granted = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+            PackageManager.PERMISSION_GRANTED
+        val rationaleDue = !granted &&
+            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)
+        homeViewModel.onNotificationPermissionChecked(granted, rationaleDue)
     }
 
     override fun onNewIntent(intent: Intent) {

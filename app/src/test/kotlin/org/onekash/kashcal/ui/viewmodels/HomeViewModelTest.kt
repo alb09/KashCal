@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -277,6 +278,16 @@ class HomeViewModelTest {
         every { dataStore.deviceCalendarRemindersEnabled } returns flowOf(true)
         coEvery { dataStore.getDeviceCalendarsEnabled() } returns false
         coEvery { dataStore.getEnabledDeviceCalendarIds() } returns emptySet()
+
+        // The onboarding sheet was answered, so startup runs past the onboarding check. Tests of
+        // the check itself stub it false.
+        every { dataStore.onboardingCompleted } returns flowOf(true)
+
+        // Reminders-are-off banner facts: never asked, no refusals.
+        every { dataStore.notificationAskDone } returns flowOf(false)
+        coEvery { dataStore.setNotificationAskDone() } returns Unit
+        every { dataStore.notificationPermissionDeniedCount } returns flowOf(0)
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 0
     }
 
     @After
@@ -442,6 +453,8 @@ class HomeViewModelTest {
         // would land on the epoch month (Dec 1969 west of UTC); with no explicit selection the
         // month views stay on today's month.
         every { displayEventRepository.getDisplayEventsForRange(any(), any()) } returns flowOf(persistentListOf())
+        // Startup fails before it lands on today, so nothing is selected yet.
+        coEvery { accountRepository.getAllAccounts() } throws IllegalStateException("no accounts")
 
         val viewModel = createViewModel()
         advanceUntilIdle()
@@ -461,6 +474,8 @@ class HomeViewModelTest {
     @Test
     fun `switching to MONTH with no prior selection stays on current month not epoch`() = runTest {
         every { displayEventRepository.getDisplayEventsForRange(any(), any()) } returns flowOf(persistentListOf())
+        // Startup fails before it lands on today, so nothing is selected yet.
+        coEvery { accountRepository.getAllAccounts() } throws IllegalStateException("no accounts")
 
         val viewModel = createViewModel()
         advanceUntilIdle()
@@ -851,10 +866,6 @@ class HomeViewModelTest {
 
     @Test
     fun `cold start in MONTH lands instantly not animated`() = runTest {
-        // initializeAsync reads onboardingDismissed.first() before the cold-start goToToday;
-        // stubbed so init runs to completion.
-        every { dataStore.onboardingDismissed } returns flowOf(false)
-
         // createViewModel runs initializeAsync, which calls goToToday(animate = false): the
         // cold-start path itself, not the handler alone.
         val viewModel = createViewModel()
@@ -2364,28 +2375,411 @@ class HomeViewModelTest {
     // ==================== UI Sheet Tests ====================
 
     @Test
-    fun `toggleAppInfoSheet toggles visibility`() = runTest {
+    fun `About opens once however often it is tapped and closes on dismiss`() = runTest {
         val viewModel = createViewModel()
         advanceUntilIdle()
+        assertFalse(viewModel.uiState.value.showAboutSheet)
 
-        assertFalse(viewModel.uiState.value.showAppInfoSheet)
-
-        viewModel.toggleAppInfoSheet()
+        viewModel.openAboutSheet()
+        viewModel.openAboutSheet()
         advanceUntilIdle()
+        assertTrue(viewModel.uiState.value.showAboutSheet)
 
-        assertTrue(viewModel.uiState.value.showAppInfoSheet)
+        viewModel.closeAboutSheet()
+        advanceUntilIdle()
+        assertFalse(viewModel.uiState.value.showAboutSheet)
     }
 
     @Test
-    fun `dismissOnboardingSheet persists dismissal`() = runTest {
-        val viewModel = createViewModel()
-        advanceUntilIdle()
+    fun `completeOnboarding persists the answer and closes the sheet`() = runTest {
+        coEvery { accountRepository.getAllAccounts() } returns emptyList()
+        coEvery { eventReader.getTotalEventCount() } returns 0
+        val viewModel = startUnanswered()
+        assertTrue(viewModel.uiState.value.showOnboardingSheet)
 
-        viewModel.dismissOnboardingSheet()
+        viewModel.completeOnboarding()
         advanceUntilIdle()
 
         assertFalse(viewModel.uiState.value.showOnboardingSheet)
-        coVerify { dataStore.setOnboardingDismissed(true) }
+        coVerify { dataStore.setOnboardingCompleted(true) }
+    }
+
+    // ==================== Onboarding sheet gate ====================
+
+    /** Builds the view model with the sheet unanswered and asserts startup reached today. */
+    private fun TestScope.startUnanswered(): HomeViewModel {
+        every { dataStore.onboardingCompleted } returns flowOf(false)
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        assertTrue(
+            "startup must reach the cold-start goToToday",
+            viewModel.uiState.value.pendingNavigateToTodayInstant
+        )
+        return viewModel
+    }
+
+    @Test
+    fun `onboarding shows for a new user with nothing set up`() = runTest {
+        coEvery { accountRepository.getAllAccounts() } returns emptyList()
+        coEvery { eventReader.getTotalEventCount() } returns 0
+
+        assertTrue(startUnanswered().uiState.value.showOnboardingSheet)
+    }
+
+    @Test
+    fun `onboarding stays hidden with a calendar feed account`() = runTest {
+        coEvery { accountRepository.getAllAccounts() } returns
+            listOf(Account(id = 7, provider = AccountProvider.ICS, email = "feeds"))
+        coEvery { eventReader.getTotalEventCount() } returns 0
+
+        assertFalse(startUnanswered().uiState.value.showOnboardingSheet)
+    }
+
+    @Test
+    fun `onboarding stays hidden with device calendars on`() = runTest {
+        coEvery { accountRepository.getAllAccounts() } returns emptyList()
+        every { dataStore.deviceCalendarsEnabled } returns flowOf(true)
+        coEvery { eventReader.getTotalEventCount() } returns 0
+
+        assertFalse(startUnanswered().uiState.value.showOnboardingSheet)
+    }
+
+    @Test
+    fun `onboarding stays hidden when the app already holds events`() = runTest {
+        coEvery { accountRepository.getAllAccounts() } returns emptyList()
+        coEvery { eventReader.getTotalEventCount() } returns 3
+
+        assertFalse(startUnanswered().uiState.value.showOnboardingSheet)
+    }
+
+    @Test
+    fun `a failed event count hides onboarding and startup still reaches today`() = runTest {
+        coEvery { accountRepository.getAllAccounts() } returns emptyList()
+        coEvery { eventReader.getTotalEventCount() } throws java.io.IOException("disk")
+
+        assertFalse(startUnanswered().uiState.value.showOnboardingSheet)
+    }
+
+    @Test
+    fun `a failed read of the onboarding flag hides it and startup still reaches today`() = runTest {
+        every { dataStore.onboardingCompleted } returns
+            kotlinx.coroutines.flow.flow { throw java.io.IOException("disk") }
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.pendingNavigateToTodayInstant)
+        assertFalse(viewModel.uiState.value.showOnboardingSheet)
+    }
+
+    @Test
+    fun `an answered onboarding sheet reads no other fact`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.showOnboardingSheet)
+        coVerify(exactly = 0) { eventReader.getTotalEventCount() }
+    }
+
+    // ==================== Reminders-are-off banner ====================
+
+    private fun deviceReminder(id: Long, calendarId: Long, triggerTime: Long) =
+        org.onekash.kashcal.data.calendar_provider.UpcomingDeviceReminder(
+            eventId = id, occurrenceStartTs = triggerTime + 600_000, title = "Device $id",
+            location = null, isAllDay = false, reminderMinutes = 10, triggerTime = triggerTime,
+            calendarColor = 0, calendarId = calendarId,
+        )
+
+    /** A device repository with one reminder due soon in each of calendars 1 and 2. */
+    private fun deviceRepoWithReminders() =
+        org.onekash.kashcal.data.calendar_provider.FakeCalendarProviderRepository().apply {
+            val soon = System.currentTimeMillis() + 2 * 3_600_000
+            upcomingReminders = listOf(
+                deviceReminder(1, calendarId = 1, triggerTime = soon),
+                deviceReminder(2, calendarId = 2, triggerTime = soon),
+            )
+        }
+
+    private fun turnOnDeviceCalendars(ids: Set<Long> = setOf(1L, 2L)) {
+        every { dataStore.deviceCalendarsEnabled } returns flowOf(true)
+        every { dataStore.enabledDeviceCalendarIds } returns flowOf(ids)
+    }
+
+    @Test
+    fun `a never-asked user with reminders this week gets the banner with the count`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 2
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        assertEquals(2, viewModel.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `the banner waits for the activity to report the permission`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 2
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        syncStatusFlow.value = SyncStatus.Succeeded()
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `seeing the permission granted hides it and records the ask`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 2
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.onNotificationPermissionChecked(granted = true, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.remindersOffBannerCount)
+        coVerify(exactly = 1) { dataStore.setNotificationAskDone() }
+    }
+
+    @Test
+    fun `an already-recorded grant isn't written again`() = runTest {
+        every { dataStore.notificationAskDone } returns flowOf(true)
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.onNotificationPermissionChecked(granted = true, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { dataStore.setNotificationAskDone() }
+    }
+
+    @Test
+    fun `a recorded refusal, a rationale or an answered ask keeps it hidden`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 2
+
+        every { dataStore.notificationPermissionDeniedCount } returns flowOf(1)
+        val refused = createViewModel()
+        advanceUntilIdle()
+        refused.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+        assertNull(refused.uiState.value.remindersOffBannerCount)
+
+        every { dataStore.notificationPermissionDeniedCount } returns flowOf(0)
+        val rationale = createViewModel()
+        advanceUntilIdle()
+        rationale.onNotificationPermissionChecked(granted = false, rationaleDue = true, sdkInt = 34)
+        advanceUntilIdle()
+        assertNull(rationale.uiState.value.remindersOffBannerCount)
+
+        every { dataStore.notificationAskDone } returns flowOf(true)
+        val answered = createViewModel()
+        advanceUntilIdle()
+        answered.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+        assertNull(answered.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `no reminders this week keeps it hidden`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `a first sync holds it back until the sync finishes`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 3
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        syncStatusFlow.value = SyncStatus.Running
+        advanceUntilIdle()
+
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+        assertNull(viewModel.uiState.value.remindersOffBannerCount)
+
+        syncStatusFlow.value = SyncStatus.Succeeded()
+        advanceUntilIdle()
+        assertEquals(3, viewModel.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `a sync after it shows keeps it on screen`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 3
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        syncStatusFlow.value = SyncStatus.Running
+        advanceUntilIdle()
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        assertEquals(3, viewModel.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `Not now hides it for good and records the answer`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 2
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        viewModel.endRemindersOffBanner()
+        advanceUntilIdle()
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.remindersOffBannerCount)
+        coVerify { dataStore.setNotificationAskDone() }
+    }
+
+    @Test
+    fun `Not now during a running check keeps it hidden`() = runTest {
+        val pending = kotlinx.coroutines.CompletableDeferred<Int>()
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } coAnswers { pending.await() }
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        viewModel.endRemindersOffBanner()
+        pending.complete(2)
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `allowing from the banner hides it and confirms with a snackbar`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 2
+        val context: android.content.Context = io.mockk.mockk(relaxed = true) {
+            every { getString(org.onekash.kashcal.R.string.reminders_on_snackbar) } returns "Reminders on"
+        }
+        val viewModel = createViewModel(context = context)
+        advanceUntilIdle()
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        viewModel.endRemindersOffBanner()
+        viewModel.onRemindersOffPermissionResult(granted = true)
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.remindersOffBannerCount)
+        assertEquals("Reminders on", viewModel.uiState.value.pendingSnackbarMessage)
+        coVerify { dataStore.setNotificationAskDone() }
+    }
+
+    @Test
+    fun `refusing from the banner hides it with no snackbar`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 2
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        viewModel.endRemindersOffBanner()
+        viewModel.onRemindersOffPermissionResult(granted = false)
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.remindersOffBannerCount)
+        assertNull(viewModel.uiState.value.pendingSnackbarMessage)
+    }
+
+    @Test
+    fun `device reminders count only from notifying device calendars`() = runTest {
+        turnOnDeviceCalendars()
+        every { dataStore.mutedDeviceCalendarIds } returns flowOf(setOf(2L))
+        val viewModel = createViewModel(calendarProviderRepository = deviceRepoWithReminders())
+        advanceUntilIdle()
+
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        assertEquals(1, viewModel.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `device reminders don't count with device calendars or their reminders off`() = runTest {
+        val repo = deviceRepoWithReminders()
+
+        every { dataStore.enabledDeviceCalendarIds } returns flowOf(setOf(1L, 2L))
+        val calendarsOff = createViewModel(calendarProviderRepository = repo)
+        advanceUntilIdle()
+        calendarsOff.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+        assertNull(calendarsOff.uiState.value.remindersOffBannerCount)
+
+        turnOnDeviceCalendars()
+        every { dataStore.deviceCalendarRemindersEnabled } returns flowOf(false)
+        val remindersOff = createViewModel(calendarProviderRepository = repo)
+        advanceUntilIdle()
+        remindersOff.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+        assertNull(remindersOff.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `an enqueued sync doesn't hold it back`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 2
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        syncStatusFlow.value = SyncStatus.Enqueued
+        advanceUntilIdle()
+
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        assertEquals(2, viewModel.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `a failed sync re-checks it`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 2
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        syncStatusFlow.value = SyncStatus.Running
+        advanceUntilIdle()
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        syncStatusFlow.value = SyncStatus.Failed(errorMessage = "Network error")
+        advanceUntilIdle()
+
+        assertEquals(2, viewModel.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `it hides when no reminders are left this week`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 1
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+        assertEquals(1, viewModel.uiState.value.remindersOffBannerCount)
+
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } returns 0
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.remindersOffBannerCount)
+    }
+
+    @Test
+    fun `a failed read keeps the banner hidden`() = runTest {
+        coEvery { eventReader.countOccurrencesWithPendingReminders(any(), any()) } throws java.io.IOException("disk")
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        viewModel.onNotificationPermissionChecked(granted = false, rationaleDue = false, sdkInt = 34)
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.remindersOffBannerCount)
     }
 
     // ==================== Snackbar Tests ====================
@@ -4148,10 +4542,7 @@ class HomeViewModelTest {
     @Test
     fun `initializeAsync seeds saved scroll minutes from DataStore`() = runTest {
         // The persisted clock time (14:00) reaches uiState so the time grid restores it on first
-        // composition, before the debounced writer can overwrite it. onboardingDismissed is
-        // stubbed so initializeAsync gets past the onboarding gate, which reads it with .first(),
-        // to the seed.
-        every { dataStore.onboardingDismissed } returns flowOf(false)
+        // composition, before the debounced writer can overwrite it.
         every { dataStore.weekViewScrollMinutes } returns flowOf(840)
         coEvery { dataStore.getWeekViewScrollMinutes() } returns 840
 
@@ -4190,7 +4581,6 @@ class HomeViewModelTest {
         // composition, in the same update that seeds the scroll minutes, so the scroll's
         // minutes-to-pixels conversion uses the restored zoom and not the default (the shared
         // update isn't asserted here).
-        every { dataStore.onboardingDismissed } returns flowOf(false)
         every { dataStore.weekViewHourHeight } returns flowOf(90f)
         coEvery { dataStore.getWeekViewHourHeight() } returns 90f
 
@@ -4204,7 +4594,6 @@ class HomeViewModelTest {
     fun `initializeAsync clamps an out-of-range persisted hour height`() = runTest {
         // A persisted or corrupt value above the pinch range is clamped on restore, so the grid
         // never renders degenerate.
-        every { dataStore.onboardingDismissed } returns flowOf(false)
         every { dataStore.weekViewHourHeight } returns flowOf(999f)
         coEvery { dataStore.getWeekViewHourHeight() } returns 999f
 
@@ -4216,7 +4605,6 @@ class HomeViewModelTest {
 
     @Test
     fun `initializeAsync clamps a too-small persisted hour height`() = runTest {
-        every { dataStore.onboardingDismissed } returns flowOf(false)
         every { dataStore.weekViewHourHeight } returns flowOf(5f)
         coEvery { dataStore.getWeekViewHourHeight() } returns 5f
 
@@ -4230,7 +4618,6 @@ class HomeViewModelTest {
     fun `initializeAsync falls back to default for a non-finite persisted hour height`() = runTest {
         // A corrupt DataStore proto could hold NaN. coerceIn leaves NaN unchanged, which would
         // render a NaN-height grid, so the seed rejects it and uses the default.
-        every { dataStore.onboardingDismissed } returns flowOf(false)
         every { dataStore.weekViewHourHeight } returns flowOf(Float.NaN)
         coEvery { dataStore.getWeekViewHourHeight() } returns Float.NaN
 
@@ -4907,8 +5294,6 @@ class HomeViewModelTest {
         coEvery { dataStore.getDefaultCalendarView() } returns KashCalDataStore.VIEW_AGENDA
         every { dataStore.defaultCalendarView } returns flowOf(KashCalDataStore.VIEW_AGENDA)
         every { eventReader.getVisibleOccurrencesWithEventsInRangeFlow(any(), any()) } returns flowOf(emptyList())
-        // initializeAsync reads onboardingDismissed with .first().
-        every { dataStore.onboardingDismissed } returns flowOf(false)
 
         val viewModel = createViewModel()
         advanceUntilIdle()

@@ -389,6 +389,51 @@ class IcsParserServiceTest {
         assertTrue(IcsParserService.isValidIcs(ics))
     }
 
+    @Test
+    fun `isValidIcs returns true for a calendar with no events`() {
+        val ics = """
+            BEGIN:VCALENDAR
+            VERSION:2.0
+            PRODID:-//Test//Test//EN
+            END:VCALENDAR
+        """.trimIndent()
+
+        assertTrue(IcsParserService.isValidIcs(ics))
+    }
+
+    @Test
+    fun `isValidIcs returns true for a calendar holding only a VTIMEZONE`() {
+        val ics = """
+            BEGIN:VCALENDAR
+            VERSION:2.0
+            PRODID:-//Test//Test//EN
+            BEGIN:VTIMEZONE
+            TZID:Europe/Rome
+            BEGIN:STANDARD
+            DTSTART:19701025T030000
+            TZOFFSETFROM:+0200
+            TZOFFSETTO:+0100
+            END:STANDARD
+            END:VTIMEZONE
+            END:VCALENDAR
+        """.trimIndent()
+
+        assertTrue(IcsParserService.isValidIcs(ics))
+    }
+
+    @Test
+    fun `isValidIcs returns false for a calendar cut off before END-VCALENDAR`() {
+        val ics = """
+            BEGIN:VCALENDAR
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:test@test.com
+            DTSTART:20231215T140000Z
+        """.trimIndent()
+
+        assertFalse(IcsParserService.isValidIcs(ics))
+    }
+
     // ==================== Calendar Name Extraction ====================
 
     @Test

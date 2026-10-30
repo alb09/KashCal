@@ -1,3 +1,44 @@
+## [2026.10.30]
+
+Pick a time without a fight, keep calendars that never leave your phone, and put your week on the fridge.
+
+### New date and time sheet (#330, #88)
+- Start and end share one sheet. Flip between them with Starts | Ends.
+- Chips set the length in one tap: 30m, 1h, 2h, or 2, 5, 7 days.
+- Spin the wheel all you like; the sheet stays where it is.
+
+### Offline calendars (#257)
+- Make as many as you like in Settings > Offline calendars. Rename, recolor, swipe to delete.
+
+### Automatic backup (#99)
+- Offline calendars copy themselves to a folder you pick, on a schedule you set.
+
+### Print your week
+- Account hub > Print your week, ready for the fridge. Your notes stay off the paper.
+
+### Export and import
+- Any calendar exports as .ics, guests included.
+- Imported files keep the details KashCal doesn't show, so they export back whole.
+
+### First launch
+- New users get one question: where are your calendars?
+- If KashCal was never allowed to ring your reminders, a banner tells you, with Turn on right there.
+
+### Quick Add
+- Reads "party tomorrow evening at 9", "Aug 23-28", "an hour and a half" and "every 1st".
+- "Become a morning person" stays a person, not "1 morning person".
+
+### About
+- Help, the source code, your version, and a thank-you to everyone who chips in.
+
+### Smaller changes
+- Colors are picked in place, so sheets hold still.
+- Emptied feeds now clear, and feed errors come in your language (#408).
+- Birthdays without a year survive CardDAV sync.
+- Shared availability gets back the space after its comma.
+- The Device calendars switch opens Android settings when Android stops asking.
+- Odia and Tamil fixes.
+
 ## [2026.10.26]
 
 - Fixed repeating events written in UTC showing an hour off after a daylight-saving change; events already on your phone are corrected when you update

@@ -149,6 +149,8 @@ import org.onekash.kashcal.ui.components.hub.AccountHubScreen
 import org.onekash.kashcal.ui.components.formatBadgeCount
 import org.onekash.kashcal.ui.components.overflowContentDescription
 import org.onekash.kashcal.ui.components.SyncBanner
+import org.onekash.kashcal.ui.components.showsRemindersOffBanner
+import org.onekash.kashcal.ui.components.RemindersOffBanner
 import org.onekash.kashcal.ui.components.TopBarLogoButton
 import org.onekash.kashcal.ui.components.AgendaDayHeader
 import org.onekash.kashcal.ui.components.AgendaDisplayItem
@@ -176,6 +178,7 @@ import org.onekash.kashcal.ui.permission.AppPermissionKind
 import org.onekash.kashcal.ui.permission.AppPermissionsScreen
 import org.onekash.kashcal.ui.model.MonthGrid
 import org.onekash.kashcal.domain.planner.PlannerWeekState
+import org.onekash.kashcal.ui.print.printAnchorDate
 import org.onekash.kashcal.ui.screens.insights.InsightsScreen
 import org.onekash.kashcal.ui.screens.planner.PlannerView
 import org.onekash.kashcal.ui.screens.planner.dayDetailEvents
@@ -246,9 +249,16 @@ fun HomeScreen(
     // Opens the system settings page for a permission kind (the app-permissions screen's
     // granted-row tap and permanently-denied escape hatch)
     onOpenPermissionSettings: (AppPermissionKind) -> Unit = {},
+    // The answer to a notification permission request from the app-permissions screen
+    onNotificationPermissionResult: (Boolean) -> Unit = {},
+    // The "Reminders are off" banner's buttons
+    onRemindersOffTurnOn: () -> Unit = {},
+    onRemindersOffNotNow: () -> Unit = {},
     // Tag management, launched on top of the hub like Settings
     onTagsClick: () -> Unit = {},
     onShareAvailabilityClick: () -> Unit = {},
+    // Print your week: called with the date on screen, which picks the week the sheet opens on
+    onPrintWeekClick: (LocalDate) -> Unit = {},
     // Invitation inbox: count, open, dismiss and RSVP
     pendingInvitesCount: Int = 0,
     pendingInvitations: List<org.onekash.kashcal.domain.reader.PendingInvitation> = emptyList(),
@@ -623,6 +633,14 @@ fun HomeScreen(
                 SyncBanner(
                     state = uiState.syncBannerState,
                     errorDetail = uiState.syncErrorDetail
+                )
+            }
+
+            if (showsRemindersOffBanner(uiState)) {
+                RemindersOffBanner(
+                    eventCount = uiState.remindersOffBannerCount ?: 0,
+                    onTurnOn = onRemindersOffTurnOn,
+                    onNotNow = onRemindersOffNotNow,
                 )
             }
 
@@ -1200,6 +1218,21 @@ fun HomeScreen(
                 onRecentChangesClick = onOpenRecentChanges,
                 onJumpToDateClick = { showJumpToDatePicker = true },
                 onShareAvailabilityClick = onShareAvailabilityClick,
+                onPrintWeekClick = {
+                    onPrintWeekClick(
+                        printAnchorDate(
+                            viewMode = uiState.viewMode,
+                            weekViewPagerPosition = uiState.weekViewPagerPosition,
+                            firstDayOfWeek = uiState.firstDayOfWeek,
+                            plannerAnchorDayCode = uiState.plannerAnchorDayCode,
+                            plannerWeekPagerPosition = uiState.plannerWeekPagerPosition,
+                            selectedDate = uiState.selectedDate,
+                            viewingYear = uiState.viewingYear,
+                            viewingMonth = uiState.viewingMonth,
+                            agendaShownDate = agendaWeekDates.firstOrNull(),
+                        )
+                    )
+                },
                 onTagsClick = onTagsClick,
                 onSettingsClick = onSettingsClick,
                 onAboutClick = onInfoClick,
@@ -1226,6 +1259,7 @@ fun HomeScreen(
             AppPermissionsScreen(
                 onBack = { showAppPermissions = false },
                 onOpenPermissionSettings = onOpenPermissionSettings,
+                onNotificationPermissionResult = onNotificationPermissionResult,
             )
         }
     }

@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Запрашэнні на падзеі</string>
     <string name="channel_event_invitations_desc">Паведамленні пра новыя запрашэнні ў календары</string>
     <string name="channel_calendar_updates">Змены ў календары</string>
+    <string name="channel_calendar_backup">Аўтаматычнае рэзервовае капіраванне календароў</string>
+    <string name="channel_calendar_backup_description">Паведамляе, калі не ўдалося стварыць рэзервовую копію календара</string>
     <string name="invite_notification_body">Ад %1$s · Націсніце, каб адказаць</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,37 @@
     <string name="backup_error_read_failed">Не ўдалося прачытаць файл</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Каляндар Apple?</string>
-    <string name="onboarding_got_you">Мы дапаможам.</string>
-    <string name="onboarding_connect_prompt">Падключыце iCloud, каб бачыць свае падзеі тут</string>
+    <string name="onboarding_title">Дзе твае календары?</string>
+    <string name="onboarding_subtitle">Выберы, што падключыць.</string>
+    <string name="onboarding_icloud_detail">Apple ID і пароль праграмы</string>
+    <string name="onboarding_caldav_title">Сервер CalDAV</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale і іншыя</string>
+    <string name="onboarding_device_title">На гэтай прыладзе</string>
+    <string name="onboarding_phone_detail">Google, Outlook і праграмы сінхранізацыі</string>
+    <string name="onboarding_use_offline">Выкарыстаць каляндар без сеткі</string>
+    <string name="onboarding_trust">Адкрыты код. Без рэкламы. Без сачэння.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Напамінанні выключаны</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">%d падзея на гэтым тыдні мае напамінанне.</item>
+        <item quantity="few">%d падзеі на гэтым тыдні маюць напамінанні.</item>
+        <item quantity="many">%d падзей на гэтым тыдні маюць напамінанні.</item>
+        <item quantity="other">%d падзей на гэтым тыдні маюць напамінанні.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Не зараз</string>
+    <string name="reminders_off_turn_on">Уключыць</string>
+    <string name="reminders_on_snackbar">Напамінанні ўключаны</string>
+    <string name="about_tagline">Усе твае календары ў адной прыватнай праграме.</string>
+    <string name="about_help_title">Даведка і інструкцыі</string>
+    <string name="about_help_detail">Наладжванне, сінхранізацыя і пытанні</string>
+    <string name="about_source_title">Зыходны код</string>
+    <string name="about_source_detail">Apache 2.0, на GitHub</string>
+    <string name="about_support_title">Падтрымаць KashCal</string>
+    <string name="about_support_detail">Дзякуй усім, хто ўжо падтрымлівае</string>
+    <string name="about_link_failed">Ніводная праграма не можа адкрыць гэтую спасылку.</string>
+    <string name="about_built_in_austin">Зроблена з ❤️ у Austin</string>
+    <string name="about_version">Версія %1$s</string>
     <string name="whats_new_skip">Прапусціць</string>
     <string name="whats_new_next">Далей</string>
     <string name="whats_new_page_of">Старонка %1$d з %2$d</string>
@@ -275,10 +303,21 @@
     <string name="whats_new_v772_changes_title">Даведайся, што змянілася</string>
     <string name="whats_new_v772_changes_body">Новыя, змененыя і выдаленыя падзеі з тваіх календароў iCloud і CalDAV 7 дзён захоўваюцца ў раздзеле «Апошнія змены». Націсні на падзею, каб адкрыць яе.</string>
     <string name="whats_new_v772_notifications_body">Атрымлівай апавяшчэнне, калі фонавая сінхранізацыя знаходзіць змены ў тваіх падзеях iCloud або CalDAV. Функцыя выключана, пакуль ты яе не ўключыш.</string>
+    <string name="whats_new_v803_offline_title">Календары-дамаседы</string>
+    <string name="whats_new_v803_offline_body">Некаторым планам не месца на серверы. Ствары для іх асобныя календары без сеткі, колькі захочаш.</string>
+    <string name="whats_new_v803_backup_title">Рэзервовыя копіі, пра якія можна забыць</string>
+    <string name="whats_new_v803_backup_body">Выберы папку адзін раз, і KashCal будзе захоўваць там свежую копію тваіх календароў без сеткі.</string>
+    <string name="whats_new_v803_print_title">Твой тыдзень на паперы</string>
+    <string name="whats_new_v803_print_body">Раздрукуй тыдзень, які бачыш на экране. А на які халадзільнік яго павесіць, вырашаць табе.</string>
     <string name="whats_new_hero_sample_lunch">Абед з камандай</string>
     <string name="whats_new_hero_sample_review">Агляд дызайну</string>
     <string name="whats_new_hero_sample_book_club">Кніжны клуб</string>
+    <string name="whats_new_hero_sample_dentist">Стаматолаг</string>
+    <string name="whats_new_hero_sample_yoga">Ёга</string>
     <string name="whats_new_hero_sample_calendar">Праца</string>
+    <string name="whats_new_hero_sample_family">Сям\'я</string>
+    <string name="whats_new_hero_sample_garden">Сад</string>
+    <string name="whats_new_hero_sample_folder">Рэзервовыя копіі календароў</string>
     <string name="whats_new_hero_now">зараз</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +433,6 @@
     <string name="error_device_calendar_title">Памылка календара</string>
     <string name="error_device_calendar_write_failed">Не ўдалося захаваць у каляндар прылады. Паспрабуйце зноў.</string>
     <string name="error_device_calendar_permission">Патрэбен дазвол на запіс у каляндар. Дайце доступ у наладах.</string>
-    <string name="error_device_calendar_permission_denied">Выключыце і зноў уключыце дазвол «Каляндар» у наладах, каб даць доступ на запіс</string>
     <string name="error_device_calendar_not_found">Каляндар не знойдзены. Магчыма, ён быў выдалены.</string>
     <string name="error_device_event_not_found">Падзея не знойдзена. Магчыма, яна была выдалена.</string>
     <string name="error_device_calendar_read_only">Гэты каляндар толькі для чытання.</string>
@@ -538,6 +576,7 @@
     <string name="subscriptions_section_add">Дадаць</string>
     <string name="subscriptions_empty_ics">Няма падпісак ICS</string>
     <string name="subscriptions_empty_ics_hint">Дадайце стужку календара для прагляду падзей</string>
+    <string name="subscriptions_swipe_hint">Правядзі па стужцы, каб выдаліць яе.</string>
     <string name="subscriptions_add_ics">Дадаць каляндар ICS</string>
     <string name="qs_tile_label">Падзея</string>
     <string name="holiday_catalog_add">Дадаць каляндар святаў</string>
@@ -624,7 +663,7 @@
     <string name="settings_device_calendars_hint">Календары з іншых праграм</string>
     <string name="offline_calendars_row_label">Календары без сеткі</string>
     <string name="offline_calendars_row_hint">Календары, якія захоўваюцца на гэтым тэлефоне</string>
-    <string name="offline_calendars_manage_note">Дадавай, перайменоўвай, мяняй колер або выдаляй календары без сеткі.</string>
+    <string name="offline_calendars_manage_note">Правядзі па календары, каб выдаліць яго.</string>
     <string name="offline_calendars_info">Захоўваюцца толькі на гэтым тэлефоне і ніколі не сінхранізуюцца. Рэзервовыя копіі не ўключаюць падзеі, таму экспартуй каляндар, каб захаваць копію.</string>
     <string name="offline_calendars_info_cd">Пра календары без сеткі</string>
     <string name="offline_calendar_default_state">Па змаўчанні</string>
@@ -654,6 +693,93 @@
     </plurals>
     <string name="offline_calendar_deleted">Каляндар %1$s выдалены</string>
     <string name="offline_calendar_duplicate_name">Каляндар без сеткі з назвай \"%1$s\" ужо існуе</string>
+    <string name="offline_calendar_similar_name">Занадта падобна на \"%1$s\". Выберы іншую назву.</string>
+    <string name="calendar_backup_title">Аўтаматычнае рэзервовае капіраванне календароў</string>
+    <string name="calendar_backup_row_off">Выключана</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Няма доступу да папкі рэзервовых копій</string>
+    <string name="calendar_backup_intro">Захоўвае кожны каляндар без сеткі ў файл ICS у выбранай табой папцы.</string>
+    <string name="calendar_backup_choose_folder">Выбраць папку</string>
+    <string name="calendar_backup_choose_folder_hint">Выберы або ствары папку, напрыклад у Documents. Android не дазваляе выбіраць корань сховішча або саму папку Download.</string>
+    <string name="calendar_backup_folder">Папка</string>
+    <string name="calendar_backup_change">Змяніць</string>
+    <string name="calendar_backup_frequency">Перыядычнасць</string>
+    <string name="calendar_backup_frequency_info">Капіраванне можа запускацца са спазненнем: Android адкладае фонавую працу, калі тэлефон не выкарыстоўваецца або KashCal даўно не адкрывалі.</string>
+    <string name="calendar_backup_copies">Колькі копій захоўваць</string>
+    <string name="calendar_backup_copies_explained">Пры кожным капіраванні папярэдні файл захоўваецца як копія з датай. Калі копій больш за гэты лік, найстарэйшыя выдаляюцца. Найнавейшы файл заўсёды мае назву календара.</string>
+    <string name="calendar_backup_copies_fewer">Захоўваць менш копій</string>
+    <string name="calendar_backup_copies_more">Захоўваць больш копій</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d копія</item>
+        <item quantity="few">%d копіі</item>
+        <item quantity="many">%d копій</item>
+        <item quantity="other">%d копій</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">Выдаляе %d старую копію. Гэта нельга адмяніць.</item>
+        <item quantity="few">Выдаляе %d старыя копіі. Гэта нельга адмяніць.</item>
+        <item quantity="many">Выдаляе %d старых копій. Гэта нельга адмяніць.</item>
+        <item quantity="other">Выдаляе %d старой копіі. Гэта нельга адмяніць.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Выдаляе старыя копіі звыш гэтага ліку. Гэта нельга адмяніць.</string>
+    <string name="calendar_backup_calendars">Календары без сеткі</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Няма падзей, нічога не захавана</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Не ўдалося захаваць. Паўторная спроба пры наступным капіраванні.</string>
+    <string name="calendar_backup_status">Апошняя копія: %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Апошняя копія: %1$s · памылка ў %2$d календары</item>
+        <item quantity="few">Апошняя копія: %1$s · памылка ў %2$d календарах</item>
+        <item quantity="many">Апошняя копія: %1$s · памылка ў %2$d календарах</item>
+        <item quantity="other">Апошняя копія: %1$s · памылка ў %2$d календарах</item>
+    </plurals>
+    <string name="calendar_backup_now">Стварыць копію зараз</string>
+    <string name="calendar_backup_running">Рэзервовае капіраванне…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal перазапісвае гэтыя файлы пры кожным капіраванні, таму змены, зробленыя ў іншых праграмах, не захаваюцца. Каб аднавіць каляндар, скарыстайся «Імпартаваць падзеі з файла».</string>
+    <string name="calendar_backup_off_files_stay">Існуючыя файлы застануцца тут: %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Няма доступу: %1$s. Магчыма, папку перамясцілі, выдалілі або адключылі.</string>
+    <string name="calendar_backup_error_unsupported">Нельга захоўваць файлы: %1$s. Выберы іншую папку.</string>
+    <string name="calendar_backup_choose_again">Выбраць зноў</string>
+    <string name="calendar_backup_pick_refused">KashCal не можа выкарыстоўваць гэту папку. Выберы іншую.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal не можа ствараць файлы ў гэтай папцы. Выберы іншую.</string>
+    <string name="calendar_backup_failed_title">Не ўдалося стварыць рэзервовую копію календара</string>
+    <string name="calendar_backup_folder_unnamed">папка рэзервовых копій</string>
+    <string name="calendar_backup_alert_unreachable">Няма доступу: %1$s. Націсні, каб выбраць папку зноў.</string>
+    <string name="calendar_backup_alert_unsupported">Нельга захоўваць файлы: %1$s. Націсні, каб выбраць іншую папку.</string>
+    <string name="calendar_backup_alert_file_retry">Не ўдалося захаваць %1$s. KashCal паўторыць спробу пры наступным капіраванні.</string>
+    <string name="calendar_backup_every_hour">Штогадзіну</string>
+    <string name="calendar_backup_every_day">Штодня</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">Раз у %d гадзіну</item>
+        <item quantity="few">Раз у %d гадзіны</item>
+        <item quantity="many">Раз у %d гадзін</item>
+        <item quantity="other">Раз у %d гадзін</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">Раз у %d дзень</item>
+        <item quantity="few">Раз у %d дні</item>
+        <item quantity="many">Раз у %d дзён</item>
+        <item quantity="other">Раз у %d дзён</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Раз у 1 дзень %1$s</string>
+    <string name="calendar_backup_every_days_hours">Раз у %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">Выберы не менш за 1 гадзіну.</string>
+    <string name="calendar_backup_interval_too_long">Выберы не больш за 30 дзён.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">Не ўдалося захаваць %d каляндар. KashCal паўторыць спробу пры наступным капіраванні.</item>
+        <item quantity="few">Не ўдалося захаваць %d календары. KashCal паўторыць спробу пры наступным капіраванні.</item>
+        <item quantity="many">Не ўдалося захаваць %d календароў. KashCal паўторыць спробу пры наступным капіраванні.</item>
+        <item quantity="other">Не ўдалося захаваць %d календара. KashCal паўторыць спробу пры наступным капіраванні.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">Апавяшчэнні для KashCal выключаны, таму ён не зможа паведаміць пра збой рэзервовага капіравання.</string>
+    <string name="calendar_backup_notifications_channel_off">Апавяшчэнні пра рэзервовае капіраванне выключаны, таму KashCal не зможа паведаміць пра збой.</string>
+    <string name="calendar_backup_open_settings">Адкрыць налады</string>
+    <string name="calendar_backup_not_now">Не зараз</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">Памылка ў %d календары</item>
+        <item quantity="few">Памылка ў %d календарах</item>
+        <item quantity="many">Памылка ў %d календарах</item>
+        <item quantity="other">Памылка ў %d календарах</item>
+    </plurals>
     <string name="settings_quick_event_add">Разумнае даданне падзей</string>
     <string name="settings_quick_event_add_info">Стварайце падзеі, набіраючы звычайны тэкст. \"Абед са Sam у пятніцу ў 13:00\" запоўніць назву, дату і час.</string>
     <string name="settings_suggest_titles">Прапаноўваць назвы падзей</string>
@@ -724,6 +850,7 @@
     <string name="label_on_days">Па днях</string>
     <string name="label_pattern">Шаблон</string>
     <string name="label_ends">Заканчваецца</string>
+    <string name="sheet_hint_change_end">Націсні дзень, каб змяніць канец</string>
     <string name="label_timezone">Часавы пояс</string>
     <string name="label_alerts">Напамінанні</string>
     <string name="label_add_alert">Дадаць напамінанне</string>
@@ -745,14 +872,11 @@
     <string name="status_hours_ago">%1$d гадз таму</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Паказваць падзеі з іншых каляндарных праграм на прыладзе.</string>
-    <string name="device_calendars_permission_required">Патрэбен дазвол на доступ да календара. Націсніце «Уключыць» для дадання доступу.</string>
-    <string name="device_calendars_read_only_access">Толькі чытанне</string>
-    <string name="device_calendars_grant_write">Дайце дазвол на запіс для рэдагавання падзей</string>
-    <string name="device_calendars_grant">Дазволіць</string>
-    <string name="device_calendars_none_found">Календары прылады не знойдзены.</string>
+    <string name="device_calendars_intro">Паказваць календары на гэтай прыладзе: Google, Outlook і праграмы сінхранізацыі.</string>
+    <string name="device_calendars_show_switch">Паказваць календары прылады</string>
+    <string name="device_calendars_pick_hint">Выберы календары для паказу.</string>
+    <string name="device_calendars_empty">Календары не знойдзены.</string>
     <string name="device_calendars_local">Лакальны</string>
-    <string name="device_calendars_read_only_no_write">Толькі чытанне (няма дазволу на запіс)</string>
     <string name="device_calendars_read_only_calendar">Толькі чытанне (каляндар толькі для чытання)</string>
     <string name="settings_sync_frequency">Частата сінхранізацыі</string>
     <string name="settings_sync_frequency_hint">Як часта сінхранізаваць у фоне</string>
@@ -1410,6 +1534,10 @@
     <string name="ics_fetch_error_http">Сервер вярнуў памылку (%1$d). Праверце URL.</string>
     <string name="ics_fetch_error_empty">Каляндарны канал пусты.</string>
     <string name="ics_fetch_error_not_calendar">Гэты URL не падобны на каляндарны канал.</string>
+    <string name="ics_feed_error_empty_response">Сервер не даслаў карэктны канал.</string>
+    <string name="ics_feed_error_access_denied">Сервер гэтага канала адмовіў у доступе.</string>
+    <string name="ics_feed_error_too_large">Гэты каляндарны канал занадта вялікі для спампоўвання.</string>
+    <string name="ics_feed_error_unreadable">Не ўдалося паказаць падзеі гэтага канала.</string>
     <string name="insights_title">Аналітыка</string>
     <string name="insights_period_this_week">Тыдзень</string>
     <string name="insights_period_last_week">Мін. тыдзень</string>
@@ -1545,7 +1673,7 @@
         <item quantity="other">Свабодныя наступныя %1$d дзён (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">У выбраным дыяпазоне няма свабодных блокаў ад гадзіны.</string>
     <string name="share_from_kashcal_footer">Адпраўлена з KashCal</string>
@@ -1569,5 +1697,35 @@
     <string name="share_as_card_all_day">Увесь дзень</string>
     <string name="share_as_card_chooser_title">Падзяліцца падзеяй</string>
     <string name="share_as_card_share_failed">Не ўдалося падзяліцца карткай</string>
+    <string name="print_your_week">Надрукаваць свой тыдзень</string>
+    <string name="print_options_title">Параметры друку</string>
+    <string name="print_pages_header">Старонкі</string>
+    <string name="print_page_week">Каляндар тыдня</string>
+    <string name="print_page_week_detail">Тыдзень у выглядзе сеткі</string>
+    <string name="print_page_details">Падрабязнасці</string>
+    <string name="print_page_details_detail">Усе падзеі цалкам</string>
+    <string name="print_action">Надрукаваць</string>
+    <string name="cd_print_previous_week">Папярэдні тыдзень</string>
+    <string name="cd_print_next_week">Наступны тыдзень</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d старонка</item>
+        <item quantity="few">%d старонкі</item>
+        <item quantity="many">%d старонак</item>
+        <item quantity="other">%d старонкі</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d з %2$d каляндара</item>
+        <item quantity="few">%1$d з %2$d каляндароў</item>
+        <item quantity="many">%1$d з %2$d каляндароў</item>
+        <item quantity="other">%1$d з %2$d каляндара</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – тыдзень з %2$s</string>
+    <string name="print_failed">Не ўдалося надрукаваць. Паспрабуй зноў.</string>
+    <string name="print_doc_week">Тыдзень</string>
+    <string name="print_doc_printed">Надрукавана %1$s</string>
+    <string name="print_doc_page_of">Старонка %1$s з %2$s</string>
+    <string name="print_doc_numbers_note">Нумары адпавядаюць падрабязнасцям, дзе ўсе падзеі пададзены цалкам.</string>
+    <string name="print_doc_times_in">Часавы пояс: %1$s</string>
 
 </resources>

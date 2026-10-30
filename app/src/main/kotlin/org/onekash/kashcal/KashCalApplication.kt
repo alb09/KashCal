@@ -11,6 +11,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.onekash.icaldav.model.ICalDateTime
+import org.onekash.kashcal.calendarbackup.CalendarBackupNotifications
+import org.onekash.kashcal.calendarbackup.CalendarBackupReconciler
 import org.onekash.kashcal.data.calendar_provider.CalendarProviderManager
 import org.onekash.kashcal.data.contacts.ContactEventManager
 import org.onekash.kashcal.data.credential.CredentialMigration
@@ -116,6 +118,12 @@ class KashCalApplication : Application(), Configuration.Provider {
     lateinit var utcSeriesZoneRepair: UtcSeriesZoneRepair
 
     @Inject
+    lateinit var calendarBackupReconciler: CalendarBackupReconciler
+
+    @Inject
+    lateinit var calendarBackupNotifications: CalendarBackupNotifications
+
+    @Inject
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
 
@@ -139,6 +147,7 @@ class KashCalApplication : Application(), Configuration.Provider {
         reminderNotificationChannels.createChannels()
         inviteNotificationChannels.createChannels()
         changeNotificationChannels.createChannels()
+        calendarBackupNotifications.createChannel()
 
         // Long-lived background registrations (network callbacks, WorkManager and AlarmManager
         // scheduling, content observers, the startup coroutines below) are skipped under unit
@@ -215,6 +224,13 @@ class KashCalApplication : Application(), Configuration.Provider {
             // No try/catch: the repair catches and logs.
             applicationScope.launch {
                 utcSeriesZoneRepair.run()
+            }
+
+            // Re-arm automatic calendar backup from its settings: a periodic job lost to a
+            // force-stop or a task killer has no other way back. No try/catch: the reconciler
+            // catches and logs.
+            applicationScope.launch {
+                calendarBackupReconciler.reconcile()
             }
         }
 

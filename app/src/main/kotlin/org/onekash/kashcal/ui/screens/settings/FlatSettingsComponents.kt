@@ -34,6 +34,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -58,6 +60,8 @@ import org.onekash.kashcal.ui.util.text.highlighted
  * @param showChevron defaults to true only when [trailing] is null
  * @param searchQuery when not blank, its matches in the label, subtitle and value are
  *   highlighted
+ * @param subtitleColor the subtitle's color, such as the error color for a problem; unspecified
+ *   keeps the usual secondary text color
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -73,8 +77,10 @@ fun SettingsRow(
     trailing: @Composable (() -> Unit)? = null,
     showChevron: Boolean = trailing == null,
     showDivider: Boolean = true,
-    searchQuery: String = ""
+    searchQuery: String = "",
+    subtitleColor: Color = Color.Unspecified,
 ) {
+    val subtitleTint = subtitleColor.takeOrElse { MaterialTheme.colorScheme.onSurfaceVariant }
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
@@ -129,13 +135,13 @@ fun SettingsRow(
                             Text(
                                 subtitle,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = subtitleTint
                             )
                         } else {
                             Text(
                                 highlighted(subtitle, searchQuery, settingsSearchHighlightStyle()),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = subtitleTint
                             )
                         }
                     }

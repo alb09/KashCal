@@ -455,6 +455,14 @@ interface CalendarProviderRepository {
     ): DeviceReminderBatch
 
     /**
+     * Returns how many occurrences of [enabledCalendarIds] have a reminder triggering in
+     * [fromMs]..[toMs], with the trigger times and declined skips of [getDueAndNextReminders] and
+     * its 30-day read past [toMs], so a long-lead reminder counts. Zero when the read is denied or
+     * fails.
+     */
+    suspend fun countReminderOccurrences(enabledCalendarIds: Set<Long>, fromMs: Long, toMs: Long): Int
+
+    /**
      * Returns true if the Events row exists with `DELETED = 0`; false when it's missing, the
      * read is denied or the provider fails.
      *

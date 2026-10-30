@@ -218,6 +218,11 @@ android {
                     // Month-widget translation fuzz: -Pmonthwidget.fuzz.seed / .iterations.
                     "monthwidget.fuzz.seed",
                     "monthwidget.fuzz.iterations",
+                    // Quick Add random-phrase test: -Pquickadd.fuzz.seed / .iterations.
+                    "quickadd.fuzz.seed",
+                    "quickadd.fuzz.iterations",
+                    // Print sample documents for a browser's print preview: -Pprint.dumpDir=<dir>.
+                    "print.dumpDir",
                 ).forEach { key ->
                     if (project.hasProperty(key)) {
                         it.systemProperty(key, project.property(key).toString())

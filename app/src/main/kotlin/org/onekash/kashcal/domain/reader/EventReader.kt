@@ -12,6 +12,7 @@ import org.onekash.kashcal.data.db.KashCalDatabase
 import org.onekash.kashcal.data.db.dao.EventWithNextOccurrence
 import org.onekash.kashcal.data.db.dao.EventWithOccurrenceAndColor
 import org.onekash.kashcal.data.db.dao.OccurrencesDao
+import org.onekash.kashcal.data.db.dao.ScheduledRemindersDao
 import org.onekash.kashcal.data.db.dao.RecentChangeWithCalendar
 import org.onekash.kashcal.data.db.dao.TitleSuggestion
 import org.onekash.kashcal.data.db.entity.Attendee
@@ -45,6 +46,8 @@ class EventReader @Inject constructor(
     private val categoryDao by lazy { database.categoryDao() }
 
     private val recentChangesDao by lazy { database.recentChangesDao() }
+
+    private val scheduledRemindersDao by lazy { database.scheduledRemindersDao() }
 
     companion object {
         /** Cap on tag suggestions so the autocomplete popup stays scannable. */
@@ -720,6 +723,13 @@ class EventReader @Inject constructor(
     }
 
     // ========== Statistics ==========
+
+    /**
+     * Returns how many occurrences have a reminder armed to trigger in [fromTime]..[toTime],
+     * muted calendars left out ([ScheduledRemindersDao.countOccurrencesWithPendingReminders]).
+     */
+    suspend fun countOccurrencesWithPendingReminders(fromTime: Long, toTime: Long): Int =
+        scheduledRemindersDao.countOccurrencesWithPendingReminders(fromTime, toTime)
 
     suspend fun getTotalEventCount(): Int {
         return eventsDao.getTotalCount()

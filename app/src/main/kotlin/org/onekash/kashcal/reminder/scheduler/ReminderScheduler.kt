@@ -194,6 +194,9 @@ class ReminderScheduler @Inject constructor(
          */
         const val SCHEDULE_WINDOW_DAYS = 7
 
+        /** [SCHEDULE_WINDOW_DAYS] in milliseconds. */
+        const val SCHEDULE_WINDOW_MS = SCHEDULE_WINDOW_DAYS * 24 * 60 * 60 * 1000L
+
         /**
          * How long before its occurrence a reminder can be set and still be armed.
          * A reminder a week before its event comes into the window once the event
@@ -225,7 +228,7 @@ class ReminderScheduler @Inject constructor(
      */
     private val rearmMutex = Mutex()
 
-    private fun windowEnd(now: Long): Long = now + SCHEDULE_WINDOW_DAYS * DAY_MS
+    private fun windowEnd(now: Long): Long = now + SCHEDULE_WINDOW_MS
 
     /** Returns whether a reminder at [triggerTime] is armed now: not past, and in the window. */
     private fun isArmable(triggerTime: Long, now: Long): Boolean =

@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">Įvykių kvietimai</string>
     <string name="channel_event_invitations_desc">Pranešimai, kai gaunate naują kalendoriaus kvietimą</string>
     <string name="channel_calendar_updates">Kalendoriaus pakeitimai</string>
+    <string name="channel_calendar_backup">Automatinis kalendorių atsarginis kopijavimas</string>
+    <string name="channel_calendar_backup_description">Praneša, kai nepavyksta sukurti kalendoriaus atsarginės kopijos</string>
     <string name="invite_notification_body">Nuo %1$s · Bakstelėkite, kad atsakytumėte</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,37 @@
     <string name="backup_error_read_failed">Nepavyko perskaityti failo</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">Apple kalendorius?</string>
-    <string name="onboarding_got_you">Mes padėsime.</string>
-    <string name="onboarding_connect_prompt">Prijunkite iCloud, kad matytumėte savo įvykius čia</string>
+    <string name="onboarding_title">Kur tavo kalendoriai?</string>
+    <string name="onboarding_subtitle">Pasirink, ką prijungti.</string>
+    <string name="onboarding_icloud_detail">Apple ID ir programos slaptažodis</string>
+    <string name="onboarding_caldav_title">CalDAV serveris</string>
+    <string name="onboarding_caldav_detail">Nextcloud, Fastmail, Radicale ir kiti</string>
+    <string name="onboarding_device_title">Šiame įrenginyje</string>
+    <string name="onboarding_phone_detail">Google, Outlook ir sinchronizavimo programos</string>
+    <string name="onboarding_use_offline">Naudoti kalendorių be ryšio</string>
+    <string name="onboarding_trust">Atvirasis kodas. Be reklamų. Be sekimo.</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">Priminimai išjungti</string>
+    <plurals name="reminders_off_body">
+        <item quantity="one">Šią savaitę %d įvykis turi priminimą.</item>
+        <item quantity="few">Šią savaitę %d įvykiai turi priminimus.</item>
+        <item quantity="many">Šią savaitę %d įvykio turi priminimų.</item>
+        <item quantity="other">Šią savaitę %d įvykių turi priminimus.</item>
+    </plurals>
+    <string name="reminders_off_not_now">Ne dabar</string>
+    <string name="reminders_off_turn_on">Įjungti</string>
+    <string name="reminders_on_snackbar">Priminimai įjungti</string>
+    <string name="about_tagline">Visi tavo kalendoriai vienoje privačioje programėlėje.</string>
+    <string name="about_help_title">Pagalba ir vadovai</string>
+    <string name="about_help_detail">Sąranka, sinchronizavimas ir klausimai</string>
+    <string name="about_source_title">Šaltinio kodas</string>
+    <string name="about_source_detail">Apache 2.0, GitHub platformoje</string>
+    <string name="about_support_title">Paremti KashCal</string>
+    <string name="about_support_detail">Ačiū visiems, kurie jau remia</string>
+    <string name="about_link_failed">Nėra programėlės, kuri galėtų atidaryti šią nuorodą.</string>
+    <string name="about_built_in_austin">Sukurta su ❤️ mieste Austin</string>
+    <string name="about_version">Versija %1$s</string>
     <string name="whats_new_skip">Praleisti</string>
     <string name="whats_new_next">Toliau</string>
     <string name="whats_new_page_of">Puslapis %1$d iš %2$d</string>
@@ -275,10 +303,21 @@
     <string name="whats_new_v772_changes_title">Pažiūrėk, kas pasikeitė</string>
     <string name="whats_new_v772_changes_body">Nauji, redaguoti ir pašalinti įvykiai iš tavo iCloud ir CalDAV kalendorių 7 dienas kaupiami skiltyje „Naujausi pakeitimai“. Bakstelėk įvykį, kad jį atidarytum.</string>
     <string name="whats_new_v772_notifications_body">Gauk pranešimą, kai foninis sinchronizavimas randa tavo iCloud ar CalDAV įvykių pakeitimų. Funkcija išjungta, kol jos neįjungsi.</string>
+    <string name="whats_new_v803_offline_title">Kalendoriai, kurie lieka telefone</string>
+    <string name="whats_new_v803_offline_body">Kai kuriems planams ne vieta serveryje. Sukurk jiems atskirus kalendorius be ryšio, kiek tik nori.</string>
+    <string name="whats_new_v803_backup_title">Atsarginės kopijos, apie kurias gali pamiršti</string>
+    <string name="whats_new_v803_backup_body">Vieną kartą pasirink aplanką, ir KashCal ten laikys naujausią tavo kalendorių be ryšio kopiją.</string>
+    <string name="whats_new_v803_print_title">Tavo savaitė popieriuje</string>
+    <string name="whats_new_v803_print_body">Atspausdink savaitę, kurią matai ekrane. O ant kurio šaldytuvo ją pakabinti, spręsti tau.</string>
     <string name="whats_new_hero_sample_lunch">Komandos pietūs</string>
     <string name="whats_new_hero_sample_review">Dizaino peržiūra</string>
     <string name="whats_new_hero_sample_book_club">Knygų klubas</string>
+    <string name="whats_new_hero_sample_dentist">Odontologas</string>
+    <string name="whats_new_hero_sample_yoga">Joga</string>
     <string name="whats_new_hero_sample_calendar">Darbas</string>
+    <string name="whats_new_hero_sample_family">Šeima</string>
+    <string name="whats_new_hero_sample_garden">Sodas</string>
+    <string name="whats_new_hero_sample_folder">Kalendorių atsarginės kopijos</string>
     <string name="whats_new_hero_now">dabar</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +433,6 @@
     <string name="error_device_calendar_title">Kalendoriaus klaida</string>
     <string name="error_device_calendar_write_failed">Nepavyko išsaugoti į įrenginio kalendorių. Bandykite dar kartą.</string>
     <string name="error_device_calendar_permission">Reikalingas rašymo į kalendorių leidimas. Suteikite prieigą nustatymuose.</string>
-    <string name="error_device_calendar_permission_denied">Nustatymuose išjunkite ir vėl įjunkite kalendoriaus leidimą, kad suteiktumėte rašymo prieigą</string>
     <string name="error_device_calendar_not_found">Kalendorius nerastas. Gali būti, kad jis buvo ištrintas.</string>
     <string name="error_device_event_not_found">Įvykis nerastas. Gali būti, kad jis buvo ištrintas.</string>
     <string name="error_device_calendar_read_only">Šis kalendorius yra tik skaitomas.</string>
@@ -538,6 +576,7 @@
     <string name="subscriptions_section_add">Pridėti</string>
     <string name="subscriptions_empty_ics">Nėra ICS prenumeratų</string>
     <string name="subscriptions_empty_ics_hint">Pridėkite kalendoriaus srautą, kad matytumėte įvykius</string>
+    <string name="subscriptions_swipe_hint">Perbrauk srautą, kad jį ištrintum.</string>
     <string name="subscriptions_add_ics">Pridėti ICS kalendorių</string>
     <string name="qs_tile_label">Įvykis</string>
     <string name="holiday_catalog_add">Pridėti švenčių kalendorių</string>
@@ -624,7 +663,7 @@
     <string name="settings_device_calendars_hint">Kalendoriai iš kitų programų</string>
     <string name="offline_calendars_row_label">Kalendoriai be ryšio</string>
     <string name="offline_calendars_row_hint">Kalendoriai, kurie lieka šiame telefone</string>
-    <string name="offline_calendars_manage_note">Pridėk, pervadink, pakeisk spalvą arba ištrink kalendorius be ryšio.</string>
+    <string name="offline_calendars_manage_note">Perbrauk kalendorių, kad jį ištrintum.</string>
     <string name="offline_calendars_info">Laikomi tik šiame telefone ir niekada nesinchronizuojami. Atsarginės kopijos neapima įvykių, todėl eksportuok kalendorių, kad turėtum kopiją.</string>
     <string name="offline_calendars_info_cd">Apie kalendorius be ryšio</string>
     <string name="offline_calendar_default_state">Numatytasis</string>
@@ -654,6 +693,93 @@
     </plurals>
     <string name="offline_calendar_deleted">Kalendorius %1$s ištrintas</string>
     <string name="offline_calendar_duplicate_name">Kalendorius be ryšio pavadinimu \"%1$s\" jau yra</string>
+    <string name="offline_calendar_similar_name">Per daug panašu į \"%1$s\". Pasirink kitą pavadinimą.</string>
+    <string name="calendar_backup_title">Automatinis kalendorių atsarginis kopijavimas</string>
+    <string name="calendar_backup_row_off">Išjungta</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">Atsarginių kopijų aplankas nepasiekiamas</string>
+    <string name="calendar_backup_intro">Kiekvieną kalendorių be ryšio išsaugo kaip ICS failą tavo pasirinktame aplanke.</string>
+    <string name="calendar_backup_choose_folder">Pasirinkti aplanką</string>
+    <string name="calendar_backup_choose_folder_hint">Pasirink arba sukurk aplanką, pavyzdžiui, aplanke Documents. Android neleidžia naudoti saugyklos šakninio aplanko ar paties Download aplanko.</string>
+    <string name="calendar_backup_folder">Aplankas</string>
+    <string name="calendar_backup_change">Keisti</string>
+    <string name="calendar_backup_frequency">Dažnumas</string>
+    <string name="calendar_backup_frequency_info">Atsarginės kopijos gali vėluoti: Android sulaiko foninį darbą, kai telefonas nenaudojamas arba KashCal ilgai nebuvo atidaryta.</string>
+    <string name="calendar_backup_copies">Kiek kopijų laikyti</string>
+    <string name="calendar_backup_copies_explained">Kuriant kiekvieną atsarginę kopiją, ankstesnis failas išlaikomas kaip kopija su data. Kai kopijų daugiau nei šis skaičius, seniausios ištrinamos. Naujausias failas visada pavadintas kalendoriaus vardu.</string>
+    <string name="calendar_backup_copies_fewer">Laikyti mažiau kopijų</string>
+    <string name="calendar_backup_copies_more">Laikyti daugiau kopijų</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="one">%d kopija</item>
+        <item quantity="few">%d kopijos</item>
+        <item quantity="many">%d kopijos</item>
+        <item quantity="other">%d kopijų</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="one">Ištrina %d senesnę kopiją. To negalima anuliuoti.</item>
+        <item quantity="few">Ištrina %d senesnes kopijas. To negalima anuliuoti.</item>
+        <item quantity="many">Ištrina %d senesnės kopijos. To negalima anuliuoti.</item>
+        <item quantity="other">Ištrina %d senesnių kopijų. To negalima anuliuoti.</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">Ištrina senesnes kopijas, viršijančias šį skaičių. To negalima anuliuoti.</string>
+    <string name="calendar_backup_calendars">Kalendoriai be ryšio</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · Nėra įvykių, nieko neišsaugota</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · Nepavyko išsaugoti. Bus bandoma dar kartą kito atsarginio kopijavimo metu.</string>
+    <string name="calendar_backup_status">Paskutinė kopija: %1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="one">Paskutinė kopija: %1$s · nepavyko: %2$d kalendorius</item>
+        <item quantity="few">Paskutinė kopija: %1$s · nepavyko: %2$d kalendoriai</item>
+        <item quantity="many">Paskutinė kopija: %1$s · nepavyko: %2$d kalendoriaus</item>
+        <item quantity="other">Paskutinė kopija: %1$s · nepavyko: %2$d kalendorių</item>
+    </plurals>
+    <string name="calendar_backup_now">Kurti kopiją dabar</string>
+    <string name="calendar_backup_running">Kuriama atsarginė kopija…</string>
+    <string name="calendar_backup_footer_overwrites">KashCal perrašo šiuos failus kiekvieno atsarginio kopijavimo metu, todėl kitose programose atlikti pakeitimai neišlieka. Kad atkurtum kalendorių, naudok „Importuoti įvykius iš failo“.</string>
+    <string name="calendar_backup_off_files_stay">Esami failai lieka čia: %1$s.</string>
+    <string name="calendar_backup_folder_unreachable">Nepasiekiama: %1$s. Galbūt aplankas perkeltas, ištrintas arba atjungtas.</string>
+    <string name="calendar_backup_error_unsupported">Negalima įrašyti failų: %1$s. Pasirink kitą aplanką.</string>
+    <string name="calendar_backup_choose_again">Pasirinkti iš naujo</string>
+    <string name="calendar_backup_pick_refused">KashCal negali naudoti šio aplanko. Pasirink kitą.</string>
+    <string name="calendar_backup_pick_cannot_create">KashCal negali kurti failų šiame aplanke. Pasirink kitą.</string>
+    <string name="calendar_backup_failed_title">Nepavyko sukurti kalendoriaus atsarginės kopijos</string>
+    <string name="calendar_backup_folder_unnamed">atsarginių kopijų aplankas</string>
+    <string name="calendar_backup_alert_unreachable">Nepasiekiama: %1$s. Bakstelėk, kad pasirinktum iš naujo.</string>
+    <string name="calendar_backup_alert_unsupported">Negalima įrašyti failų: %1$s. Bakstelėk, kad pasirinktum kitą aplanką.</string>
+    <string name="calendar_backup_alert_file_retry">Nepavyko išsaugoti %1$s. KashCal bandys dar kartą kito atsarginio kopijavimo metu.</string>
+    <string name="calendar_backup_every_hour">Kas valandą</string>
+    <string name="calendar_backup_every_day">Kasdien</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="one">Kas %d valandą</item>
+        <item quantity="few">Kas %d valandas</item>
+        <item quantity="many">Kas %d valandos</item>
+        <item quantity="other">Kas %d valandų</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="one">Kas %d dieną</item>
+        <item quantity="few">Kas %d dienas</item>
+        <item quantity="many">Kas %d dienos</item>
+        <item quantity="other">Kas %d dienų</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">Intervalas: 1 diena %1$s</string>
+    <string name="calendar_backup_every_days_hours">Intervalas: %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">Pasirink bent 1 valandą.</string>
+    <string name="calendar_backup_interval_too_long">Pasirink ne daugiau kaip 30 dienų.</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="one">Nepavyko išsaugoti %d kalendoriaus. KashCal bandys dar kartą kito atsarginio kopijavimo metu.</item>
+        <item quantity="few">Nepavyko išsaugoti %d kalendorių. KashCal bandys dar kartą kito atsarginio kopijavimo metu.</item>
+        <item quantity="many">Nepavyko išsaugoti %d kalendoriaus. KashCal bandys dar kartą kito atsarginio kopijavimo metu.</item>
+        <item quantity="other">Nepavyko išsaugoti %d kalendorių. KashCal bandys dar kartą kito atsarginio kopijavimo metu.</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">KashCal pranešimai išjungti, todėl programa negalės tau pranešti, jei nepavyks sukurti atsarginės kopijos.</string>
+    <string name="calendar_backup_notifications_channel_off">Atsarginių kopijų pranešimai išjungti, todėl KashCal negalės tau pranešti, jei nepavyks sukurti atsarginės kopijos.</string>
+    <string name="calendar_backup_open_settings">Atidaryti nustatymus</string>
+    <string name="calendar_backup_not_now">Ne dabar</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="one">Nepavyko: %d kalendorius</item>
+        <item quantity="few">Nepavyko: %d kalendoriai</item>
+        <item quantity="many">Nepavyko: %d kalendoriaus</item>
+        <item quantity="other">Nepavyko: %d kalendorių</item>
+    </plurals>
     <string name="settings_quick_event_add">Išmanusis įvykių pridėjimas</string>
     <string name="settings_quick_event_add_info">Kurkite įvykius rašydami įprastu tekstu. „Pietūs su Sam penktadienį 13:00“ užpildo pavadinimą, datą ir laiką už jus.</string>
     <string name="settings_suggest_titles">Siūlyti įvykių pavadinimus</string>
@@ -724,6 +850,7 @@
     <string name="label_on_days">Dienomis</string>
     <string name="label_pattern">Šablonas</string>
     <string name="label_ends">Baigiasi</string>
+    <string name="sheet_hint_change_end">Bakstelėk dieną, kad pakeistum pabaigą</string>
     <string name="label_timezone">Laiko juosta</string>
     <string name="label_alerts">Priminimai</string>
     <string name="label_add_alert">Pridėti priminimą</string>
@@ -745,14 +872,11 @@
     <string name="status_hours_ago">prieš %1$d val.</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">Rodyti įvykius iš kitų kalendoriaus programų jūsų įrenginyje.</string>
-    <string name="device_calendars_permission_required">Reikalingas kalendoriaus leidimas. Bakstelėkite „Įjungti" suteikti prieigą.</string>
-    <string name="device_calendars_read_only_access">Tik skaitymas</string>
-    <string name="device_calendars_grant_write">Suteikite rašymo leidimą redaguoti įvykius</string>
-    <string name="device_calendars_grant">Suteikti</string>
-    <string name="device_calendars_none_found">Įrenginio kalendorių nerasta.</string>
+    <string name="device_calendars_intro">Rodyk Google, Outlook ir sinchronizavimo programų kalendorius šiame įrenginyje.</string>
+    <string name="device_calendars_show_switch">Rodyti įrenginio kalendorius</string>
+    <string name="device_calendars_pick_hint">Pasirink, kuriuos kalendorius rodyti.</string>
+    <string name="device_calendars_empty">Kalendorių nerasta.</string>
     <string name="device_calendars_local">Vietinis</string>
-    <string name="device_calendars_read_only_no_write">Tik skaitymas (nėra rašymo leidimo)</string>
     <string name="device_calendars_read_only_calendar">Tik skaitymas (kalendorius tik skaitomas)</string>
     <string name="settings_sync_frequency">Sinchronizavimo dažnumas</string>
     <string name="settings_sync_frequency_hint">Kaip dažnai sinchronizuoti fone</string>
@@ -1410,6 +1534,10 @@
     <string name="ics_fetch_error_http">Serveris grąžino klaidą (%1$d). Patikrink URL.</string>
     <string name="ics_fetch_error_empty">Kalendoriaus srautas tuščias.</string>
     <string name="ics_fetch_error_not_calendar">Šis URL nepanašus į kalendoriaus srautą.</string>
+    <string name="ics_feed_error_empty_response">Serveris neatsiuntė tinkamo srauto.</string>
+    <string name="ics_feed_error_access_denied">Šio srauto serveris atsisakė suteikti prieigą.</string>
+    <string name="ics_feed_error_too_large">Šis kalendoriaus srautas per didelis atsisiųsti.</string>
+    <string name="ics_feed_error_unreadable">Nepavyko parodyti šio srauto įvykių.</string>
     <string name="insights_title">Statistika</string>
     <string name="insights_period_this_week">Savaitė</string>
     <string name="insights_period_last_week">Praėjusi sav.</string>
@@ -1545,7 +1673,7 @@
         <item quantity="other">Laisva kitas %1$d dienų (%2$s – %3$s):</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">Pasirinktame intervale nėra laisvų bent valandos blokų.</string>
     <string name="share_from_kashcal_footer">Bendrinama iš KashCal</string>
@@ -1569,5 +1697,35 @@
     <string name="share_as_card_all_day">Visa diena</string>
     <string name="share_as_card_chooser_title">Bendrinti įvykį</string>
     <string name="share_as_card_share_failed">Nepavyko bendrinti kortelės</string>
+    <string name="print_your_week">Atspausdinti savo savaitę</string>
+    <string name="print_options_title">Spausdinimo parinktys</string>
+    <string name="print_pages_header">Puslapiai</string>
+    <string name="print_page_week">Savaitės kalendorius</string>
+    <string name="print_page_week_detail">Savaitė tinklelyje</string>
+    <string name="print_page_details">Išsami informacija</string>
+    <string name="print_page_details_detail">Visi įvykiai išsamiai</string>
+    <string name="print_action">Spausdinti</string>
+    <string name="cd_print_previous_week">Ankstesnė savaitė</string>
+    <string name="cd_print_next_week">Kita savaitė</string>
+    <plurals name="print_summary_pages">
+        <item quantity="one">%d puslapis</item>
+        <item quantity="few">%d puslapiai</item>
+        <item quantity="many">%d puslapio</item>
+        <item quantity="other">%d puslapių</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="one">%1$d iš %2$d kalendoriaus</item>
+        <item quantity="few">%1$d iš %2$d kalendorių</item>
+        <item quantity="many">%1$d iš %2$d kalendoriaus</item>
+        <item quantity="other">%1$d iš %2$d kalendorių</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – savaitė nuo %2$s</string>
+    <string name="print_failed">Nepavyko išspausdinti. Bandyk dar kartą.</string>
+    <string name="print_doc_week">Savaitė</string>
+    <string name="print_doc_printed">Išspausdinta %1$s</string>
+    <string name="print_doc_page_of">Puslapis %1$s iš %2$s</string>
+    <string name="print_doc_numbers_note">Numeriai atitinka išsamią informaciją, kurioje visi įvykiai pateikti išsamiai.</string>
+    <string name="print_doc_times_in">Laiko juosta: %1$s</string>
 
 </resources>

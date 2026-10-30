@@ -34,6 +34,7 @@ import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Print
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Widgets
@@ -132,6 +133,8 @@ fun AccountHubScreen(
     onAppPermissionsClick: () -> Unit = {},
     // Recent changes opens a sheet over the hub, like Invites.
     onRecentChangesClick: () -> Unit = {},
+    // Print your week opens the print sheet over the hub, like Share availability.
+    onPrintWeekClick: () -> Unit = {},
     // A slot so tests can stub it: the real section gets an AppearanceViewModel through
     // hiltViewModel(), which a plain Compose test has no graph for.
     makeItYours: @Composable () -> Unit = { MakeItYoursSection() },
@@ -222,6 +225,11 @@ fun AccountHubScreen(
                 label = stringResource(R.string.share_availability_rail_label),
                 icon = Icons.Default.Share,
                 onClick = onShareAvailabilityClick,
+            )
+            HubDrawerItem(
+                label = stringResource(R.string.print_your_week),
+                icon = Icons.Default.Print,
+                onClick = onPrintWeekClick,
             )
             // Tag management opens on top of the hub, like Settings, without swapping the
             // calendar view, so it has no `selected` state and the hub stays mounted beneath.

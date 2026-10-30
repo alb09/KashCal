@@ -43,6 +43,8 @@
     <string name="channel_event_invitations">活動邀請</string>
     <string name="channel_event_invitations_desc">收到新日曆邀請時的通知</string>
     <string name="channel_calendar_updates">行事曆更新</string>
+    <string name="channel_calendar_backup">自動備份行事曆</string>
+    <string name="channel_calendar_backup_description">行事曆備份失敗時通知你</string>
     <string name="invite_notification_body">來自 %1$s · 點一下以回覆</string>
 
     <!-- ==================== App Shortcuts ==================== -->
@@ -254,11 +256,34 @@
     <string name="backup_error_read_failed">無法讀取檔案</string>
 
     <!-- ==================== Onboarding ==================== -->
-    <string name="onboarding_apple_calendar">使用 Apple 行事曆？</string>
-    <string name="onboarding_got_you">交給我們。</string>
-    <string name="onboarding_connect_prompt">連接 iCloud 查看你的事件</string>
+    <string name="onboarding_title">你的行事曆在哪裡？</string>
+    <string name="onboarding_subtitle">選擇一個進行連結。</string>
+    <string name="onboarding_icloud_detail">Apple ID 和 App 專用密碼</string>
+    <string name="onboarding_caldav_title">CalDAV 伺服器</string>
+    <string name="onboarding_caldav_detail">Nextcloud、Fastmail、Radicale 等</string>
+    <string name="onboarding_device_title">在此裝置上</string>
+    <string name="onboarding_phone_detail">Google、Outlook 和同步應用程式</string>
+    <string name="onboarding_use_offline">使用離線行事曆</string>
+    <string name="onboarding_trust">開放原始碼。無廣告。無追蹤。</string>
 
     <!-- ==================== What\'s New ==================== -->
+    <string name="reminders_off_title">提醒已關閉</string>
+    <plurals name="reminders_off_body">
+        <item quantity="other">本週有 %d 個事件設有提醒。</item>
+    </plurals>
+    <string name="reminders_off_not_now">稍後再說</string>
+    <string name="reminders_off_turn_on">開啟</string>
+    <string name="reminders_on_snackbar">提醒已開啟</string>
+    <string name="about_tagline">你的所有行事曆，盡在一個私密的應用程式。</string>
+    <string name="about_help_title">說明與指南</string>
+    <string name="about_help_detail">設定、同步與常見問題</string>
+    <string name="about_source_title">原始碼</string>
+    <string name="about_source_detail">Apache 2.0，託管於 GitHub</string>
+    <string name="about_support_title">支持開序曆</string>
+    <string name="about_support_detail">感謝每一位已經支持我們的人</string>
+    <string name="about_link_failed">沒有可以開啟這個連結的應用程式。</string>
+    <string name="about_built_in_austin">在 Austin 用 ❤️ 打造</string>
+    <string name="about_version">版本 %1$s</string>
     <string name="whats_new_skip">略過</string>
     <string name="whats_new_next">下一步</string>
     <string name="whats_new_page_of">第 %1$d 頁，共 %2$d 頁</string>
@@ -275,10 +300,21 @@
     <string name="whats_new_v772_changes_title">看看有哪些變更</string>
     <string name="whats_new_v772_changes_body">你的 iCloud 和 CalDAV 行事曆中新增、編輯和刪除的事件會在「最近變更」中保留 7 天。輕觸即可開啟。</string>
     <string name="whats_new_v772_notifications_body">背景同步偵測到你的 iCloud 或 CalDAV 事件有變更時，會傳送通知給你。此功能預設為關閉，需手動開啟。</string>
+    <string name="whats_new_v803_offline_title">只待在手機裡的行事曆</string>
+    <string name="whats_new_v803_offline_body">有些計畫不必放上伺服器。替它們新增專屬的離線行事曆，數量不限。</string>
+    <string name="whats_new_v803_backup_title">設定好就不用操心的備份</string>
+    <string name="whats_new_v803_backup_body">只要選一次資料夾，開序曆就會在那裡持續儲存離線行事曆的最新副本。</string>
+    <string name="whats_new_v803_print_title">印在紙上的一週</string>
+    <string name="whats_new_v803_print_body">把正在檢視的這一週印出來。要貼在哪台冰箱上，由你決定。</string>
     <string name="whats_new_hero_sample_lunch">團隊午餐</string>
     <string name="whats_new_hero_sample_review">設計審查</string>
     <string name="whats_new_hero_sample_book_club">讀書會</string>
+    <string name="whats_new_hero_sample_dentist">看牙醫</string>
+    <string name="whats_new_hero_sample_yoga">瑜珈</string>
     <string name="whats_new_hero_sample_calendar">工作</string>
+    <string name="whats_new_hero_sample_family">家人</string>
+    <string name="whats_new_hero_sample_garden">園藝</string>
+    <string name="whats_new_hero_sample_folder">行事曆備份</string>
     <string name="whats_new_hero_now">現在</string>
 
     <!-- ==================== Sign-In Sheets ==================== -->
@@ -394,7 +430,6 @@
     <string name="error_device_calendar_title">行事曆錯誤</string>
     <string name="error_device_calendar_write_failed">無法儲存至裝置行事曆。請重試。</string>
     <string name="error_device_calendar_permission">需要行事曆寫入權限。請在設定中授權。</string>
-    <string name="error_device_calendar_permission_denied">請在設定中關閉再重新開啟行事曆權限，以授予寫入權限</string>
     <string name="error_device_calendar_not_found">找不到行事曆。可能已被移除。</string>
     <string name="error_device_event_not_found">找不到事件。可能已被刪除。</string>
     <string name="error_device_calendar_read_only">此行事曆為唯讀。</string>
@@ -538,6 +573,7 @@
     <string name="subscriptions_section_add">新增</string>
     <string name="subscriptions_empty_ics">沒有 ICS 訂閱</string>
     <string name="subscriptions_empty_ics_hint">新增行事曆訂閱源以查看事件</string>
+    <string name="subscriptions_swipe_hint">滑動訂閱源即可刪除。</string>
     <string name="subscriptions_add_ics">新增 ICS 行事曆</string>
     <string name="qs_tile_label">新增活動</string>
     <string name="holiday_catalog_add">新增假日日曆</string>
@@ -624,7 +660,7 @@
     <string name="settings_device_calendars_hint">其他應用程式的行事曆</string>
     <string name="offline_calendars_row_label">離線行事曆</string>
     <string name="offline_calendars_row_hint">只存放在這支手機上的行事曆</string>
-    <string name="offline_calendars_manage_note">新增、重新命名、變更顏色或刪除離線行事曆。</string>
+    <string name="offline_calendars_manage_note">滑動行事曆即可刪除。</string>
     <string name="offline_calendars_info">只存放在這支手機上，永不同步。備份不含事件，請匯出行事曆以保留副本。</string>
     <string name="offline_calendars_info_cd">關於離線行事曆</string>
     <string name="offline_calendar_default_state">預設</string>
@@ -648,6 +684,72 @@
     </plurals>
     <string name="offline_calendar_deleted">已刪除%1$s</string>
     <string name="offline_calendar_duplicate_name">已有名為「%1$s」的離線行事曆</string>
+    <string name="offline_calendar_similar_name">與「%1$s」太過相似。請改用其他名稱。</string>
+    <string name="calendar_backup_title">自動備份行事曆</string>
+    <string name="calendar_backup_row_off">關閉</string>
+    <string name="calendar_backup_row_on">%1$s · %2$s</string>
+    <string name="calendar_backup_row_problem">無法存取備份資料夾</string>
+    <string name="calendar_backup_intro">將每個離線行事曆儲存為 ICS 檔案，放在你選擇的資料夾中。</string>
+    <string name="calendar_backup_choose_folder">選擇資料夾</string>
+    <string name="calendar_backup_choose_folder_hint">請選擇或建立一個資料夾，例如在 Documents 中。Android 不允許使用儲存空間的最上層或 Download 資料夾本身。</string>
+    <string name="calendar_backup_folder">資料夾</string>
+    <string name="calendar_backup_change">變更</string>
+    <string name="calendar_backup_frequency">頻率</string>
+    <string name="calendar_backup_frequency_info">備份可能會延後執行：手機處於閒置狀態或一段時間未開啟開序曆時，Android 會延後背景工作。</string>
+    <string name="calendar_backup_copies">保留的副本數量</string>
+    <string name="calendar_backup_copies_explained">每次備份都會將前一個檔案保留為附日期的副本。副本超過這個數量時，最舊的副本會遭到刪除。最新的檔案一律使用行事曆的名稱。</string>
+    <string name="calendar_backup_copies_fewer">減少副本</string>
+    <string name="calendar_backup_copies_more">增加副本</string>
+    <plurals name="calendar_backup_copies_state">
+        <item quantity="other">%d 份副本</item>
+    </plurals>
+    <plurals name="calendar_backup_deletes">
+        <item quantity="other">將刪除 %d 個舊副本。此動作無法復原。</item>
+    </plurals>
+    <string name="calendar_backup_deletes_unknown">刪除超出這個數量的舊副本。此動作無法復原。</string>
+    <string name="calendar_backup_calendars">離線行事曆</string>
+    <string name="calendar_backup_calendar_nothing_saved">%1$s · 沒有事件，未儲存</string>
+    <string name="calendar_backup_calendar_save_failed">%1$s · 無法儲存。將在下次備份時重試。</string>
+    <string name="calendar_backup_status">上次備份：%1$s</string>
+    <plurals name="calendar_backup_status_failed">
+        <item quantity="other">上次備份：%1$s · %2$d 個行事曆失敗</item>
+    </plurals>
+    <string name="calendar_backup_now">立即備份</string>
+    <string name="calendar_backup_running">正在備份…</string>
+    <string name="calendar_backup_footer_overwrites">開序曆每次備份都會覆寫這些檔案，因此在其他應用程式中所做的變更不會保留。如要還原行事曆，請使用「從檔案匯入事件」。</string>
+    <string name="calendar_backup_off_files_stay">現有檔案仍保留在%1$s中。</string>
+    <string name="calendar_backup_folder_unreachable">無法存取%1$s。資料夾可能已移動、刪除或中斷連線。</string>
+    <string name="calendar_backup_error_unsupported">無法在%1$s中儲存檔案。請選擇其他資料夾。</string>
+    <string name="calendar_backup_choose_again">重新選擇</string>
+    <string name="calendar_backup_pick_refused">開序曆無法使用該資料夾。請選擇其他資料夾。</string>
+    <string name="calendar_backup_pick_cannot_create">開序曆無法在該資料夾中建立檔案。請選擇其他資料夾。</string>
+    <string name="calendar_backup_failed_title">行事曆備份失敗</string>
+    <string name="calendar_backup_folder_unnamed">備份資料夾</string>
+    <string name="calendar_backup_alert_unreachable">無法存取%1$s。輕觸即可重新選擇。</string>
+    <string name="calendar_backup_alert_unsupported">無法在%1$s中儲存檔案。輕觸即可選擇其他資料夾。</string>
+    <string name="calendar_backup_alert_file_retry">無法儲存%1$s。開序曆將在下次備份時重試。</string>
+    <string name="calendar_backup_every_hour">每小時</string>
+    <string name="calendar_backup_every_day">每天</string>
+    <plurals name="calendar_backup_every_hours">
+        <item quantity="other">每 %d 小時</item>
+    </plurals>
+    <plurals name="calendar_backup_every_days">
+        <item quantity="other">每 %d 天</item>
+    </plurals>
+    <string name="calendar_backup_every_day_hours">每 1 天 %1$s</string>
+    <string name="calendar_backup_every_days_hours">每 %1$s %2$s</string>
+    <string name="calendar_backup_interval_too_short">請選擇至少 1 小時。</string>
+    <string name="calendar_backup_interval_too_long">請選擇 30 天以內。</string>
+    <plurals name="calendar_backup_alert_files_retry">
+        <item quantity="other">無法儲存 %d 個行事曆。開序曆將在下次備份時重試。</item>
+    </plurals>
+    <string name="calendar_backup_notifications_app_off">開序曆的通知已關閉，因此備份失敗時無法通知你。</string>
+    <string name="calendar_backup_notifications_channel_off">備份通知已關閉，因此備份失敗時開序曆無法通知你。</string>
+    <string name="calendar_backup_open_settings">開啟設定</string>
+    <string name="calendar_backup_not_now">暫不</string>
+    <plurals name="calendar_backup_row_calendars_failed">
+        <item quantity="other">%d 個行事曆失敗</item>
+    </plurals>
     <string name="settings_quick_event_add">智慧新增事件</string>
     <string name="settings_quick_event_add_info">用自然的方式輸入即可建立活動。輸入\"週五下午1點和 Sam 吃午餐\"，標題、日期和時間會自動填好。</string>
     <string name="settings_suggest_titles">建議事件標題</string>
@@ -715,6 +817,7 @@
     <string name="label_on_days">選擇日期</string>
     <string name="label_pattern">模式</string>
     <string name="label_ends">結束</string>
+    <string name="sheet_hint_change_end">輕觸某一天即可變更結束日期</string>
     <string name="label_timezone">時區</string>
     <string name="label_alerts">提醒</string>
     <string name="label_add_alert">新增提醒</string>
@@ -736,14 +839,11 @@
     <string name="status_hours_ago">%1$d 小時前</string>
 
     <!-- ==================== i18n: Device Calendars Sheet ==================== -->
-    <string name="device_calendars_description">顯示裝置上其他行事曆應用程式的事件（同步轉接器、本機行事曆）。</string>
-    <string name="device_calendars_permission_required">需要行事曆權限。點選啟用以授權。</string>
-    <string name="device_calendars_read_only_access">唯讀存取</string>
-    <string name="device_calendars_grant_write">授予寫入權限以編輯裝置行事曆事件</string>
-    <string name="device_calendars_grant">授權</string>
-    <string name="device_calendars_none_found">找不到裝置行事曆。</string>
+    <string name="device_calendars_intro">顯示此裝置上來自 Google、Outlook 和同步應用程式的行事曆。</string>
+    <string name="device_calendars_show_switch">顯示裝置行事曆</string>
+    <string name="device_calendars_pick_hint">選擇要顯示的行事曆。</string>
+    <string name="device_calendars_empty">找不到行事曆。</string>
     <string name="device_calendars_local">本機</string>
-    <string name="device_calendars_read_only_no_write">唯讀（無寫入權限）</string>
     <string name="device_calendars_read_only_calendar">唯讀（行事曆為唯讀）</string>
     <string name="settings_sync_frequency">同步頻率</string>
     <string name="settings_sync_frequency_hint">背景同步的頻率</string>
@@ -1233,6 +1333,10 @@
     <string name="ics_fetch_error_http">伺服器傳回了錯誤（%1$d）。請檢查URL。</string>
     <string name="ics_fetch_error_empty">此行事曆訂閱來源是空的。</string>
     <string name="ics_fetch_error_not_calendar">這個URL似乎不是行事曆訂閱來源。</string>
+    <string name="ics_feed_error_empty_response">伺服器未傳送有效的訂閱來源。</string>
+    <string name="ics_feed_error_access_denied">此訂閱來源的伺服器拒絕存取。</string>
+    <string name="ics_feed_error_too_large">此行事曆訂閱來源過大，無法下載。</string>
+    <string name="ics_feed_error_unreadable">無法顯示此訂閱來源中的事件。</string>
     <string name="insights_title">洞察</string>
     <string name="insights_period_this_week">週</string>
     <string name="insights_period_last_week">上週</string>
@@ -1355,7 +1459,7 @@
         <item quantity="other">未來 %1$d 天空閒時段（%2$s – %3$s）：</item>
     </plurals>
     <string name="share_availability_day_line">%1$s: %2$s</string>
-    <string name="share_availability_block_separator">, </string>
+    <string name="share_availability_block_separator">", "</string>
     <string name="share_availability_time_range">%1$s – %2$s</string>
     <string name="share_availability_empty">所選範圍內沒有至少一小時的空閒時段。</string>
     <string name="share_from_kashcal_footer">由 KashCal 分享</string>
@@ -1376,5 +1480,29 @@
     <string name="share_as_card_all_day">全天</string>
     <string name="share_as_card_chooser_title">分享活動</string>
     <string name="share_as_card_share_failed">無法分享卡片</string>
+    <string name="print_your_week">列印一週行程</string>
+    <string name="print_options_title">選擇列印選項</string>
+    <string name="print_pages_header">頁面</string>
+    <string name="print_page_week">週曆</string>
+    <string name="print_page_week_detail">以格狀顯示一週</string>
+    <string name="print_page_details">詳細資訊</string>
+    <string name="print_page_details_detail">完整列出每個事件</string>
+    <string name="print_action">列印</string>
+    <string name="cd_print_previous_week">上一週</string>
+    <string name="cd_print_next_week">下一週</string>
+    <plurals name="print_summary_pages">
+        <item quantity="other">%d 頁</item>
+    </plurals>
+    <plurals name="print_summary_calendars">
+        <item quantity="other">%2$d 個行事曆中的 %1$d 個</item>
+    </plurals>
+    <string name="print_summary">%1$s · %2$s</string>
+    <string name="print_job_name">%1$s – %2$s 當週</string>
+    <string name="print_failed">無法列印，請再試一次。</string>
+    <string name="print_doc_week">週</string>
+    <string name="print_doc_printed">列印日期：%1$s</string>
+    <string name="print_doc_page_of">第 %1$s 頁，共 %2$s 頁</string>
+    <string name="print_doc_numbers_note">編號對應詳細資訊頁面，該頁完整列出每個事件。</string>
+    <string name="print_doc_times_in">時間以%1$s顯示</string>
 
 </resources>

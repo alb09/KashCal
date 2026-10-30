@@ -144,6 +144,7 @@ object ExportablePreferences {
         PreferencesKeys.CONTACT_BIRTHDAYS_LAST_SYNC.name,
         PreferencesKeys.CONTACT_ANNIVERSARIES_LAST_SYNC.name,
         PreferencesKeys.NOTIFICATION_PERMISSION_DENIED_COUNT.name,
+        PreferencesKeys.NOTIFICATION_ASK_DONE.name,
         // Set when a background contact sync hit a revoked WRITE_CONTACTS; drives a re-grant
         // banner on this device
         PreferencesKeys.CONTACT_SYNC_PERMISSION_NEEDED.name,
@@ -161,7 +162,6 @@ object ExportablePreferences {
         PreferencesKeys.ONBOARDING_COMPLETED.name,
         PreferencesKeys.SHOWN_LOCAL_CALENDAR_INTRO.name,
         PreferencesKeys.SHOWN_SHARE_CARD_TOOLTIP.name,
-        PreferencesKeys.ONBOARDING_DISMISSED.name,
         PreferencesKeys.LAST_WHATSNEW_VERSION_SHOWN.name,
         // Permission-banner dismissal, tied to this device's contacts permission
         PreferencesKeys.CONTACT_SUGGESTIONS_DECLINED.name,

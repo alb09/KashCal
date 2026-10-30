@@ -568,7 +568,7 @@ private fun PlannerEventRow(
             )
         }
     }
-    val cueText = cue?.let { stringResource(R.string.planner_moved_was, cueLabel(it, timePattern, formats)) }
+    val cueText = cue?.let { stringResource(R.string.planner_moved_was, movedCueLabel(it, timePattern, formats.locale, formats.weekday, formats.shortDate, ZoneId.systemDefault())) }
     val isPast = DateTimeUtils.isEventPast(event.endTs, event.endDay, event.isAllDay, nowMs, todayDayCode)
     val isDeclined = event.isDeclinedByMe
     val isCancelled = event.isCancelled
@@ -646,13 +646,6 @@ private fun PlannerEventRow(
             }
         }
     }
-}
-
-/** Returns where a moved occurrence was: a time, a short weekday, or a short date. */
-private fun cueLabel(cue: MovedCue, timePattern: String, formats: PlannerFormats): String = when (cue) {
-    is MovedCue.Time -> plannerTime(cue.originalMs, timePattern, formats.locale, ZoneId.systemDefault())
-    is MovedCue.Day -> formats.weekday.format(DayPagerUtils.dayCodeToLocalDate(cue.originalDayCode))
-    is MovedCue.Date -> formats.shortDate.format(DayPagerUtils.dayCodeToLocalDate(cue.originalDayCode))
 }
 
 @Composable

@@ -18,7 +18,8 @@ import org.onekash.kashcal.data.db.entity.IcsSubscription
  * Tests which responses [OkHttpIcsFetcher] retries, against a MockWebServer.
  *
  * HTTP 429, 503 and 500 are retried, and retries run out after two requests. HTTP 401, 403, 404
- * and 413, an oversize body, invalid ICS and a 304 aren't. Not tested here: the fetcher also
+ * and 413, an oversize body, invalid ICS, a blank body and a 304 aren't. A calendar with no
+ * events is a success, not invalid ICS. Not tested here: the fetcher also
  * retries the network errors `isRetryableError` accepts (socket timeout, unknown host, connect
  * failure, connection reset), and retries an SSL handshake failure once after AIA completion.
  */
@@ -226,6 +227,29 @@ class OkHttpIcsFetcherRetryTest {
 
         assertTrue("Should return error on invalid ICS", result is IcsFetcher.FetchResult.Error)
         assertEquals("Should only make 1 request (no retry)", 1, mockServer.requestCount)
+    }
+
+    @Test
+    fun `does NOT retry on a blank body`() = runTest {
+        mockServer.enqueue(MockResponse().setResponseCode(200).setBody(""))
+        mockServer.enqueue(MockResponse().setResponseCode(200).setBody(validIcsContent))
+
+        val result = fetcher.fetch(subscription)
+
+        assertEquals(IcsFetcher.FetchResult.Error("Empty response from server"), result)
+        assertEquals("Should only make 1 request (no retry)", 1, mockServer.requestCount)
+    }
+
+    @Test
+    fun `a calendar with no events is a success`() = runTest {
+        val empty = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Test//Test//EN\r\nEND:VCALENDAR\r\n"
+        mockServer.enqueue(MockResponse().setResponseCode(200).setBody(empty))
+
+        val result = fetcher.fetch(subscription)
+
+        assertTrue("Should succeed, got $result", result is IcsFetcher.FetchResult.Success)
+        assertEquals(empty, (result as IcsFetcher.FetchResult.Success).content)
+        assertEquals("Should only make 1 request", 1, mockServer.requestCount)
     }
 
     // ==================== Edge Cases ====================
